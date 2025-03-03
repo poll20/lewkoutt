@@ -1,0 +1,134 @@
+/* Main Layout Container */
+.horizontal-card-layout {
+  
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+    /* background-color: #f8f9fa; */
+  }
+  
+  /* Parent Card */
+  .parent-card {
+    /* border: 2px solid red; */
+    width: 100%;
+    height: 50vh;
+    overflow: hidden;
+    /* border-radius: 12px; */
+  }
+  
+  .parent-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* border-radius: 12px; */
+  }
+  
+  /* Child Cards - Horizontal Scroll */
+  .child-cards-wrapper {
+    overflow-x: auto;
+    display: flex;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+  }
+  
+  .child-cards {
+    /* border: 2px solid red; */
+    display: flex;
+    gap: 20px;
+    width: max-content;
+  }
+  
+  /* Individual Child Card */
+  .child-card {
+    /* border: 2px solid red; */
+    flex: 0 0 auto;
+    width: 250px;
+    /* background-color: whit; */
+    /* border-radius: 8px; */
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+    /* padding: 10px; */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .child-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .child-card-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .child-title {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .child-description {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .child-price {
+    font-size: 1rem;
+    
+    color: #555;
+  }
+  /* For modern browsers */
+.child-cards-wrapper {
+  
+    overflow-x: scroll;
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;    /* Firefox */
+  }
+  
+  .child-cards-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+.catebtn{
+  border:1px solid rgb(190, 190, 190);
+  background-color: white;
+}
+  /* Responsive Design */
+  @media (max-width: 768px) {
+
+    .parent-card {
+      /* border: 2px solid red; */
+      width: 100%;
+      min-height: 60vh;
+      overflow: hidden;
+      /* border-radius: 12px; */
+    }
+    .child-card {
+      width: 200px;
+    }
+    .child-card-image {
+      height: 120px;
+    }
+
+    .cate-card-done{
+    /* border: 2px solid red; */
+    width: 200px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .parent-card {
+      height: 50vh;
+    }
+    .child-card {
+      width: 180px;
+    }
+    .child-card-image {
+      height: 200px;
+    }
+  }
+  

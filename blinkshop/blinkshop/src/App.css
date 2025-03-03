@@ -1,0 +1,57 @@
+/* Full page layout */
+html, body, #root {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+.mainnn-contenttttttt {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;  /* Full height page */
+      }
+      /* Content jo grow hoga */
+.contenttt {
+        flex: 1; /* Jitna space milega utna fill karega */
+      }
+
+
+      /* ✅ Main Content for Normal Website */
+/* .main-content {
+        flex: 1;
+        padding: 0;
+        min-height: 100vh;
+      } */
+      
+      /* ✅ Fix for Admin Panel */
+      .dashboard-container {
+        border: 1px solid black;
+        display: flex;
+        flex-direction: row; /* Sidebar + Main Content */
+        min-height: 100vh;
+        width: 100%;
+        background-color:white; /* Light background */
+      }
+      
+      .dashboard-content {
+        flex-grow: 1; /* Main content takes up remaining space */
+        padding: 20px;
+        overflow: auto; /* Prevents content from overflowing */
+      }
+
+      
+      
+/* Footer ko neeche fix rakhne ke liye */
+.footer {
+        background: #222;
+        color: white;
+        text-align: center;
+        padding: 10px;
+      }
+.navlink{
+        color: black;
+}
+.navlink:hover{
+        color: black;
+}
+  

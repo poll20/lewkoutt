@@ -1,0 +1,81 @@
+.admin-adddata-container {
+    width: 1000px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .admin-adddata-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .admin-adddata-options button,
+  .admin-adddata-category button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  
+  .admin-adddata-options button:hover {
+    background: #0056b3;
+  }
+  
+  .admin-adddata-category {
+    text-align: center;
+  }
+  
+  .admin-adddata-category select {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  .admin-adddata-category button {
+    background: #28a745;
+  }
+  
+  .admin-adddata-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  input, select, textarea, button {
+    padding: 10px;
+    margin-top: 5px;
+  }
+  
+  button {
+    background: #007bff;
+  }
+  
+  button:hover {
+    background: #0056b3;
+  }
+  
+  .color-section {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  

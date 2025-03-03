@@ -1,0 +1,86 @@
+/* ✅ Orders Table Wrapper */
+.user-ke-orders-container {
+    width: 100%;
+    padding: 20px;
+    background: #f8f9fa;
+  }
+  
+  .user-ke-orders-title {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* ✅ Responsive Table */
+  .user-ke-orders-table-wrapper {
+    width: 100%;
+    overflow-x: auto;  /* ✅ Horizontal scroll for small screens */
+  }
+  
+  .user-ke-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1100px; /* ✅ Prevent table from shrinking */
+  }
+  
+  .user-ke-orders-table th,
+  .user-ke-orders-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .user-ke-orders-table th {
+    background: #343a40;
+    color: white;
+  }
+  
+  /* ✅ Status Styling */
+  .user-ke-orders-status {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .user-ke-orders-status.pending {
+    background: #ffc107;
+    color: #333;
+  }
+  
+  .user-ke-orders-status.shipped {
+    background: #17a2b8;
+    color: white;
+  }
+  
+  .user-ke-orders-status.delivered {
+    background: #28a745;
+    color: white;
+  }
+  
+  /* ✅ Update Button */
+  .user-ke-orders-btn {
+    padding: 5px 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .user-ke-orders-btn:hover {
+    background: #0056b3;
+  }
+  
+  /* ✅ Mobile Responsive */
+  @media (max-width: 768px) {
+    .user-ke-orders-table-wrapper {
+      overflow-x: scroll;
+    }
+  
+    .user-ke-orders-table {
+      min-width: 1100px;
+    }
+  }
+  

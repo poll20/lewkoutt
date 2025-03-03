@@ -1,0 +1,94 @@
+.profile-container {
+  /* border: 2px solid red; */
+  margin-top:64px;
+  width: 100%;
+  max-width: 600px;
+  /* margin: auto; */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+ 
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius:0;
+  
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  font-size: 50px;
+  background-color: #b8e994;
+  border-radius: 50%;
+  padding: 10px;
+  margin-right: 15px;
+}
+
+.profile-details {
+  font-size: 14px;
+}
+
+.profile-add-button {
+  color: green;
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profile-balance {
+  display: flex;
+  justify-content: space-around;
+  margin:0;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius:0;
+}
+
+.balance-item {
+  text-align: center;
+}
+
+.balance-item svg {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.profile-menu {
+  border-top: 1px solid #ddd;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.menu-item p {
+  margin: 0;
+}
+
+.menu-item svg {
+  font-size: 20px;
+}
+
+.scroll{
+  
+  overflow-y: scroll;
+  height: 70vh;
+  /* border: 2px solid black; */
+}
+.scroll::-webkit-scrollbar{
+display: none;
+}

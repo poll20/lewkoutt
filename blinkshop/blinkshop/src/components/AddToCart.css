@@ -1,0 +1,218 @@
+/* OrderDetails.css */
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.order-container-addtocart {
+  /* border: 1px solid red; */
+  max-width: 600px;
+  /* max-height: 600px; */
+  min-height: 800px;
+  overflow-y: scroll;
+  /* margin: 20px auto; */
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow:none;
+}
+
+.order-container-addtocart::-webkit-scrollbar{
+  display: none;
+}
+.order-card-addtocart {
+  border-bottom: 1px solid #eeeeee;
+  padding: 15px 0;
+}
+
+.order-detailss-addtocart {
+  display: flex;
+  gap: 15px;
+}
+
+.order-imagee-addtocart {
+  width: 70px;
+  height: 70px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.order-info-addtocart {
+  flex: 1;
+}
+
+.order-title-addtocart {
+  margin: 0;
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+}
+
+.order-meta-addtocart {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #777777;
+}
+
+.order-delivery-addtocart {
+  font-size: 14px;
+  color: #555555;
+}
+.custom-checkbox input[type="checkbox"] {
+  appearance: none; /* Hides the default checkbox (cross-browser support) */
+  width: 15px;
+  height: 15px;
+  border:1px solid black;
+  border-radius:0; /* Make it rounded if needed */
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Add styles for the checked state */
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: #000000;
+  border-color: #3cb371;
+  position: relative;
+}
+
+.custom-checkbox input[type="checkbox"]:checked::before {
+  content: "✔";
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Add hover effect */
+.custom-checkbox input[type="checkbox"]:hover {
+  border-color: #555;
+}
+
+/* Bottom Sheet Styles */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  animation: slide-up 0.3s ease-out;
+  padding:20px;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sheet-content {
+  margin-top: 20px;
+}
+
+.size-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.size-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.size-button:hover {
+  background-color: #f0f0f0;
+}
+
+.guide-info {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 14px;
+  color: #555;
+}
+
+.buy-buttonss {
+  width: 100%;
+  
+  padding: 5px 0;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+}
+input[type="radio"] {
+  accent-color: black;  /* 👈 Changes the radio button color to black */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-container-addtocart {
+    /* border: 1px solid red; */
+    width:100%;
+    
+    /* margin: 10px;
+    padding: 15px; */
+  }
+.header{
+  /* border: 1px solid red; */
+  padding-top: 5px;
+  display: flex;
+  justify-content:start;
+  padding-left:10px ;
+  gap: 10px;
+align-items:center;
+  text-align: center;
+  margin-top: 64px;
+}
+  .order-detailss-addtocart {
+    display: flex;
+    width: 100%;
+    
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .order-imagee-addtocart {
+    width: 30vw;
+    height: 25vh;
+    border: 1px solid black;
+  }
+}

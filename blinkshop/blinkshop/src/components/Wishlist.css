@@ -1,0 +1,129 @@
+/* OrderDetails.css */
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.order-container-addtocart {
+  max-width: 600px;
+  max-height: 600px;
+  overflow-y: scroll;
+  /* margin: 20px auto; */
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow:none;
+}
+
+.order-container-addtocart::-webkit-scrollbar{
+  display: none;
+}
+.order-card-addtocart {
+  border-bottom: 1px solid #eeeeee;
+  padding: 15px 0;
+}
+
+.order-detailss-addtocart {
+  display: flex;
+  gap: 15px;
+}
+
+.order-imagee-addtocart {
+  width: 70px;
+  height: 70px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.order-info-addtocart {
+  flex: 1;
+}
+
+.order-title-addtocart {
+  margin: 0;
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+}
+
+.order-meta-addtocart {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #777777;
+}
+
+.order-delivery-addtocart {
+  font-size: 14px;
+  color: #555555;
+}
+.custom-checkbox input[type="checkbox"] {
+  appearance: none; /* Hides the default checkbox (cross-browser support) */
+  width: 15px;
+  height: 15px;
+  border:1px solid black;
+  border-radius:0; /* Make it rounded if needed */
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Add styles for the checked state */
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: #000000;
+  border-color: #3cb371;
+  position: relative;
+}
+
+.custom-checkbox input[type="checkbox"]:checked::before {
+  content: "✔";
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Add hover effect */
+.custom-checkbox input[type="checkbox"]:hover {
+  border-color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-container-addtocart {
+    /* border: 1px solid red; */
+    width:100%;
+    /* margin: 10px;
+    padding: 15px; */
+  }
+.header{
+  /* border: 1px solid red; */
+  padding-top: 5px;
+  display: flex;
+  justify-content:start;
+  padding-left:10px ;
+  gap: 10px;
+align-items:center;
+  text-align: center;
+  margin-top: 64px;
+}
+  .order-detailss-addtocart {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .order-imagee-addtocart {
+    width: 30vw;
+    height: 25vh;
+    border: 1px solid black;
+  }
+}

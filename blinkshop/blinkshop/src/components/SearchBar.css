@@ -1,0 +1,89 @@
+/* For larger screens */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Search Icon */
+.search-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Search Bar container for larger screens */
+.search-bar {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 40px;
+  transition: all 0.5s ease;
+  position: absolute;
+  right: 2rem;
+}
+
+.search-input {
+  width: 0;
+  opacity: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  transition: width 0.5s ease, opacity 0.3s ease;
+  font-size: 1rem;
+  background: none;
+  border-bottom: 2px solid #000;
+}
+
+.search-bar.active .search-input {
+  width: 200px;
+  opacity: 1;
+  padding: 5px;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  /* Full screen white overlay when search is open */
+  .mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 1; /* Make sure it covers the background */
+  }
+
+  /* Mobile search container (now sliding from the top) */
+  .mobile-search-bar {
+    position: fixed;
+    top: -30vh; /* Initially hidden above the viewport */
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: top 0.5s ease;
+    z-index: 2; /* Above the overlay */
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Slide down when open */
+  .mobile-search-bar.slide-down {
+    top: 0;
+  }
+
+  /* Mobile search input */
+  .mobile-search-input {
+    width: 80%;
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    border: 2px solid #000;
+    outline: none;
+    border-radius: 5px;
+  }
+}

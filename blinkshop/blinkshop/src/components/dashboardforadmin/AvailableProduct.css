@@ -1,0 +1,117 @@
+.admin-ka-dashtable-container {
+    width: 100%;
+    
+    overflow-x: auto; /* ✅ Table overflow fix */
+    padding: 20px;
+    background-color: white;
+  }
+  
+  .admin-ka-dashtable-title {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  /* ✅ Table Style */
+  .admin-ka-dashtable-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  }
+  
+  /* ✅ Fixed Table Header */
+  .admin-ka-dashtable-table thead {
+    background-color: #1f2937;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* ✅ Scrollable Table Body */
+  .admin-ka-dashtable-container tbody {
+    display: block;
+    max-height: 600px; /* ✅ Change height as needed */
+    overflow-y: auto;
+    width: 100%;
+  }
+  .admin-ka-dashtable-container tbody::-webkit-scrollbar{
+    display: none;
+  }
+  
+  /* ✅ Ensure Proper Table Layout */
+  .admin-ka-dashtable-container thead,
+  .admin-ka-dashtable-container tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+  
+  .admin-ka-dashtable-container th,
+  .admin-ka-dashtable-container td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    word-wrap: break-word;
+  }
+  
+  /* ✅ Fix Column Alignment */
+  .admin-ka-dashtable-container thead th {
+    text-align: center;
+  }
+  
+  /* ✅ Improve Scrollbar Visibility */
+  .admin-ka-dashtable-container tbody::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .admin-ka-dashtable-container tbody::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+  }
+  
+  .admin-ka-dashtable-container tbody::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin: 0 5px;
+  }
+  
+  .action-button.edit { color: blue; }
+  .action-button.save { color: green; }
+  .action-button.delete { color: red; }
+  .search-bar {
+    width: 30%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  .search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.sort-dropdown {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+  

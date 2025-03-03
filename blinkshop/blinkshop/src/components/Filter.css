@@ -1,0 +1,106 @@
+
+.myfilter-container{
+   
+    border: 1px solid rgb(206, 205, 205);
+    
+    margin:70px 15px;
+    
+    display: flex;
+    height: 80vh;
+    border-radius: 20px;
+    background-color: white;
+    
+    
+}
+.myfilter-name{
+    padding-top: 10px;
+    width: 40%;
+    height: 83%;
+    border-right: 1px solid rgb(185, 185, 185) ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center   */ 
+}
+.filter-list{
+    /* border: 2px solid red; */
+    height: 100%;
+    width: 100%;
+    overflow-y:scroll;
+    display: flex;
+    flex-direction: column;
+    /* justify-content:space-between; */
+    padding-left: 7px;
+    gap: 20px;
+/* display: flex;
+align-items: start; */
+/* justify-content: center; */
+/* flex-direction: column;
+justify-content: space-between;
+} */
+}
+.filter-list::-webkit-scrollbar{
+    display: none;
+}
+.myfilter-option{
+    /* border: 2px solid red; */
+    padding-top: 10px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+}
+.color-options{
+    overflow-y: auto;
+    /* border: 2px solid red; */
+    height: 100%;
+}
+.color-btn {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+.occasion-btn{
+    width: 15px;
+  height: 15px;
+  
+}
+
+.colorss{
+width: 100%;
+
+}
+.occasionss{
+    width: 100%;
+    }
+.categoriess{
+    width: 100%;
+}
+.btnnn {
+    background-color:white;
+    border-top:1px solid rgb(185, 185, 185) ;
+    left:40px;
+    /* border-radius:10px ; */
+    position: absolute;
+    bottom: 12vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content:space-evenly;
+    width: 80%;
+    padding:10px 0;
+    
+}
+ .btnnn button{
+    background-color:black;
+   border-radius:10px ;
+font-weight: bold;
+    padding: 10px 25px;
+    color: rgb(255, 255, 255);
+    
+}
+.filter-item.active {
+    color: green;
+    
+}
+

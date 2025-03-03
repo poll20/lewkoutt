@@ -1,0 +1,260 @@
+/* Container that holds all the cards */
+.om-card-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 950px;
+  height: 1000px;
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
+
+/* Individual cards */
+.om-card {
+  /* background-color: white; */
+  text-align: left;
+  transition: transform 0.3s ease-in-out;
+  min-width: 150px;
+  height: 60vh;
+}
+
+/* Image styling for the cards */
+.om-card-image {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+/* Hover effect to slightly lift the card */
+.om-card:hover {
+  transform: translateY(-10px);
+}
+
+/* Responsive design for tablets and mobile */
+.om-h2 {
+  border-bottom: 2px solid rgb(154, 154, 154);
+  width: 30vw;
+}
+
+/* Background sections */
+.om-responsive-background {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.om-static-bg {
+  width: 90vw;
+  height: 100vh;
+  background-image: url('D:\\blinkshop\\blinkshop\\src\\components\\image\\img1.jpg');
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto;
+}
+
+.om-mobile-bg {
+  display: none;
+}
+
+.om-foryou {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.om-dress {
+  border-top: 2px solid rgb(122, 122, 122);
+  border-left: 2px solid rgb(122, 122, 122);
+  height: 85%;
+  width: 20%;
+  background-image: url("D:\\blinkshop\\blinkshop\\src\\components\\image\\img4.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.om-discrep {
+  display: flex;
+  align-items: center;
+  gap: 35%;
+  color: #666;
+  flex-direction: column;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  width: 50%;
+  height: 60%;
+  position: relative;
+  left: -3%;
+}
+
+.om-discrep button {
+  border: 1px solid black;
+  margin-top: 4%;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.om-h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.om-p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.om-btnnn {
+  /* margin-top: 50px; */
+  width: 50%;
+  margin: auto;
+  margin-top: 10px;
+  /* margin-bottom: 2%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.om-btnnn button {
+  border: 1px solid gray;
+  background-color: rgba(255, 255, 255, 0.568);
+  padding: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .om-card-container {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 700px;
+      height: 500px;
+  }
+
+  .om-card {
+      /* background-color: #fff; */
+      text-align: center;
+      min-width: 170px;
+      height: 400px;
+  }
+
+  .om-responsive-background {
+      margin-top: 80%;
+      height: 70vh;
+  }
+
+  .om-static-bg {
+      display: none;
+  }
+
+  .om-mobile-bg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      padding: 0 20px;
+      height: 100vh;
+  }
+}
+
+/* Mobile-specific styling */
+@media (max-width: 768px) {
+  .om-card-container {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 15px;
+      height: 350px;
+  }
+
+  .om-card-container::-webkit-scrollbar {
+      display: none;
+  }
+
+  .om-card-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+  }
+
+  .om-card {
+      border-radius: 0px;
+      height: 45vh;
+      text-align: center;
+  }
+
+  .om-responsive-background {
+      margin-top: 0;
+      height: 70vh;
+  }
+
+  .om-static-bg {
+      display: none;
+  }
+
+  .om-mobile-bg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      padding: 0 20px;
+      height: 60vh;
+  }
+
+  .om-foryou {
+      margin-top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .om-dress {
+      height: 85%;
+      width: 100%;
+      background-image: url("D:\\blinkshop\\blinkshop\\src\\components\\image\\img4.jpeg");
+  }
+
+  .om-discrep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10%;
+      color: #666;
+      flex-direction: column;
+      border: 2px solid rgb(192, 188, 188);
+      background-color: #fffdfd;
+      width: 80%;
+      height: 70%;
+      position: relative;
+      left: 0;
+      top: -4%;
+  }
+
+  .om-discrep button {
+      border: 1px solid black;
+      margin-top: 4%;
+      background-color: black;
+      color: white;
+      border-radius: 5px;
+      padding: 5px;
+  }
+
+  .om-btnnn {
+
+      width: 50%;
+      margin: auto;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+}

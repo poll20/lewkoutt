@@ -1,0 +1,70 @@
+/* Referral Container */
+.referral-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #f9fafb, #e0e7ff);
+    padding: 20px;
+  }
+  
+  /* Referral Content */
+  .referral-content {
+    max-width: 400px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+  }
+  
+  /* Title */
+  .referral-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1e40af;
+  }
+  
+  /* Text */
+  .referral-text {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Field */
+  .referral-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  /* Button */
+  .referral-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #1e40af;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .referral-button:hover {
+    background-color: #1d4ed8;
+  }
+  
+  /* Referral Note */
+  .referral-note {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #374151;
+  }
+  

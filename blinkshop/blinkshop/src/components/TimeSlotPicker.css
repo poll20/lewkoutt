@@ -1,0 +1,80 @@
+/* Container Styling */
+.time-slot-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #f9f9f9;
+    min-height: 50vh;
+  }
+  
+  .time-slot-picker h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Time Slot Buttons Container */
+  .time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  /* Time Slot Button */
+  .time-slot {
+    padding: 12px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .time-slot:hover {
+    background: #ffefc3;
+    border-color: #ffc107;
+  }
+  
+  /* Selected Slot */
+  .time-slot.selected {
+    background: #ffc107;
+    color: white;
+    border-color: #ff9800;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Disabled Slot */
+  .time-slot.disabled {
+    background: #e0e0e0;
+    color: #9e9e9e;
+    border-color: #c7c7c7;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .time-slot {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .time-slots {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+  
+    .time-slot {
+      font-size: 12px;
+      padding: 8px;
+    }
+  }
+  

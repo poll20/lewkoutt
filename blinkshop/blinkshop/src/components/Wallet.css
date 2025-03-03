@@ -1,0 +1,61 @@
+.wallet-container-mera-wallet {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin-top: 50px;
+  }
+  
+  .wallet-tabs-mera-wallet {
+    display: flex;
+    justify-content: space-around;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .wallet-tab-mera-wallet {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .wallet-tab-mera-wallet:hover {
+    color: #007bff;
+  }
+  
+  .active-mera-wallet {
+    color: #fff;
+    background: #007bff;
+    border-radius: 5px;
+  }
+  
+  .wallet-section-mera-wallet {
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .cashback-mera-wallet {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  }
+  
+  .points-mera-wallet {
+    background: linear-gradient(135deg, #1e90ff, #3742fa);
+  }
+  
+  .pppp {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+  
