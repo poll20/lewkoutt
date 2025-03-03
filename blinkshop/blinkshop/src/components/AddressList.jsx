@@ -5,11 +5,9 @@ import { useAuth } from "./AuthContext";
 import { HiH1 } from "react-icons/hi2";
 import { useBio } from "./BioContext";
 import { useNavigate } from "react-router-dom";
-
-
 const AddressList = () => {
   
-  const [otp, setOtp] = useState(""); // ✅ State for OTP input
+  const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
 const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
   const {handlenewaddress,handlechooseaddress,deleteandeditaddrress}=useBio()
   const [pincode, setPincode] = useState("");
