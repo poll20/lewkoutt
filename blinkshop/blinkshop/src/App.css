@@ -3,6 +3,8 @@ html, body, #root {
         height: 100%;
         margin: 0;
         padding: 0;
+        font-family: 'Courier New', Courier, monospace;
+        background-color: white;
       }
       
 .mainnn-contenttttttt {

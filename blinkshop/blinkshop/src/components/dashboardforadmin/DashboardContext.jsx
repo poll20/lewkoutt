@@ -14,6 +14,7 @@ export const DashboardProvider = ({ children }) => {
     const[shopkeeperprd,setshopkeeperprd]=useState([])
     const[productonlydetails,setproductonlydetails]=useState([])
     const[shopkeepersale,setshopkepersale]=useState([])
+    const[returndata,setreturndata]=useState([])
     const [dis, setdis] = useState({
         dismin:2,
         dismax:50,
@@ -231,16 +232,25 @@ useEffect(()=>{
 
       };
 
+      
       const markAsDelivered = async (orderId) => {
+        if(userDetails)
+        {
         try {
             const response = await fetch(`http://localhost:3000/order/deliver/${orderId}`, {
                 method: "PUT",
+                headers: {
+                  "Content-Type": "application/json", // Sending JSON data
+                },
+                body: JSON.stringify({userDetails}), // Convert object to JSON string
+                
             });
             const data = await response.json();
             alert(data.message);
         } catch (error) {
             console.error("Error:", error);
         }
+      }
     };
  
 
@@ -367,13 +377,29 @@ useEffect(()=>{
     getShopDailySales()
 },[user,userDetails])
     
+    const updateOrdersWithReturnDetails = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/return');
+        // Check if the response is okay even if no records are found
+        const data = await response.json();
+        console.log('Updated Orders:', data);
+        setreturndata(data.updatedOrders || []); // use updatedOrders from response
+      } catch (error) {
+        console.error('Error updating orders:', error);
+      }
+    };
+    
+    // Call the function when the component mounts
+    useEffect(() => {
+      updateOrdersWithReturnDetails();
+    }, []);
     
     
     
     
   return (
     <DashboardContext.Provider
-      value={{adddatatoexistingcategory , addnewcategory ,users,editordeleteinexisitingcategory,deletefromexistingproduct,dis, setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,shopkeepersale}}
+      value={{adddatatoexistingcategory , addnewcategory ,users,editordeleteinexisitingcategory,deletefromexistingproduct,dis, setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,shopkeepersale,updateOrdersWithReturnDetails,returndata}}
     >
       {children}
     </DashboardContext.Provider>

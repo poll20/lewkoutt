@@ -4,5 +4,5 @@ let mongoose=require("mongoose")
     console.log("connect successfully")
  })
  .catch((e)=>{
-    console.log(`error: ${e}`)
+    console.log(`error agyi: ${e}`)
  })

@@ -39,7 +39,7 @@ const twilio = require("twilio");
 // let wishmodel=require("../database/collection.js")
 let bodyparser=require("body-parser")
 // let addtocart=require("../database/collection.js")
-let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans}=require("../database/collection.js")
+let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel}=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const products = [
   
@@ -141,16 +141,59 @@ app.get("/card", (req, res) => {
 });
 
 //save itm to cart
-app.post('/cart', async (req, res) => {
-  const { _id,title,description,image,price,discountprice,userid,productId,shopname} = req.body;
-  const newItem = new wishmodel({ itemid:_id, title, description, image,price,discountprice,userId:userid ,productId,shopname});
-//console.log(newItem)
+// app.post('/cart', async (req, res) => {
+//   const { _id,title,description,image,price,discountprice,userid,productId,shopname} = req.body;
+//   const newItem = new wishmodel({ itemid:_id, title, description, image,price,discountprice,userId:userid ,productId,shopname});
+// console.log("wish",newItem)
+//   try {
+//     await newItem.save();
+//     res.status(201).json(newItem);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//     //console.log(err)
+//   }
+// });
+app.post("/cart", async (req, res) => {
   try {
+    const {
+      _id,
+      title,
+      description,
+      image,
+      price,
+      discountprice,
+      userid,
+      productId,
+      shopname,
+      size
+    } = req.body;
+
+    console.log("Received Data:", req.body); // Debugging
+
+    if (!userid || !productId) {
+      return res.status(400).json({ error: "User ID and Product ID are required" });
+    }
+
+    const newItem = new wishmodel({
+      itemid: _id,
+      title,
+      description,
+      image,
+      price,
+      discountprice,
+      userId: userid,
+      productId,
+      shopname,
+      size
+    });
+
+    console.log("Saving item to DB:", newItem);
+
     await newItem.save();
     res.status(201).json(newItem);
   } catch (err) {
+    console.error("Error saving to DB:", err);
     res.status(400).json({ error: err.message });
-    //console.log(err)
   }
 });
 
@@ -1341,8 +1384,8 @@ const sendWhatsAppMessage = async (order) => {
 // console.log("✅ Cron Job for Auto Order Status Update is Running!");
 
 
-  async function addPointsOnPurchase(userId, purchaseAmount) {
-    
+  async function addPointsOnPurchase(userId, purchaseAmount,type) {
+
     console.log("user ki idd",userId)
     console.log("khredi ki vlaue",purchaseAmount)
       
@@ -1364,8 +1407,37 @@ const sendWhatsAppMessage = async (order) => {
         description: `Earned from purchase of ₹${purchaseAmount}`,
         date: new Date()
     });
+  
+ 
 
-    console.log(`✅ User ${userId} earned ${pointsEarned} points (₹${valueInRupees})`);
+    // console.log(`✅ User ${userId} earned ${pointsEarned?(pointsEarned):(purchaseAmount)} points (₹${valueInRupees?(valueInRupees):()})`);
+  }
+
+  async function addcashbacktowallet(userId, purchaseAmount,type) {
+
+    console.log("user ki idd",userId)
+    console.log("khredi ki vlaue",purchaseAmount)
+      
+  
+    // ✅ Update User Wallet
+    await userr.updateOne(
+        { _id: userId },
+        { $inc: { "wallet.cashback":purchaseAmount } }
+    );
+
+    // ✅ Add Wallet Transaction History
+    await wallettrans.create({
+        userId,
+        type: "cashback",
+        amount: purchaseAmount,
+        valueInRupees:purchaseAmount,
+        description: `Earned from return of ₹${purchaseAmount}`,
+        date: new Date()
+    });
+  
+ 
+
+    // console.log(`✅ User ${userId} earned ${pointsEarned?(pointsEarned):(purchaseAmount)} points (₹${valueInRupees?(valueInRupees):()})`);
   }
 
 
@@ -1399,6 +1471,19 @@ console.log("orderaaarr",ordersArray)
  })); 
 
 
+// 🟢 Subtract Ordered Quantity from Product Model
+for (const item of ordersArray) {
+  const product = await productsmodel.findById(item.productid?(item.productid):(item._id));
+  if (product) {
+      if (product.qty >= item.qty) {
+          product.qty -= item.qty; // 🛑 Subtract ordered quantity
+          await product.save();
+      } else {
+          return res.status(400).json({ error: `Not enough stock for product ID: ${item.productid}` });
+      }
+  }
+}
+
       // Save Order in Database
       const newOrder = new orderr ({
         name:userDetails.name,
@@ -1418,7 +1503,7 @@ console.log("orderaaarr",ordersArray)
       let orderprice = ordersArray.reduce((total, e) => total + (Array.isArray(e.discountprice) 
   ? e.discountprice.reduce((sum, price) => sum + price, 0) 
   : e.discountprice), 0);
-    addPointsOnPurchase(userDetails._id,orderprice)
+    // addPointsOnPurchase(userDetails._id,orderprice)
   } catch (error) {
       console.error("Order Error:", error);
       res.status(500).json({ error: "Order Failed" });
@@ -1478,6 +1563,7 @@ console.log("Order Products:", userOrders[0].products);
 app.put('/order/deliver/:id', async (req, res) => {
   try {
       const order = await orderr.findById(req.params.id);
+      const {userDetails}=req.body 
       if (!order) {
           return res.status(404).json({ error: "Order not found" });
       }
@@ -1495,9 +1581,19 @@ app.put('/order/deliver/:id', async (req, res) => {
  
       else if(order.status=="shipped"){
         order.status = "delivered";
+        order.deliveredAt = new Date(); // ✅ Store delivery time
         await order.save();
         orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
         res.json({ message: "Order marked as delivered!" });
+        
+      }
+
+      else if(order.status=="pending-returned"){
+        order.status = "returned";
+        await order.save();
+        orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
+        res.json({ message: "Order marked as returned!" });
+      
       }
       else{
         return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
@@ -1509,6 +1605,58 @@ app.put('/order/deliver/:id', async (req, res) => {
       res.status(500).json({ error: "Server error" });
   }
 });
+
+// setInterval(async () => {
+//   try {
+//     const timeLimit = new Date(Date.now() - 65 * 60 * 1000); // 65 minutes ago
+//     const eligibleOrders = await orderr.find({
+//       status: "delivered",
+//       deliveredAt: { $lte: timeLimit }
+//     });
+
+//     for (const order of eligibleOrders) {
+//       await addPointsOnPurchase(order.userId, order.price,"delivered");
+//       console.log(`✅ Points added for Order ID: ${order._id}`);
+
+//       // ✅ Ensure points are only added once
+//       order.status = "points-added";
+//       await order.save();
+//     }
+//   } catch (err) {
+//     console.error("❌ Error in points scheduler:", err);
+//   }
+// }, 5 * 60 * 1000); // ✅ Runs every 5 minutes
+
+setInterval(async () => {
+  try {
+    const timeLimit = new Date(Date.now() - 24 * 65 * 60 * 1000); // 65 minutes ago
+    const eligibleOrders = await orderr.find({
+      status: "delivered",
+      deliveredAt: { $lte: timeLimit }
+    });
+
+    for (const order of eligibleOrders) {
+      // ✅ Sum totalAmount from all products
+      const totalAmount = order.products?.reduce((sum, product) => sum + (product.totalAmount || 0), 0);
+
+      if (totalAmount <= 0) {
+        console.error(`❌ Order ID: ${order._id} has invalid totalAmount:`, totalAmount);
+        continue; // Skip this order if totalAmount is invalid
+      }
+
+      console.log(`✅ Adding points for Order ID: ${order._id}, Amount: ₹${totalAmount}`);
+
+      await addPointsOnPurchase(order.userId, totalAmount, "delivered");
+
+      // ✅ Ensure points are only added once
+      order.status = "Delivered";
+      await order.save();
+    }
+  } catch (err) {
+    console.error("❌ Error in points scheduler:", err);
+  }
+}, 2 * 60 * 1000); // ✅ Runs every 5 minutes
+
 
 
 // ✅ User se Rating Accept karna
@@ -1692,73 +1840,6 @@ app.get("/sales/daily", async (req, res) => {
   }
 });
 
-
-// app.get("/sales/daily/:shopname", async (req, res) => { 
-//   try {
-//       let { shopname } = req.params;
-//       if (!shopname) {
-//           return res.status(400).json({ error: "Shopname is required" });
-//       }
-
-//       let today = new Date();
-//       today.setHours(0, 0, 0, 0);
-
-//       let sales = await SalesModel.aggregate([
-//           { $match: { saleDate: { $gte: today }, shopname: shopname } },  // ✅ Date & Shopname filter
-
-//           // 🔥 Lookup from "products"
-//           { 
-//               $lookup: {  
-//                   from: "products",  
-//                   localField: "productId",  // ✅ SalesModel ka productId
-//                   foreignField: "_id",      // ✅ Products ka _id (main document)
-//                   as: "productInfo"
-//               }
-//           },
-
-//           { $unwind: { path: "$productInfo", preserveNullAndEmptyArrays: true } }, // ✅ Unwind products
-
-//           // 🔥 Lookup from "productInfo.productdetails" (Nested Collection)
-//           { 
-//               $lookup: {  
-//                   from: "products",  
-//                   localField: "productId",       // ✅ SalesModel ka productId
-//                   foreignField: "productdetails._id", // ✅ Match products.productdetails._id se
-//                   as: "matchedProduct"
-//               }
-//           },
-
-//           { $unwind: { path: "$matchedProduct", preserveNullAndEmptyArrays: true } }, // ✅ Unwind matchedProduct
-
-//           // ✅ Grouping Sales Data
-//           { 
-//               $group: { 
-//                   _id: null, 
-//                   totalSales: { $sum: "$quantity" },  
-//                   totalReturns: { $sum: "$returnedQuantity" }, 
-//                   totalRevenue: { $sum: "$totalAmount" },  
-//                   products: { 
-//                       $push: { 
-//                           productName: "$matchedProduct.productdetails.title",  
-//                           quantity: "$quantity" 
-//                       } 
-//                   } 
-//               } 
-//           }
-//       ]);
-
-//       console.log("✅ Aggregated Sales Data:", JSON.stringify(sales, null, 2));
-
-//       let result = sales[0] || { totalSales: 0, totalReturns: 0, totalRevenue: 0, products: [] };
-//       result.netSales = result.totalSales - result.totalReturns;
-
-//       res.json(result);
-//       console.log("✅ Sales Result:", result);
-//   } catch (error) {
-//       console.error("❌ Error fetching daily sales:", error);
-//       res.status(500).json({ error: "Failed to fetch sales" });
-//   }
-// });
 app.get("/sales/daily/:shopname", async (req, res) => { 
   try {
       let { shopname } = req.params;
@@ -1835,6 +1916,159 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 // })
 
 // ✅ Start Server
+
+
+app.post("/return", async (req, res) => {
+  try {
+    let { reason,subreason,selectedOption,orderdata } = req.body;
+    
+    // ✅ Correct validation
+    if (!reason || !subreason|| !selectedOption||  !orderdata) {
+      return res.status(400).json({ error: "All fields are required!" });
+    }
+
+    // ✅ Converting frontend data into proper format
+    const returnData = orderdata.map(e => ({
+      orderid: e._id,  // `_id` ko `orderId` me convert kiya
+      reason: reason,
+      subreason: subreason,
+      selectedOption:selectedOption
+      
+    }));
+ 
+    // ✅ Saving data in database
+    let savedReturns = await returnmodel.create(returnData);
+ console.log("savreretun",savedReturns)
+
+//  await orderr.findByIdAndDelete({_id:orderdata[0]._id})
+    return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
+  } catch (error) {
+    console.error("Error in return request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
+cron.schedule("*/5 * * * *", async () => {
+  console.log("🔄 Checking for orders eligible for cashback...");
+
+  try {
+    // Find all returned orders with 'wallet' option but cashback not processed
+    const returns = await returnmodel.find({ selectedOption: "Wallet" });
+
+    for (const ret of returns) {
+      const order = await orderr.findOne({ _id: ret.orderid, status: "returned" });
+
+      if (order) {
+        // ✅ Sum totalAmount from all products
+        const totalAmount = order.products?.reduce((sum, product) => sum + (product.totalAmount || 0), 0);
+
+        if (totalAmount <= 0) {
+          console.error(`❌ Order ID: ${order._id} has invalid totalAmount:`, totalAmount);
+          continue; // Skip this order if totalAmount is invalid
+        }
+
+        console.log(`✅ Processing cashback of ₹${totalAmount} for Order ID: ${order._id}`);
+
+        await addcashbacktowallet(order.userId, totalAmount);
+
+        // ✅ Update order status to prevent duplicate cashback
+        order.status = "cashback-processed";
+        await order.save();
+      }
+    }
+  } catch (error) {
+    console.error("❌ Error in cashback cron job:", error);
+  }
+});
+
+
+
+
+
+// GET /return endpoint
+// app.get("/return", async (req, res) => {
+//   try {
+//     // Fetch all return records from the Return collection
+//     const returns = await returnmodel.find();
+//     if (!returns || returns.length === 0) {
+//       return res.status(404).json({ message: "No return records found." });
+//     }
+
+//     // Array to collect orders that get updated
+//     const updatedOrders = [];
+
+//     // Process each return record
+//     for (const ret of returns) {
+//       // Find the order in Order collection where _id matches ret.orderid and status is 'delivered'
+//       const order = await orderr.findOne({ _id: ret.orderid, status: "delivered" });
+//       console.log("ordd",typeof(order))
+//       if (order) {
+//         // Update the order with return details from the return document
+//         order.reason = ret.reason;
+//         order.subreason = ret.subreason;
+//         order.selectedOption = ret.selectedOption;
+//         order.returnDate = ret.returnDate; // Assuming this is already a Date or ISO string
+//         order.status="pending-returned"
+//         // Save the updated order document
+//         await order.save();
+//         updatedOrders.push(order);
+//       }
+//     }
+
+//     res.status(200).json({
+//       message: "Orders updated with return details.",
+//       updatedOrders,
+//     });
+//   } catch (error) {
+//     console.error("Error updating orders with return details:", error);
+//     res.status(500).json({ message: "Server error.", error: error.message });
+//   }
+// });
+app.get("/return", async (req, res) => {
+  try {
+    // Fetch all return records from the Return collection
+    const returns = await returnmodel.find();
+
+    if (!returns || returns.length === 0) {
+      return res.status(404).json({ message: "No return records found." });
+    }
+
+    // Process each return record
+    for (const ret of returns) {
+      // Find the order where _id matches ret.orderid and status is 'delivered'
+      const order = await orderr.findOne({ _id: ret.orderid, status: "delivered" });
+
+      if (order) {
+        // Update order with return details
+        order.reason = ret.reason;
+        order.subreason = ret.subreason;
+        order.selectedOption = ret.selectedOption;
+        order.returnDate = ret.returnDate; // Assuming Date or ISO string
+        order.status = "pending-returned";
+
+        // Save updated order
+        await order.save();
+      }
+    }
+
+    // 🔹 Return all orders again after update
+    const updatedOrders = await orderr.find({ status: "pending-returned" });
+
+    res.status(200).json({
+      message: "Orders updated with return details.",
+      updatedOrders,
+    });
+  } catch (error) {
+    console.error("Error updating orders with return details:", error);
+    res.status(500).json({ message: "Server error.", error: error.message });
+  }
+});
+
+
+
+
 app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 Server running on port: ${port}`);
 });

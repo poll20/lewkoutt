@@ -168,6 +168,7 @@ import Wallet from "./components/Wallet";
 import Ordersofusers from "./components/dashboardforadmin/Ordersofusers";
 import ShopkeeperDashboard from "./components/ShopKeeperDashboard";
 import ReturnRequest from "./components/ReturnRequest";
+import ReturnDataTable from "./components/dashboardforadmin/ReturnDataTable";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -240,6 +241,7 @@ function Layout() {
               <Route path="/admin/registeruser" element={<RegisterUser/>} />
               <Route path="/admin/newarrival" element={<NewArrival/>} />
               <Route path="/admin/userorder" element={<Ordersofusers/>} />
+              <Route path="/admin/returnmyorder" element={<ReturnDataTable/>} />
 
 
             </Routes>

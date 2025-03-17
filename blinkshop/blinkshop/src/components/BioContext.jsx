@@ -31,6 +31,7 @@ export const BioProvider = ({children,addtocartitem }) => {
  const [refetch, setRefetch] = useState(false); // ✅ Track re-fetch status
  const[userorder,setuserorder]=useState([])
  const[rating,setrating]=useState([]) 
+ 
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -153,45 +154,113 @@ useEffect(() => {
     }, [user,userDetails]);
 
   
-  const handleClick = async (id) => {
+  // const handleClick = async (prd,id) => {
+  //   try {
+  //     // const matchItem = allproductdata.find((e) => e._id === id);
+  //     const matchItem = productdataonlydetail
+  //     .flatMap(product => product.colors)  // Sare products ke colors ko ek array bana diya
+  //     .filter(color => color._id == id);
+  //      console.log("matchiterm",matchItem)
+  //     console.log("id",id)
+  //     console.log("ui",userDetails._id )
+  //     matchItem["userid"]=userDetails._id
+  //     matchItem["productId"]=id
+  //     matchItem["price"]=prd.price
+  //     matchItem["discountprice"]=prd.discountprice
+  //     matchItem["productId"]=id
+  //     matchItem["image"]=prd.image
+  //     matchItem["shopname"]=prd.shopname
+  //     console.log(typeof(matchItem),"mit")
+  //     console.log("match ho gyaa",matchItem)
+  //     const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
+  //  console.log("delete",itemInCart)
+  //     if (!itemInCart) {
+  //       const response = await fetch('http://localhost:3000/cart', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify(matchItem),
+  //       });
+
+  //       if (response.ok) {
+  //         const addedItem = await response.json();
+  //         setWishlist((prev) => [...prev, id]);
+  //         setwishlistdata((prev) => [...prev, addedItem]);
+  //       }
+  //     } else {
+  //       const response = await fetch(`http://localhost:3000/cart/${itemInCart._id}`, {
+  //         method: 'DELETE',
+  //       });
+
+  //       if (response.ok) {
+  //         setWishlist((prev) => prev.filter((itemId) => itemId !== id));
+  //         setwishlistdata((prev) => prev.filter((item) => item.itemid !== id));
+  //         toast.success("data removed succesfully")
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error in handleClick:', error);
+      
+  //   }
+  // };
+  const handleClick = async (prd, id) => {
     try {
-      const matchItem = allproductdata.find((e) => e._id === id);
-      console.log("ui",userDetails._id )
-      matchItem["userid"]=userDetails._id
-      matchItem["productId"]=id
-      console.log(typeof(matchItem),"mit")
-      console.log("match ho gyaa",matchItem)
-      const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
-   console.log("delete",itemInCart)
+      // Correcting the way matchItem is created
+      const matchedColors = productdataonlydetail
+        .flatMap(product => product.colors)
+        .filter(color => color._id == id);
+  
+      if (matchedColors.length === 0) {
+        console.error("No matching item found!");
+        return;
+      }
+  
+      const matchItem = { ...matchedColors[0] }; // Convert array to object
+      console.log("matchItem before adding data:", matchItem);
+  
+      // Adding necessary properties
+      matchItem.userid = userDetails._id;
+      matchItem.productId = id;
+      matchItem.price = prd.price;
+      matchItem.discountprice = prd.discountprice;
+      matchItem.image = prd.image;
+      matchItem.shopname = prd.shopname;
+      matchItem.title = prd.title;
+      matchItem.description = prd.description;
+      matchItem.size = prd.sizes;
+  
+      console.log("Final matchItem:", matchItem); // Debugging
+  
+      const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
+      console.log("delete", itemInCart);
+  
       if (!itemInCart) {
-        const response = await fetch('http://localhost:3000/cart', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("http://localhost:3000/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(matchItem),
         });
-
+  
         if (response.ok) {
           const addedItem = await response.json();
-          setWishlist((prev) => [...prev, id]);
-          setwishlistdata((prev) => [...prev, addedItem]);
+          setWishlist(prev => [...prev, id]);
+          setwishlistdata(prev => [...prev, addedItem]);
         }
       } else {
         const response = await fetch(`http://localhost:3000/cart/${itemInCart._id}`, {
-          method: 'DELETE',
+          method: "DELETE",
         });
-
+  
         if (response.ok) {
-          setWishlist((prev) => prev.filter((itemId) => itemId !== id));
-          setwishlistdata((prev) => prev.filter((item) => item.itemid !== id));
-          toast.success("data removed succesfully")
+          setWishlist(prev => prev.filter(itemId => itemId !== id));
+          setwishlistdata(prev => prev.filter(item => item.itemid !== id));
+          toast.success("Data removed successfully");
         }
       }
     } catch (error) {
-      console.error('Error in handleClick:', error);
-      
+      console.error("Error in handleClick:", error);
     }
   };
-
+  
 const addtowishlistonly=async(id)=>{
   console.log("mili kya",id)
   try {
@@ -225,30 +294,35 @@ catch(e){
 }
 
 
-  const handleAddToCart = async (id,quantity,selectedSize) => {
+  const handleAddToCart = async (prd,quantity,selectedSize) => {
     try {
-      console.log("iqs",id,quantity,selectedSize)
-      const matchItem = allproductdata.find((e) => e._id === id);
-      console.log("dekhte h chlo yha kya milta hia",matchItem)
-      matchItem["userid"]=userDetails._id
-      matchItem["productId"]=id
-      Object.assign(matchItem, { size: selectedSize });
-      Object.assign(matchItem, { qty: quantity });
-      console.log("dekhte h chlo yha kya milta hia",matchItem)
+      console.log("iqs",prd,quantity,selectedSize)
+      // const matchItem = productdataonlydetail.find((e) => e._id == id);
+      // const matchItem = productdataonlydetail
+      // .flatMap(product => product.colors)  // Sare products ke colors ko ek array bana diya
+      // .filter(color => color._id == id);
+      // console.log("dekhte h chlo yha kya milta hia",matchItem)
+      prd.userid=userDetails._id
+      prd.productId=prd._id
+      prd.size=selectedSize
+      prd.qty=quantity
+      // Object.assign(matchItem, { size: selectedSize });
+      // Object.assign(matchItem, { qty: quantity });
+      console.log("dekhte h chlo yha kya milta hia",prd)
       // const itemInCart = addtocartdatas.find((cartItem) => cartItem._id === id);
-      const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
+      // const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
 
       
         const response = await fetch('http://localhost:3000/addtocart', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(matchItem),
+          body: JSON.stringify(prd),
         });
 
         if (response.ok) {
           const addedItem = await response.json();
           setaddtocartdata((prev) => [...prev, addedItem]);
-          setaddtocartdataonly((prev) => [...prev, id]);
+          setaddtocartdataonly((prev) => [...prev, prd._id]);
           
         }
         else{
@@ -719,6 +793,33 @@ useEffect(() => {
 }, [userDetails?._id, user]);
 
 
+
+let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
+  console.log("slec",selectedOption)
+
+  try{
+    let orderpost=await fetch("http://localhost:3000/return",{
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json",  // Specify that we're sending JSON
+      },
+      body: JSON.stringify({reason,subreason,selectedOption,orderdata}), 
+
+    })
+    if(orderpost.ok){
+      toast.success("order return process successfull")
+    }
+     // ✅ New Order ko State me Add Karo
+    
+  }
+  catch(e){
+    console.log(e)
+  }
+
+}
+
+
+
   return (
     <>
     <ToastContainer 
@@ -773,9 +874,10 @@ useEffect(() => {
         userorder,
         submitRating,
         fetchRatings,
-        rating
-      
-    }}
+        rating,
+        orderreturn,
+    
+  }}
     >
       {children}
     </BioContext.Provider>

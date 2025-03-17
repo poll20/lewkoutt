@@ -51,9 +51,19 @@ body {
   .status-badge.delivered {
     background-color: #27ae60;
   }
+  .status-badge.points-added{
+    background-color: #27ae60;
+  }
   
   .status-badge.returned {
     background-color: #e74c3c;
+  }
+  
+  .status-badge.cashback-processed{
+    background-color: #000000;
+  }
+  .status-badge.pending-returned{
+    background-color: #043eff;
   }
 
   .status-badge.shipped {

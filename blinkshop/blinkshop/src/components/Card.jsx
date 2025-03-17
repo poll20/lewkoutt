@@ -313,8 +313,13 @@ import React, { useState, useEffect } from "react";
 
       const setShowSize=(id)=>{
         console.log("iid",id)
-        let prd=productdataonlydetail.filter((e)=>(e._id==id))
-        let siz=prd.map((e)=>e.colors.map((e)=>(e.sizes.map((e)=>(e.size)))).flat()).flat()
+        // let prd=productdataonlydetail.filter((e)=>(e._id==id))
+        let prd = productdataonlydetail
+  .flatMap(e => e.colors) // Sare products ke colors ko ek array bana diya
+  .filter(color => color._id == id); // Colors ke andar se specific _id match kiya
+  console.log("prddd",prd)
+  let siz=prd[0].sizes.map((e)=>e.size)
+  
         
       setprdallsizes(siz)  
       setaddtocartkeliyeid(id)

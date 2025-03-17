@@ -29,7 +29,7 @@ const Wallet = ({ cashback, points }) => {
       {activeTab === "cashback" && (
         <div className="wallet-section-mera-wallet cashback-mera-wallet">
           <h2>Cashback Balance</h2>
-          <p className="pppp">₹{cashback}</p>
+          <p className="pppp">₹{!userDetails.wallet.cashback?(0):(userDetails.wallet.cashback)}</p>
         </div>
       )}
 

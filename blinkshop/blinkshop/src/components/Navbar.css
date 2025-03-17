@@ -9,6 +9,7 @@ body {
   border: 2px solid red;
   display: flex;
   border:none;
+  
   justify-content:space-around;
   align-items: center;
   padding: 10px 0;
@@ -191,6 +192,7 @@ body {
   overflow-y: auto;
   z-index: 1001;
   padding-top: 60px;
+  
 }
 .side-navbar.open {
   transform: translateX(0); /* Slide-in effect */
@@ -219,12 +221,14 @@ body {
 
 .side-navbar ul li {
   padding: 15px 20px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .side-navbar ul li a {
   text-decoration: none;
   color: #333;
   font-size: 16px;
+  /* font-family: 'Courier New', Courier, monospace; */
 }
 
 .side-navbar.open {

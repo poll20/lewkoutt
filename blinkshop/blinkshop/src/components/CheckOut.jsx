@@ -94,8 +94,10 @@ const{recordMultipleSales}=useDashboard()
   const toggleSheet = () => setShowSheet(!showSheet);
 if(buydata){
   console.log("mera naam bhay",buydata)
+  console.log("guggu babuu",purchaseproduct)
 }
-
+const totalDiscountPrice = purchaseproduct.reduce((sum, item) => sum + item.discountprice, 0);
+const totalPrice = purchaseproduct.reduce((sum, item) => sum + item.price, 0);
   return (
     <div className="checkout-container-checkoutbuy">
       <h2 className="checkout-title-checkoutbuy">Checkout</h2>
@@ -130,7 +132,7 @@ if(buydata){
               onChange={() => setSelectedPayment("UPI")}
             />
             <span>UPI via</span>
-            <p>₹{purchaseproduct[0].discountprice}.0</p>
+            <p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>
           </label>
           <label className="payment-option-checkoutbuy">
             <input
@@ -140,7 +142,7 @@ if(buydata){
               onChange={() => setSelectedPayment("Credit/Debit Card")}
             />
             <span>Credit/Debit Card</span>
-            <p>₹{purchaseproduct[0].discountprice}.0</p>
+            <p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>
           </label>
           <label className="payment-option-checkoutbuy">
             <input
@@ -150,7 +152,7 @@ if(buydata){
               onChange={() => setSelectedPayment("Net Banking")}
             />
             <span>Net Banking</span>
-            <p>₹{purchaseproduct[0].discountprice}.0</p>
+            <p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.00</p>
           </label>
         </div>
 
@@ -164,7 +166,7 @@ if(buydata){
               onChange={() => setSelectedPayment("COD")}
             />
             <span>COD (Cash on Delivery)</span>
-            <p>₹{purchaseproduct[0].discountprice + 30}.0</p>
+            <p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice +30):(totalDiscountPrice + 30)}.0</p>
           </label>
         </div>
       </div>
@@ -174,11 +176,12 @@ if(buydata){
         <h3>Order Details</h3>
         <div className="order-row-checkoutbuy">
           <span>MRP</span>
-          <span>₹{purchaseproduct[0].price}</span>
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].price):(totalPrice)}.0</span>
         </div>
         <div className="order-row-checkoutbuy">
           <span>Discount on MRP</span>
-          <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span>
+          {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice):(totalPrice-totalDiscountPrice)}.0</span>
         </div>
         <div className="order-row-checkoutbuy">
           <span>Wallet Money</span>
@@ -190,9 +193,9 @@ if(buydata){
         </div>
         <div className="order-row-checkoutbuy payable-row-checkoutbuy">
           <span>Payable amount</span>
-          <span>₹{purchaseproduct[0].discountprice}</span>
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</span>
         </div>
-        <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct[0].price-purchaseproduct[0].discountprice} on the final amount</p>
+        <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice):(totalPrice-totalDiscountPrice)}.0 on the final amount</p>
       </div>
 
       <button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);setTimeout(()=>{recordMultipleSales(purchaseproduct)},300) }}>Pay Now</button>

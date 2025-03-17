@@ -26,7 +26,7 @@ import Card from "./Card";
 // const {addtocartitem,cartitem} = useContext(BioContext);
 const ProductDescription = () => {
    
- 
+  const [loading, setLoading] = useState(true);
 const [cartData, setCartData] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
   const [qty, setqty] = useState(1);
@@ -36,58 +36,65 @@ const [cartData, setCartData] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
   const [popupImage, setPopupImage] = useState(""); // State to store the clicked image
-
+  const [Selectedcolor,setSelectedcolor]=useState([])
+const[product,setproduct]=useState([])
   let { id } = useParams();
   let navigate=useNavigate()
-  let {handleClick,productdata,handleAddToCart,takebuydata}=useBio()
+  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail}=useBio()
   const { user,userDetails } = useAuth();
-  useEffect(() => {
-    const fetchCartData = async () => {
-      if(userDetails)
-      {
-      try {
-        let res = await fetch(`http://localhost:3000/addtocart/${userDetails._id}`);
+  // useEffect(() => {
+  //   const fetchCartData = async () => {
+  //     if(userDetails || userDetails._id )
+  //     {
+  //     try {
+  //       let res = await fetch(`http://localhost:3000/addtocart/${userDetails._id}`);
 
-        let data = await res.json();
-        console.log("iuiu",data)
-        setCartData(data); // This will contain items already in the cart
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    };
-    fetchCartData();
-  }, [userDetails]);
+  //       let data = await res.json();
+  //       console.log("iuiu",data)
+  //       setCartData(data); // This will contain items already in the cart
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   }
+  //   };
+  //   fetchCartData();
+  // }, [userDetails]);
 
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      if(userDetails){
-      try {
-        let response = await fetch(`http://localhost:3000/cart/${userDetails._id}`);
-        let data = await response.json();
-        let cartItemIds = data.map(item => item.id); // Collect the ids of the items in the cart
-        setWishlist(cartItemIds);  // Set the ids in the state to keep the icons red
-        setCartItems(data)
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    }
-    };
+  // useEffect(() => {
+  //   const fetchCartItems = async () => {
+  //     if(userDetails){
+  //     try {
+  //       let response = await fetch(`http://localhost:3000/cart/${userDetails._id}`);
+  //       let data = await response.json();
+  //       let cartItemIds = data.map(item => item.id); // Collect the ids of the items in the cart
+  //       setWishlist(cartItemIds);  // Set the ids in the state to keep the icons red
+  //       setCartItems(data)
+  //     } catch (error) {
+  //       console.error("Error fetching cart items:", error);
+  //     }
+  //   }
+  //   };
 
-    fetchCartItems();
-  }, [userDetails]);
+  //   fetchCartItems();
+  // }, [userDetails]);
 
   
-  console.log(id,"bvn",typeof(id))
-  console.log("aaaaaaaaaaaaaa",typeof(id));
+  
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
+  // console.log(id,"bvn",typeof(id))
+  // console.log("aaaaaaaaaaaaaa",typeof(id));
  
 
 
 
- if(productdata.length==0){
-  return(<p>loading...</p>)
- }
- console.log("koko",productdata)
+//  if(productdata.length==0){
+//   return(<p>loading...</p>)
+//  }
+//  console.log("koko",productdata)
+
+ 
 
   const cards = [
     {
@@ -158,7 +165,7 @@ const [cartData, setCartData] = useState([]);
  
   let handleclick = async (id,quantity,selectedSize) => {
 
-   
+   console.log("oi3nt",id,quantity,selectedSize)
   if(user)
   {
  if (selectedSize.length==0) {
@@ -178,61 +185,61 @@ const [cartData, setCartData] = useState([]);
 
 
   
-  let handleclickwish = async (id) => {
-    const numericId = parseInt(id); // Ensure `id` is a number
-    console.log("sss", numericId);
+//   let handleclickwish = async (id) => {
+//     const numericId = parseInt(id); // Ensure `id` is a number
+//     console.log("sss", numericId);
   
-    if (selectedSize.length === 0) {
-      alert("Please select a size before adding to the wishlist.");
-      return;
-    }
+//     if (selectedSize.length === 0) {
+//       alert("Please select a size before adding to the wishlist.");
+//       return;
+//     }
     
-    console.log("randd",cartItems)
-    console.log("randd",wishlist)
-  //   if(wishlist.id==id){
-  //  console.log("dono match hai ")
-  //   }
-  //   else{
-  //     console.log("mhi hai lody")
-  //   }
+//     console.log("randd",cartItems)
+//     console.log("randd",wishlist)
+//   //   if(wishlist.id==id){
+//   //  console.log("dono match hai ")
+//   //   }
+//   //   else{
+//   //     console.log("mhi hai lody")
+//   //   }
 
-  let ids=wishlist.filter((e)=>(
-      e==numericId
-  ))
-if(ids.length>0){
-  navigate("/wishlist")
-}
-  console.log("name of id",ids)
+//   let ids=wishlist.filter((e)=>(
+//       e==numericId
+//   ))
+// if(ids.length>0){
+//   navigate("/wishlist")
+// }
+//   console.log("name of id",ids)
   
-    try {
-      let data = cards.find((e) => e.id === numericId);
-      console.log(data);
+//     try {
+//       let data = cards.find((e) => e.id === numericId);
+//       console.log(data);
   
-      data["id"] = data.id;
-      data["title"] = data.title;
-      data["description"] = data.description;
-      data["image"] = data.image[0];
-      data["size"] = selectedSize;
-      data["qty"] = count;
+//       data["id"] = data.id;
+//       data["title"] = data.title;
+//       data["description"] = data.description;
+//       data["image"] = data.image[0];
+//       data["size"] = selectedSize;
+//       data["qty"] = count;
   
-      let res = await fetch("http://localhost:3000/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+//       let res = await fetch("http://localhost:3000/cart", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(data),
+//       });
   
-      if (res.ok) {
-        console.log("Item added to wishlist successfully");
+//       if (res.ok) {
+//         console.log("Item added to wishlist successfully");
   
-        // Update wishlist state
-        setWishlist((prev) => [...prev, numericId]); // Add the ID to wishlist state
-      } else {
-        console.log("Failed to add item to wishlist");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+//         // Update wishlist state
+//         setWishlist((prev) => [...prev, numericId]); // Add the ID to wishlist state
+//       } else {
+//         console.log("Failed to add item to wishlist");
+//       }
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   };
   
 productdata.map((e)=>{  
 e.productdetails.map((ee)=>{
@@ -240,23 +247,69 @@ e.productdetails.map((ee)=>{
 })
 })
 
-  let idss=[]
-  let drl=productdata.map((e)=>(e.productdetails))
-  drl.map((e)=>{
-    e.map((r)=>{
-      idss.push(r)
-    })
-  })
-  console.log("allid",idss)
+  // let idss=[]
+  // let drl=productdata.map((e)=>(e.productdetails))
+  // drl.map((e)=>{
+  //   e.map((r)=>{
+  //     idss.push(r)
+  //   })
+  // })
+  // console.log("allid",idss)
+// const productdescription=productdata.map((e)=>(e.productdetails))
+  // let pokl=productdescription.map((e)=>{
+  //   console.log("ioi",e)
+  // })
 
-  const productdescription=productdata.map((e)=>(e.productdetails))
+  // console.log("Component Rendered! productdataonlydetail:", productdataonlydetail);
+  // console.log("Component Rendered! id:", id);
+
+  if (!productdataonlydetail || productdataonlydetail.length === 0) {
+    return <p>Loading...</p>;
+  }
   
-  let pokl=productdescription.map((e)=>{
-    console.log("ioi",e)
-  })
-  const product=idss.filter((e)=>(e._id==id))
+  const mainProductt = productdataonlydetail.find((e) => e._id === id);
+  console.log("mainprdd",mainProductt)
+  useEffect(() => {
+    console.log("🔥 useEffect Triggered! Checking for Data Update");
   
-  if (!product) {
+    if (productdataonlydetail.length > 0) {
+      console.log("✅ Product Data Loaded, Running useEffect");
+      const mainProduct = productdataonlydetail.find((e) => e._id === id);
+      console.log("mainProduct inside useEffect:", mainProduct);
+      console.log("selected color",Selectedcolor)
+      if (mainProduct) {
+        
+        const defaultVariant =mainProduct.colors.find(
+          (e) => e.color === Selectedcolor
+        ) || mainProduct.colors.find((e) => e.color === mainProduct.defaultColor) || mainProduct.colors[0];
+  
+        if (defaultVariant) {
+          console.log("defaultVariant:", defaultVariant);
+          setproduct({
+            ...defaultVariant,
+            price: mainProduct.price,
+            discountprice: mainProduct.discountprice,
+            shopname: mainProduct.shopname,
+            shopaddress: mainProduct.shopaddress,
+            discount: mainProduct.discount,
+            cate: mainProduct.cate,
+            image:mainProduct.image[0]
+          });
+        }
+      }
+    }
+  }, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
+  
+
+  
+  // let product=productofreview[0].colors.filter((e)=>(e.color == productofreview[0].defaultColor)) 
+  // product[0].price=productofreview[0].price
+  // product[0].discountprice=productofreview[0].discountprice
+  // product[0].shopname=productofreview[0].shopname
+  // product[0].shopaddress=productofreview[0].shopaddress
+  // product[0].discount=productofreview[0].discount
+  // product[0].cate=productofreview[0].cate
+  if (!product || product.length === 0) {
     return <p>Loading...</p>;
   }
 
@@ -270,8 +323,8 @@ console.log("lplp",product)
   
   
 
-  const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
-
+  // const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
+  const sizes=product.sizes.map((e)=>(e.size))
 
   let handleqty=(e)=>{
     // console.log(e.target.value)
@@ -296,12 +349,12 @@ console.log("sq",selectedSize,quantity)
 
 
 let buydata=(data,siz,qtys)=>{
-
+console.log("kop",data,siz,qtys)
   if(user){
     if(siz){
-    console.log("buydata",data,siz,qtys)
-    data[0].size=siz
-    data[0].qty=qtys
+    console.log("buydatanini",data,siz,qtys)
+    data.size=siz
+    data.qty=qtys
     console.log("buydata",data)
     takebuydata(data)
 navigate("/address")
@@ -317,7 +370,7 @@ navigate("/address")
 
 
 }
-let cate=product[0].cate
+let cate=product.cate
   return (
     <>
     <ToastContainer 
@@ -377,11 +430,11 @@ let cate=product[0].cate
     </div>
     <div className="details-sectionnn">
           <div style={{display:"flex",  justifyContent:"space-between"}}>
-          <p className="product-description">{product[0].description}<p style={{fontWeight:"bold",gap:'5px'}}><FaIndianRupeeSign/><span>{product[0].discountprice} </span> <span style={{marginLeft:"2px"}} className="original-price"><FaIndianRupeeSign/> {product[0].price} </span><span style={{marginLeft:"3px"}}>{product[0].discount} discount</span></p></p>
+          <p className="product-description">{product.description}<p style={{fontWeight:"bold",gap:'5px'}}><FaIndianRupeeSign/><span>{product.discountprice} </span> <span style={{marginLeft:"2px"}} className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px"}}>{product.discount} discount</span></p></p>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
-          <div className="icons" onClick={() => handleClick(id)}>
+          <div className="icons" onClick={() => handleClick(product,product._id)}>
           
-<HeartButton   cardid={id} />
+<HeartButton   cardid={product._id} />
 {/* <HiOutlineShoppingBag size={30}/> */}
 </div>
         </div>
@@ -401,8 +454,26 @@ let cate=product[0].cate
                 </button>
               ))}
             </div>
-            <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label>
+            <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label>
           </div>
+
+          <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"20px"}}>
+          <label>Colors Available</label>
+            <div className="sizes">
+
+              {mainProductt?.colors?.map((color) => (
+                <button
+                  
+                  className={`size-btn ${selectedSize === color ? "active" : ""}`}
+                   onClick={() => setSelectedcolor(color.color)}>
+                  
+                  {color.color}
+                </button>
+              ))}
+            </div>
+            {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
+          </div>
+
 
          
           {/* Quantity Selector */}
@@ -414,7 +485,7 @@ let cate=product[0].cate
            </button>
            <span className="quantity">{quantity}</span>
            <button className="quantity-btn" onClick={incrementQuantity}>
-             +
+            +
            </button>
         </div>
         
@@ -426,8 +497,8 @@ let cate=product[0].cate
           
           <div className="button-group" style={{display:"flex",alignItems:"center",justifyContent:"start",marginBottom:"20px"}}>
            
-          <button className="add-to-cart" onClick={()=>{ handleclick(id,quantity,selectedSize)}}>Add to Cart</button>
-         <button className="add-to-cart" onClick={()=>{buydata(product,selectedSize,qty)}}>Buy Now</button>
+          <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}}>Add to Cart</button>
+         <button className="add-to-cart" onClick={()=>{buydata(product,selectedSize,quantity)}}>Buy Now</button>
             
           </div>
         </div>
@@ -437,7 +508,7 @@ let cate=product[0].cate
     
      <div style={{display:"flex",width:"100%",alignItems:'center',gap:'10px'}}>  
       <p style={{fontSize:"20px",paddingLeft:"10px"}}>Similer To</p>
-      <p style={{color:"green",marginTop:"3px"}}>{product[0].title}</p>
+      <p style={{color:"green",marginTop:"3px"}}>{product.title}</p>
       </div>
     <Card  category={cate}/>
     </div>
@@ -447,4 +518,3 @@ let cate=product[0].cate
 };
 
 export default ProductDescription;
-

@@ -4,7 +4,7 @@ let Scema=new mongoose.Schema({
         type:String,
         required:true,
     },
-    email:{
+    email:{ 
         type:String,
         required:true,
         unique:true
@@ -38,6 +38,7 @@ let cartscema=mongoose.Schema({
     image: [String],
     price:Number,
     shopname:String,
+    size:[String],
     discountprice:Number
    // price: String,
 })
@@ -83,9 +84,13 @@ const otpSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now, expires: 300 }, // OTP expires in 5 mins
 });
 
+// Random 5-character alphanumeric code generator function
+const generateRandomCode = () => Math.random().toString(36).substring(2, 7).toUpperCase();
+
 let users=mongoose.Schema({
     name: String,
     email: String,
+    code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     address:[addressSchema],  
     phone:[{ type: String, unique: true }],
     shopid:String,
@@ -120,9 +125,21 @@ let orders=mongoose.Schema({
     },
   ],
  
-  status: { type: String, default: "Pending" }, // Pending, Shipped, Delivered
+  status: { type: String, default: "Pending" }, // Pending, Shipped, Delivered, Return
   orderedAt: { type: Date, default: Date.now },
   deliveredAt: { type: Date, default: Date.now },
+  reason: {
+    type: String,
+  },
+  subreason: {
+    type: String,
+  },
+  selectedOption: {
+    type: String,
+  },
+  returnDate: {
+    type: Date,
+  },
 },{ timestamps: true })
 
 let rent=mongoose.Schema({
@@ -174,8 +191,10 @@ const sizeSchema = new mongoose.Schema({
 const colorSchema = new mongoose.Schema({
     color: {
         type: String,
-        
     },
+    title:{type:String},
+    tag:{type:String},
+    description:{type:String},  
     sizes: [sizeSchema]
 },{_id:true});
 const CategorySchema = new mongoose.Schema({
@@ -205,6 +224,9 @@ const CategorySchema = new mongoose.Schema({
       discountprice: {
         type: Number,
         
+      },
+      defaultColor:{
+        type:String
       },
       colors: [colorSchema],
      
@@ -296,6 +318,13 @@ const WalletTransactionSchema = new mongoose.Schema({
   } // 🔥 Default current date
 });
 
+let returnscema=mongoose.Schema({
+  orderid:{type: mongoose.Schema.Types.ObjectId, ref: "order", required: true},
+  reason:String,
+  subreason:String,
+  selectedOption:String,  
+  returnDate:{ type: Date, default: Date.now }
+})
 
 let wishmodel=new mongoose.model("cart",cartscema)
 
@@ -313,6 +342,7 @@ const Rating = mongoose.model("rating", ratingSchema);
 let rentt=mongoose.model("rent",rent)
 let wallettrans=mongoose.model("wallettransection",WalletTransactionSchema)
 const SalesModel = mongoose.model("Sales", salesSchema);
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans}
+const returnmodel = mongoose.model("return",returnscema);
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel}
 
 

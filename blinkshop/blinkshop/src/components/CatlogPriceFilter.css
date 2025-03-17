@@ -9,7 +9,7 @@
   }
   
   .range-slider {
-    
+    /* border: 1px solid blue; */
     position: relative;
     width: 100%;
     height: 5px;
@@ -19,6 +19,7 @@
   }
   
   .slider-track {
+    /* border: 2px solid pink; */
     height: 100%;
     position: absolute;
     background-color: #b6fcaf;
