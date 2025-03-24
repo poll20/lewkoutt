@@ -11,8 +11,7 @@ import React, { useState, useEffect } from "react";
   import HeartButton from "./HeartButton";
   import { AiOutlineDelete } from "react-icons/ai";
   // import FaChevronDown from "react-icons/fa";
-
-  const Card = (props) => {
+const Card = (props) => {
     const[prdallsizes,setprdallsizes]=useState([])
     const [addtocartkeliyeid,setaddtocartkeliyeid]=useState("")
     const[sizesshow,setsizesshow]=useState(false)
@@ -24,7 +23,7 @@ import React, { useState, useEffect } from "react";
     console.log("rentpoint",rent)
   console.log("wish",wish)
     // console.log("storeee",store)
-    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue} = useBio();
+    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly} = useBio();
 
     const a = useMemo(() => {
       return productdataonlydetail.filter((e) =>
@@ -58,13 +57,14 @@ import React, { useState, useEffect } from "react";
     ];
 
     const sizeOptions = {
-      "Top Wear": ["S", "M", "L", "XL", "XXL", "XXXL"],
+      "Top Wear": ["s", "m", "l", "xl", "xl", "xxl","xxl"],
       "Bottom Wear": ["24", "26", "28", "30", "32", "34"],
     };
 
     const handleSizeSelection = (category, size) => {
       setSelectedSizes((prev) => {
         const updated = { ...prev };
+        console.log("updatepccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccrd",updated)
         if (updated[category].includes(size)) {
           updated[category] = updated[category].filter((s) => s !== size);
         } else {
@@ -162,7 +162,7 @@ import React, { useState, useEffect } from "react";
       // Filter by color
       if (color.length > 0) {
         filteredProducts = filteredProducts.filter((product) =>
-          color.includes(product.color)
+          color.includes(product.defaultColor)
         );
       }
     
@@ -172,8 +172,17 @@ import React, { useState, useEffect } from "react";
           categories.includes(product.category)
         );
       }
-    
+    console.log("selectedsize",selectedSizes)
       // Filter by size
+
+      filteredProducts.forEach((product, index) => {
+        console.log(`Product ${index + 1}:`, product);
+        product.colors.forEach((color, colorIndex) => {
+          console.log(`  Color ${colorIndex + 1}:`, color);
+          console.log(`    Sizes:`, color.sizes.map(s => s.size));
+        });
+      });
+      
       if (Object.values(selectedSizes).flat().length > 0) {
         filteredProducts = filteredProducts.filter((product) =>
           Object.keys(selectedSizes).some((category) =>
@@ -184,7 +193,7 @@ import React, { useState, useEffect } from "react";
             )
           )
         );
-        console.log("chlo",filteredProducts)
+        console.log("chleedddddddddo",filteredProducts)
       }
     
       // Apply sorting
@@ -311,24 +320,74 @@ import React, { useState, useEffect } from "react";
     
     
 
-      const setShowSize=(id)=>{
-        console.log("iid",id)
-        // let prd=productdataonlydetail.filter((e)=>(e._id==id))
-        let prd = productdataonlydetail
-  .flatMap(e => e.colors) // Sare products ke colors ko ek array bana diya
-  .filter(color => color._id == id); // Colors ke andar se specific _id match kiya
-  console.log("prddd",prd)
-  let siz=prd[0].sizes.map((e)=>e.size)
+  //     const setShowSize=(id)=>{
+  //       console.log("iid",id)
+  //       // let prd=productdataonlydetail.filter((e)=>(e._id==id))
+  // //       let prd = productdataonlydetail
+  // // .flatMap(e => e.colors) // Sare products ke colors ko ek array bana diya
+  // // .filter(color => color._id == id); // Colors ke andar se specific _id match kiya
+  // let prd=productdataonlydetail
+  // .map(product => {
+  //   const matchingColor = product.colors.find(color => color._id === id);
+  //   if (matchingColor) {
+  //     return {
+  //       ...product,  // Saara product data
+  //       colors: [matchingColor] // Sirf matching color object ek array me
+  //     };
+  //   }
+  //   return null; // Agar matching color na mile toh null return karo
+  // }).filter(product => product !== null); // Sirf valid products rakho
+  // console.log("prddd",prd)
+  // let siz=prd[0].colors[0].sizes.map((e)=>e.size)
   
-        
-      setprdallsizes(siz)  
-      setaddtocartkeliyeid(id)
-      setsizesshow(true)
-      }
+  // if (Array.isArray(prd)) {
+  //   prd = prd[0]; // Take the first object if it's an array
+  // }
+  //     setprdallsizes(siz)  
+  //     setaddtocartkeliyeid(prd)
+  //     setsizesshow(true)
+  //     }
 
-  let chlodekhe=(s,i)=>{
-    console.log("dekhte h",s,i)
-  }
+  // let chlodekhe=(s,i)=>{
+  //   console.log("dekhte h",s,i)
+  // }
+
+  const setShowSize = (id) => {
+    console.log("iid", id);
+
+    let prd = productdataonlydetail
+        .map(product => {
+            const matchingColor = product.colors.find(color => color._id === id);
+            if (matchingColor) {
+                return {
+                    ...product,  // Product ka pura data
+                    colors: [{ 
+                        ...matchingColor,  // Matching color ka pura data
+                        price: product.price, // Price ko color object me add kiya
+                        discountprice: product.discountprice, // Discounted price
+                        shopname: product.shopname, // Shop Name
+                        shopaddress: product.shopaddress, // Shop Address
+                        discount: product.discount // Discount
+                    }]
+                };
+            }
+            return null;
+        })
+        .filter(product => product !== null); // Sirf valid products rakho
+
+    console.log("prddd", prd);
+
+    if (prd.length > 0) {
+        let siz = prd[0].colors[0].sizes.map(e => e.size);
+        setprdallsizes(siz);  
+        setaddtocartkeliyeid(prd[0].colors[0]); // Sirf ek object assign karo
+        setsizesshow(true);
+    }
+};
+
+const chlodekhe = (s, i) => {
+    console.log("dekhte h", s, i);
+};
 
     const fetchProducts = async (url) => {  
       
@@ -407,7 +466,7 @@ import React, { useState, useEffect } from "react";
       setProducts(rentdata);
       setoriginalProducts(rentdata)
     } else if (wish && wishlistdata.length > 0) {
-      const filteredData = applyFilters(wishlistdata);
+      // const filteredData = applyFilters(wishlistdata);
       console.log("ajani",wishlistdata)
       setProducts(wishlistdata);
     }
@@ -562,7 +621,7 @@ if(searchvalue){
           />
           </NavLink>
           {/* Heart Icon */}
-          <div className="heart-icon">{!wish?(<div onClick={()=>{ handleClick(product._id)}}><HeartButton cardid={product._id} /></div>):(<AiOutlineDelete onClick={()=>{ handleClick(product.itemid)}} style={{color:"black",position:'relative',left:"-3px",bottom:"2px"}} size={15} />)}</div>
+          <div className="heart-icon">{!wish?(<div onClick={()=>{ handleClick(product._id)}}><HeartButton cardid={product._id} /></div>):(<AiOutlineDelete onClick={()=>{ removewishlistonly(product.itemid)}} style={{color:"black",position:'relative',left:"-3px",bottom:"2px"}} size={15} />)}</div>
           {/* Rating */}
           <div className="rating">
             ⭐ 4.7 | 16

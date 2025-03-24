@@ -42,34 +42,14 @@ const [userprf,setuserprf]=useState({ address: [] })
  }
 
 
- const getUserLocation = () => {
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-
-        let response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-        let data = await response.json();
-
-        setLocation(data.display_name);
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-      }
-    );
-  } else {
-    console.log("Geolocation not supported");
-  }
-};
-
 
 // Function to handle saving the address
 const saveAddress = (panel) => {
   console.log("panel",panel)
+  console.log("panel",pincode,building,locality)
   const newAddress = {
     pincode,
-    phone,
+    phone:"6377563527",
     building,
     locality,
     city: "Jaipur",
@@ -117,6 +97,35 @@ else if(panel=="edit"){
 }  
   setshowadresspanel("")
 }
+
+
+
+const getUserLocation = () => {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+
+        let response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        let data = await response.json();
+        setBuilding(data.address.city)
+        setLocality(data.address.county)
+        setPincode(data.address.postcode)
+        setTimeout(()=>{saveAddress("addaddress")},600)
+       console.log("loda",data.address.city)
+        setLocation(data.display_name);
+        
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+      }
+    );
+  } else {
+    console.log("Geolocation not supported");
+  }
+};
+
 
 const deleteoreditaddress=(addressid,action)=>{
 

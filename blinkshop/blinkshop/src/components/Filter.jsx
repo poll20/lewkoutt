@@ -174,7 +174,7 @@ export default function Filter() {
     };
 
     const sizeOptions = {
-        "Top Wear": ["S", "M", "L", "XL", "XXL", "XXXL"],
+        "Top Wear": ["s", "m", "l", "xl", "xxl", "xxxl"],
         "Bottom Wear": ["24", "26", "28", "30", "32", "34", "36"],
     };
 
@@ -292,7 +292,7 @@ setapplybtndisplay(false)
                     {selectedFilter === "colors" ? (
                         <div className="filter-value colorss">
                             <div className="color-options">
-                                {['Red', 'Blue', 'Green', 'Black', 'pink', 'gray', 'white', 'purple'].map((color) => (
+                                {['red', 'blue', 'green', 'black', 'pink', 'gray', 'white', 'purple'].map((color) => (
                                     <div key={color} style={{ width: "100%", display: "flex", justifyContent: "space-between", padding: '10px' }}>
                                         <button style={{ backgroundColor: color.toLowerCase(), borderRadius: "50%", border:"none" }} className='color-btn'></button>
                                         <input

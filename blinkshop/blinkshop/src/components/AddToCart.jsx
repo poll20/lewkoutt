@@ -17,14 +17,16 @@ const AddToCart = () => {
   const [choosebuy,setchoosebuy]=useState([])
   const [popup, setPopup] = useState(false);
   const [popupProductId, setPopupProductId] = useState(null);
+  const [wowalaprd, setwowalaprd] = useState(null);
  const[totalprice,settotalprice]=useState(0)
  const [isChecked, setIsChecked] = useState(false);
  const[cprice,setcprice]=useState(0)
   
   
-  const openPopup = (id) => {
+  const openPopup = (id,prd) => {
     setPopup(true);
     setPopupProductId(id); // Save the specific product ID for the popup
+    setwowalaprd(prd)
   };
 
   const closePopup = () => {
@@ -116,7 +118,7 @@ if(!addtocartdatas){
                   <AiOutlineDelete /> Remove from bag
                 </span>
                 <span onClick={() => {
-                  addtowishlistonly(popupProductId);
+                  addtowishlistonly(popupProductId,wowalaprd);
                   closePopup();
                 }}>
                   <CiHeart /> Move to wish list
@@ -148,7 +150,7 @@ if(!addtocartdatas){
                       <span>
                         <AiOutlineDelete
                           size={20}
-                          onClick={() => openPopup(order.productid)}
+                          onClick={() => openPopup(order.productid,order)}
                         />
                       </span>
                     </p>

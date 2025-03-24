@@ -203,6 +203,7 @@ useEffect(() => {
   //   }
   // };
   const handleClick = async (prd, id) => {
+    console.log("iredandid",prd,id)
     try {
       // Correcting the way matchItem is created
       const matchedColors = productdataonlydetail
@@ -246,7 +247,7 @@ useEffect(() => {
           setwishlistdata(prev => [...prev, addedItem]);
         }
       } else {
-        const response = await fetch(`http://localhost:3000/cart/${itemInCart._id}`, {
+        const response = await fetch(`http://localhost:3000/cart/${itemInCart.itemid}`, {
           method: "DELETE",
         });
   
@@ -260,34 +261,105 @@ useEffect(() => {
       console.error("Error in handleClick:", error);
     }
   };
-  
-const addtowishlistonly=async(id)=>{
-  console.log("mili kya",id)
-  try {
-    const matchItem = allproductdata.find((e) => e._id === id);
-    console.log("apd",allproductdata)
-    console.log("gyu",matchItem)
-    matchItem["userid"]=userDetails._id
-    matchItem["productId"]=id
-    const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
 
-    
-      const response = await fetch('http://localhost:3000/cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(matchItem),
+  const removewishlistonly=async(id)=>{
+    console.log("id",id)
+    try{
+      const response = await fetch(`http://localhost:3000/cart/${id}`, {
+        method: "DELETE",
       });
 
+      const data = await response.json(); // Server se response parse karo
+    console.log("Server Response:", data); // Error ya success message dekho
       if (response.ok) {
-        const addedItem = await response.json();
-        setWishlist((prev) => [...prev, id]);
-        setwishlistdata((prev) => [...prev, addedItem]);
-        toast.success("item move to wishlist")
-        removefromaddtocart(id)
+        setWishlist(prev => prev.filter(itemId => itemId !== id));
+        setwishlistdata(prev => prev.filter(item => item.itemid !== id));
+        toast.success("Data removed successfully");
       }
+      else {
+        toast.error(data.message || "Error removing item");
+      }
+  
+    }
+    catch(e){
+      toast.error(data.message || "Error removing item");
+    }
+
+  }
+  
+const addtowishlistonly=async(id,prd)=>{
+//   console.log("mili kya",id,prd)
+//   try {
+//     const matchItem = allproductdata.find((e) => e._id === id);
+//     console.log("apd",allproductdata)
+//     console.log("gyu",matchItem)
+//     prd["userid"]=userDetails._id
+//     prd["productId"]=id
+//     const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
+
+    
+//       const response = await fetch('http://localhost:3000/cart', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(prd),
+//       });
+
+//       if (response.ok) {
+//         const addedItem = await response.json();
+//         setWishlist((prev) => [...prev, id]);
+//         setwishlistdata((prev) => [...prev, addedItem]);
+//         toast.success("item move to wishlist")
+//         removefromaddtocart(id)
+//       }
       
     
-}
+// }
+console.log("iredandid",prd,id)
+    try {
+      // Correcting the way matchItem is created
+      const matchedColors = productdataonlydetail
+        .flatMap(product => product.colors)
+        .filter(color => color._id == id);
+  
+      if (matchedColors.length === 0) {
+        console.error("No matching item found!");
+        return;
+      }
+  
+      const matchItem = { ...matchedColors[0] }; // Convert array to object
+      console.log("matchItem before adding data:", matchItem);
+  
+      // Adding necessary properties
+      matchItem.userid = userDetails._id;
+      matchItem.productId = id;
+      matchItem.price = prd.price;
+      matchItem.discountprice = prd.discountprice;
+      matchItem.image = prd.image;
+      matchItem.shopname = prd.shopname;
+      matchItem.title = prd.title;
+      matchItem.description = prd.description;
+      matchItem.size = prd.sizes;
+  
+      console.log("Final matchItem:", matchItem); // Debugging
+  
+      // const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
+      // console.log("delete", itemInCart);
+  
+      
+        const response = await fetch("http://localhost:3000/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(matchItem),
+        });
+  
+        if (response.ok) {
+          const addedItem = await response.json();
+          setWishlist(prev => [...prev, id]);
+          setwishlistdata(prev => [...prev, addedItem]);
+          toast.success("item move to wishlist")
+         removefromaddtocart(id)
+        }
+    }
 catch(e){
   console.log(e)
 }
@@ -876,6 +948,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         fetchRatings,
         rating,
         orderreturn,
+        removewishlistonly
     
   }}
     >

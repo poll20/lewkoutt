@@ -16,8 +16,13 @@ const{recordMultipleSales}=useDashboard()
     localStorage.getItem("selectedPayment") || "UPI"
   );
 
+  // const [purchaseproduct, setpurchaseproduct] = useState(
+  //   JSON.parse(localStorage.getItem("purchaseproduct")) || buydata || []
+  // );
   const [purchaseproduct, setpurchaseproduct] = useState(
-    JSON.parse(localStorage.getItem("purchaseproduct")) || buydata || []
+    Array.isArray(JSON.parse(localStorage.getItem("purchaseproduct"))) 
+      ? JSON.parse(localStorage.getItem("purchaseproduct")) 
+      : (Array.isArray(buydata) ? buydata : [])
   );
 
   const [buyDataState, setBuyDataState] = useState(
@@ -36,7 +41,7 @@ const{recordMultipleSales}=useDashboard()
   }, [selectedPayment]);
 
   useEffect(() => {
-    localStorage.setItem("purchaseproduct", JSON.stringify(purchaseproduct));
+    localStorage.setItem("purchaseproduct", JSON.stringify(Array.isArray(purchaseproduct)));
   }, [purchaseproduct]);
 
   useEffect(() => {
@@ -63,17 +68,28 @@ const{recordMultipleSales}=useDashboard()
   //     setBuyDataState(location.state.buydata);
   //   }
   // }, [location.state]);
+  // useEffect(() => {
+  //   let storedBuyData = JSON.parse(localStorage.getItem("buydata"));
+    
+  //   if (!buydata || buydata.length === 0) {
+  //     console.log("Restoring buydata from LocalStorage:", storedBuyData);
+  //     setpurchaseproduct(storedBuyData || []);
+  //   } else {
+  //     console.log("buydata from Context:", buydata);
+  //   }
+  // }, [buydata]);
+
   useEffect(() => {
     let storedBuyData = JSON.parse(localStorage.getItem("buydata"));
     
     if (!buydata || buydata.length === 0) {
       console.log("Restoring buydata from LocalStorage:", storedBuyData);
-      setpurchaseproduct(storedBuyData || []);
+      setpurchaseproduct(Array.isArray(storedBuyData) ? storedBuyData : []);
     } else {
       console.log("buydata from Context:", buydata);
+      setpurchaseproduct(Array.isArray(buydata) ? buydata : []);
     }
-  }, [buydata]);
-
+}, [buydata]);
   // ✅ Step 3: Reset Local Storage When User Leaves Checkout Page
   useEffect(() => {
     const handleRouteChange = () => {
@@ -95,6 +111,7 @@ const{recordMultipleSales}=useDashboard()
 if(buydata){
   console.log("mera naam bhay",buydata)
   console.log("guggu babuu",purchaseproduct)
+  
 }
 const totalDiscountPrice = purchaseproduct.reduce((sum, item) => sum + item.discountprice, 0);
 const totalPrice = purchaseproduct.reduce((sum, item) => sum + item.price, 0);

@@ -222,9 +222,14 @@ const UserProfile = () => {
           <p>Wallet</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink className="menu-item navlink">
+        <NavLink className="menu-item navlink"to={'/aboutus'} >
            LO
           <p>About Us</p>
+          <IoIosArrowForward />
+        </NavLink>
+        <NavLink className="menu-item navlink" to={'/faq'}>
+           LO
+          <p>F&Q</p>
           <IoIosArrowForward />
         </NavLink>
       </div>

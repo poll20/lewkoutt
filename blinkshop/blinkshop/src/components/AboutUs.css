@@ -1,0 +1,114 @@
+/* Apply fonts */
+/* body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+  } */
+  
+  .about-container {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .gradient-text {
+    font-size: 28px;
+    font-weight: 200;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(90deg, #d63384, #ff9800, #4caf50, #2196f3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  
+  .abtimage-container {
+    width: 100%; /* Full width */
+    max-width: 100vw; /* Maximum width is full viewport */
+    margin: 20px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .abtimage-container img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    border-radius: 15px;
+  }
+  .about-content {
+    max-width: 600px;
+    margin: auto;
+    text-align: left;
+  }
+  
+  .about-content h2 {
+    font-size: 24px;
+    font-weight:600;
+    margin-bottom: 10px;
+  }
+  
+  .about-content p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  /* Footer Section */
+.about-footer {
+    text-align: center;
+    margin-top: 10px;
+    padding: 20px;
+  }
+  
+  .instagram-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, #ff0033, #9b29b8);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s ease;
+  }
+  
+  .instagram-button:hover {
+    opacity: 0.8;
+  }
+  
+  .instagram-button i {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  .company-info {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #444;
+  }
+  
+  .company-info h3 {
+    color: #1abc72;
+    font-weight: 600;
+  }
+  
+  .footer-links {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: #1abc72;
+    margin: 0 10px;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  

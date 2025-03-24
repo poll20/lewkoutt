@@ -61,7 +61,7 @@ const CtegoriesLayout = () => {
     {
       productdata.map((e)=>(
         <div className="horizontal-card-layout">
-      <h1 style={{textAlign:"center"}}>{e.category}</h1>
+      <h1 style={{textAlign:"center"}} >{e.category}</h1>
       {/* Parent Card */}
       <div className="parent-card" style={{borderRadius:'20px'}}>
         <NavLink to={`wear/${e.cate}`}>

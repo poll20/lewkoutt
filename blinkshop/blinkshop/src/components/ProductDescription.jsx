@@ -173,6 +173,10 @@ const[product,setproduct]=useState([])
       return;
     }
    try {
+    if (Array.isArray(id)) {
+      id = id[0]; // Take the first object if it's an array
+    }
+  
       handleAddToCart(id,quantity,selectedSize)
     } catch (e) {
       console.log(e);
@@ -275,7 +279,19 @@ e.productdetails.map((ee)=>{
     if (productdataonlydetail.length > 0) {
       console.log("✅ Product Data Loaded, Running useEffect");
       const mainProduct = productdataonlydetail.find((e) => e._id === id);
+      const varientprd = productdataonlydetail
+      .map(product => {
+        const matchingColor = product.colors.find(color => color._id === id);
+        if (matchingColor) {
+          return {
+            ...product,  // Saara product data
+            colors: [matchingColor] // Sirf matching color object ek array me
+          };
+        }
+        return null; // Agar matching color na mile toh null return karo
+      }).filter(product => product !== null); // Sirf valid products rakho
       console.log("mainProduct inside useEffect:", mainProduct);
+      console.log("vareintProduct inside useEffect:", varientprd);
       console.log("selected color",Selectedcolor)
       if (mainProduct) {
         
@@ -297,6 +313,20 @@ e.productdetails.map((ee)=>{
           });
         }
       }
+      else{
+        setproduct({
+          ...varientprd[0].colors[0],
+          price: varientprd[0].price,
+          discountprice: varientprd[0].discountprice,
+          shopname: varientprd[0].shopname,
+          shopaddress: varientprd[0].shopaddress,
+          discount: varientprd[0].discount,
+          cate: varientprd[0].cate,
+          image:varientprd[0].image[0]
+        });
+
+      }
+      
     }
   }, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
   
@@ -324,7 +354,7 @@ console.log("lplp",product)
   
 
   // const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
-  const sizes=product.sizes.map((e)=>(e.size))
+  const sizes=product.sizes.map((e)=>(e.size)) 
 
   let handleqty=(e)=>{
     // console.log(e.target.value)
@@ -348,7 +378,7 @@ console.log("qty is",qty)
 console.log("sq",selectedSize,quantity)
 
 
-let buydata=(data,siz,qtys)=>{
+let buydata=(data,siz,qtys)=>{  
 console.log("kop",data,siz,qtys)
   if(user){
     if(siz){
@@ -356,7 +386,8 @@ console.log("kop",data,siz,qtys)
     data.size=siz
     data.qty=qtys
     console.log("buydata",data)
-    takebuydata(data)
+    let finalData = Array.isArray(data) ? data : [data];
+    takebuydata(finalData)
 navigate("/address")
     }
     else{
@@ -430,7 +461,7 @@ let cate=product.cate
     </div>
     <div className="details-sectionnn">
           <div style={{display:"flex",  justifyContent:"space-between"}}>
-          <p className="product-description">{product.description}<p style={{fontWeight:"bold",gap:'5px'}}><FaIndianRupeeSign/><span>{product.discountprice} </span> <span style={{marginLeft:"2px"}} className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px"}}>{product.discount} discount</span></p></p>
+          <p className="product-description">{product.description}<p style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span>{product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px"}}>{product.discount} discount</span></p></p>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
           <div className="icons" onClick={() => handleClick(product,product._id)}>
           
@@ -460,16 +491,18 @@ let cate=product.cate
           <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"20px"}}>
           <label>Colors Available</label>
             <div className="sizes">
-
-              {mainProductt?.colors?.map((color) => (
-                <button
-                  
-                  className={`size-btn ${selectedSize === color ? "active" : ""}`}
-                   onClick={() => setSelectedcolor(color.color)}>
-                  
-                  {color.color}
-                </button>
-              ))}
+              {
+                mainProductt?(mainProductt?.colors?.map((color) => (
+                  <button
+                    
+                    className={`size-btn ${selectedSize === color ? "active" : ""}`}
+                     onClick={() => setSelectedcolor(color.color)}>
+                    
+                    {color.color}
+                  </button>
+                ))):(<button className={`size-btn`}>{product.color}</button>)
+              }
+              
             </div>
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>

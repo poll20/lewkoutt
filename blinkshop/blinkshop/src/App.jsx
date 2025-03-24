@@ -169,7 +169,8 @@ import Ordersofusers from "./components/dashboardforadmin/Ordersofusers";
 import ShopkeeperDashboard from "./components/ShopKeeperDashboard";
 import ReturnRequest from "./components/ReturnRequest";
 import ReturnDataTable from "./components/dashboardforadmin/ReturnDataTable";
-
+import Faq from "./components/Faq";
+import AboutUs from "./components/AboutUs";
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
@@ -222,6 +223,7 @@ export default function App() {
 function Layout() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isabout = location.pathname.startsWith("/aboutus");
 
   return (
     <>
@@ -273,6 +275,9 @@ function Layout() {
             <Route path="/filter" element={<Filter />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/wallet" element={<Wallet />} />
+            <Route path="/faq" element={<Faq/>} />
+            <Route path="/aboutus" element={<AboutUs/>} />
+            
             <Route path="/shopkeeper" element={<ShopkeeperDashboard />} />
             <Route path="/return/:id" element={<ReturnRequest/>} />
 
@@ -287,7 +292,7 @@ function Layout() {
      
       
 
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && !isabout  && <Footer />}
     </>
   );
 }

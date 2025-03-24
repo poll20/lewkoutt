@@ -218,19 +218,30 @@ app.get('/cart/:uid', async (req, res) => {
 app.delete('/cart/:id', async (req, res) => {
   const { id } = req.params; // Extract the item ID from the URL params
 console.log(id)
+
+ // Ensure ID is a valid ObjectId
+ if (!mongoose.Types.ObjectId.isValid(id)) {
+  return res.status(400).json({ message: "Invalid ID format" });
+}
   try {
-    const deletedItem = await wishmodel.findByIdAndDelete(id); // Find the item by its ID and delete it
-    console.log(deletedItem)
+    const deletedItem = await wishmodel.find({itemid:new mongoose.Types.ObjectId(id)}); // Find the item by its ID and delete it
+    console.log("ss",deletedItem)
     if (deletedItem) {
-      // If the item is found and deleted, return success response
+      let d=await wishmodel.findByIdAndDelete(deletedItem[0]._id)
+
+      if(d){
+        res.status(200).json({ message: 'Item deleted successfully',d});
+      }
+            // If the item is found and deleted, return success response
       //console.log(deletedItem);
-      res.status(200).json({ message: 'Item deleted successfully', deletedItem });
+     
     } else {
       // If the item with the given ID is not found, return 404
       res.status(404).json({ message: 'Item not found' });
     }
   } catch (err) {
     // In case of any error, return 500 with the error message
+    console.error("Database Deletion Error:", err);
     res.status(500).json({ error: err.message });
   }
 });

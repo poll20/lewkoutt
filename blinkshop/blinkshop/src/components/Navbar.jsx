@@ -217,14 +217,14 @@ let closeslidecategorynav=()=>{
         
         
       {/* Sliding Side Navbar */}
-      <div className={`side-navbar ${sideNavbarOpen ? 'open' : ''}`}>
+      <div className={`side-navbar ${sideNavbarOpen ? 'open' : ''}`} >
         
       <div className="menu-container" ref={dropdownRef} >
       <div>
-          <ul className='catlist'>
-           <NavLink to={`/productmodel/newarrivals`} onClick={closeslidecategorynav} className='navlink'> <li>New Arrival</li></NavLink>
-           <NavLink to={`/bestsalling/bestsale`} onClick={closeslidecategorynav} className='navlink'><li>Best Selling</li></NavLink>
-            <li>
+          <ul className='catlist' >
+           <NavLink to={`/productmodel/newarrivals`} onClick={closeslidecategorynav} className='navlink'> <li style={{ fontFamily: "'Poppins', sans-serif" }}>New Arrival</li></NavLink>
+           <NavLink to={`/bestsalling/bestsale`} onClick={closeslidecategorynav} className='navlink'><li style={{ fontFamily: "'Poppins', sans-serif" }}>Best Selling</li></NavLink>
+            <li style={{ fontFamily: "'Poppins', sans-serif" }}>
              <span onClick={toggleDropdown}>CATEGORIES</span>
                {/* Dropdown Menu */}
       <div className={`dropdown ${issOpen ? "slide-down" : "slide-up"}`}>
@@ -251,9 +251,11 @@ let closeslidecategorynav=()=>{
         </ul>
       </div>
             </li>
-            <li>Customer Support</li>
-            <li>Login</li>
-            {userDetails || user?(<li><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")}
+            <NavLink className="navlink" to={'/faq'} onClick={closeslidecategorynav}>
+            <li style={{ fontFamily: "'Poppins', sans-serif" }}>Customer Support</li>
+            </NavLink>
+            <li style={{ fontFamily: "'Poppins', sans-serif" }} onClick={closeslidecategorynav}>Login</li>
+            {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")}
           </ul>
         </div>
      

@@ -31,7 +31,8 @@ const ratingSchema = new mongoose.Schema({
 
 let cartscema=mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    itemid: String,
+    // itemid: String,
+    itemid:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
     productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
     title: String,
     description: String,
@@ -92,6 +93,8 @@ let users=mongoose.Schema({
     email: String,
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     address:[addressSchema],  
+    lat: Number,  // User latitude
+    long: Number , // User longitude
     phone:[{ type: String, unique: true }],
     shopid:String,
     shopaddress:{type:String,default:""}, 
@@ -259,7 +262,11 @@ const CategorySchema = new mongoose.Schema({
       discount: {
         type: String,
         
-      }
+      },
+      location: {  
+        type: { type: String, enum: ["Point"], default: "Point" }, // GeoJSON Type
+        coordinates: { type: [Number], required: true }  // [longitude, latitude]
+    }
   },{_id:true})
 
 
@@ -271,6 +278,9 @@ const ProductSchema = new mongoose.Schema({
     productdetails:[CategorySchema]
   },{_id:true});  // Ensures timestamps are added to the main document
 
+
+// 2dsphere Index for Location-Based Querying
+CategorySchema.index({ location: "2dsphere" });
 
 
   const salesSchema = new mongoose.Schema({
