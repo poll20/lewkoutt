@@ -9,7 +9,7 @@ const EventEmitter = require('events');
 const orderEvent = new EventEmitter();
 
 
-let port=process.env.PORT
+let port=process.env.PORT || 3000
 
 // const server = http.createServer(app); // ✅ Create HTTP Server
 
