@@ -189,6 +189,7 @@ import "./BottomUpSlidingList.css";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const BottomUpSlidingList = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isOpen, setIsOpen] = useState(true); // Controls panel visibility
   const [activeCategory, setActiveCategory] = useState(null); // Tracks active dropdown
   const [categories, setCategories] = useState([]);
@@ -201,7 +202,7 @@ const BottomUpSlidingList = () => {
   // Fetch categories from the API
   const rentData = async () => {
     try {
-      let rentRes = await fetch("http://localhost:3000/rent?operation=all");
+      let rentRes = await fetch(`${apiUrl}/rent?operation=all`);
       let finalRes = await rentRes.json();
       setCategories(finalRes);
     } catch (error) {

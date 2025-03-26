@@ -7,7 +7,7 @@ import './index.css'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
   
-   <Auth0Provider domain='dev-yecqqx2brys1xssx.us.auth0.com' clientId='4rfWRbxMSztcXXXJoMJWzFW7GlsN9fdA' authorizationParams={{
+   <Auth0Provider domain={import.meta.env.VITE_AUTH0_DOMAIN} clientId={import.meta.env.VITE_AUTH0_CLIENT_ID} authorizationParams={{
       redirect_uri: window.location.origin
     }}>
     <App/>

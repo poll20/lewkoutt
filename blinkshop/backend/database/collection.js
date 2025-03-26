@@ -262,11 +262,11 @@ const CategorySchema = new mongoose.Schema({
       discount: {
         type: String,
         
-      },
-      location: {  
-        type: { type: String, enum: ["Point"], default: "Point" }, // GeoJSON Type
-        coordinates: { type: [Number], required: true }  // [longitude, latitude]
-    }
+      }
+    //   location: {  
+    //     type: { type: String, enum: ["Point"], default: "Point" }, // GeoJSON Type
+    //     coordinates: { type: [Number], required: true }  // [longitude, latitude]
+    // }
   },{_id:true})
 
 
@@ -280,7 +280,7 @@ const ProductSchema = new mongoose.Schema({
 
 
 // 2dsphere Index for Location-Based Querying
-CategorySchema.index({ location: "2dsphere" });
+// CategorySchema.index({ location: "2dsphere" });
 
 
   const salesSchema = new mongoose.Schema({

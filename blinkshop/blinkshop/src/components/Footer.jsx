@@ -5,11 +5,12 @@ import { NavLink } from 'react-router-dom';
 
 
 const Footer = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
 let [cat,setcat]=useState([])
 
 let fetchCateGory=async()=>{
   try{
-let data=await fetch("http://localhost:3000/wear?operation=all")
+let data=await fetch(`${apiUrl}/wear?operation=all`)
 let res=await data.json()
 console.log("Dffefe",res)
 setcat(res)

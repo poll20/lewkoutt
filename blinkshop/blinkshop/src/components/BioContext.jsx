@@ -9,7 +9,8 @@ export const BioContext = createContext();
 
 
 export const BioProvider = ({children,addtocartitem }) => {
-
+  const apiUrl = import.meta.env.VITE_API_URL;
+  console.log("urll",apiUrl)
   const { user,userDetails } = useAuth();
   const [cart, setCart] = useState([]);
   const[searchvalue,setsearchvalue]=useState("")
@@ -31,6 +32,7 @@ export const BioProvider = ({children,addtocartitem }) => {
  const [refetch, setRefetch] = useState(false); // ✅ Track re-fetch status
  const[userorder,setuserorder]=useState([])
  const[rating,setrating]=useState([]) 
+ const[walletkapesa,setwalletkapesa]=useState(0)
  
   const [filters, setFilters] = useState({
     pricerangemin:300,
@@ -47,7 +49,7 @@ export const BioProvider = ({children,addtocartitem }) => {
     discount: []
 });
 console.log("myfil",filters)
-const backendURL = 'http://192.168.185.61:3000';
+const backendURL = `${apiUrl}:3000`;
 const notify = () => toast("Plese Login For Add Items In Wishlist");
 
   const cards = [
@@ -103,7 +105,7 @@ useEffect(() => {
   
     const fetchCartItems = async () => {
       try {
-        let response = await fetch(`http://localhost:3000/cart/${userDetails._id}`);
+        let response = await fetch(`${apiUrl}/cart/${userDetails._id}`);
         let data = await response.json();
         // console.log("data in cart",data)
         // if(data)
@@ -133,7 +135,7 @@ useEffect(() => {
     if(user&& userDetails._id){
       const fetchCartItems = async () => {
         try {
-          let response = await fetch(`http://localhost:3000/addtocart/${userDetails._id}`);
+          let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`);
           let data = await response.json();
           if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
             console.error("Invalid response format:", data);
@@ -175,7 +177,7 @@ useEffect(() => {
   //     const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
   //  console.log("delete",itemInCart)
   //     if (!itemInCart) {
-  //       const response = await fetch('http://localhost:3000/cart', {
+  //       const response = await fetch('${apiUrl}/cart', {
   //         method: 'POST',
   //         headers: { 'Content-Type': 'application/json' },
   //         body: JSON.stringify(matchItem),
@@ -187,7 +189,7 @@ useEffect(() => {
   //         setwishlistdata((prev) => [...prev, addedItem]);
   //       }
   //     } else {
-  //       const response = await fetch(`http://localhost:3000/cart/${itemInCart._id}`, {
+  //       const response = await fetch(`${apiUrl}/cart/${itemInCart._id}`, {
   //         method: 'DELETE',
   //       });
 
@@ -235,7 +237,7 @@ useEffect(() => {
       console.log("delete", itemInCart);
   
       if (!itemInCart) {
-        const response = await fetch("http://localhost:3000/cart", {
+        const response = await fetch(`${apiUrl}/cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(matchItem),
@@ -247,7 +249,7 @@ useEffect(() => {
           setwishlistdata(prev => [...prev, addedItem]);
         }
       } else {
-        const response = await fetch(`http://localhost:3000/cart/${itemInCart.itemid}`, {
+        const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
           method: "DELETE",
         });
   
@@ -265,7 +267,7 @@ useEffect(() => {
   const removewishlistonly=async(id)=>{
     console.log("id",id)
     try{
-      const response = await fetch(`http://localhost:3000/cart/${id}`, {
+      const response = await fetch(`${apiUrl}/cart/${id}`, {
         method: "DELETE",
       });
 
@@ -298,7 +300,7 @@ const addtowishlistonly=async(id,prd)=>{
 //     const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
 
     
-//       const response = await fetch('http://localhost:3000/cart', {
+//       const response = await fetch('${apiUrl}/cart', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify(prd),
@@ -346,7 +348,7 @@ console.log("iredandid",prd,id)
       // console.log("delete", itemInCart);
   
       
-        const response = await fetch("http://localhost:3000/cart", {
+        const response = await fetch(`${apiUrl}/cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(matchItem),
@@ -385,7 +387,7 @@ catch(e){
       // const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
 
       
-        const response = await fetch('http://localhost:3000/addtocart', {
+        const response = await fetch(`${apiUrl}/addtocart`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(prd),
@@ -403,7 +405,7 @@ catch(e){
 
 
     // else {
-    //     const response = await fetch(`http://localhost:3000/addtocart/${itemInCart._id}`, {
+    //     const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
     //       method: 'DELETE',
     //     });
 
@@ -427,7 +429,7 @@ catch(e){
 
    if(itemInCart)
    {
-    const response = await fetch(`http://localhost:3000/addtocart/${itemInCart._id}`, {
+    const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
       method: 'DELETE',
        });
  
@@ -442,7 +444,7 @@ catch(e){
                toast.error("data not removed")
              }
    }
-    // const response = await fetch(`http://localhost:3000/addtocart/${id}`, {
+    // const response = await fetch(`${apiUrl}/addtocart/${id}`, {
     //  method: 'DELETE',
     //   });
 
@@ -465,7 +467,7 @@ catch(e){
  
  let bestselling=async()=>{
   try{
-let bestselingdata=await fetch("http://localhost:3000/bestselling")
+let bestselingdata=await fetch(`${apiUrl}/bestselling`)
 
 let resdata=await bestselingdata.json()
 console.log("papapama",resdata)
@@ -484,7 +486,7 @@ catch(e){
  
     let wears=async()=>{
      try{
-   let wearsdata=await fetch("http://localhost:3000/wear?operation=all")
+   let wearsdata=await fetch(`${apiUrl}/wear?operation=all`)
    console.log(wearsdata)
    let resdata=await wearsdata.json()
    console.log("ajana",resdata)
@@ -502,7 +504,7 @@ catch(e){
      //rent data
      const rentData = async () => {
       try {
-        let rentRes = await fetch("http://localhost:3000/rent?operation=all");
+        let rentRes = await fetch(`${apiUrl}/rent?operation=all`);
         let finalRes = await rentRes.json();
         console.log("rentdress ka data",finalRes)
         setrentdata(finalRes);
@@ -519,7 +521,7 @@ catch(e){
 
     useEffect(()=>{
       let newarrival=async()=>{
-  let getdata=await fetch("http://localhost:3000/newarrival")
+  let getdata=await fetch(`${apiUrl}/newarrival`)
   let resdata=await getdata.json()
    setnewarrival(resdata)
       }
@@ -536,7 +538,7 @@ catch(e){
     try {
       let data =wishlistdata.find((e) => e.id === id);
       console.log("xdx",data)
-      let res = await fetch(`http://localhost:3000/cart/${data._id}`, {
+      let res = await fetch(`${apiUrl}/cart/${data._id}`, {
         method: "DELETE",
       });
       if(res.ok){
@@ -564,7 +566,7 @@ catch(e){
   };
 //  const productfetch=async()=>{ 
 //   try{
-//   let data=await fetch("http://localhost:3000/productmodel?operation=all")
+//   let data=await fetch("${apiUrl}/productmodel?operation=all")
 //   let res=await data.json()
 //   console.log("plz acche se ana ",res)
 //   setproductdata(res)
@@ -589,7 +591,7 @@ catch(e){
 
 const productfetch = async () => {
   try {
-    let data = await fetch("http://localhost:3000/productmodel?operation=all");
+    let data = await fetch(`${apiUrl}/productmodel?operation=all`);
     let res = await data.json();
     
     console.log("✅ New data fetched:", res);
@@ -644,7 +646,7 @@ setcatehicate(catearr)
 // let handlenewaddress=async(address,user)=>{
 //   console.log("useridf",user._id)
 //   try {
-//     const response = await fetch(`http://localhost:3000/user/${user._id}/address`, {
+//     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
 //       method: "PATCH",  // Using PATCH request to update the address
 //       headers: {
 //         "Content-Type": "application/json",  // Specify that we're sending JSON
@@ -683,7 +685,7 @@ let handlenewaddress = async (address, user) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:3000/user/${user._id}/address`, {
+    const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(address),
@@ -713,7 +715,7 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
 
   if(action=="delete"){
  try{
-  const response = await fetch(`http://localhost:3000/user/${user._id}/addressdoe`, {
+  const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
     method: "PATCH",  // Using PATCH request to update the address
     headers: {
       "Content-Type": "application/json",  // Specify that we're sending JSON
@@ -735,7 +737,7 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
 else{
   console.log("useridf",user._id)
   try {
-    const response = await fetch(`http://localhost:3000/user/${user._id}/addressdoe`, {
+    const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
       method: "PATCH",  // Using PATCH request to update the address
       headers: {
         "Content-Type": "application/json",  // Specify that we're sending JSON
@@ -772,7 +774,7 @@ let orderplaced=async(order,address)=>{
  console.log("addre",address)
 if(user && userDetails){
   try{
-    let orderpost=await fetch("http://localhost:3000/order",{
+    let orderpost=await fetch(`${apiUrl}/order`,{
       method:"POST",
       headers: {
         "Content-Type": "application/json",  // Specify that we're sending JSON
@@ -803,7 +805,7 @@ const fetchUserOrders = async (userId) => {
           console.error("❌ User ID is missing!");
           return;
       }
-      let res = await fetch(`http://localhost:3000/orders/user/${userDetails._id}`);
+      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`);
       if (!res.ok) {
           throw new Error("Failed to fetch user orders");
       }
@@ -825,7 +827,7 @@ useEffect(() => {
 const submitRating = async (productId, userId, rating, review) => {
   console.log("rating",rating)
   try {
-      const response = await fetch("http://localhost:3000/rate", {
+      const response = await fetch(`${apiUrl}/rate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, productId, rating, review })
@@ -844,7 +846,7 @@ const fetchRatings = async (productId) => {
       console.error("❌ User ID is missing!");
       return;
     }
-    let res = await fetch(`http://localhost:3000/ratings/${userDetails._id}/${productId}`);
+    let res = await fetch(`${apiUrl}/ratings/${userDetails._id}/${productId}`);
     if (!res.ok) {
         throw new Error("Failed to fetch iusers rating");
     }
@@ -870,7 +872,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
   console.log("slec",selectedOption)
 
   try{
-    let orderpost=await fetch("http://localhost:3000/return",{
+    let orderpost=await fetch(`${apiUrl}/return`,{
       method:"POST",
       headers: {
         "Content-Type": "application/json",  // Specify that we're sending JSON
@@ -948,7 +950,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         fetchRatings,
         rating,
         orderreturn,
-        removewishlistonly
+        removewishlistonly,
+        setwalletkapesa,
+        walletkapesa
     
   }}
     >

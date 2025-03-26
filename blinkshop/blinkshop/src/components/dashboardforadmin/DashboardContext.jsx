@@ -7,7 +7,7 @@ const DashboardContext = createContext();
 
 // ✅ 2️⃣ Create the provider component
 export const DashboardProvider = ({ children }) => {
-
+  const apiUrl = import.meta.env.VITE_API_URL;
     const{user,userDetails}=useAuth()
     const [users, setUsers] = useState([]);
     const [userorder,setuserorder]=useState([])
@@ -27,7 +27,7 @@ export const DashboardProvider = ({ children }) => {
     let adddatatoexistingcategory = async (data, id) => {
         try {
             console.log("data m cate h kya ",data)
-          let response = await fetch(`http://localhost:3000/productmodel/${id}`, {
+          let response = await fetch(`${apiUrl}/productmodel/${id}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export const DashboardProvider = ({ children }) => {
       let  editordeleteinexisitingcategory = async (data, id) => {
         try {
             if(data && Object.keys(data).length > 0){
-          let response = await fetch(`http://localhost:3000/editordeleteproduct/${id}`, {
+          let response = await fetch(`${apiUrl}/editordeleteproduct/${id}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export const DashboardProvider = ({ children }) => {
 let deletefromexistingproduct=async(id)=>{
     try{
         if(id){
-            let response = await fetch(`http://localhost:3000/deleteproductfromcate/${id}`, {
+            let response = await fetch(`${apiUrl}/deleteproductfromcate/${id}`, {
                 method: "PATCH",
                 headers: {
                   "Content-Type": "application/json",
@@ -131,7 +131,7 @@ let deletefromexistingproduct=async(id)=>{
 
       let addnewcategory = async (data) => {
         try {
-          let response = await fetch(`http://localhost:3000/productmodel`, {
+          let response = await fetch(`${apiUrl}/productmodel`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -156,7 +156,7 @@ let deletefromexistingproduct=async(id)=>{
       
       const fetchUsers = async () => {
         try {
-          let response = await fetch("http://localhost:3000/user"); // ✅ GET Request
+          let response = await fetch(`${apiUrl}/user`); // ✅ GET Request
           if (!response.ok) {
             throw new Error("Failed to fetch users");
           }
@@ -174,7 +174,7 @@ let deletefromexistingproduct=async(id)=>{
       
 const fetchuserorder= async()=>{    
 try{
-    let res=await fetch("http://localhost:3000/orders")
+    let res=await fetch(`${apiUrl}/orders`)
     if(!res.ok){
         throw new Error("Failed to fetch order");
     }
@@ -191,7 +191,7 @@ useEffect(()=>{
     fetchuserorder()
 
 
-    const eventSource = new EventSource("http://localhost:3000/events");
+    const eventSource = new EventSource(`${apiUrl}/events`);
 
     eventSource.onmessage = () => {
     fetchuserorder(); // 🟢 Jab bhi event aaye, orders fetch karo
@@ -208,7 +208,7 @@ useEffect(()=>{
 
       const postNewArrival = async (productId) => {
         try {
-          const response = await fetch("http://localhost:3000/newarrival", {
+          const response = await fetch(`${apiUrl}/newarrival`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json", // Sending JSON data
@@ -237,7 +237,7 @@ useEffect(()=>{
         if(userDetails)
         {
         try {
-            const response = await fetch(`http://localhost:3000/order/deliver/${orderId}`, {
+            const response = await fetch(`${apiUrl}/order/deliver/${orderId}`, {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json", // Sending JSON data
@@ -256,7 +256,7 @@ useEffect(()=>{
 
     // const updateUserRole = async (userId, newRole) => {
     //     try {
-    //       const response = await fetch(`http://localhost:3000/user/update-role/${userId}`, {
+    //       const response = await fetch(`${apiUrl}/user/update-role/${userId}`, {
     //         method: "PUT",
     //         headers: {
     //           "Content-Type": "application/json",
@@ -288,7 +288,7 @@ useEffect(()=>{
     
                 console.log("Sending Data:", requestBody); // ✅ Debugging log
 
-            const response = await fetch(`http://localhost:3000/user/update-role/${userId}`, {
+            const response = await fetch(`${apiUrl}/user/update-role/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -318,7 +318,7 @@ useEffect(()=>{
                 const shopname = userDetails.shopname.trim();  // 🔥 Trimmed before sending
                 console.log("🟡 Fetching for shopname:", `"${shopname}"`);  
     
-                const response = await fetch(`http://localhost:3000/products/shop/${encodeURIComponent(shopname)}`);
+                const response = await fetch(`${apiUrl}/products/shop/${encodeURIComponent(shopname)}`);
                 
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     
@@ -341,7 +341,7 @@ useEffect(()=>{
     const recordMultipleSales = async (sales) => {
         console.log("sales",sales)
         try {
-            const response = await fetch("http://localhost:3000/sales", {
+            const response = await fetch(`${apiUrl}/sales`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -366,7 +366,7 @@ useEffect(()=>{
 
         if(user || userDetails)
         try {
-            let response = await fetch(`http://localhost:3000/sales/daily/${userDetails.shopname}`);
+            let response = await fetch(`${apiUrl}/sales/daily/${userDetails.shopname}`);
             let data = await response.json();
             console.log("✅ Shopkeeper Sales Data:", data);
             setshopkepersale(data)
@@ -379,7 +379,7 @@ useEffect(()=>{
     
     const updateOrdersWithReturnDetails = async () => {
       try {
-        const response = await fetch('http://localhost:3000/return');
+        const response = await fetch(`${apiUrl}/return`);
         // Check if the response is okay even if no records are found
         const data = await response.json();
         console.log('Updated Orders:', data);

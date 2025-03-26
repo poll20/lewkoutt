@@ -1,5 +1,6 @@
 let mongoose=require("mongoose")
- mongoose.connect("mongodb+srv://sharmaabhay1549:dtWREboypg89DhGC@clusterlewkout.btwa3.mongodb.net/",{dbName:"lewkout"})
+console.log("MongoDB URI:", process.env.MONGO_URI);
+ mongoose.connect(process.env.MONGO_URI)
  .then(()=>{
     console.log("connect successfully")
  })

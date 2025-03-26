@@ -21,7 +21,7 @@ import { useBio } from './BioContext';
 // import { set } from 'mongoose';
 import { useAuth } from './AuthContext';
 const ResponsiveNavbar = () => {
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   let {user,userDetails}=useAuth()
   let {setcatehicate}=useBio()
   const [dropdown, setDropdown] = useState(false);
@@ -91,7 +91,7 @@ const ResponsiveNavbar = () => {
 
 
 let datafetch=async()=>{
-  let data=await fetch("http://localhost:3000/productmodel?operation=all")
+  let data=await fetch(`${apiUrl}/productmodel?operation=all`)
   let finaldata=await data.json()
   console.log("kookoaio",finaldata)
  setcategorydata(finaldata)

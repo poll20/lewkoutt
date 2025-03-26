@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
   const [userDetails, setUserDetails] = useState({});
   const [isRegistered, setIsRegistered] = useState(false);
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       if (user && !isRegistered) {
         setLoading(true);
 
-        const response = await fetch("http://localhost:3000/user/register", {
+        const response = await fetch(`${apiUrl}/user/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +57,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
 
       if (user) {
-        const response = await fetch("http://localhost:3000/user/logout", {
+        const response = await fetch(`${apiUrl}/user/logout`,{
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -84,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      const response = await fetch(`http://localhost:3000/user/profile?email=${user.email}`)
+      const response = await fetch(`${apiUrl}/user/profile?email=${user.email}`)
 
       if (!response.ok) {
         throw new Error(`Failed to fetch user details: ${response.statusText}`);

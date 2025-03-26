@@ -27,3 +27,4 @@ echo "node_modules/" >> .gitignore
 echo "bun.lockb" >> .gitignore
 echo "blinkshop/node_modules/bun/bin/bun.exe" >> .gitignore
 echo "blinkshop/node_modules/@oven/bun-windows-x64-baseline/bin/bun.exe" >> .gitignore
+.env

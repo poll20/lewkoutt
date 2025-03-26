@@ -80,7 +80,7 @@ const CtegoriesLayout = () => {
             e.productdetails.map((e)=>(
          
           <div className="cate-card-done">
-            <Cardforall id={e._id} discription={e.description} price={e.price} discountprice={e.discountprice} image={e.image[0]} discount={e.discount}/>
+            <Cardforall id={e} discription={e.description} price={e.price} discountprice={e.discountprice} image={e.image[0]} discount={e.discount}/>
           </div>
           ))
           

@@ -1,3 +1,4 @@
+require('dotenv').config();
 let express=require("express")
 let app= express()
 const cron = require("node-cron")
@@ -8,7 +9,7 @@ const EventEmitter = require('events');
 const orderEvent = new EventEmitter();
 
 
-let port=process.env.PORT|| 3000
+let port=process.env.PORT
 
 // const server = http.createServer(app); // ✅ Create HTTP Server
 
@@ -53,10 +54,7 @@ const products = [
 
 
 // Twilio credentials from .env
-const accountSid = 'ACd88ff55e54c00212ee4f38968fe069e2';
-const authToken = '811eeb522657ce9096293dbf4503c2f1';
-const twilioNumber = '+14155238886'; // Twilio Sandbox Number
-const adminNumber = '+916377563527'; // Admin's WhatsApp Number
+
 
 const cors = require('cors');
 app.use(cors());
@@ -124,7 +122,7 @@ app.get("/events", (req, res) => {
   });
 });
 
-const client = twilio('ACd88ff55e54c00212ee4f38968fe069e2','811eeb522657ce9096293dbf4503c2f1');
+const client = twilio(process.env.ACCOUNTSID,process.env.AUTHTOKEN);
 
 app.get("/card", (req, res) => {
   const section = req.query.section; // Get the category from the query string
@@ -1352,8 +1350,8 @@ const sendWhatsAppMessage = async (order) => {
   console.log("hello from whatsapp",order.products)
     try {
         const message = await client.messages.create({
-            from:'whatsapp:+14155238886',
-            to:'whatsapp:+916377563527',
+            from:`whatsapp:${process.env.TWILIONUMBER}`,
+            to:`whatsapp:${process.env.ADMINNUMBER}`,
             body: `New Order Received! 📦\n\n👤 Customer: ${order.name}\n📍 Address: ${order.address}\n🛒 Product: ${order.products.map((e)=>(e.tag))}\n💰 Price: ${order.products.map((e)=>(e.discountprice))} Rs\n\n✅ Please process the order ASAP!`
         });
         console.log("WhatsApp Message Sent ✅", message.sid);

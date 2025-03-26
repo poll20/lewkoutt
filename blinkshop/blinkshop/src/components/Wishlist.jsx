@@ -7,6 +7,7 @@ import { useBio } from './BioContext';
 import { ToastContainer, toast } from 'react-toastify';
 import Card from './Card';
 export default function Wishlist() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const {addtocartitem,cartitem} = useContext(BioContext);
   console.log("wish",addtocartitem)
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function Wishlist() {
       console.log("jij",data)
       data['size'] = selectedSizes[id]; // Use the selected size for this item
          console.log("xqe",selectedSizes[id])
-      let res = await fetch("http://localhost:3000/addtocart", {
+      let res = await fetch(`${apiUrl}/addtocart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

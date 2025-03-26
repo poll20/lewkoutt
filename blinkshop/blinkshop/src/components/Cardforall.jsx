@@ -9,6 +9,7 @@ import HeartButton from './HeartButton';
 export default function Cardforall(props) {
 
   let {handleClick,wishlistdata}=useBio()
+  console.log("propd",props)
   // console.log(handleClicks
 if(!wishlistdata){
   return(<p>loading...</p>)
@@ -20,7 +21,7 @@ console.log("wishlist in coa",wishlistdata)
       <div className="product-card">
       {/* Image Section */}
       <div className="image-container">
-      <NavLink to={`/productdescription/${props.id}`}>
+      <NavLink to={`/productdescription/${props.id._id}`}>
         <img
           src={img2} // Replace with real image
           alt="Product"
@@ -28,7 +29,7 @@ console.log("wishlist in coa",wishlistdata)
         />
         </NavLink> 
         {/* Heart Icon */}
-        <div className="heart-icon" onClick={()=>{handleClick(props.id)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id}/></div>
+        <div className="heart-icon" onClick={()=>{handleClick(props.id,props.id.colors[0]._id)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id.colors[0]._id}/></div>
         {/* Rating */}
         <div className="rating">
           ⭐ 4.7 | 16

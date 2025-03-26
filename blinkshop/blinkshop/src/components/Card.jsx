@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
   import { AiOutlineDelete } from "react-icons/ai";
   // import FaChevronDown from "react-icons/fa";
 const Card = (props) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
     const[prdallsizes,setprdallsizes]=useState([])
     const [addtocartkeliyeid,setaddtocartkeliyeid]=useState("")
     const[sizesshow,setsizesshow]=useState(false)
@@ -442,19 +443,19 @@ const chlodekhe = (s, i) => {
 
     if (section && section!="newarrivals") { 
       fetchProducts(
-        `http://localhost:3000/productmodel?operation=filtered&section=${section}`
+        `${apiUrl}/productmodel?operation=filtered&section=${section}`
       );
 
   }
   if (props.category) { 
     fetchProducts(
-      `http://localhost:3000/productmodel?operation=filtered&section=${props.category}`
+      `${apiUrl}/productmodel?operation=filtered&section=${props.category}`
     );
 
 }
   else if (category) {
       fetchProducts(
-        `http://localhost:3000/rent?operation=filtered&category=${category}`,
+        `${apiUrl}/rent?operation=filtered&category=${category}`,
         "rent"
       );
     } else if (store && productdataonlydetail.length > 0) {
@@ -621,7 +622,15 @@ if(searchvalue){
           />
           </NavLink>
           {/* Heart Icon */}
-          <div className="heart-icon">{!wish?(<div onClick={()=>{ handleClick(product._id)}}><HeartButton cardid={product._id} /></div>):(<AiOutlineDelete onClick={()=>{ removewishlistonly(product.itemid)}} style={{color:"black",position:'relative',left:"-3px",bottom:"2px"}} size={15} />)}</div>
+          <div className="heart-icon">{!wish ? (
+    product.colors && product.colors.length > 0 ? (
+      <div onClick={() => handleClick(product, product.colors[0]._id)}>
+        <HeartButton cardid={product.colors[0]._id} />
+      </div>
+    ) : null
+  ) : (
+    <AiOutlineDelete onClick={() => removewishlistonly(product.itemid)} style={{ color: "black", position: 'relative', left: "-3px", bottom: "2px" }} size={15} />
+  )}</div>
           {/* Rating */}
           <div className="rating">
             ⭐ 4.7 | 16

@@ -4,9 +4,15 @@ import { useBio } from "./BioContext";
 import img1 from "./image/img3.jpg"
 import { useDashboard } from "./dashboardforadmin/DashboardContext";
 import { IoIosArrowForward } from "react-icons/io";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 const Checkout = () => {
-const { buydata, addresssetkro,orderplaced } = useBio();
+
+
+ 
+
+const { buydata, addresssetkro,orderplaced,walletkapesa } = useBio();
+const{userDetails}=useAuth()
 const{recordMultipleSales}=useDashboard()
   const location = useLocation();
   const navigate = useNavigate(); // ✅ Hook to detect navigation
@@ -115,13 +121,31 @@ if(buydata){
 }
 const totalDiscountPrice = purchaseproduct.reduce((sum, item) => sum + item.discountprice, 0);
 const totalPrice = purchaseproduct.reduce((sum, item) => sum + item.price, 0);
+
+const [mywalletSelectedOption, setMywalletSelectedOption] = useState("wallet");
+const [mywalletAmount, setMywalletAmount] = useState(walletkapesa || 0);
+const [mywalletDropdownOpen, setMywalletDropdownOpen] = useState(false);
+
+const handleSelect = (option) => {
+  setMywalletSelectedOption(option);
+  if (option === "wallet") {
+    setMywalletAmount(userDetails.wallet.cashback || 0);
+  } else {
+    setMywalletAmount(userDetails?.wallet?.points ? userDetails?.wallet?.points * 2.5 : 0); // 1 point = 2.5 Rs
+  }
+  setMywalletDropdownOpen(false); // Select karte hi dropdown band ho jayega
+};
   return (
     <div className="checkout-container-checkoutbuy">
       <h2 className="checkout-title-checkoutbuy">Checkout</h2>
 
       {/* Address Section */}
       <div className="address-section-checkoutbuy">
-        <p>{deleveryaddress[0].building}/{deleveryaddress[0].locality}, {deleveryaddress[0].city}</p>
+      <p>
+  {deleveryaddress.length > 0
+    ? `${deleveryaddress[0].building}/${deleveryaddress[0].locality}, ${deleveryaddress[0].city}`
+    : "No address available"}
+</p>
       </div>
 
       {/* Review Item Section */}
@@ -200,19 +224,51 @@ const totalPrice = purchaseproduct.reduce((sum, item) => sum + item.price, 0);
           {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
           <span>₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice):(totalPrice-totalDiscountPrice)}.0</span>
         </div>
-        <div className="order-row-checkoutbuy">
+        
+        {/* <div className="order-row-checkoutbuy">
           <span>Wallet Money</span>
-          <span>₹0</span>
-        </div>
+          <span>{`₹${walletkapesa?(walletkapesa):(0)}`}</span>
+        </div> */}
+        <div className="order-row-checkoutbuy relative">
+      <span>Wallet Money</span>
+      <span>{`₹${mywalletAmount}`}</span>
+
+      <div className="relative">
+        <button
+          className="border px-3 py-1 rounded bg-gray-200"
+          onClick={() => setMywalletDropdownOpen(!mywalletDropdownOpen)}
+        >
+          {mywalletSelectedOption === "wallet" ? "Wallet Money" : "Points"}
+        </button>
+
+        {mywalletDropdownOpen && (
+          <div className="absolute bg-white border rounded shadow-md mt-1 w-full">
+            <p
+              className="px-3 py-1 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleSelect("wallet")}
+            >
+              Wallet Money
+            </p>
+            <p
+              className="px-3 py-1 cursor-pointer hover:bg-gray-100"
+              onClick={() => handleSelect("points")}
+            >
+              Points
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+        
         <div className="order-row-checkoutbuy">
           <span>Shipping Fee (Non Refundable)</span>
           <span>₹0</span>
         </div>
         <div className="order-row-checkoutbuy payable-row-checkoutbuy">
           <span>Payable amount</span>
-          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</span>
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice)-mywalletAmount:(totalDiscountPrice)-mywalletAmount}.0</span>
         </div>
-        <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice):(totalPrice-totalDiscountPrice)}.0 on the final amount</p>
+        <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice+mywalletAmount):(totalPrice-totalDiscountPrice+mywalletAmount)}.0 on the final amount</p>
       </div>
 
       <button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);setTimeout(()=>{recordMultipleSales(purchaseproduct)},300) }}>Pay Now</button>
