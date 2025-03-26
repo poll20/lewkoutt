@@ -66,7 +66,8 @@ app.use(bodyparser.json())
 //     res.header({"Access-Control-Allow-Origin": "*"});
 //     next();
 //   }) 
-require("../database/dbconn.js")
+// require("../database/dbconn.js")
+const connectDB = require('./database/dbconn');
 app.get("/",(req,res)=>{
     res.send("hello")
 })
@@ -2078,8 +2079,11 @@ app.get("/return", async (req, res) => {
 
 
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port: ${port}`);
-});
-
+// app.listen(port, "0.0.0.0", () => {
+//   console.log(`🚀 Server running on port: ${port}`);
+// });
+(async () => {
+  await connectDB();  // ✅ पहले DB कनेक्ट करो, फिर सर्वर स्टार्ट करो
+  app.listen(port, () => console.log(`🚀 Server running on port: ${port}`));
+})();
 

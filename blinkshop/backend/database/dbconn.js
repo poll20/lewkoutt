@@ -1,15 +1,18 @@
 let mongoose=require("mongoose")
-console.log("MongoDB URI:", process.env.MONGO_URI, {});
-mongoose.set('bufferCommands', false); // To avoid command buffering
- mongoose.connect(process.env.MONGO_URI,{
-   useNewUrlParser: true,
-   useUnifiedTopology: true,
-   serverSelectionTimeoutMS: 50000,  // ✅ सही जगह
-   socketTimeoutMS: 45000
- })
- .then(()=>{
-    console.log("connect successfully")
- })
- .catch((e)=>{
-    console.log(`error agyi: ${e}`)
- })
+const connectDB = async () => {
+   try {
+     mongoose.set('bufferCommands', false); // ✅ पहले ही सेट कर दो
+ 
+     await mongoose.connect(process.env.MONGO_URI, {
+       serverSelectionTimeoutMS: 50000,
+       socketTimeoutMS: 45000
+     });
+ 
+     console.log("✅ MongoDB connected successfully");
+   } catch (err) {
+     console.error("❌ MongoDB connection error:", err);
+     process.exit(1);
+   }
+ };
+ 
+ module.exports = connectDB;
