@@ -2,5 +2,8 @@
   "dependencies": { "bun": "^1.2.4", "react-fontawesome": "^1.7.1" },
   "devDependencies": {
     "vite": "^6.2.0"
+  }, 
+  "engines": {
+    "node": "18.17.1"
   }
 }
