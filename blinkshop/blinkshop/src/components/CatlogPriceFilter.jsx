@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./catlogPriceFilter.css";
+import "./CatlogPriceFilter.css";
 import { useBio } from './BioContext';
 const CatlogPriceFilter = () => {
   const initialMinPrice = 300;
