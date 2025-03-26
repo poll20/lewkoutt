@@ -1,13 +1,12 @@
 let mongoose=require("mongoose")
-console.log("MongoDB URI:", process.env.MONGO_URI, {
+console.log("MongoDB URI:", process.env.MONGO_URI, {});
+mongoose.set('bufferCommands', false); // To avoid command buffering
+ mongoose.connect(process.env.MONGO_URI,{
    useNewUrlParser: true,
    useUnifiedTopology: true,
-   serverSelectionTimeoutMS: 50000, // Server selection timeout बढ़ाया
-   socketTimeoutMS: 45000, // Query execution का timeout बढ़ाया
- });
-mongoose.set('bufferCommands', false); // To avoid command buffering
-mongoose.set('serverSelectionTimeoutMS', 30000); // Increase timeout to 30s
- mongoose.connect(process.env.MONGO_URI)
+   serverSelectionTimeoutMS: 50000,  // ✅ सही जगह
+   socketTimeoutMS: 45000
+ })
  .then(()=>{
     console.log("connect successfully")
  })
