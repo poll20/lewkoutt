@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import "./Checkout.css";
+import "./CheckOut.css";
 import { useBio } from "./BioContext";
 import img1 from "./image/img3.jpg"
 import { useDashboard } from "./dashboardforadmin/DashboardContext";
