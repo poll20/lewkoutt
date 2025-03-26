@@ -67,7 +67,7 @@ app.use(bodyparser.json())
 //     next();
 //   }) 
 // require("../database/dbconn.js")
-const connectDB = require('./database/dbconn.js');
+const connectDB = require('../database/dbconn.js');
 app.get("/",(req,res)=>{
     res.send("hello")
 })
