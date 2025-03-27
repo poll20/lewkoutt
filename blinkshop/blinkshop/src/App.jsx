@@ -202,6 +202,15 @@ export default function App() {
   //   // fetchData();
   //   fetchCartItems();
   // }, []);
+  useEffect(() => {
+    const keepAlive = setInterval(() => {
+      fetch("https://lewkoutt.onrender.com/ping")
+        .then((res) => console.log("Keeping Server Alive"))
+        .catch((err) => console.error(err));
+    }, 300000); // 5 min
+
+    return () => clearInterval(keepAlive); // Cleanup when unmounting
+  }, []);
 
   return (
     <AuthProvider>

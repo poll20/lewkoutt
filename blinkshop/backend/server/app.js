@@ -106,6 +106,9 @@ app.get("/",(req,res)=>{
 //     }
 // })
 
+app.get("/ping", (req, res) => {
+  res.status(200).send("Server is awake!");
+});
 
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
