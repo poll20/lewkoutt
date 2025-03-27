@@ -240,9 +240,7 @@ const LoginButton = () => {
       { isAuthenticated ? (
       <NavLink to={"/Profile"}><CiUser size={30}></CiUser></NavLink>
      ) : (
-       <CiUser size={30} onClick={() => loginWithRedirect().catch((error) => {
-        console.error("Auth0 Login Error:", error);
-      })}></CiUser>
+       <CiUser size={30} onClick={() => loginWithRedirect()}></CiUser>
     )}
     </div>
   );
