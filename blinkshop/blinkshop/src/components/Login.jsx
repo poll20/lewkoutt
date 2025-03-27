@@ -240,7 +240,9 @@ const LoginButton = () => {
       { isAuthenticated ? (
       <NavLink to={"/Profile"}><CiUser size={30}></CiUser></NavLink>
      ) : (
-       <CiUser size={30} onClick={() => loginWithRedirect()}></CiUser>
+       <CiUser size={30} onClick={() => loginWithRedirect({
+        redirect_uri: window.location.origin, // Automatically sets correct URL
+      })}></CiUser>
     )}
     </div>
   );
