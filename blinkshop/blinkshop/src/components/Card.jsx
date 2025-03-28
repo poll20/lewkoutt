@@ -625,7 +625,7 @@ if(searchvalue){
           <div className="heart-icon">{!wish ? (
     product.colors && product.colors.length > 0 ? (
       <div onClick={() => handleClick(product, product.colors[0]._id)}>
-        <HeartButton cardid={product.colors[0]._id} />
+        <HeartButton cardid={product.colors?.[0]?._id} />
       </div>
     ) : null
   ) : (
