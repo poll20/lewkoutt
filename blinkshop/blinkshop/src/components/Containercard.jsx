@@ -29,7 +29,7 @@ const CardLayout = () => {
     return(<p>loading...</p>)
   }
   console.log("new arrival",newarrival)
-  let targetId = newarrival.map((e) => e.ProductId.toString());  // Convert to string if needed
+  let targetId = newarrival.map((e) => e.ProductId);  // Convert to string if needed
   console.log("tra", targetId);
   
   const filteredProducts = productdata

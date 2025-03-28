@@ -39,6 +39,7 @@ const [cartData, setCartData] = useState([]);
   const [Selectedcolor,setSelectedcolor]=useState([])
 const[product,setproduct]=useState([])
   let { id } = useParams();
+  console.log("fwff",id)
   let navigate=useNavigate()
   let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail}=useBio()
   const { user,userDetails } = useAuth();
