@@ -10,6 +10,9 @@ import Cardforall from "./Cardforall";
 import { useBio } from "./BioContext";
 const CtegoriesLayout = () => {
   const {productdata}=useBio()
+  if(!productdata){
+    return <p>loading....</p>
+  }
   console.log("yha bhi mil gya",productdata)
   const cards = [
     {
@@ -59,7 +62,7 @@ const CtegoriesLayout = () => {
   return (
     <>
     {
-      productdata.map((e)=>(
+      productdata?.map((e)=>(
         <div className="horizontal-card-layout">
       <h1 style={{textAlign:"center"}} >{e.category}</h1>
       {/* Parent Card */}
