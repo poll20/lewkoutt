@@ -35,7 +35,7 @@ const CardLayout = () => {
   const filteredProducts = productdata
     .map(item => item.productdetails) // Get productdetails from each category
     .flat() // Flatten the nested arrays
-    .filter(product => targetId.find(targetIds => product._id.toString() === targetIds)); // Compare as strings
+    .filter(product => targetId.find(targetIds => product._id=== targetIds)); // Compare as strings pehle ._id.toString() tha
   console.log("egergegrbrtnttynr",filteredProducts  )
   if (filteredProducts.length > 0) {
     console.log('Filtered Products:', filteredProducts);
