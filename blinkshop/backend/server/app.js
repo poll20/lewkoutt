@@ -57,7 +57,12 @@ const products = [
 
 
 const cors = require('cors');
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: "https://lewkout.netlify.app", // Your frontend URL
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
