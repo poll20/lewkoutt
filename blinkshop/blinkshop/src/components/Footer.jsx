@@ -24,7 +24,7 @@ useEffect(()=>{
 },[])
 
 console.log("popo",cat)
-let data=cat.map((e)=>(e.productdetails.map((e)=>(e.tag))))
+let data=cat.map((e)=>(e.productdetails.map((e)=>(e.tag)))).flat()
 console.log("cucu",data)
 
 let distinctcat=[... new Set(data)]
