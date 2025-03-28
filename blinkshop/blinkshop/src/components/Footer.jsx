@@ -10,7 +10,7 @@ let [cat,setcat]=useState([])
 
 let fetchCateGory=async()=>{
   try{
-let data=await fetch(`${apiUrl}/wear?operation=all`)
+let data=await fetch(`${apiUrl}/productmodel?operation=all`)
 let res=await data.json()
 console.log("Dffefe",res)
 setcat(res)
