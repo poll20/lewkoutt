@@ -87,7 +87,7 @@ let distinctcat=[... new Set(data)]
     distinctcat.map((e)=>{
       return(
         <li>
-          <NavLink to={`/wear/${e}`}>{e}</NavLink>
+          <NavLink to={`/productmodel/${e}`}>{e}</NavLink>
         </li>
       )
     })
