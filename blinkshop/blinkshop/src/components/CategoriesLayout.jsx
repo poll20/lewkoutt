@@ -64,7 +64,7 @@ const CtegoriesLayout = () => {
       <h1 style={{textAlign:"center"}} >{e.category}</h1>
       {/* Parent Card */}
       <div className="parent-card" style={{borderRadius:'20px'}}>
-        <NavLink to={`/productmodel/${e.cate}`}>
+        <NavLink to={`/productmodel/${e.category}`}>
         <img
           src={cards[0].image}
           alt="Parent Card"
