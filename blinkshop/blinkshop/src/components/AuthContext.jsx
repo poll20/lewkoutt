@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
   // Automatically register user when logged in
   useEffect(() => {
     if (user) {
+      console.log("User state updated:", user); // ✅ Check karne ke liye log
       registerUser();
     }
   }, [user]);

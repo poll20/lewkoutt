@@ -361,6 +361,7 @@ app.get("/wear",async(req,res)=>{
 
 //user created or registered
 app.post("/user/register", async (req, res) => {
+  console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   const { name, email, updated_at } = req.body;
   if (email) {
     try {
@@ -380,6 +381,7 @@ app.post("/user/register", async (req, res) => {
         res.status(200).json({ message: "User already exists" });
       }
     } catch (e) {
+      console.error("Database error:", e);
       res.status(500).json({ message: e.message });
     }
   } else {
