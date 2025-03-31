@@ -94,7 +94,7 @@ if(!addtocartdatas){
       {addtocartdatas.length > 0 ? (
           addtocartdatas.map((order) => (
             <div className="order-card-addtocart" key={order._id}>
-              <div
+              {/* <div
                 style={{
                   border: "1px solid gray",
                   position: "absolute",
@@ -123,7 +123,7 @@ if(!addtocartdatas){
                 }}>
                   <CiHeart /> Move to wish list
                 </span>
-              </div>
+              </div> */}
 
               <div className="order-detailss-addtocart">
                 <div className="custom-checkbox">
@@ -168,6 +168,15 @@ if(!addtocartdatas){
          <span className="original-price">₹{cprice}</span>
          </div>
         <button className="buy-buttonss" style={{width:"140px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>
+       </div>
+
+       <div className="bottom-sheet" style={{ display: popup && popupProductId === order.productid ? "flex" : "none",alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
+          {/* <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+         <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
+         <span className="original-price">₹{cprice}</span>
+         </div> */}
+        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);}}>Remove To Cart</button>
+        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => { addtowishlistonly(popupProductId,wowalaprd);}}>Move To Wishlist</button>
        </div>
       </div>
     </>
