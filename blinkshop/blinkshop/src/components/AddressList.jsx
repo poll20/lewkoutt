@@ -49,7 +49,7 @@ const saveAddress = (panel) => {
   console.log("panel",pincode,building,locality)
   const newAddress = {
     pincode,
-    phone:"6377563527",
+    phone,
     building,
     locality,
     city: "Jaipur",

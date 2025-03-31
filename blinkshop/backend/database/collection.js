@@ -95,7 +95,7 @@ let users=mongoose.Schema({
     address:[addressSchema],  
     lat: Number,  // User latitude
     long: Number , // User longitude
-    phone:[{ type: String,sparse: true }],
+    phone:[{ type: String}],
     shopid:String,
     shopaddress:{type:String,default:""}, 
     shopname:{type:String,default:""},
