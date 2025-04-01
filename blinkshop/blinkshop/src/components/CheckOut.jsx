@@ -277,7 +277,7 @@ const handleSelect = (option) => {
 {/* review buy data */}
 <div className="bottom-sheet" style={{display:showSheet?('block'):('none')}}>
 <p>Review item</p>
-<button onClick={()=>{setShowSheet(false)}} className="close-button">
+<button onClick={()=>{setShowSheet(false)}} className="closed-button">
           ✖
         </button>
 

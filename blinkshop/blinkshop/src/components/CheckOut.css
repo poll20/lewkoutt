@@ -140,16 +140,18 @@
   margin-bottom: 20px;
 }
 
-.close-button {
+.closed-button {
   background:white;
   border: none;
-  font-size: 20px;
+  font-size: 15px;
   cursor: pointer;
   border: 1px solid gray;
   position:absolute;
-  top: -40px;
+  top: -30px;
   right: 10px;
-  border-radius: 100%;
+  width:40px ;
+  height:40px;
+  border-radius:100%;
   
 }
 

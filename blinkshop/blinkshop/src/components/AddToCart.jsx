@@ -99,7 +99,7 @@ if(!addtocartdatas){
                   border: "1px solid gray",
                   position: "absolute",
                   left: "25vw",
-                  top: "40vh",
+                  top: "80vh",
                   width: "50vw",
                   height: "20vh",
                   background: "white",
@@ -108,6 +108,7 @@ if(!addtocartdatas){
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "10px",
+                  
                 }}
               >
                 <RxCross1 size={18} onClick={closePopup} />
@@ -162,22 +163,20 @@ if(!addtocartdatas){
         ) : (
           <EmptyCart endpoint={window.location.pathname.substring(1)} />
         )}
-        <div className="bottom-sheet" style={{ display:choosebuy.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
+        <div className="bottom-sheet" style={{ display:choosebuy.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
           <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
          <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
          <span className="original-price">₹{cprice}</span>
          </div>
         <button className="buy-buttonss" style={{width:"140px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>
        </div>
-
-       <div className="bottom-sheet" style={{ display: popup && popupProductId === order.productid ? "flex" : "none",alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
-          {/* <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
-         <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
-         <span className="original-price">₹{cprice}</span>
-         </div> */}
-        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);}}>Remove To Cart</button>
-        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => { addtowishlistonly(popupProductId,wowalaprd);}}>Move To Wishlist</button>
+       <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
+       <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
+         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
+        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}>Wishlist</button>
        </div>
+
+       
       </div>
     </>
   );

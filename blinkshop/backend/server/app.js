@@ -2,7 +2,7 @@ require('dotenv').config();
 let express=require("express")
 let app= express()
 const cron = require("node-cron")
-
+const jwt = require("jsonwebtoken");
 // const http = require("http"); // ✅ Required for Socket.io abhi nhiii
 // const socketIo = require("socket.io"); // ✅ Import Socket.io
 const EventEmitter = require('events');
@@ -57,12 +57,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());
+// app.use(cors());//te localhost m h
 app.use(cors({
   origin: "https://lewkout.netlify.app", // Your frontend URL
   methods: "GET,POST,PUT,PATCH,DELETE",
   credentials: true
-}));
+}));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -111,6 +111,8 @@ app.get("/",(req,res)=>{
 //     }
 // })
 
+
+
 app.get("/ping", (req, res) => {
   res.status(200).send("Server is awake!");
 });
@@ -130,6 +132,26 @@ app.get("/events", (req, res) => {
       orderEvent.removeListener("orderUpdated", sendEvent);
   });
 });
+
+
+// ✅ Middleware to Verify Auth0 JWT
+const verifyToken = async (req, res, next) => {
+  const token = req.header("Authorization");
+  if (!token) return res.status(401).json({ error: "Access denied" });
+
+  try {
+    const response = await axios.get(
+      `https://${process.env.AUTH0_DOMAIN}/userinfo`,
+      { headers: { Authorization: token } }
+    );
+
+    req.user = response.data;
+    next();
+  } catch (error) {
+    res.status(400).json({ error: "Invalid token" });
+  }
+};
+
 
 const client = twilio(process.env.ACCOUNTSID,process.env.AUTHTOKEN);
 

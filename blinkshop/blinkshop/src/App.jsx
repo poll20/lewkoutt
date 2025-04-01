@@ -171,6 +171,8 @@ import ReturnRequest from "./components/ReturnRequest";
 import ReturnDataTable from "./components/dashboardforadmin/ReturnDataTable";
 import Faq from "./components/Faq";
 import AboutUs from "./components/AboutUs";
+import MyLogin from "./components/MyLogin";
+import OTPLogin from "./components/OtpLogin";
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
@@ -289,6 +291,7 @@ function Layout() {
             
             <Route path="/shopkeeper" element={<ShopkeeperDashboard />} />
             <Route path="/return/:id" element={<ReturnRequest/>} />
+            <Route path="/loginn" element={<OTPLogin/>} />
 
   
           
