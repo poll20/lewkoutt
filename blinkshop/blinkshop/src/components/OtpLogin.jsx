@@ -1,6 +1,6 @@
 // OTPLogin.js
 import React, { useState } from "react";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./firebase";
+import { auth, RecaptchaVerifier, signInWithPhoneNumber,PhoneAuthProvider,signInWithCredential } from "./firebase";
 
 const OTPLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -10,18 +10,22 @@ const OTPLogin = () => {
 
   // Setup reCAPTCHA verifier
   const setupRecaptcha = (phoneNumber) => {
-    const recaptchaVerifier = new RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: (response) => {
-          console.log("reCAPTCHA solved:", response);
-        },
-      },
-      auth
-    );
-
-    signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier)
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("reCAPTCHA solved:", response);
+          },
+        }
+      );
+    }
+  
+    const appVerifier = window.recaptchaVerifier;
+  
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
         setVerificationId(confirmationResult.verificationId);
         setIsOtpSent(true);
@@ -31,16 +35,12 @@ const OTPLogin = () => {
         console.error("Error during phone authentication:", error);
       });
   };
-
+  
   // Handle OTP Verification
   const verifyOtp = () => {
-    const credential = window.firebase.auth.PhoneAuthProvider.credential(
-      verificationId,
-      otp
-    );
-
-    auth
-      .signInWithCredential(credential)
+    const credential = PhoneAuthProvider.credential(verificationId, otp);
+  
+    signInWithCredential(auth, credential)
       .then((userCredential) => {
         console.log("User signed in successfully:", userCredential.user);
       })
