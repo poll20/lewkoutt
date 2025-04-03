@@ -147,10 +147,11 @@ import { BiHelpCircle } from "react-icons/bi";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
   const [userprf,setuserprf]=useState([])
   let {user,userDetails, handleLogout ,logout}=useAuth()
-
+let navigate=useNavigate()
   useEffect(()=>{ 
     
     if(user && userDetails){
@@ -162,6 +163,17 @@ const UserProfile = () => {
     // console.log("lolokii",userprf)
     console.log("lolokii",userDetails)
   }
+
+  const openPopup = (id,prd) => {
+    setPopup(true);
+    // setPopupProductId(id); // Save the specific product ID for the popup
+    // setwowalaprd(prd)
+  };
+
+  const closePopup = () => {
+    setPopup(false);
+    // setPopupProductId(null);
+  };
   return (
     <div className="profile-container">
       <h2>{userprf.name}</h2>
@@ -213,7 +225,7 @@ const UserProfile = () => {
           <IoIosArrowForward />
         </NavLink>
         <NavLink className="menu-item navlink">
-          <RiLogoutBoxLine  onClick={()=>{logout()}}/>
+          <RiLogoutBoxLine  onClick={() => openPopup()}/>
           <p>Logout</p>
           <IoIosArrowForward />
         </NavLink>
@@ -234,6 +246,11 @@ const UserProfile = () => {
         </NavLink>
       </div>
       </div>
+      <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
+       <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
+         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logout();setTimeout(()=>{navigate("/loginn")},400)}}>Logout</button> 
+        {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}></button> */}
+       </div>
     </div>
   );
 };

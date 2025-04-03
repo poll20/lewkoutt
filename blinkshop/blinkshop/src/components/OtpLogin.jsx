@@ -335,67 +335,107 @@ const OtpLogin = () => {
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
               )}
-              <button
-                type="submit"
-                className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg
-                           font-semibold shadow-md hover:bg-indigo-700
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500
-                           transition-all duration-200"
-              >
-                Send OTP
-              </button>
+               <button
+            //   type="submit"
+            //   disabled={loading || otp.join("").length !== 6}
+              style={{
+                width: "100%",
+                padding: "12px",
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "8px",
+                fontWeight: "bold",
+                boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+                cursor: loading ? "not-allowed" : "pointer",
+                opacity: loading ? 0.5 : 1,
+                transition: "background-color 0.2s",
+              }}
+            >
+              Send Otp
+            </button>
             </div>
           </form>
         ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex justify-center">
-              <div className="grid grid-cols-6 gap-2 w-full max-w-xs">
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    maxLength="1"
-                    ref={(ref) => (inputRefs.current[index] = ref)}
-                    value={digit}
-                    onChange={(e) => handleChange(e.target, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    className="w-full h-14 border-2 rounded-lg text-center text-xl font-semibold
-                               focus:border-indigo-500 focus:outline-none transition-all duration-200
-                               disabled:bg-gray-100"
-                    disabled={loading}
-                  />
-                ))}
-              </div>
+            <form
+            onSubmit={handleSubmit}
+            style={{
+              
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "16px",
+              width: "100%",
+              maxWidth: "400px",
+              margin: "auto",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                gap: "8px",
+              }}
+            >
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength="1"
+                  ref={(ref) => (inputRefs.current[index] = ref)}
+                  value={digit}
+                  onChange={(e) => handleChange(e.target, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  style={{
+                    flex: 1,
+                    height: "50px",
+                    border: "2px solidrgb(0, 0, 0)",
+                    borderRadius: "8px",
+                    textAlign: "center",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    outline: "none",
+                    transition: "all 0.2s",
+                  }}
+                  disabled={loading}
+                />
+              ))}
             </div>
           
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+            {error && <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>{error}</p>}
           
             <button
               type="submit"
               disabled={loading || otp.join("").length !== 6}
-              className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg
-                         font-semibold shadow-md hover:bg-indigo-700 focus:outline-none
-                         focus:ring-2 focus:ring-indigo-500 disabled:opacity-50
-                         disabled:cursor-not-allowed transition-all duration-200"
+              style={{
+                width: "100%",
+                padding: "12px",
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "8px",
+                fontWeight: "bold",
+                boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+                cursor: loading ? "not-allowed" : "pointer",
+                opacity: loading ? 0.5 : 1,
+                transition: "background-color 0.2s",
+              }}
             >
-              {loading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                  <span className="ml-2">Verifying...</span>
-                </div>
-              ) : (
-                "Verify OTP"
-              )}
+              {loading ? "Verifying..." : "Verify OTP"}
             </button>
           
-            <div className="text-center">
-              <div className="flex items-center justify-center space-x-2 text-gray-600">
-                <BiTime className="text-xl" />
+            <div style={{ textAlign: "center", color: "#555" }}>
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+                <BiTime style={{ fontSize: "20px" }} />
                 <span>
                   {canResend ? (
                     <button
                       onClick={handleResend}
-                      className="text-indigo-600 font-semibold hover:text-indigo-700"
+                      style={{
+                        color: "#4F46E5",
+                        fontWeight: "bold",
+                        border: "none",
+                        background: "none",
+                        cursor: "pointer",
+                      }}
                     >
                       Resend OTP
                     </button>
@@ -406,6 +446,7 @@ const OtpLogin = () => {
               </div>
             </div>
           </form>
+          
           
         )}
 
