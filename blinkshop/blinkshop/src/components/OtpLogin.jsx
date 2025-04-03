@@ -347,8 +347,8 @@ const OtpLogin = () => {
             </div>
           </form>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex justify-center space-x-3">
+          <form onSubmit={handleSubmit} className="space-y-6" style={{border:"2px solid red"}}>
+            <div className="flex justify-center space-x-3" >
               {otp.map((digit, index) => (
                 <input
                   key={index}
