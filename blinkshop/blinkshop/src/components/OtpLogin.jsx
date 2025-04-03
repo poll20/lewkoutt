@@ -358,7 +358,7 @@ const OtpLogin = () => {
                   value={digit}
                   onChange={(e) => handleChange(e.target, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="w-12 h-12 border-2 rounded-lg text-center text-xl font-semibold
+                  className="w-2 h-12 border-2 rounded-lg text-center text-xl font-semibold
                             focus:border-indigo-500 focus:outline-none
                             transition-all duration-200
                             disabled:bg-gray-100"
