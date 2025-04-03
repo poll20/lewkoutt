@@ -347,38 +347,36 @@ const OtpLogin = () => {
             </div>
           </form>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6" style={{border:"2px solid red"}}>
-            <div className="flex justify-center space-x-3" >
-              {otp.map((digit, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  maxLength="1"
-                  ref={(ref) => (inputRefs.current[index] = ref)}
-                  value={digit}
-                  onChange={(e) => handleChange(e.target, index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="w-2 h-12 border-2 rounded-lg text-center text-xl font-semibold
-                            focus:border-indigo-500 focus:outline-none
-                            transition-all duration-200
-                            disabled:bg-gray-100"
-                  disabled={loading}
-                />
-              ))}
+            <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex justify-center">
+              <div className="grid grid-cols-6 gap-2 w-full max-w-xs">
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    maxLength="1"
+                    ref={(ref) => (inputRefs.current[index] = ref)}
+                    value={digit}
+                    onChange={(e) => handleChange(e.target, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    className="w-full h-14 border-2 rounded-lg text-center text-xl font-semibold
+                               focus:border-indigo-500 focus:outline-none transition-all duration-200
+                               disabled:bg-gray-100"
+                    disabled={loading}
+                  />
+                ))}
+              </div>
             </div>
-
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
-            )}
-
+          
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          
             <button
               type="submit"
               disabled={loading || otp.join("").length !== 6}
               className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg
-                       font-semibold shadow-md hover:bg-indigo-700
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500
-                       disabled:opacity-50 disabled:cursor-not-allowed
-                       transition-all duration-200"
+                         font-semibold shadow-md hover:bg-indigo-700 focus:outline-none
+                         focus:ring-2 focus:ring-indigo-500 disabled:opacity-50
+                         disabled:cursor-not-allowed transition-all duration-200"
             >
               {loading ? (
                 <div className="flex items-center justify-center">
@@ -389,7 +387,7 @@ const OtpLogin = () => {
                 "Verify OTP"
               )}
             </button>
-
+          
             <div className="text-center">
               <div className="flex items-center justify-center space-x-2 text-gray-600">
                 <BiTime className="text-xl" />
@@ -408,6 +406,7 @@ const OtpLogin = () => {
               </div>
             </div>
           </form>
+          
         )}
 
         <div className="flex items-center justify-center space-x-2 text-gray-500 text-sm">
