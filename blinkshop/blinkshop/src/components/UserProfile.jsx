@@ -151,6 +151,7 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
   const [userprf,setuserprf]=useState([])
   let {user,userDetails, handleLogout ,logout}=useAuth()
+  let [popup,setPopup]=useState(false)
 let navigate=useNavigate()
   useEffect(()=>{ 
     
@@ -246,7 +247,7 @@ let navigate=useNavigate()
         </NavLink>
       </div>
       </div>
-      <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
+      <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
          <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logout();setTimeout(()=>{navigate("/loginn")},400)}}>Logout</button> 
         {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}></button> */}
