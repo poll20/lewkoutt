@@ -276,10 +276,25 @@ const MapWithAutocomplete = () => {
         }
       });
 
-      markerRef.current.addListener("dragend", () => {
+    //   markerRef.current.addListener("dragend", () => {
+    //     const pos = markerRef.current.getPosition();
+    //     console.log("Dragged to:", pos.lat(), pos.lng());
+    //   });
+    markerRef.current.addListener("dragend", () => {
         const pos = markerRef.current.getPosition();
+        const geocoder = new window.google.maps.Geocoder();
+      
+        geocoder.geocode({ location: pos }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            setSelectedAddress(results[0].formatted_address);
+          } else {
+            console.error("Reverse geocoding failed:", status);
+          }
+        });
+      
         console.log("Dragged to:", pos.lat(), pos.lng());
       });
+      
     };
 
     const loadGoogleMaps = async () => {
