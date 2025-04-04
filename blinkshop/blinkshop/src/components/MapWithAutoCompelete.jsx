@@ -7,7 +7,7 @@ const MapWithAutocompelete = () => {
   const markerRef = useRef(null);
   const mapInstance = useRef(null);
 
-  const apiKey = "YOUR_GOOGLE_MAPS_API_KEY"; // 🔁 Replace with your API key
+  const apiKey =import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // 🔁 Replace with your API key
 
   useEffect(() => {
     const initMapScript = () => {
