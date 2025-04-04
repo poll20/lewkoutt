@@ -297,28 +297,63 @@ const MapWithAutocomplete = () => {
       
     };
 
-    const loadGoogleMaps = async () => {
-      if (!window.google) {
-        await loadScript(
-          `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`
-        );
-      }
+    // const loadGoogleMaps = async () => {
+    //   if (!window.google) {
+    //     await loadScript(
+    //       `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`
+    //     );
+    //   }
 
-      // Get current location
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const location = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          };
-          initMap(location);
-        },
-        (err) => {
-          console.warn("Geolocation failed, defaulting to Jaipur:", err.message);
-          initMap({ lat: 26.9124, lng: 75.7873 }); // Jaipur fallback
+    //   // Get current location
+    //   navigator.geolocation.getCurrentPosition(
+    //     (pos) => {
+    //       const location = {
+    //         lat: pos.coords.latitude,
+    //         lng: pos.coords.longitude,
+    //       };
+    //       initMap(location);
+    //     },
+    //     (err) => {
+    //       console.warn("Geolocation failed, defaulting to Jaipur:", err.message);
+    //       initMap({ lat: 26.9124, lng: 75.7873 }); // Jaipur fallback
+    //     }
+    //   );
+    // };
+    const loadGoogleMaps = async () => {
+        if (!window.google) {
+          await loadScript(
+            `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
+          );
+      
+          const waitForGoogle = () =>
+            new Promise((resolve) => {
+              const interval = setInterval(() => {
+                if (window.google && window.google.maps) {
+                  clearInterval(interval);
+                  resolve();
+                }
+              }, 100);
+            });
+      
+          await waitForGoogle();
         }
-      );
-    };
+      
+        // Now safe to use google.maps
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const location = {
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude,
+            };
+            initMap(location);
+          },
+          (err) => {
+            console.warn("Geolocation failed, defaulting to Jaipur:", err.message);
+            initMap({ lat: 26.9124, lng: 75.7873 }); // Jaipur fallback
+          }
+        );
+      };
+      
 
     loadGoogleMaps();
   }, []);
