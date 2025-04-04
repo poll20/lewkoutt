@@ -93,7 +93,7 @@ const MapWithAutocompelete = () => {
           border: "2px solid #ccc",
         }}
       ></div>
-      <p>{address}</p>
+      {/* <p>{address}</p> */}
     </div>
   );
 };
