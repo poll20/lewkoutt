@@ -192,7 +192,9 @@ useEffect(() => {
         {userprf?.address?.length === 0 ? (
           <div style={{display:'flex',alignItems:'center',justifyContent:"space-between"}}>
           <h2>Address</h2>
+          <NavLink to='/maps' className="navlink">
           <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}}>+ Add Addddress</button>
+          </NavLink>
           </div>
         ) : (
           <>
