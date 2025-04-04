@@ -100,7 +100,132 @@
 
     // export default MapWithAutocompelete;
 
-    import React, { useEffect, useRef, useState } from "react";
+
+
+
+
+
+
+//     import React, { useEffect, useRef, useState } from "react";
+
+// const MapWithAutocomplete = () => {
+//   const [selectedAddress, setSelectedAddress] = useState("");
+//   const mapRef = useRef(null);
+//   const markerRef = useRef(null);
+//   const mapInstance = useRef(null);
+
+//   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+//   useEffect(() => {
+//     const loadScript = (url) =>
+//       new Promise((resolve) => {
+//         const script = document.createElement("script");
+//         script.src = url;
+//         script.async = true;
+//         script.defer = true;
+//         script.onload = resolve;
+//         document.body.appendChild(script);
+//       });
+
+//     const initMap = () => {
+//       const defaultLocation = { lat: 26.9124, lng: 75.7873 }; // Jaipur
+
+//       mapInstance.current = new window.google.maps.Map(mapRef.current, {
+//         center: defaultLocation,
+//         zoom: 13,
+//       });
+
+//       markerRef.current = new window.google.maps.Marker({
+//         position: defaultLocation,
+//         map: mapInstance.current,
+//         draggable: true,
+//       });
+
+//       const input = document.getElementById("autocomplete");
+
+//       const autocomplete = new window.google.maps.places.Autocomplete(input, {
+//         types: ["geocode"],
+//         componentRestrictions: { country: "in" },
+//       });
+
+//       autocomplete.addListener("place_changed", () => {
+//         const place = autocomplete.getPlace();
+//         if (place.geometry && place.geometry.location) {
+//           const location = place.geometry.location;
+//           mapInstance.current.setCenter(location);
+//           mapInstance.current.setZoom(16);
+//           markerRef.current.setPosition(location);
+//           setSelectedAddress(place.formatted_address);
+//         }
+//       });
+
+//       markerRef.current.addListener("dragend", () => {
+//         const pos = markerRef.current.getPosition();
+//         console.log("Dragged to:", pos.lat(), pos.lng());
+//       });
+//     };
+
+//     const loadGoogleMaps = async () => {
+//       if (!window.google) {
+//         await loadScript(
+//           `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
+//         );
+//       }
+//       initMap();
+//     };
+
+//     loadGoogleMaps();
+//   }, []);
+
+//   return (
+//     <div style={{ padding: "10px", fontFamily: "sans-serif" }}>
+//       <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
+//         📍 Google Map with Autocomplete (Working 💯)
+//       </h3>
+
+//       <input
+//         id="autocomplete"
+//         placeholder="Enter your address"
+//         style={{
+//           width: "100%",
+//           padding: "10px",
+//           fontSize: "16px",
+//           borderRadius: "8px",
+//           border: "1px solid #ccc",
+//           marginBottom: "10px",
+//         }}
+//       />
+
+//       <div
+//         ref={mapRef}
+//         style={{
+//           width: "100%",
+//           height: "400px",
+//           borderRadius: "12px",
+//           border: "2px solid #ccc",
+//         }}
+//       ></div>
+
+//       {selectedAddress && (
+//         <p
+//           style={{
+//             marginTop: "10px",
+//             padding: "10px",
+//             background: "#f4f4f4",
+//             borderRadius: "8px",
+//           }}
+//         >
+//           Selected: <strong>{selectedAddress}</strong>
+//         </p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default MapWithAutocomplete;
+
+
+import React, { useEffect, useRef, useState } from "react";
 
 const MapWithAutocomplete = () => {
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -121,16 +246,14 @@ const MapWithAutocomplete = () => {
         document.body.appendChild(script);
       });
 
-    const initMap = () => {
-      const defaultLocation = { lat: 26.9124, lng: 75.7873 }; // Jaipur
-
+    const initMap = (location) => {
       mapInstance.current = new window.google.maps.Map(mapRef.current, {
-        center: defaultLocation,
-        zoom: 13,
+        center: location,
+        zoom: 15,
       });
 
       markerRef.current = new window.google.maps.Marker({
-        position: defaultLocation,
+        position: location,
         map: mapInstance.current,
         draggable: true,
       });
@@ -145,10 +268,10 @@ const MapWithAutocomplete = () => {
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
         if (place.geometry && place.geometry.location) {
-          const location = place.geometry.location;
-          mapInstance.current.setCenter(location);
+          const loc = place.geometry.location;
+          mapInstance.current.setCenter(loc);
           mapInstance.current.setZoom(16);
-          markerRef.current.setPosition(location);
+          markerRef.current.setPosition(loc);
           setSelectedAddress(place.formatted_address);
         }
       });
@@ -165,7 +288,21 @@ const MapWithAutocomplete = () => {
           `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
         );
       }
-      initMap();
+
+      // Get current location
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const location = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          };
+          initMap(location);
+        },
+        (err) => {
+          console.warn("Geolocation failed, defaulting to Jaipur:", err.message);
+          initMap({ lat: 26.9124, lng: 75.7873 }); // Jaipur fallback
+        }
+      );
     };
 
     loadGoogleMaps();
@@ -174,7 +311,7 @@ const MapWithAutocomplete = () => {
   return (
     <div style={{ padding: "10px", fontFamily: "sans-serif" }}>
       <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-        📍 Google Map with Autocomplete (Working 💯)
+        📍 Google Map with Autocomplete + Current Location
       </h3>
 
       <input
