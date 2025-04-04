@@ -173,6 +173,7 @@ import Faq from "./components/Faq";
 import AboutUs from "./components/AboutUs";
 import MyLogin from "./components/MyLogin";
 import OTPLogin from "./components/OtpLogin";
+import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
@@ -292,6 +293,7 @@ function Layout() {
             <Route path="/shopkeeper" element={<ShopkeeperDashboard />} />
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
+            <Route path="/maps" element={<MapWithAutocompelete/>} />
 
   
           

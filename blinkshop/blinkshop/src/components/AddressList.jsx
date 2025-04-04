@@ -4,7 +4,7 @@ import "./AddressList.css";
 import { useAuth } from "./AuthContext";
 import { HiH1 } from "react-icons/hi2";
 import { useBio } from "./BioContext";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 const AddressList = () => {
   
   const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
@@ -198,7 +198,9 @@ useEffect(() => {
           <>
             <div className="address-header">
               <h2>Select Address</h2>
+              <NavLink to='/maps' className="navlink">
               <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}}>+ Add Addressdd</button>
+              </NavLink>
             </div>
     
             {/* Address loop */}
