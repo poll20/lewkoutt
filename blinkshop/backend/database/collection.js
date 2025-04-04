@@ -73,6 +73,7 @@ const addressSchema = new mongoose.Schema({
   pincode: { type: String, required: true },
   building: { type: String, required: true },
   locality: { type: String, required: true },
+  address:{type:String},
   phone:[String],
   city: { type: String, default: "Jaipur" },
   state: { type: String, default: "Rajasthan" },
