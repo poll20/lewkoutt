@@ -142,7 +142,7 @@ const MapWithAutocomplete = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ paddingTop: "100px" }}>
       <input
         ref={inputRef}
         type="text"
