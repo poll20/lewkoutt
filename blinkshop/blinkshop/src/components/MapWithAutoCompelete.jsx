@@ -103,7 +103,7 @@
     import React, { useEffect, useRef, useState } from "react";
 
 const MapWithAutocomplete = () => {
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState("");
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const mapInstance = useRef(null);
@@ -111,31 +111,15 @@ const MapWithAutocomplete = () => {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
-    const loadGoogleMapsScript = () => {
-      if (!window.google) {
+    const loadScript = (url) =>
+      new Promise((resolve) => {
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.src = url;
         script.async = true;
         script.defer = true;
-        script.onload = () => {
-          loadWebComponent();
-        };
+        script.onload = resolve;
         document.body.appendChild(script);
-      } else {
-        loadWebComponent();
-      }
-    };
-
-    const loadWebComponent = () => {
-      const componentScript = document.createElement("script");
-      componentScript.src =
-        "https://maps.googleapis.com/maps/api/js/webcomponent/loader.js";
-      componentScript.async = true;
-      componentScript.onload = () => {
-        initMap();
-      };
-      document.body.appendChild(componentScript);
-    };
+      });
 
     const initMap = () => {
       const defaultLocation = { lat: 26.9124, lng: 75.7873 }; // Jaipur
@@ -151,16 +135,21 @@ const MapWithAutocomplete = () => {
         draggable: true,
       });
 
-      const autocomplete = document.querySelector("gmpx-placeautocomplete");
+      const input = document.getElementById("autocomplete");
 
-      autocomplete.addEventListener("gmpx-placeautocomplete:place", (e) => {
-        const place = e.detail;
-        if (place && place.geometry && place.geometry.location) {
-          const loc = place.geometry.location;
-          mapInstance.current.setCenter(loc);
+      const autocomplete = new window.google.maps.places.Autocomplete(input, {
+        types: ["geocode"],
+        componentRestrictions: { country: "in" },
+      });
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry && place.geometry.location) {
+          const location = place.geometry.location;
+          mapInstance.current.setCenter(location);
           mapInstance.current.setZoom(16);
-          markerRef.current.setPosition(loc);
-          setSelectedPlace(place.formatted_address || place.displayName?.text);
+          markerRef.current.setPosition(location);
+          setSelectedAddress(place.formatted_address);
         }
       });
 
@@ -170,17 +159,27 @@ const MapWithAutocomplete = () => {
       });
     };
 
-    loadGoogleMapsScript();
+    const loadGoogleMaps = async () => {
+      if (!window.google) {
+        await loadScript(
+          `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
+        );
+      }
+      initMap();
+    };
+
+    loadGoogleMaps();
   }, []);
 
   return (
     <div style={{ padding: "10px", fontFamily: "sans-serif" }}>
       <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-        📍 Location Picker (with Google Maps Autocomplete)
+        📍 Google Map with Autocomplete (Working 💯)
       </h3>
 
-      {/* Place Autocomplete Web Component */}
-      <gmpx-placeautocomplete
+      <input
+        id="autocomplete"
+        placeholder="Enter your address"
         style={{
           width: "100%",
           padding: "10px",
@@ -188,12 +187,9 @@ const MapWithAutocomplete = () => {
           borderRadius: "8px",
           border: "1px solid #ccc",
           marginBottom: "10px",
-          display: "block",
         }}
-        placeholder="Enter your address"
-      ></gmpx-placeautocomplete>
+      />
 
-      {/* Map Display */}
       <div
         ref={mapRef}
         style={{
@@ -204,18 +200,16 @@ const MapWithAutocomplete = () => {
         }}
       ></div>
 
-      {/* Address Display */}
-      {selectedPlace && (
+      {selectedAddress && (
         <p
           style={{
             marginTop: "10px",
-            background: "#f9f9f9",
             padding: "10px",
+            background: "#f4f4f4",
             borderRadius: "8px",
-            fontSize: "14px",
           }}
         >
-          📌 Selected Address: <strong>{selectedPlace}</strong>
+          Selected: <strong>{selectedAddress}</strong>
         </p>
       )}
     </div>
