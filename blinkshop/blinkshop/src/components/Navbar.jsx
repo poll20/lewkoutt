@@ -130,7 +130,7 @@ let closeslidecategorynav=()=>{
         <div className="logo lato-thin" >LEWKOUT</div>
         
         <div style={{display:"flex",gap:"15%"}}>
-        <NavLink to="/cart" className="hideinbigscreen"><CiShoppingCart size={30}/>
+        {/* <NavLink to="/cart" className="hideinbigscreen navlink"><CiShoppingCart size={30}/>
         {addtocartdatas.length > 0 && (
     <span
       className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full
@@ -139,7 +139,20 @@ let closeslidecategorynav=()=>{
       {addtocartdatas.length}
     </span>
   )}
-        </NavLink>
+        </NavLink> */}
+        <NavLink to="/cart" className="hideinbigscreen navlink">
+  <div className="relative">
+    <CiShoppingCart size={30} />
+    {addtocartdatas.length > 0 && (
+      <span
+        className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full
+                   flex items-center justify-center font-bold"
+      >
+        {addtocartdatas.length}
+      </span>
+    )}
+  </div>
+</NavLink>
          <NavLink to='/searchme'className='navlink'><CiSearch size={30}/></NavLink>
           </div>
         
