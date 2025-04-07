@@ -130,30 +130,26 @@ let closeslidecategorynav=()=>{
         <div className="logo lato-thin" >LEWKOUT</div>
         
         <div style={{display:"flex",gap:"15%"}}>
-        {/* <NavLink to="/cart" className="hideinbigscreen navlink"><CiShoppingCart size={30}/>
-        {addtocartdatas.length > 0 && (
-    <span
-      className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full
-                 flex items-center justify-center font-bold"
-    >
-      {addtocartdatas.length}
-    </span>
-  )}
-        </NavLink> */}
-      <div className="relative w-fit">
-  <NavLink to="/cart">
-    <CiShoppingCart size={30} />
+        <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?(position-relative):('')}`}><CiShoppingCart size={30} /> 
+        {
+          addtocartdatas.length>0?( <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {addtocartdatas.length>0?(addtocartdatas.length):('')}
+            <span class="visually-hidden">unread messages</span>
+          </span>):('')
+       
+}
   </NavLink>
-  <span style={{color:"black"}} className="absolute -top-2 -right-2 w-5 h-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center font-bold z-50">
-    4
-  </span>
-</div>
-
-
-         <NavLink to='/searchme'className='navlink'><CiSearch size={30}/></NavLink>
+<NavLink to='/searchme'className='navlink'><CiSearch size={30}/></NavLink>
           </div>
-        
-        <ul className="nav-links">
+
+{/* <button type="button" class="btn btn-primary position-relative">
+  Inbox
+  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    99+
+    <span class="visually-hidden">unread messages</span>
+  </span>
+</button>       */}
+       <ul className="nav-links">
           <li><NavLink to="/"><CiHome size={30} /></NavLink></li>
           <li><NavLink to="/cart"><CiShoppingCart size={30} /></NavLink></li>
           <li><NavLink to="/wishlist" className='navlink'><CiHeart size={30}/></NavLink></li>
@@ -230,7 +226,7 @@ let closeslidecategorynav=()=>{
 
           <div className="homeeee">
           
-          <li style={{textAlign:"center"}}><LoginButton/>Account</li>
+          <li style={{textAlign:"center"}}><LoginButton/><span>Account</span></li>
           {/* <li className='homer'>account</li> */}
           </div>
         </ul>
