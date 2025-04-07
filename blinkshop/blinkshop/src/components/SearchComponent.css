@@ -7,16 +7,33 @@
 margin-top: 65px;
   }
   
-  .search-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* border: 1px solid black; */
-    width: 84%;
-    gap: 8px;
-    
-
+  .search-barrrrr {
+    position: relative;
+    width: 100%;
   }
+  
+  .inppp {
+    padding-left: 12px;
+    height: 40px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    z-index: 2;
+    font-size: 1rem;
+  }
+  
+  /* This styles the fake placeholder */
+  .fake-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #aaa;
+    pointer-events: none;
+    font-size: 1rem;
+    z-index: 1;
+  }
+  
   
   .search-bar .back-button {
     background: none;
@@ -26,12 +43,7 @@ margin-top: 65px;
   }
   
   
-  .inppp {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #080808;
-    border-radius:0px;
-  }
+ 
 
   
   .section {

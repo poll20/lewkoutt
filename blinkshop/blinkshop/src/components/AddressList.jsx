@@ -237,7 +237,7 @@ useEffect(() => {
             }
           </>
         )}
-        <button className="back-to-home">Back to home</button>
+        <button className="back-to-home" style={{position:"absolute",bottom:"80px",left:"100px"}}>Back to home</button>
 
 
 

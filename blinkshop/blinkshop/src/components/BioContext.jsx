@@ -32,6 +32,7 @@ export const BioProvider = ({children,addtocartitem }) => {
  const [refetch, setRefetch] = useState(false); // ✅ Track re-fetch status
  const[userorder,setuserorder]=useState([])
  const[rating,setrating]=useState([]) 
+ const[timeslotlelo,settimeslotlelo]=useState("")
  const[walletkapesa,setwalletkapesa]=useState(0)
  
   const [filters, setFilters] = useState({
@@ -397,6 +398,7 @@ catch(e){
           const addedItem = await response.json();
           setaddtocartdata((prev) => [...prev, addedItem]);
           setaddtocartdataonly((prev) => [...prev, prd._id]);
+          toast.success("data added successfully")
           
         }
         else{
@@ -952,7 +954,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         orderreturn,
         removewishlistonly,
         setwalletkapesa,
-        walletkapesa
+        walletkapesa,
+        settimeslotlelo,
+        timeslotlelo
     
   }}
     >

@@ -236,7 +236,7 @@ const LoginButton = () => {
 
   return (
     <div>
-      {loading && <p>Loading...</p>}
+      {/* {loading && <p>Loading...</p>} */}
       { isAuthenticated ? (
       <NavLink to={"/Profile"}><CiUser size={30}></CiUser></NavLink>
      ) : (

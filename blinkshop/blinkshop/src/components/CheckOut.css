@@ -94,7 +94,7 @@
     display: block;
     width: 100%;
     padding: 15px;
-    background-color: #007bff;
+    background-color: #000000;
     color: white;
     border: none;
     border-radius: 4px;
@@ -104,7 +104,7 @@
   }
   
   .pay-now-btn-checkoutbuy:hover {
-    background-color: #0056b3;
+    background-color: #000000;
   }
   /* Bottom Sheet Styles */
 .bottom-sheet {

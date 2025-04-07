@@ -6,12 +6,13 @@ import { useDashboard } from "./dashboardforadmin/DashboardContext";
 import { IoIosArrowForward } from "react-icons/io";
 import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import TimeSlots from "./TimeSlots"
 const Checkout = () => {
 
 
  
 
-const { buydata, addresssetkro,orderplaced,walletkapesa } = useBio();
+const { buydata, addresssetkro,orderplaced,walletkapesa,timeslotlelo} = useBio();
 const{userDetails}=useAuth()
 const{recordMultipleSales}=useDashboard()
   const location = useLocation();
@@ -235,6 +236,7 @@ const handleSelect = (option) => {
 
       <div className="relative">
         <button
+         style={{color:"white"}}
           className="border px-3 py-1 rounded bg-gray-200"
           onClick={() => setMywalletDropdownOpen(!mywalletDropdownOpen)}
         >
@@ -271,7 +273,9 @@ const handleSelect = (option) => {
         <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice+mywalletAmount):(totalPrice-totalDiscountPrice+mywalletAmount)}.0 on the final amount</p>
       </div>
 
-      <button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);setTimeout(()=>{recordMultipleSales(purchaseproduct)},300) }}>Pay Now</button>
+      <TimeSlots/>
+
+    {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);setTimeout(()=>{recordMultipleSales(purchaseproduct)},300) }}>Pay Now</button>):('')}
 
 
 {/* review buy data */}

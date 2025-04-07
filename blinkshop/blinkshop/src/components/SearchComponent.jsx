@@ -104,7 +104,7 @@ import "./SearchComponent.css";
 import img1 from "./image/img3.jpg";
 import { useBio } from "./BioContext";
 import { NavLink } from "react-router-dom";
-
+import { Typewriter } from 'react-simple-typewriter';
 const SearchCoponent = () => {
   let { bestsellingdata, productdataonlydetail, getsearchinput,catecate } = useBio();
   let [bestsale, setbestsale] = useState([]);
@@ -146,7 +146,7 @@ if(filteredProducts){
   return (
     <div className="trending-container">
       {/* Search Bar */}
-      <div className="search-bar">
+      {/* <div className="search-barrrrr">
         <input
           className="inppp"
           type="text"
@@ -154,11 +154,33 @@ if(filteredProducts){
           value={search}
           onChange={handleChange}
         />
-      </div>
+      </div> */}
+   <div className="search-barrrrr">
+  <input
+    className="inppp"
+    type="text"
+    value={search}
+    onChange={handleChange}
+  />
+
+  {search === '' && (
+    <div className="fake-placeholder">
+      <Typewriter
+        words={['Search here...', 'Search by tag...', 'Search by title...']}
+        loop={true}
+        cursor
+        cursorStyle="|"
+        typeSpeed={80}
+        deleteSpeed={60}
+        delaySpeed={1500}
+      />
+    </div>
+  )}
+</div>
 
       {/* Search Results */}
       {search && filteredProducts.length > 0 && (
-        <div className="search-results" style={{marginTop:'50px'}}>
+        <div className="search-results" style={{marginTop:'20px'}}>
           {/* <h2>Search Results</h2> */}
           {filteredProducts.slice(0, 4).map((product, index) => (
         
@@ -184,7 +206,7 @@ if(filteredProducts){
       )}
 
       {/* Trending Searches Section */}
-      <div className="section" style={{ marginTop: "60px" }}>
+      {/* <div className="section" style={{ marginTop: "60px" }}>
         <h2>Trending Searches 🔥</h2>
         <div className="trending-tags" style={{ marginTop: "13px" }}>
           {[
@@ -207,10 +229,10 @@ if(filteredProducts){
           ))}
           <span className="tag more-tag">+More</span>
         </div>
-      </div>
+      </div> */}
 
       {/* Trending Products Section */}
-      <div className="section">
+      <div className="section" style={{ marginTop: "30px" }}>
         <h2>Trending Products 🔥</h2>
         <div className="trending-products">
           {bestsale.map((product, index) => (

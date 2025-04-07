@@ -23,7 +23,7 @@ import { useAuth } from './AuthContext';
 const ResponsiveNavbar = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   let {user,userDetails}=useAuth()
-  let {setcatehicate}=useBio()
+  let {setcatehicate,addtocartdatas}=useBio()
   const [dropdown, setDropdown] = useState(false);
   const [sideNavbarOpen, setSideNavbarOpen] = useState(false);
 
@@ -127,7 +127,16 @@ let closeslidecategorynav=()=>{
         <div className="logo lato-thin" >LEWKOUT</div>
         
         <div style={{display:"flex",gap:"15%"}}>
-        <NavLink to="/cart" className="hideinbigscreen"><CiShoppingCart size={30}/></NavLink>
+        <NavLink to="/cart" className="hideinbigscreen"><CiShoppingCart size={30}/>
+        {addtocartdatas.length > 0 && (
+    <span
+      className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full
+                 flex items-center justify-center font-bold"
+    >
+      {addtocartdatas.length}
+    </span>
+  )}
+        </NavLink>
          <NavLink to='/searchme'className='navlink'><CiSearch size={30}/></NavLink>
           </div>
         
@@ -208,8 +217,8 @@ let closeslidecategorynav=()=>{
 
           <div className="homeeee">
           
-          <li style={{textAlign:"center"}}><LoginButton/></li>
-          <li className='homer'>account</li>
+          <li style={{textAlign:"center"}}><LoginButton/>Account</li>
+          {/* <li className='homer'>account</li> */}
           </div>
         </ul>
        

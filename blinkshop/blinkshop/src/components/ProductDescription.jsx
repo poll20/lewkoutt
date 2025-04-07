@@ -1,5 +1,5 @@
  // export default ProductDescription;
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef } from "react";
 import { useAuth } from "./AuthContext";
 import "./ProductDescription.css";
 import img1 from "./image/img1.jpg";
@@ -38,6 +38,8 @@ const [cartData, setCartData] = useState([]);
   const [popupImage, setPopupImage] = useState(""); // State to store the clicked image
   const [Selectedcolor,setSelectedcolor]=useState([])
 const[product,setproduct]=useState([])
+const imageRef = useRef();
+const cartRef = useRef();
   let { id } = useParams();
   console.log("fwff",id)
   let navigate=useNavigate()
@@ -167,6 +169,44 @@ const[product,setproduct]=useState([])
   let handleclick = async (id,quantity,selectedSize) => {
 
    console.log("oi3nt",id,quantity,selectedSize)
+
+  //  const image = imageRef.current;
+  //  const cart = cartRef.current;
+ 
+  //  if (!image || !cart) return;
+ 
+  //  const imageRect = image.getBoundingClientRect();
+  //  const cartRect = cart.getBoundingClientRect();
+ 
+  //  const clone = image.cloneNode(true);
+ 
+  //  // Style the clone
+  //  clone.style.position = 'fixed';
+  //  clone.style.left = `${imageRect.left}px`;
+  //  clone.style.top = `${imageRect.top}px`;
+  //  clone.style.width = `${imageRect.width}px`;
+  //  clone.style.height = `${imageRect.height}px`;
+  //  clone.style.transition = 'all 0.7s ease-in-out';
+  //  clone.style.zIndex = '9999';
+  //  clone.style.pointerEvents = 'none';
+  //  clone.style.borderRadius = '12px';
+ 
+  //  document.body.appendChild(clone);
+ 
+  //  // Force reflow before animation
+  //  requestAnimationFrame(() => {
+  //    clone.style.left = `${cartRect.left}px`;
+  //    clone.style.top = `${cartRect.top}px`;
+  //    clone.style.width = '40px';
+  //    clone.style.height = '40px';
+  //    clone.style.opacity = '0.5';
+  //  });
+ 
+  //  // Remove clone after animation ends
+  //  setTimeout(() => {
+  //    clone.remove();
+  //  }, 800);
+
   if(user)
   {
  if (selectedSize.length==0) {
@@ -427,6 +467,7 @@ let cate=product.cate
             <div key={index} className="image-slide" >
               
               <img
+              //  ref={imageRef}
                 src={image[2]}
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
@@ -466,7 +507,8 @@ let cate=product.cate
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
           <div className="icons" onClick={() => handleClick(product,product._id)}>
           
-<HeartButton   cardid={product._id} />
+<HeartButton   cardid={product._id} w={23} h={23} mt={6} 
+/>
 {/* <HiOutlineShoppingBag size={30}/> */}
 </div>
         </div>
@@ -489,7 +531,7 @@ let cate=product.cate
             <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label>
           </div>
 
-          <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"20px"}}>
+          <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}>
           <label>Colors Available</label>
             <div className="sizes">
               {
@@ -508,7 +550,7 @@ let cate=product.cate
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>
 
-
+          {/* <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}}>Add to Cart</button>   */}
          
           {/* Quantity Selector */}
          <div className="quantity-controls">

@@ -217,7 +217,7 @@ let navigate=useNavigate()
         </NavLink>
         <NavLink className="menu-item navlink">
           <FaShop/>
-          <p>LEWKOUT Stores</p>
+          <p>Coupon</p>
           <IoIosArrowForward />
         </NavLink>
         <NavLink className="menu-item navlink">
@@ -227,8 +227,8 @@ let navigate=useNavigate()
         </NavLink>
         <NavLink className="menu-item navlink">
           <RiLogoutBoxLine  onClick={() => openPopup()}/>
-          <p>Logout</p>
-          <IoIosArrowForward />
+          <p onClick={() => openPopup()}>Logout</p>
+          <IoIosArrowForward onClick={() => openPopup()}/>
         </NavLink>
         <NavLink to='/wallet' className="menu-item navlink">
           <RiLogoutBoxLine/>

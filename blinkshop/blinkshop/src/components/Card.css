@@ -248,7 +248,7 @@
   }
   
   .size-btn:hover {
-    background: #0056b3;
+    background: #000000;
     color: #fff;
   }
   .selected-filter {
@@ -281,7 +281,7 @@
 /* Apply Button */
 .apply-btn {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #000000;
   color: white;
   font-size: 16px;
   border: none;
@@ -291,7 +291,7 @@
 }
 
 .apply-btn:hover {
-  background-color: #0056b3;
+  background-color: #000000;
 }
 
 .hidefiltersec{
