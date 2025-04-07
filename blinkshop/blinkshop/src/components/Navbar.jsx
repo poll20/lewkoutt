@@ -33,7 +33,7 @@ const ResponsiveNavbar = () => {
     
   };
   if(addtocartdatas){
-    console.log("plzaaaaaaaaaaaa aajaaaaaaa",addtocartdatas)
+    console.log("plzaaaaaaaaaaaa aajaaaaaaa",addtocartdatas.length)
   }
 
   // Toggle for the sliding navbar on mobile
