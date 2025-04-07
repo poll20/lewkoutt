@@ -113,25 +113,25 @@ app.get("/",(req,res)=>{
 
 
 
-// app.get("/ping", (req, res) => {
-//   res.status(200).send("Server is awake!");
-// });
+app.get("/ping", (req, res) => {
+  res.status(200).send("Server is awake!");
+});
 
-// app.get("/events", (req, res) => {
-//   res.setHeader("Content-Type", "text/event-stream");
-//   res.setHeader("Cache-Control", "no-cache");
-//   res.setHeader("Connection", "keep-alive");
+app.get("/events", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
 
-//   const sendEvent = () => {
-//       res.write("data: update\n\n"); // 🔄 Notify client
-//   };
+  const sendEvent = () => {
+      res.write("data: update\n\n"); // 🔄 Notify client
+  };
 
-//   orderEvent.on("orderUpdated", sendEvent);
+  orderEvent.on("orderUpdated", sendEvent);
 
-//   req.on("close", () => {
-//       orderEvent.removeListener("orderUpdated", sendEvent);
-//   });
-// });
+  req.on("close", () => {
+      orderEvent.removeListener("orderUpdated", sendEvent);
+  });
+});
 
 
 // ✅ Middleware to Verify Auth0 JWT
