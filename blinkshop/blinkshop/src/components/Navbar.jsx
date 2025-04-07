@@ -140,15 +140,15 @@ let closeslidecategorynav=()=>{
     </span>
   )}
         </NavLink> */}
-       <NavLink to="/cart" className="relative">
-  <CiShoppingCart size={30} />
-  <span
-    className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 rounded-full
-               flex items-center justify-center font-bold z-50"
-  >
-    3
+      <div className="relative w-fit">
+  <NavLink to="/cart">
+    <CiShoppingCart size={30} />
+  </NavLink>
+  <span style={{color:"black"}} className="absolute -top-2 -right-2 w-5 h-5 bg-red-600 text-white text-xs rounded-full flex items-center justify-center font-bold z-50">
+    4
   </span>
-</NavLink>
+</div>
+
 
          <NavLink to='/searchme'className='navlink'><CiSearch size={30}/></NavLink>
           </div>
