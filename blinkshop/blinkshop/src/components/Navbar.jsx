@@ -226,7 +226,12 @@ let closeslidecategorynav=()=>{
 
           <div className="homeeee">
           
-          <li style={{textAlign:"center"}}><LoginButton/><span>Account</span></li>
+          <li style={{textAlign:"center"}}><LoginButton/><span onClick={(e) => {e.stopPropagation(); // Click andar na jaye
+          }}
+      style={{ cursor: "default" }}
+    >
+      Account
+    </span></li>
           {/* <li className='homer'>account</li> */}
           </div>
         </ul>
