@@ -32,6 +32,9 @@ const ResponsiveNavbar = () => {
     setDropdown(!dropdown);
     
   };
+  if(addtocartdatas){
+    console.log("plzaaaaaaaaaaaa aajaaaaaaa",addtocartdatas)
+  }
 
   // Toggle for the sliding navbar on mobile
   const handleSideNavbarToggle = () => {
