@@ -130,7 +130,7 @@ let closeslidecategorynav=()=>{
         <div className="logo lato-thin" >LEWKOUT</div>
         
         <div style={{display:"flex",gap:"15%"}}>
-        <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?(position-relative):('')}`}><CiShoppingCart size={30} /> 
+        <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?('position-relative'):('')}`}><CiShoppingCart size={30} /> 
         {
           addtocartdatas.length>0?( <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {addtocartdatas.length>0?(addtocartdatas.length):('')}
