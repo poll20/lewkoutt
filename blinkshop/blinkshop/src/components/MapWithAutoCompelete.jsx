@@ -154,7 +154,8 @@
 
 
 import React, { useEffect, useRef, useState } from "react";
-
+import { useBio } from "./BioContext";
+import { useAuth } from "./AuthContext";
 const MapWithAutocomplete = () => {
   const [selectedAddresss, setSelectedAddresss] = useState("");
 //   const [phone, setPhone] = useState("");
