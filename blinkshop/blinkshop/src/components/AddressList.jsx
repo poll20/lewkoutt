@@ -59,7 +59,7 @@ const saveAddress = (panel) => {
   }
   if(panel=="addaddress")
   {
-  if(newAddress){
+  if(newAddress && user){
     console.log("adddfrr",newAddress)
     handlenewaddress(newAddress,userDetails)
   }
