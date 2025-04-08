@@ -77,6 +77,12 @@ let sendtocheckout = () => {
     }, 1000 ); // Small delay to allow React to update state
   }
 };
+useEffect(() => {
+  if (addtocartdatas && addtocartdatas.length > 0) {
+    setchoosebuy(addtocartdatas); // Select all items by default
+  }
+}, [addtocartdatas]);
+
 
 if(!addtocartdatas){
   return(<p>loadin....  </p>)
