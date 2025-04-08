@@ -34,7 +34,7 @@ export const BioProvider = ({children,addtocartitem }) => {
  const[rating,setrating]=useState([]) 
  const[timeslotlelo,settimeslotlelo]=useState("")
  const[walletkapesa,setwalletkapesa]=useState(0)
- 
+ const[toastmsg,settoastmsg]=useState("")
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -248,6 +248,7 @@ useEffect(() => {
           const addedItem = await response.json();
           setWishlist(prev => [...prev, id]);
           setwishlistdata(prev => [...prev, addedItem]);
+          settoastmsg("item added successfully")
         }
       } else {
         const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
@@ -257,7 +258,8 @@ useEffect(() => {
         if (response.ok) {
           setWishlist(prev => prev.filter(itemId => itemId !== id));
           setwishlistdata(prev => prev.filter(item => item.itemid !== id));
-          toast.success("Data removed successfully");
+          // toast.success("Data removed successfully");
+          settoastmsg("item removed successfully")
         }
       }
     } catch (error) {
@@ -277,7 +279,8 @@ useEffect(() => {
       if (response.ok) {
         setWishlist(prev => prev.filter(itemId => itemId !== id));
         setwishlistdata(prev => prev.filter(item => item.itemid !== id));
-        toast.success("Data removed successfully");
+       // toast.success("Data removed successfully");
+       settoastmsg("item removed successfully")
       }
       else {
         toast.error(data.message || "Error removing item");
@@ -359,7 +362,8 @@ console.log("iredandid",prd,id)
           const addedItem = await response.json();
           setWishlist(prev => [...prev, id]);
           setwishlistdata(prev => [...prev, addedItem]);
-          toast.success("item move to wishlist")
+        //  toast.success("item move to wishlist")
+        settoastmsg("item moved successfully")
          removefromaddtocart(id)
         }
     }
@@ -398,7 +402,8 @@ catch(e){
           const addedItem = await response.json();
           setaddtocartdata((prev) => [...prev, addedItem]);
           setaddtocartdataonly((prev) => [...prev, prd._id]);
-          toast.success("data added successfully")
+        //  toast.success("data added successfully")
+        settoastmsg("item added successfully")
           
         }
         else{
@@ -440,7 +445,8 @@ catch(e){
               setaddtocartdata((prev) => prev.filter((item) => item._id !== itemInCart._id));
 
                // setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
-               toast.success("data removed successfully")
+               //toast.success("data removed successfully")
+               settoastmsg("item removed successfully")
              }
              else{
                toast.error("data not removed")
@@ -544,7 +550,8 @@ catch(e){
         method: "DELETE",
       });
       if(res.ok){
-        toast.success("itme removed successfulyy")
+      //  toast.success("itme removed successfulyy")
+      settoastmsg("item removed successfully")
       }
       setWishlist(wishlist.filter(item => item.id !== id)); // Remove item from local state
     } catch (e) {
@@ -956,7 +963,8 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         setwalletkapesa,
         walletkapesa,
         settimeslotlelo,
-        timeslotlelo
+        timeslotlelo,
+        toastmsg
     
   }}
     >

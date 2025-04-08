@@ -6,8 +6,11 @@ import { NavLink } from 'react-router-dom';
 import { GoHeart } from "react-icons/go";
 import { useBio } from './BioContext';
 import HeartButton from './HeartButton';
+import Toast from './Toast';
+
 export default function Cardforall(props) {
 
+  const [showToast, setShowToast] = useState(false);
   let {handleClick,wishlistdata}=useBio()
   console.log("propd",props)
   // console.log(handleClicks
@@ -29,7 +32,7 @@ console.log("wishlist in coa",wishlistdata)
         />
         </NavLink> 
         {/* Heart Icon */}
-        <div className="heart-icon" onClick={()=>{handleClick(props.id,props.id.colors?.[0]?._id)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15}/></div>
+        <div className="heart-icon" onClick={()=>{handleClick(props.id,props.id.colors?.[0]?._id),setShowToast(true)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15}/></div>
         {/* Rating */}
         <div className="rating">
           ⭐ 4.7 | 16
@@ -47,6 +50,12 @@ console.log("wishlist in coa",wishlistdata)
         </div>
         {/* <div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'10px'}}>⚡Fast Delivery</div> */}
       </div>
+      {showToast && (
+        <Toast
+          message="Item added from your wishlist"
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div> 
      
     </>

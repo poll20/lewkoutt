@@ -131,7 +131,7 @@ import ResponsiveNavbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScollToTop";
 import { AuthProvider } from "./components/AuthContext";
-import { BioProvider } from "./components/BioContext";
+import { BioProvider, useBio } from "./components/BioContext";
 import "./App.css"
 // ✅ Normal Website Components
 import Home from "./components/Home";
@@ -174,6 +174,7 @@ import AboutUs from "./components/AboutUs";
 import MyLogin from "./components/MyLogin";
 import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
+
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
@@ -205,6 +206,7 @@ export default function App() {
   //   // fetchData();
   //   fetchCartItems();
   // }, []);
+  const {toastmsg}=useBio()
   useEffect(() => {
     const keepAlive = setInterval(() => {
       fetch("https://lewkoutt.onrender.com/ping")
@@ -301,7 +303,9 @@ function Layout() {
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
-
+            { toastmsg && (
+        <Toast message={toastMessage} onClose={() => setShowToast(false)} />
+      )}
   
           
   
