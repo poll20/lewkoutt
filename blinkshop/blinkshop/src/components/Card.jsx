@@ -606,7 +606,7 @@ if(searchvalue){
 
         
 
-        <div className="unique-product-container" style={{marginTop:!props.category?(''):('0px')}}>
+        <div className="unique-product-container" style={{marginTop:!props.category?(''):('0px'),border:"2px solid red"}}>
           {isLoading ? (
             <p>Loading products...</p>
           ) : products.length > 0 ? (
@@ -638,7 +638,7 @@ if(searchvalue){
         </div>
 
         {/* Details Section */}
-        <div className="product-details" style={{border:"2px solid red"}}>
+        <div className="product-details" >
           <p className="product-title">{product.description.length>19?(product.description.slice(0,18)+`...`):(product.description)}</p>
           <div className="product-pricing">
             <span className="current-price">₹{product.discountprice}</span>
