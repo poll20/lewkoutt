@@ -63,29 +63,7 @@ const saveAddress = (panel) => {
     handlenewaddress(newAddress,userDetails)
   }
 
-  // if (!otpSent) {
-  //   // ✅ Step 1: Send OTP request
-  //   console.log("Sending OTP to:", phone);
-  //   handlenewaddress(newAddress, userDetails);
-  //   setOtpSent(true);
-  //   // alert("OTP sent! Please enter the OTP to verify.");
-  // } else {  
-  //   // ✅ Step 2: Verify OTP and Save Address
-  //   console.log("Verifying OTP:", otp);
-  //   handlenewaddress({ ...newAddress, otp }, userDetails);
-  // }
-//   if (!otpSent) {
-//     console.log("Sending OTP to:", phone);
-//     handlenewaddress(newAddress, userDetails);
-//     setOtpSent(true);
-// } else {
-//     console.log("Verifying OTP:", otp);
-//     if (!otp) {
-//         alert("Please enter OTP before saving the address.");
-//         return;
-//     }
-//     handlenewaddress({ ...newAddress, otp }, userDetails);
-// }
+ 
 }
 else if(panel=="edit"){
   if(newAddress){
@@ -134,19 +112,7 @@ const deleteoreditaddress=(addressid,action)=>{
 
 
 
-  const addresses = [
-    {
-      id: 1,
-      name: "Tanushree Goyal",
-      isDefault: true,
-      address: [
-        "71/1 Shree Puram Colony, Gujar ki Thadi Shanti Nagar, Jaipur, 302019",
-        "117 Geetanjali Colony, Salasar Enclave, Jaipur, 302020"
-      ],
-      phone: ["+918955345400", "8955345400"]
-    }
-  ]; 
-  
+ 
 
   useEffect(()=>{
     if(selectedAddress){
@@ -237,13 +203,13 @@ useEffect(() => {
             }
           </>
         )}
-        <button className="back-to-home" style={{position:"absolute",bottom:"80px",left:"100px"}}>Back to home</button>
+        <button className="back-to-home" style={{position:"absolute",bottom:"80px",left:"140px"}}>Back to home</button>
 
 
 
 
-        <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
-      {/* <h2 className="address-title">Add Your Address</h2> */}
+        {/* <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
+     
 
       <div className="address-form">
         <h3 className="section-title">Address Information</h3>
@@ -304,7 +270,7 @@ useEffect(() => {
 
         <button className="save-address" onClick={()=>{saveAddress(showaddresspanel)}}>Save my address</button>
       </div>
-    </div>
+    </div> */}
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0'}}>
         <button className="buy-buttonss" style={{width:"290px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>

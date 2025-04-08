@@ -156,16 +156,158 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const MapWithAutocomplete = () => {
-  const [selectedAddress, setSelectedAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [pincode, setPincode] = useState("");
+  const [selectedAddresss, setSelectedAddresss] = useState("");
+//   const [phone, setPhone] = useState("");
+//   const [pincode, setPincode] = useState("");
   const [showPhoneInput, setShowPhoneInput] = useState(false);
-
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const mapInstance = useRef(null);
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+ const {handlenewaddress,handlechooseaddress,deleteandeditaddrress}=useBio()
+  const [pincode, setPincode] = useState("");
+  const [phone, setPhone] = useState("");
+    const [building, setBuilding] = useState("");
+    const [locality, setLocality] = useState("");
+    const [location, setLocation] = useState("Click to get location");
+    const [isDefault, setIsDefault] = useState(false);
+   const [chooseaddress,setchooseaddress]=useState([])
+   const[showaddresspanel,setshowadresspanel]=useState("")
+   const [isAddressPanelOpen, setIsAddressPanelOpen] = useState(false);
+   const [actionss,setaction]=useState()
+    const navigate=useNavigate()
+  const [selectedAddress, setSelectedAddress] = useState(null);
+ const{user,userDetails}=useAuth()
+const [userprf,setuserprf]=useState({ address: [] })
+ useEffect(()=>{
+  if(userDetails){
+    console.log("uer",userDetails)
+    setuserprf(userDetails)
+  }
+ },[userDetails])
+
+
+
+ const addressinputcontainer=(bool,pnl)=>{
+  console.log("Function Executed", bool, pnl);  // ✅ Check if this logs
+
+  setIsAddressPanelOpen(bool)
+  setshowadresspanel(pnl)
+
+ }
+
+
+
+// Function to handle saving the address
+const saveAddress = (panel) => {
+  console.log("panel",panel)
+  console.log("panel",pincode,building,locality)
+  const newAddress = {
+    pincode,
+    phone,
+    building,
+    locality,
+    city: "Jaipur",
+    state: "Rajasthan",
+    isDefault,
+  }
+  if(panel=="addaddress")
+  {
+  if(newAddress){
+    console.log("adddfrr",newAddress)
+    handlenewaddress(newAddress,userDetails)
+  }
+
+ 
+}
+else if(panel=="edit"){
+  if(newAddress){
+    console.log("lop",actionss,panel)
+    deleteandeditaddrress(actionss,panel,userDetails,newAddress)
+    setshowadresspanel("")
+    return
+  }
+}  
+  setshowadresspanel("")
+}
+
+
+
+const getUserLocation = () => {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+
+        let response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        let data = await response.json();
+        setBuilding(data.address.city)
+        setLocality(data.address.county)
+        setPincode(data.address.postcode)
+        setTimeout(()=>{saveAddress("addaddress")},600)
+       console.log("loda",data.address.city)
+        setLocation(data.display_name);
+        
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+      }
+    );
+  } else {
+    console.log("Geolocation not supported");
+  }
+};
+
+
+const deleteoreditaddress=(addressid,action)=>{
+
+  deleteandeditaddrress(addressid,action,userDetails)
+}
+
+
+
+ 
+
+  useEffect(()=>{
+    if(selectedAddress){
+  
+      console.log("aws",selectedAddress)   
+       let a=userprf?.address?.filter((e)=>(e._id==selectedAddress))
+       console.log("sssll",a)
+       setchooseaddress(a)
+       
+     }
+  },[selectedAddress])
+
+
+console.log("userprf:", userprf);
+console.log("userprf.address:", userprf?.address);
+console.log("userprf.address.length:", userprf?.address?.length);
+
+useEffect(()=>{
+  if(chooseaddress){
+    console.log("chooseadd",chooseaddress)
+  }
+  
+},[chooseaddress])
+
+
+if (!userprf) {
+  return <h2>Loading...</h2>;
+}
+let sendtocheckout = () => {
+  if (chooseaddress) {
+    handlechooseaddress(chooseaddress); // Contex t u p d a t e   k a r o
+    navigate("/checkout"); // Data directly navigate ke saath bhejo
+  }
+};
+
+useEffect(() => {
+  console.log("isAddressPanelOpen:", isAddressPanelOpen);
+  console.log("showaddresspanel:", showaddresspanel);
+}, [isAddressPanelOpen, showaddresspanel]);
 
   useEffect(() => {
     const loadScript = (url) =>
@@ -193,7 +335,7 @@ const MapWithAutocomplete = () => {
         if (status === "OK" && results[0]) {
           const formattedAddress = results[0].formatted_address;
           const pincodeValue = extractPincode(results[0].address_components);
-          setSelectedAddress(formattedAddress);
+          setSelectedAddresss(formattedAddress);
           setPincode(pincodeValue);
           setShowPhoneInput(true);
         } else {
@@ -230,7 +372,7 @@ const MapWithAutocomplete = () => {
           markerRef.current.setPosition(loc);
 
           const pincodeValue = extractPincode(place.address_components);
-          setSelectedAddress(place.formatted_address);
+          setSelectedAddresss(place.formatted_address);
           setPincode(pincodeValue);
           setShowPhoneInput(true);
         }
@@ -296,7 +438,7 @@ const MapWithAutocomplete = () => {
         }}
       ></div>
 
-      {selectedAddress && (
+      {selectedAddresss && (
         <div style={{ marginTop: "10px" }}>
           <p
             style={{
@@ -305,13 +447,13 @@ const MapWithAutocomplete = () => {
               borderRadius: "8px",
             }}
           >
-            Selected: <strong>{selectedAddress}</strong> <br />
+            Selected: <strong>{selectedAddresss}</strong> <br />
             Pincode: <strong>{pincode}</strong>
           </p>
 
           {showPhoneInput && (
             <>
-              <input
+              {/* <input
                 type="tel"
                 placeholder="Enter your phone number"
                 value={phone}
@@ -343,7 +485,70 @@ const MapWithAutocomplete = () => {
                 }}
               >
                 Add Address
-              </button>
+              </button> */}
+               <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
+      {/* <h2 className="address-title">Add Your Address</h2> */}
+
+      <div className="address-form">
+        <h3 className="section-title">Address Information</h3>
+
+        <button className="use-location" onClick={getUserLocation}>{location?(location):('use my location')}</button>
+
+        <input
+          type="text"
+          placeholder="Pincode*"
+          value={pincode}
+          onChange={(e) => setPincode(e.target.value)}
+        />
+         <input
+          type="text"
+          placeholder="Phone no.*"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
+        <input
+          type="text"
+          placeholder="Flat no / building name*"
+          value={building}
+          onChange={(e) => setBuilding(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Locality / Area / Street*"
+          value={locality}
+          onChange={(e) => setLocality(e.target.value)}
+        />
+        {otpSent && (
+  <input
+    type="text"
+    placeholder="Enter OTP"
+    value={otp}
+    onChange={(e) => setOtp(e.target.value)}
+  />
+)}
+        
+
+        <div className="city-state">
+          <input type="text" value="Jaipur" readOnly />
+          <input type="text" value="Rajasthan" readOnly />
+        </div>
+
+        <div className="default-address">
+          <span>⭐ Set as Default Address</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={isDefault}
+              onChange={() => setIsDefault(!isDefault)}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
+
+        <button className="save-address" onClick={()=>{saveAddress(showaddresspanel)}}>Save my address</button>
+      </div>
+    </div>
             </>
           )}
         </div>
