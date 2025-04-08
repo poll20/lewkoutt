@@ -174,6 +174,7 @@ import AboutUs from "./components/AboutUs";
 import MyLogin from "./components/MyLogin";
 import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
+import Toast from "./components/Toast";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -304,7 +305,7 @@ function Layout() {
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
             { toastmsg && (
-        <Toast message={toastMessage} onClose={() => setShowToast(false)} />
+        <Toast message={toastmsg}  />
       )}
   
           
