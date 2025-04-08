@@ -638,7 +638,7 @@ if(searchvalue){
         </div>
 
         {/* Details Section */}
-        <div className="product-details">
+        <div className="product-details" style={{border:"2px solid red"}}>
           <p className="product-title">{product.description.length>19?(product.description.slice(0,18)+`...`):(product.description)}</p>
           <div className="product-pricing">
             <span className="current-price">₹{product.discountprice}</span>
