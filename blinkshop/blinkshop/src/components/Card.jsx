@@ -611,7 +611,7 @@ if(searchvalue){
             <p>Loading products...</p>
           ) : products.length > 0 ? (
             products.map((product) => (
-              <div className="product-card" style={{border:'none',boxShadow:"none",border:"2px solid red"}}>
+              <div className="product-card" style={{border:'none',boxShadow:"none"}}>
         {/* Image Section */}
         <div className="image-container">
           <NavLink to={`/productdescription/${!wish?(product._id):(product.itemid)}`}>
