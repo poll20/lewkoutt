@@ -186,11 +186,11 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
  const{user,userDetails}=useAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
-  if(userDetails){
+  if(userDetails && user){
     console.log("uer",userDetails)
     setuserprf(userDetails)
   }
- },[userDetails])
+ },[userDetails,user])
 
 
 
