@@ -169,6 +169,8 @@ const MapWithAutocomplete = () => {
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
  const {handlenewaddress,handlechooseaddress,deleteandeditaddrress}=useBio()
+  const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
+ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
   const [pincode, setPincode] = useState("");
   const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
