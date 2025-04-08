@@ -207,7 +207,7 @@ export default function App() {
   //   // fetchData();
   //   fetchCartItems();
   // }, []);
-  const {toastmsg}=useBio()
+  
   useEffect(() => {
     const keepAlive = setInterval(() => {
       fetch("https://lewkoutt.onrender.com/ping")
@@ -246,7 +246,7 @@ function Layout() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
-
+  const {toastmsg}=useBio()
   return (
     <>
       {!isAdminRoute && <ResponsiveNavbar />}
@@ -304,7 +304,7 @@ function Layout() {
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
-            { toastmsg && (
+            { toastmsg.length>0 && (
         <Toast message={toastmsg}  />
       )}
   
