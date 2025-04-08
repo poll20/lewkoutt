@@ -156,6 +156,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useBio } from "./BioContext";
 import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
+
 const MapWithAutocomplete = () => {
   const [selectedAddresss, setSelectedAddresss] = useState("");
 //   const [phone, setPhone] = useState("");
