@@ -606,12 +606,12 @@ if(searchvalue){
 
         
 
-        <div className="unique-product-container" style={{marginTop:!props.category?(''):('0px'),border:"2px solid red"}}>
+        <div className="unique-product-container" style={{marginTop:!props.category?(''):('0px')}}>
           {isLoading ? (
             <p>Loading products...</p>
           ) : products.length > 0 ? (
             products.map((product) => (
-              <div className="product-card" style={{border:'none',boxShadow:"none"}}>
+              <div className="product-card" style={{border:'none',boxShadow:"none",border:"2px solid red"}}>
         {/* Image Section */}
         <div className="image-container">
           <NavLink to={`/productdescription/${!wish?(product._id):(product.itemid)}`}>
