@@ -390,9 +390,9 @@ useEffect(() => {
     };
 
     const loadGoogleMaps = async () => {
-      if (!window.google) {
+      if (!window.google && window.google.maps) {
         await loadScript(
-          `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`
+          `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
         );
       }
 
@@ -497,7 +497,7 @@ useEffect(() => {
       <div className="address-form">
         <h3 className="section-title">Address Information</h3>
 
-        <button className="use-location" onClick={getUserLocation}>{location?(location):('use my location')}</button>
+        {/* <button className="use-location" onClick={getUserLocation}>{location?(location):('use my location')}</button> */}
 
         <input
           type="text"
