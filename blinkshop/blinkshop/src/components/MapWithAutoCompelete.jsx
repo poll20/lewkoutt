@@ -491,7 +491,7 @@ useEffect(() => {
               >
                 Add Address
               </button> */}
-               <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
+               <div className="address-containerrr">
       {/* <h2 className="address-title">Add Your Address</h2> */}
 
       <div className="address-form">
