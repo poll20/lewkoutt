@@ -647,7 +647,7 @@ if(searchvalue){
             
           </div>
           
-        {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"10px"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)} 
+        {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)} 
         </div>
       </div>
             ))
