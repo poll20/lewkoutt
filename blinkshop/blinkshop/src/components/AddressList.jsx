@@ -30,7 +30,7 @@ const [userprf,setuserprf]=useState({ address: [] })
     console.log("uer",userDetails)
     setuserprf(userDetails)
   }
- },[userDetails])
+ },[userDetails,user])
 
 
 
