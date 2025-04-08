@@ -390,7 +390,7 @@ useEffect(() => {
     };
 
     const loadGoogleMaps = async () => {
-      if (!window.google && window.google.maps) {
+      if (!window.google) {
         await loadScript(
           `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
         );
