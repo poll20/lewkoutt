@@ -304,9 +304,9 @@ function Layout() {
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
-            { toastmsg.length>0 && (
-        <Toast message={toastmsg}  />
-      )}
+            { toastmsg.length>0?(<Toast message={toastmsg}  />):('')
+        
+      }
   
           
   
