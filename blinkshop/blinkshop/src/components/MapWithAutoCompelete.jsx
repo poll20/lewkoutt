@@ -222,6 +222,9 @@ const saveAddress = (panel) => {
   if(newAddress){
     console.log("adddfrr",newAddress)
     handlenewaddress(newAddress,userDetails)
+    setTimeout(() => {
+        navigate("/address")
+    }, 400);
   }
 
  
