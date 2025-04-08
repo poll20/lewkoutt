@@ -5,6 +5,7 @@ import { useAuth } from "./AuthContext";
 import { HiH1 } from "react-icons/hi2";
 import { useBio } from "./BioContext";
 import { NavLink, useNavigate } from "react-router-dom";
+import { use } from "react";
 const AddressList = () => {
   
   const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
@@ -25,7 +26,7 @@ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
  const{user,userDetails}=useAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
-  if(userDetails){
+  if(userDetails && user){
     console.log("uer",userDetails)
     setuserprf(userDetails)
   }
