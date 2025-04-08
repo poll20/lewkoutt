@@ -205,7 +205,7 @@ const [userprf,setuserprf]=useState({ address: [] })
 
 
 // Function to handle saving the address
-const saveAddress = (panel) => {
+const saveAddress = async(panel) => {
   console.log("panel",panel)
   console.log("panel",pincode,building,locality)
   const newAddress = {
@@ -221,7 +221,8 @@ const saveAddress = (panel) => {
   {
   if(newAddress){
     console.log("adddfrr",newAddress)
-    handlenewaddress(newAddress,userDetails)
+   await handlenewaddress(newAddress,userDetails)
+   
     setTimeout(() => {
         navigate("/address")
     }, 400);
