@@ -121,7 +121,8 @@ export const AuthProvider = ({ children }) => {
         handleLogout,
         loading,
         error,
-        logout
+        logout,
+        fetchUserDetails // ✅ Add this line
       }}
     >
       {children}

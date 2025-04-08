@@ -183,14 +183,14 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
- const{user,userDetails}=useAuth()
+ const{user,userDetails, fetchUserDetails}=useAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
-  if(userDetails && user){
+  if(userDetails ){
     console.log("uer",userDetails)
     setuserprf(userDetails)
   }
- },[userDetails,user])
+ },[userDetails])
 
 
 
@@ -205,7 +205,7 @@ const [userprf,setuserprf]=useState({ address: [] })
 
 
 // Function to handle saving the address
-const saveAddress = async(panel) => {
+const saveAddress =async  (panel) => {
   console.log("panel",panel)
   console.log("panel",pincode,building,locality)
   const newAddress = {
@@ -221,7 +221,8 @@ const saveAddress = async(panel) => {
   {
   if(newAddress){
     console.log("adddfrr",newAddress)
-   await handlenewaddress(newAddress,userDetails)
+  await handlenewaddress(newAddress,userDetails)
+   await fetchUserDetails(); // ✅ Fetch latest user details
    
     setTimeout(() => {
         navigate("/address")
