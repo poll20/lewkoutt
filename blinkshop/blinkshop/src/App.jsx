@@ -225,6 +225,7 @@ export default function App() {
   //   document.head.appendChild(script);
   // }, []);
   const showPopup = (msg) => {
+    console.log("msg agya na showpopup sehehehe",msg)
     setPopupMessage(msg);
   };
 
