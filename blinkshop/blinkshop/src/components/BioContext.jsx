@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect ,useRef} from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import img1 from "./image/img1.jpg"
@@ -36,6 +36,7 @@ export const BioProvider = ({children,addtocartitem }) => {
  const[timeslotlelo,settimeslotlelo]=useState("")
  const[walletkapesa,setwalletkapesa]=useState(0)
  const[toastmsg,settoastmsg]=useState("")
+ const toastRef = useRef(null);
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -249,6 +250,8 @@ useEffect(() => {
           const addedItem = await response.json();
           setWishlist(prev => [...prev, id]);
           setwishlistdata(prev => [...prev, addedItem]);
+          const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
           settoastmsg("item added successfully")
         }
       } else {
@@ -260,6 +263,8 @@ useEffect(() => {
           setWishlist(prev => prev.filter(itemId => itemId !== id));
           setwishlistdata(prev => prev.filter(item => item.itemid !== id));
           // toast.success("Data removed successfully");
+          const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
           settoastmsg("item removed successfully")
         }
       }
@@ -281,14 +286,20 @@ useEffect(() => {
         setWishlist(prev => prev.filter(itemId => itemId !== id));
         setwishlistdata(prev => prev.filter(item => item.itemid !== id));
        // toast.success("Data removed successfully");
+       const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
        settoastmsg("item removed successfully")
       }
       else {
+        const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
         settoastmsg(data.message || "Error removing item");
       }
   
     }
     catch(e){
+      const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
       settoastmsg(data.message || "Error removing item");
     }
 
@@ -364,6 +375,8 @@ console.log("iredandid",prd,id)
           setWishlist(prev => [...prev, id]);
           setwishlistdata(prev => [...prev, addedItem]);
         //  toast.success("item move to wishlist")
+        const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
         settoastmsg("item moved successfully")
          removefromaddtocart(id)
         }
@@ -404,10 +417,14 @@ catch(e){
           setaddtocartdata((prev) => [...prev, addedItem]);
           setaddtocartdataonly((prev) => [...prev, prd._id]);
         //  toast.success("data added successfully")
+        const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
         settoastmsg("item added successfully")
           
         }
         else{
+          const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
           settoastmsg("oopss....")
         }
 
@@ -447,9 +464,13 @@ catch(e){
 
                // setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
                //toast.success("data removed successfully")
+               const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
                settoastmsg("item removed successfully")
              }
              else{
+              const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
                settoastmsg("data not removed")
              }
    }
@@ -552,6 +573,8 @@ catch(e){
       });
       if(res.ok){
       //  toast.success("itme removed successfulyy")
+      const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
       settoastmsg("item removed successfully")
       }
       setWishlist(wishlist.filter(item => item.id !== id)); // Remove item from local state
@@ -891,6 +914,8 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
     })
     if(orderpost.ok){
+      const toast = new window.bootstrap.Toast(toastRef.current);
+    toast.show();
       settoastmsg("order return process successfull")
     }
      // ✅ New Order ko State me Add Karo
@@ -921,7 +946,14 @@ console.log("toastmsg",toastmsg)
         pauseOnHover
         theme="light" // You can change the theme: light or dark
       /> */}
-      {toastmsg.length>0?(<Toast message={toastmsg}  />):('')}
+     <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"   ref={toastRef}>
+  <div class="d-flex">
+    <div class="toast-body">
+    item added successfully
+   </div>
+    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
 
     <BioContext.Provider
       value={{
