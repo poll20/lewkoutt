@@ -175,11 +175,11 @@ import MyLogin from "./components/MyLogin";
 import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 // import Toast from "./components/Toast";
-
+import PopUpNotificationss from "./components/PopUpNotificationss";
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
-
+  const [popupMessage, setPopupMessage] = useState("");
 
   // useEffect(() => {
   //   // const fetchData = async () => {
@@ -224,6 +224,10 @@ export default function App() {
   //   script.defer = true;
   //   document.head.appendChild(script);
   // }, []);
+  const showPopup = (msg) => {
+    setPopupMessage(msg);
+  };
+
 
   return (
     <AuthProvider>
@@ -232,7 +236,13 @@ export default function App() {
       <BioProvider>
         <Router>
           <ScrollToTop />
-          <Layout />
+          {popupMessage && (
+    <PopUpNotificationss
+      message={popupMessage}
+      onClose={() => setPopupMessage("")}
+    />
+  )}
+          <Layout showPopup={showPopup}/>
         </Router>
       </BioProvider>
     
@@ -242,7 +252,7 @@ export default function App() {
 }
 
 // ✅ Separate Layout Component to Hide Navbar & Footer on Admin Routes
-function Layout() {
+function Layout({ showPopup }) {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
