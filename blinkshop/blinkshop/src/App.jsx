@@ -234,7 +234,7 @@ export default function App() {
     <AuthProvider>
     <DashboardProvider>
     
-      <BioProvider>
+      <BioProvider showPopup={showPopup}>
         <Router>
           <ScrollToTop />
           {popupMessage && (
