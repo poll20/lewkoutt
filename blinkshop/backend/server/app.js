@@ -862,23 +862,34 @@ app.patch(`/user/:userId/addressdoe`, async (req, res) => {
       
   //   }
   else if (action === "edit") {
-    console.log("Editing address:", addresid);
-  
-    const addressIndex = user.address.findIndex((addr) => addr._id.toString() === addresid);
+    console.log("✏️ Editing address:", addresid);
+
+    const addressIndex = user.address.findIndex(
+      (addr) => addr._id.toString() === addresid
+    );
+
     if (addressIndex === -1) {
+      console.log("❌ Address not found for edit");
       return res.status(404).json({ message: "Address not found" });
     }
-  
-    // ✅ Keep existing fields + override only updated fields
+
+    console.log("🛠️ Old Address Before Update:", user.address[addressIndex]);
+
     user.address[addressIndex] = {
-      ...user.address[addressIndex]._doc, // <== important
+      ...user.address[addressIndex]._doc, // Ensure existing schema fields are preserved
       ...addr,
     };
-  
+
+    console.log("✅ New Address After Update:", user.address[addressIndex]);
+
     await user.save();
-  
-    return res.status(200).json({ message: "Address updated successfully", updatedAddress: user.address[addressIndex] });
-  }
+    console.log("✅ User saved after address update");
+
+    return res.status(200).json({
+      message: "Address updated successfully",
+      updatedAddress: user.address[addressIndex],
+    });
+  } 
   
     else {
       return res.status(400).json({ message: "Invalid action" });
