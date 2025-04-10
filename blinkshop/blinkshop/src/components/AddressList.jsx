@@ -23,7 +23,7 @@ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
- const{user,userDetails}=useAuth()
+ const{user,userDetails, fetchUserDetails }=useAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
   if(userDetails && user){
@@ -45,7 +45,7 @@ const [userprf,setuserprf]=useState({ address: [] })
 
 
 // Function to handle saving the address
-const saveAddress = (panel) => {
+const saveAddress =async (panel) => {
   console.log("panel",panel)
   console.log("panel",pincode,building,locality)
   const newAddress = {
@@ -61,7 +61,7 @@ const saveAddress = (panel) => {
   {
   if(newAddress && user){
     console.log("adddfrr",newAddress)
-   handlenewaddress(newAddress,userDetails)
+  await handlenewaddress(newAddress,userDetails)
   }
 
  
@@ -69,8 +69,8 @@ const saveAddress = (panel) => {
 else if(panel=="edit"){
   if(newAddress){
     console.log("lop",actionss,panel)
-    deleteandeditaddrress(actionss,panel,userDetails,newAddress)
-  
+   await deleteandeditaddrress(actionss,panel,userDetails,newAddress)
+  await  fetchUserDetails()
     setshowadresspanel("")
     return
   }
@@ -107,9 +107,10 @@ const getUserLocation = () => {
 };
 
 
-const deleteoreditaddress=(addressid,action)=>{
+const deleteoreditaddress=async(addressid,action)=>{
 
-  deleteandeditaddrress(addressid,action,userDetails)
+ await deleteandeditaddrress(addressid,action,userDetails)
+ await  fetchUserDetails()
 }
 
 

@@ -768,10 +768,10 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
   });
   if(response.ok){
     console.log("good")
-    setaddress(prev => {
-      console.log("Previous Address State", prev); // Debug check
-      return prev.filter(a => a._id !== addresid);
-    });
+    // setaddress(prev => {
+    //   console.log("Previous Address State", prev); // Debug check
+    //   return prev.filter(a => a._id !== addresid);
+    // });
   }
   else{
     console.log("issue")
@@ -805,6 +805,9 @@ else{
 
 }
 }
+useEffect(() => {
+  console.log("Address updated:", address);
+}, [address]);
 
 let handlechooseaddress=(add)=>{
   console.log("hello add")
