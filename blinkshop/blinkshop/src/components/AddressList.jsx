@@ -285,10 +285,13 @@ useEffect(() => {
           className="save-button edit-button" 
           onClick={() => {
             deleteoreditaddress(addr._id, "edit", {
-          building: editedAddress.building,
-          locality: editedAddress.locality,
-          pincode: editedAddress.pincode,
-          phone: [editedAddress.phone],
+              building: editedAddress.building,
+              locality: editedAddress.locality,
+              pincode: editedAddress.pincode,
+              phone: [editedAddress.phone],
+              city: addr.city,
+              state: addr.state,
+              isDefault: addr.isDefault,
         });
             setEditingAddressId(null);
           }}
