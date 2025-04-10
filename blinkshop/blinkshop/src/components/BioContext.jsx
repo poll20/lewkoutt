@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import img1 from "./image/img1.jpg"
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import Toast from './Toast';
 
 export const BioContext = createContext();
@@ -52,7 +52,7 @@ export const BioProvider = ({children,addtocartitem }) => {
 });
 console.log("myfil",filters)
 const backendURL = `${apiUrl}:3000`;
-const notify = () => toast("Plese Login For Add Items In Wishlist");
+// const notify = () => toast("Plese Login For Add Items In Wishlist");
 
   const cards = [
     {
@@ -284,12 +284,12 @@ useEffect(() => {
        settoastmsg("item removed successfully")
       }
       else {
-        toast.error(data.message || "Error removing item");
+        settoastmsg(data.message || "Error removing item");
       }
   
     }
     catch(e){
-      toast.error(data.message || "Error removing item");
+      settoastmsg(data.message || "Error removing item");
     }
 
   }
@@ -408,7 +408,7 @@ catch(e){
           
         }
         else{
-          toast.error("oopss....")
+          settoastmsg("oopss....")
         }
 
 
@@ -450,7 +450,7 @@ catch(e){
                settoastmsg("item removed successfully")
              }
              else{
-               toast.error("data not removed")
+               settoastmsg("data not removed")
              }
    }
     // const response = await fetch(`${apiUrl}/addtocart/${id}`, {
@@ -891,7 +891,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
     })
     if(orderpost.ok){
-      toast.success("order return process successfull")
+      settoastmsg("order return process successfull")
     }
      // ✅ New Order ko State me Add Karo
     
@@ -920,7 +920,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         pauseOnHover
         theme="light" // You can change the theme: light or dark
       /> */}
-      { toastmsg.length>0?(<Toast message={toastmsg}  />):('')}
+      {toastmsg && toastmsg.length>0?(<Toast message={toastmsg}  />):('')}
 
     <BioContext.Provider
       value={{
