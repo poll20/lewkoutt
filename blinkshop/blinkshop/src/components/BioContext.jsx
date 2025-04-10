@@ -902,7 +902,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
 }
 
-
+if(toastmsg.length>0){
+  console.log("toastmsg",toastmsg)
+}
 
   return (
     <>
@@ -920,7 +922,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         pauseOnHover
         theme="light" // You can change the theme: light or dark
       /> */}
-      {toastmsg && toastmsg.length>0?(<Toast message={toastmsg}  />):('')}
+      {toastmsg.length>0?(<Toast message={toastmsg}  />):('')}
 
     <BioContext.Provider
       value={{
