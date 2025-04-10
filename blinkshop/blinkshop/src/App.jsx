@@ -174,7 +174,7 @@ import AboutUs from "./components/AboutUs";
 import MyLogin from "./components/MyLogin";
 import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
-import Toast from "./components/Toast";
+// import Toast from "./components/Toast";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);

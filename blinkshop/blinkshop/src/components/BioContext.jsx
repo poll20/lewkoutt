@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import img1 from "./image/img1.jpg"
 // import { ToastContainer, toast } from 'react-toastify';
-import Toast from './Toast';
+// import Toast from './Toast';
 
 export const BioContext = createContext();
 
@@ -1002,7 +1002,7 @@ console.log("toastmsg",toastmsg)
         walletkapesa,
         settimeslotlelo,
         timeslotlelo,
-        toastmsg
+        
     
   }}
     >
