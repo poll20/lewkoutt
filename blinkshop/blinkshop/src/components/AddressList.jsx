@@ -288,7 +288,7 @@ useEffect(() => {
               building: editedAddress.building,
               locality: editedAddress.locality,
               pincode: editedAddress.pincode,
-              phone: [editedAddress.phone],
+              phone: editedAddress.phone,
               city: addr.city,
               state: addr.state,
               isDefault: addr.isDefault,
