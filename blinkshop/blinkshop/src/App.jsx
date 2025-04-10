@@ -246,7 +246,7 @@ function Layout() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
-  const {toastmsg}=useBio()
+  
   return (
     <>
       {!isAdminRoute && <ResponsiveNavbar />}
@@ -304,10 +304,10 @@ function Layout() {
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
-            { toastmsg.length>0?(<Toast message={toastmsg}  />):('')
+            {/* { toastmsg.length>0?(<Toast message={toastmsg}  />):('')
         
       }
-  
+   */}
           
   
           </Routes>

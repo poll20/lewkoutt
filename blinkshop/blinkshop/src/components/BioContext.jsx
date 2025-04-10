@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import img1 from "./image/img1.jpg"
 import { ToastContainer, toast } from 'react-toastify';
+import Toast from './Toast';
 
 export const BioContext = createContext();
 
@@ -905,7 +906,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
   return (
     <>
-    <ToastContainer 
+    {
+    
+    /* <ToastContainer 
         position="top-center" // You can set the position of the toast
         autoClose={3000} // Automatically close after 3 seconds
         hideProgressBar={false}
@@ -916,7 +919,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
         draggable
         pauseOnHover
         theme="light" // You can change the theme: light or dark
-      />
+      /> */}
+      { toastmsg.length>0?(<Toast message={toastmsg}  />):('')}
+
     <BioContext.Provider
       value={{
        
