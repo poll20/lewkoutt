@@ -805,9 +805,7 @@ else{
 
 }
 }
-useEffect(() => {
-  console.log("Address updated:", address);
-}, [address]);
+
 
 let handlechooseaddress=(add)=>{
   console.log("hello add")
