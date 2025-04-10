@@ -110,9 +110,9 @@ const getUserLocation = () => {
 };
 
 
-const deleteoreditaddress=async(addressid,action)=>{
+const deleteoreditaddress=async(addressid,action,addr)=>{
 
- await deleteandeditaddrress(addressid,action,userDetails)
+ await deleteandeditaddrress(addressid,action,userDetails,addr)
  await  fetchUserDetails()
 }
 
