@@ -25,6 +25,9 @@ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
   const [selectedAddress, setSelectedAddress] = useState(null);
  const{user,userDetails, fetchUserDetails }=useAuth()
 const [userprf,setuserprf]=useState({ address: [] })
+const [editingAddressId, setEditingAddressId] = useState(null); // Track which one is being edited
+const [editedAddress, setEditedAddress] = useState({}); // Temp store for editing
+
  useEffect(()=>{
   if(userDetails && user){
     console.log("uer",userDetails)
@@ -175,7 +178,7 @@ useEffect(() => {
             </div>
     
             {/* Address loop */}
-            {
+            {/* {
               userprf?.address?.map((addr, index) => (
                 <div className="address-card" key={`${addr._id}`}>
                   <div className="custom-checkbox">
@@ -203,7 +206,115 @@ useEffect(() => {
                   </div>
                 </div>
               ))
+            } */}
+            {address.map((addr) => (
+  <div className="address-card" key={addr._id}>
+    <div className="custom-checkbox">
+      <input
+        type="radio"
+        name="address"
+        value={addr._id}
+        onClick={() => setSelectedAddress(addr._id)}
+      />
+    </div>
+
+    <div className="address-info">
+      <p className="address-name">{userprf.name}</p>
+
+      {editingAddressId === addr._id ? (
+        <>
+          <input
+            type="text"
+            value={editedAddress.building}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, building: e.target.value })
             }
+            placeholder="Building"
+          />
+          <input
+            type="text"
+            value={editedAddress.locality}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, locality: e.target.value })
+            }
+            placeholder="Locality"
+          />
+          <input
+            type="text"
+            value={editedAddress.pincode}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, pincode: e.target.value })
+            }
+            placeholder="Pincode"
+          />
+          <input
+            type="text"
+            value={editedAddress.phone}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, phone: e.target.value })
+            }
+            placeholder="Phone"
+          />
+        </>
+      ) : (
+        <>
+          <p className="address-details">
+            Address: {addr.building} / {addr.locality}, {addr.city},{" "}
+            {addr.state}
+          </p>
+          <p className="address-details">Pincode: {addr.pincode}</p>
+          <p className="address-phone">Phone: {addr.phone}</p>
+        </>
+      )}
+
+      <p className="address-tip">
+        <span>ℹ️</span> For better reach, include an alternate number
+      </p>
+    </div>
+
+    <div className="address-actions">
+      <button
+        className="delete-button"
+        onClick={() => deleteoreditaddress(addr._id, "delete", addr)}
+      >
+        Delete
+      </button>
+
+      {editingAddressId === addr._id ? (
+        <button
+          className="save-button"
+          onClick={() => {
+            deleteoreditaddress(addr._id, "edit", userDetails, {
+              ...editedAddress,
+              city: addr.city,
+              state: addr.state,
+              isDefault: addr.isDefault,
+            });
+            setEditingAddressId(null);
+          }}
+        >
+          Save
+        </button>
+      ) : (
+        <button
+          className="edit-button"
+          onClick={() => {
+            setEditingAddressId(addr._id);
+            setEditedAddress({
+              building: addr.building,
+              locality: addr.locality,
+              pincode: addr.pincode,
+              phone: addr.phone,
+            });
+          }}
+        >
+          Edit
+        </button>
+      )}
+    </div>
+  </div>
+))}
+
           </>
         )}
         <button className="back-to-home" style={{position:"absolute",bottom:"80px",left:"140px"}}>Back to home</button>
@@ -211,7 +322,7 @@ useEffect(() => {
 
 
 
-         <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
+        {/* <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
      
 
       <div className="address-form">
@@ -273,7 +384,7 @@ useEffect(() => {
 
         <button className="save-address" onClick={()=>{saveAddress(showaddresspanel)}}>Save my address</button>
       </div>
-    </div> 
+    </div> */}
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0'}}>
         <button className="buy-buttonss" style={{width:"290px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>
