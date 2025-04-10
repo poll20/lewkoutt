@@ -97,6 +97,10 @@
   border:1px solid rgb(190, 190, 190);
   background-color: white;
 }
+.catebtn:hover{
+  background: white;
+  color: black;
+}
   /* Responsive Design */
   @media (max-width: 768px) {
 

@@ -94,10 +94,14 @@ body {
   }
   
   .delete-button:hover {
+    background-color: transparent;
+    color: #e74c3c;
     text-decoration: underline;
   }
   
   .edit-button:hover {
+    background-color: transparent;
+    color:#3cb371 ;
     text-decoration: underline;
   }
   

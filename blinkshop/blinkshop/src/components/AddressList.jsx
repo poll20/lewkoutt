@@ -211,7 +211,7 @@ useEffect(() => {
 
 
 
-        {/* <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
+         <div className={isAddressPanelOpen ?("address-containerrr"):("addresspaneldisplaynul")}>
      
 
       <div className="address-form">
@@ -273,7 +273,7 @@ useEffect(() => {
 
         <button className="save-address" onClick={()=>{saveAddress(showaddresspanel)}}>Save my address</button>
       </div>
-    </div> */}
+    </div> 
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0'}}>
         <button className="buy-buttonss" style={{width:"290px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>
