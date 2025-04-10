@@ -947,8 +947,8 @@ console.log("toastmsg",toastmsg)
         theme="light" // You can change the theme: light or dark
       /> */}
      <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true"   ref={toastRef}>
-  <div class="d-flex">
-    <div class="toast-body">
+  <div class="d-flex"style={{border:"2px solid red"}}>
+    <div class="toast-body" style={{color:"black"}}>
     item added successfully
    </div>
     <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
