@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./Faq.css"; // Custom CSS import
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 const faqData = [
   {
+    
     category: "MY ACCOUNT & MY ORDER",
     questions: [
       {
@@ -246,7 +248,8 @@ const faqData = [
 const Faq = () => {
   const [openCategory, setOpenCategory] = useState(null);
   const [openQuestion, setOpenQuestion] = useState(null);
-
+  const phoneNumber = '6377563527';
+  const supportEmail = 'sharmaabhay1549@gmail.com';
   const toggleCategory = (index) => {
     setOpenCategory(openCategory === index ? null : index);
     setOpenQuestion(null);
@@ -257,6 +260,28 @@ const Faq = () => {
   };
 
   return (
+    <>
+    <div className="flex gap-6 items-center justify-center p-4 bg-gray-100 rounded-xl shadow-md">
+      {/* Phone Icon */}
+      <a
+        href={`tel:${phoneNumber}`}
+        className="flex flex-col items-center group hover:text-blue-600 transition"
+      >
+        <FontAwesomeIcon icon={faPhone} className="text-xl" />
+        <span className="text-sm mt-1 group-hover:underline">Call</span>
+      </a>
+
+      {/* Email Icon */}
+      <a
+        href={`https://mail.google.com/mail/?view=cm&fs=1&to=${supportEmail}&su=Support Request from Lewkout`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex flex-col items-center group hover:text-green-600 transition"
+      >
+        <FontAwesomeIcon icon={faEnvelope} className="text-xl" />
+        <span className="text-sm mt-1 group-hover:underline">Email</span>
+      </a>
+    </div>
     <div className="fq-container">
       <h2 className="fq-title">FAQs</h2>
       <div className="fq-wrapper">
@@ -291,6 +316,7 @@ const Faq = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 
