@@ -819,7 +819,7 @@ app.patch(`/user/:userId/addressdoe`, async (req, res) => {
   const { userId } = req.params;
   console.log("uid", userId);
   const { addresid, action,addr } = req.body;
-
+console.log("addddddddrrrrrr",addr)
   try {
     // ✅ Step 1: Find User
     const user = await userr.findById(userId);
