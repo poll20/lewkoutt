@@ -772,6 +772,7 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
     //   console.log("Previous Address State", prev); // Debug check
     //   return prev.filter(a => a._id !== addresid);
     // });
+    showPopup("Adress Delete")
   }
   else{
     console.log("issue")
@@ -796,6 +797,7 @@ else{
     });
     if(response.ok){
       console.log("address edit")
+      showPopup("Address Edited")
     }
     else{
       console.log("not edit")
