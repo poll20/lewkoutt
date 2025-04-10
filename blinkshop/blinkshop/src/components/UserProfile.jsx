@@ -220,7 +220,7 @@ let navigate=useNavigate()
           <p>Coupon</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink className="menu-item navlink">
+        <NavLink className="menu-item navlink" to={'/faq'}>
           <BiHelpCircle/>
           <p>Help & Support</p>
           <IoIosArrowForward />
@@ -240,11 +240,11 @@ let navigate=useNavigate()
           <p>About Us</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink className="menu-item navlink" to={'/faq'}>
+        {/* <NavLink className="menu-item navlink" to={'/faq'}>
            LO
           <p>F&Q</p>
           <IoIosArrowForward />
-        </NavLink>
+        </NavLink> */}
       </div>
       </div>
       <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
