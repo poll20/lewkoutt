@@ -282,14 +282,14 @@ useEffect(() => {
 
       {editingAddressId === addr._id ? (
         <button
-          className="save-button"
+          className="save-button edit-button" 
           onClick={() => {
-            deleteoreditaddress(addr._id, "edit", userDetails, {
-              ...editedAddress,
-              city: addr.city,
-              state: addr.state,
-              isDefault: addr.isDefault,
-            });
+            deleteoreditaddress(addr._id, "edit", {
+          building: editedAddress.building,
+          locality: editedAddress.locality,
+          pincode: editedAddress.pincode,
+          phone: [editedAddress.phone],
+        });
             setEditingAddressId(null);
           }}
         >
