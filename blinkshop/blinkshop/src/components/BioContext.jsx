@@ -768,6 +768,7 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
   });
   if(response.ok){
     console.log("good")
+    setaddress(prev => prev.filter(addr => addr._id !== addresid));
   }
   else{
     console.log("issue")
