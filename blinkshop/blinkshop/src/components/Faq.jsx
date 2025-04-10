@@ -261,6 +261,8 @@ const Faq = () => {
 
   return (
     <>
+    
+    <div className="fq-container">
     <div className="flex gap-6 items-center justify-center p-4 bg-gray-100 rounded-xl shadow-md">
       {/* Phone Icon */}
       <a
@@ -282,7 +284,6 @@ const Faq = () => {
         <span className="text-sm mt-1 group-hover:underline">Email</span>
       </a>
     </div>
-    <div className="fq-container">
       <h2 className="fq-title">FAQs</h2>
       <div className="fq-wrapper">
         {faqData.map((category, catIndex) => (
