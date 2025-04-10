@@ -70,7 +70,7 @@ else if(panel=="edit"){
   if(newAddress){
     console.log("lop",actionss,panel)
   await  deleteandeditaddrress(actionss,panel,userDetails,newAddress)
-  await fetchUserDetails
+  await fetchUserDetails()
     setshowadresspanel("")
     return
   }
