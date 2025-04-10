@@ -45,7 +45,7 @@ const [userprf,setuserprf]=useState({ address: [] })
 
 
 // Function to handle saving the address
-const saveAddress = async(panel) => {
+const saveAddress = (panel) => {
   console.log("panel",panel)
   console.log("panel",pincode,building,locality)
   const newAddress = {
