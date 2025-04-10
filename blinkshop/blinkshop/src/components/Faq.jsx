@@ -250,7 +250,36 @@ const Faq = () => {
   const [openQuestion, setOpenQuestion] = useState(null);
   const phoneNumber = '6377563527';
   const supportEmail = 'sharmaabhay1549@gmail.com';
+
+  const containerStyle = {
+    display: 'flex',
+    gap: '40px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '20px',
+    backgroundColor: '#fff',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    borderRadius: '16px',
+    width: '100%',
+    maxWidth: '400px',
+    margin: '40px auto'
+  };
+
+  const iconStyle = {
+    color: '#555',
+    fontSize: '28px',
+    cursor: 'pointer',
+    textAlign: 'center',
+    transition: 'color 0.3s ease'
+  };
+
+  const labelStyle = {
+    fontSize: '12px',
+    marginTop: '4px',
+    color: '#333'
+  };
   const toggleCategory = (index) => {
+
     setOpenCategory(openCategory === index ? null : index);
     setOpenQuestion(null);
   };
@@ -263,14 +292,18 @@ const Faq = () => {
     <>
     
     <div className="fq-container">
-    <div className="flex gap-6 items-center justify-center p-4 bg-gray-100 rounded-xl shadow-md">
+    <div style={containerStyle}>
       {/* Phone Icon */}
       <a
         href={`tel:${phoneNumber}`}
-        className="flex flex-col items-center group hover:text-blue-600 transition"
+        style={{ ...iconStyle, textDecoration: 'none' }}
+        onMouseOver={(e) => (e.currentTarget.style.color = '#007BFF')}
+        onMouseOut={(e) => (e.currentTarget.style.color = '#555')}
       >
-        <FontAwesomeIcon icon={faPhone} className="text-xl" />
-        <span className="text-sm mt-1 group-hover:underline">Call</span>
+        <div>
+          <FontAwesomeIcon icon={faPhone} />
+          <div style={labelStyle}>Call</div>
+        </div>
       </a>
 
       {/* Email Icon */}
@@ -278,10 +311,14 @@ const Faq = () => {
         href={`https://mail.google.com/mail/?view=cm&fs=1&to=${supportEmail}&su=Support Request from Lewkout`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex flex-col items-center group hover:text-green-600 transition"
+        style={{ ...iconStyle, textDecoration: 'none' }}
+        onMouseOver={(e) => (e.currentTarget.style.color = '#28a745')}
+        onMouseOut={(e) => (e.currentTarget.style.color = '#555')}
       >
-        <FontAwesomeIcon icon={faEnvelope} className="text-xl" />
-        <span className="text-sm mt-1 group-hover:underline">Email</span>
+        <div>
+          <FontAwesomeIcon icon={faEnvelope} />
+          <div style={labelStyle}>Email</div>
+        </div>
       </a>
     </div>
       <h2 className="fq-title">FAQs</h2>
