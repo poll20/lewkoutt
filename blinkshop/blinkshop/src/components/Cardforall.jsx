@@ -50,12 +50,12 @@ console.log("wishlist in coa",wishlistdata)
         </div>
         {/* <div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'10px'}}>⚡Fast Delivery</div> */}
       </div>
-      {showToast && (
+      {/* {showToast && (
         <Toast
           message="Item added from your wishlist"
           onClose={() => setShowToast(false)}
         />
-      )}
+      )} */}
     </div> 
      
     </>
