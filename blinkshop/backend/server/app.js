@@ -844,23 +844,42 @@ app.patch(`/user/:userId/addressdoe`, async (req, res) => {
       return res.status(200).json({ message: "Address deleted successfully" });
     } 
     
-    else if(action=="edit"){
-      console.log("Editing address:", addresid);
+  //   else if(action=="edit"){
+  //     console.log("Editing address:", addresid);
 
-  // ✅ Step 2: Check if address exists before editing
-  const addressIndex = user.address.findIndex((addr) => addr._id.toString() === addresid);
-  if (addressIndex === -1) {
-    return res.status(404).json({ message: "Address not found" });
-  }
+  // // ✅ Step 2: Check if address exists before editing
+  // const addressIndex = user.address.findIndex((addr) => addr._id.toString() === addresid);
+  // if (addressIndex === -1) {
+  //   return res.status(404).json({ message: "Address not found" });
+  // }
 
-  // ✅ Step 3: Update the existing address with new data
-  user.address[addressIndex] = { ...user.address[addressIndex], ...addr };
+  // // ✅ Step 3: Update the existing address with new data
+  // user.address[addressIndex] = { ...user.address[addressIndex], ...addr };
 
-  await user.save(); // ✅ Save updated user
+  // await user.save(); // ✅ Save updated user
 
-  return res.status(200).json({ message: "Address updated successfully", updatedAddress: user.address[addressIndex] });
+  // return res.status(200).json({ message: "Address updated successfully", updatedAddress: user.address[addressIndex] });
       
+  //   }
+  else if (action === "edit") {
+    console.log("Editing address:", addresid);
+  
+    const addressIndex = user.address.findIndex((addr) => addr._id.toString() === addresid);
+    if (addressIndex === -1) {
+      return res.status(404).json({ message: "Address not found" });
     }
+  
+    // ✅ Keep existing fields + override only updated fields
+    user.address[addressIndex] = {
+      ...user.address[addressIndex]._doc, // <== important
+      ...addr,
+    };
+  
+    await user.save();
+  
+    return res.status(200).json({ message: "Address updated successfully", updatedAddress: user.address[addressIndex] });
+  }
+  
     else {
       return res.status(400).json({ message: "Invalid action" });
     }

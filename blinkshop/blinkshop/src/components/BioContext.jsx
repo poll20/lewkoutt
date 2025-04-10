@@ -782,8 +782,10 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
  
 }
 }
+
 else{
   console.log("useridf",user._id)
+  console.log("useridf",addr)
   try {
     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
       method: "PATCH",  // Using PATCH request to update the address
