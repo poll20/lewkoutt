@@ -875,8 +875,12 @@ console.log("addddddddrrrrrr",addr)
 
     console.log("🛠️ Old Address Before Update:", user.address[addressIndex]);
 
+    // user.address[addressIndex] = {
+    //   ...user.address[addressIndex]._doc, // Ensure existing schema fields are preserved
+    //   ...addr,
+    // };
     user.address[addressIndex] = {
-      ...user.address[addressIndex]._doc, // Ensure existing schema fields are preserved
+      ...(user.address[addressIndex]?.toObject?.() || user.address[addressIndex]),
       ...addr,
     };
 
@@ -896,6 +900,7 @@ console.log("addddddddrrrrrr",addr)
     }
   } catch (e) {
     console.error(e);
+    console.error("🔥 Error in PATCH /user/:userId/addressdoe:", e);
     return res.status(500).json({ message: "Server error", error: e });
   }
 });
