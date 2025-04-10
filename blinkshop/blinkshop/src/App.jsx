@@ -237,12 +237,20 @@ export default function App() {
       <BioProvider showPopup={showPopup}>
         <Router>
           <ScrollToTop />
-          {popupMessage && (
+          {/* {popupMessage && (
+    <PopUpNotificationss
+      message={popupMessage}
+      onClose={() => setPopupMessage("")}
+    />
+  )} */}
+  <div id="popup-wrapper">
+  {popupMessage && (
     <PopUpNotificationss
       message={popupMessage}
       onClose={() => setPopupMessage("")}
     />
   )}
+</div>
           <Layout showPopup={showPopup}/>
         </Router>
       </BioProvider>
