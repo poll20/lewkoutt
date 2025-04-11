@@ -169,7 +169,7 @@ if(!addtocartdatas){
         ) : (
           <EmptyCart endpoint={window.location.pathname.substring(1)} />
         )}
-        <div className="bottom-sheet" style={{ display:choosebuy.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
+        <div className="bottom-sheet"  style={{ display:choosebuy.length>0 && addtocartdatas.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
           <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
          <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
          <span className="original-price">₹{cprice}</span>
