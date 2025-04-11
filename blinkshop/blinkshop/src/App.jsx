@@ -176,6 +176,8 @@ import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 // import Toast from "./components/Toast";
 import PopUpNotificationss from "./components/PopUpNotificationss";
+import { LoadingProvider } from "./components/LoadingContext";
+
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
@@ -231,6 +233,7 @@ export default function App() {
 
 
   return (
+    <LoadingProvider>
     <AuthProvider>
     <DashboardProvider>
     
@@ -257,6 +260,7 @@ export default function App() {
     
     </DashboardProvider>
     </AuthProvider>
+    </LoadingProvider>
   );
 }
 

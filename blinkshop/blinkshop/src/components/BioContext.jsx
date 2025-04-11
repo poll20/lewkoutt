@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState, useEffect ,useRef} from 're
 import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import img1 from "./image/img1.jpg"
+import { useLoading } from './LoadingContext';
+
 // import { ToastContainer, toast } from 'react-toastify';
 // import Toast from './Toast';
 
@@ -13,6 +15,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   console.log("urll",apiUrl)
   const { user,userDetails } = useAuth();
+  const { setIsLoading } = useLoading();
   const [cart, setCart] = useState([]);
   const[searchvalue,setsearchvalue]=useState("")
   const [wishlist, setWishlist] = useState([]);
@@ -108,6 +111,7 @@ useEffect(() => {
   
     const fetchCartItems = async () => {
       try {
+        setIsLoading(true)
         let response = await fetch(`${apiUrl}/cart/${userDetails._id}`);
         let data = await response.json();
         // console.log("data in cart",data)
@@ -126,6 +130,9 @@ useEffect(() => {
       } catch (error) {
         console.error("Error fetching cart items:", error);
       }
+      finally{
+        setIsLoading(false)
+      }
     };
     fetchCartItems()
   
@@ -138,6 +145,7 @@ useEffect(() => {
     if(user&& userDetails._id){
       const fetchCartItems = async () => {
         try {
+          setIsLoading(true)
           let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`);
           let data = await response.json();
           if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
@@ -150,6 +158,9 @@ useEffect(() => {
           setaddtocartdataonly(cartItemIds);  // Set the ids in the state to keep the icons red
         } catch (error) {
           console.error("Error fetching cart items:", error);
+        }
+        finally{
+          setIsLoading(false)
         }
       };
       fetchCartItems()
@@ -210,6 +221,7 @@ useEffect(() => {
   const handleClick = async (prd, id) => {
     console.log("iredandid",prd,id)
     try {
+      setIsLoading(true)
       // Correcting the way matchItem is created
       const matchedColors = productdataonlydetail
         .flatMap(product => product.colors)
@@ -273,11 +285,15 @@ useEffect(() => {
     } catch (error) {
       console.error("Error in handleClick:", error);
     }
+    finally{
+      setIsLoading(false)
+    }
   };
 
   const removewishlistonly=async(id)=>{
     console.log("id",id)
     try{
+      setIsLoading(true)
       const response = await fetch(`${apiUrl}/cart/${id}`, {
         method: "DELETE",
       });
@@ -306,6 +322,9 @@ useEffect(() => {
     // toast.show();
     //   settoastmsg(data.message || "Error removing item");
     showPopup("error removing item")
+    }
+    finally{
+      setIsLoading(false)
     }
 
   }
@@ -339,6 +358,7 @@ const addtowishlistonly=async(id,prd)=>{
 // }
 console.log("iredandid",prd,id)
     try {
+      setIsLoading(true)
       // Correcting the way matchItem is created
       const matchedColors = productdataonlydetail
         .flatMap(product => product.colors)
@@ -390,11 +410,15 @@ console.log("iredandid",prd,id)
 catch(e){
   console.log(e)
 }
+finally{
+  setIsLoading(false)
+}
 }
 
 
   const handleAddToCart = async (prd,quantity,selectedSize) => {
     try {
+      setIsLoading(true)
       console.log("iqs",prd,quantity,selectedSize)
       // const matchItem = productdataonlydetail.find((e) => e._id == id);
       // const matchItem = productdataonlydetail
@@ -451,10 +475,14 @@ catch(e){
     } catch (error) {
       console.error('Error in handleClick:', error);
     }
+    finally{
+      setIsLoading(false)
+    }
   };
   const removefromaddtocart=async(id)=>{
     console.log("crt ki id",id)
     try{
+      setIsLoading(true)
       const matchItem = allproductdata.find((e) => e._id === id);
       console.log("match ho gyaa crtid",matchItem)
       const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
@@ -500,6 +528,9 @@ catch(e){
     catch(e){
       console.error('Error in handleClick:', error);
     }
+    finally{
+      setIsLoading(false)
+    }
     
   }
 
@@ -507,6 +538,7 @@ catch(e){
  
  let bestselling=async()=>{
   try{
+    setIsLoading(true)
 let bestselingdata=await fetch(`${apiUrl}/bestselling`)
 
 let resdata=await bestselingdata.json()
@@ -515,6 +547,9 @@ setbestsellingdata(resdata)
 }
 catch(e){
   console.log(e)
+}
+finally{
+  setIsLoading(false)
 }
 
  }
@@ -526,6 +561,7 @@ catch(e){
  
     let wears=async()=>{
      try{
+      setIsLoading(true)
    let wearsdata=await fetch(`${apiUrl}/wear?operation=all`)
    console.log(wearsdata)
    let resdata=await wearsdata.json()
@@ -534,6 +570,9 @@ catch(e){
    }
    catch(e){
      console.log(e)
+   }
+   finally{
+    setIsLoading(false)
    }
    
     }
@@ -544,12 +583,16 @@ catch(e){
      //rent data
      const rentData = async () => {
       try {
+        setIsLoading(true)
         let rentRes = await fetch(`${apiUrl}/rent?operation=all`);
         let finalRes = await rentRes.json();
         console.log("rentdress ka data",finalRes)
         setrentdata(finalRes);
       } catch (error) {
         console.error("Error fetching data:", error);
+      }
+      finally{
+        setIsLoading(false)
       }
 
     };
@@ -561,9 +604,16 @@ catch(e){
 
     useEffect(()=>{
       let newarrival=async()=>{
+try{
+  setIsLoading(true)
   let getdata=await fetch(`${apiUrl}/newarrival`)
   let resdata=await getdata.json()
    setnewarrival(resdata)
+}
+catch(e){
+  console.log(e)
+}
+finally{(false)}
       }
       newarrival()
     },[])
@@ -576,6 +626,7 @@ catch(e){
     console.log("myid",id)
     console.log("wishid",wishlist)
     try {
+      setIsLoading(true)
       let data =wishlistdata.find((e) => e.id === id);
       console.log("xdx",data)
       let res = await fetch(`${apiUrl}/cart/${data._id}`, {
@@ -591,6 +642,9 @@ catch(e){
       setWishlist(wishlist.filter(item => item.id !== id)); // Remove item from local state
     } catch (e) {
       console.log(e);
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
@@ -635,6 +689,7 @@ catch(e){
 
 const productfetch = async () => {
   try {
+    setIsLoading(true)
     let data = await fetch(`${apiUrl}/productmodel?operation=all`);
     let res = await data.json();
     
@@ -650,6 +705,9 @@ const productfetch = async () => {
     setRefetch(false);  
   } catch (e) {
     console.log("❌ Fetch Error:", e);
+  }
+  finally{
+    setIsLoading(false)
   }
 };
 
@@ -729,6 +787,7 @@ let handlenewaddress = async (address, user) => {
   }
 
   try {
+    setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -752,6 +811,9 @@ let handlenewaddress = async (address, user) => {
     console.error("Error:", error);
     alert("An error occurred while adding the address.");
   }
+  finally{
+    setIsLoading(false)
+  }
 };
 
 
@@ -759,6 +821,7 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
 
   if(action=="delete"){
  try{
+  setIsLoading(true)
   const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
     method: "PATCH",  // Using PATCH request to update the address
     headers: {
@@ -782,12 +845,16 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
   console.log(e)
  
 }
+finally{
+  setIsLoading(false)
+}
 }
 
 else{
   console.log("useridf",user._id)
   console.log("useridf",addr)
   try {
+    setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
       method: "PATCH",  // Using PATCH request to update the address
       headers: {
@@ -805,6 +872,9 @@ else{
   } catch (error) {
     console.error("Error:", error);
     alert("An error occurred while adding the address.");
+  }
+  finally{
+    setIsLoading(false)
   }
 
 }
@@ -827,6 +897,7 @@ let orderplaced=async(order,address)=>{
  console.log("addre",address)
 if(user && userDetails){
   try{
+    setIsLoading(true)
     let orderpost=await fetch(`${apiUrl}/order`,{
       method:"POST",
       headers: {
@@ -843,6 +914,9 @@ if(user && userDetails){
   }
   catch(e){
     console.log(e)
+  }
+  finally{
+    setIsLoading(false)
   }
 }
 }
@@ -880,6 +954,7 @@ useEffect(() => {
 const submitRating = async (productId, userId, rating, review) => {
   console.log("rating",rating)
   try {
+    setIsLoading(true)
       const response = await fetch(`${apiUrl}/rate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -891,9 +966,13 @@ const submitRating = async (productId, userId, rating, review) => {
   } catch (error) {
       console.error("Error submitting rating:", error);
   }
+  finally{
+    setIsLoading(false)
+  }
 };
 const fetchRatings = async (productId) => {
   try {
+    setIsLoading(true)
     if(!userDetails._id && user)
     {
       console.error("❌ User ID is missing!");
@@ -911,6 +990,9 @@ const fetchRatings = async (productId) => {
   } catch (error) {
       console.error("Error fetching ratings:", error);
   }
+  finally{
+    setIsLoading(false)
+  }
 };
 
 useEffect(() => { 
@@ -925,6 +1007,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
   console.log("slec",selectedOption)
 
   try{
+    setIsLoading(true)
     let orderpost=await fetch(`${apiUrl}/return`,{
       method:"POST",
       headers: {
@@ -944,6 +1027,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
   }
   catch(e){
     console.log(e)
+  }
+  finally{
+    setIsLoading(false)
   }
 
 }
