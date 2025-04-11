@@ -241,7 +241,7 @@ export default function App() {
 
 
   return (
-    <LoadingProvider>
+    
     <AuthProvider>
     <DashboardProvider>
     
@@ -268,7 +268,7 @@ export default function App() {
     
     </DashboardProvider>
     </AuthProvider>
-    </LoadingProvider>
+  
   );
 }
 
