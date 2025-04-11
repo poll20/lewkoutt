@@ -177,6 +177,7 @@ import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 // import Toast from "./components/Toast";
 import PopUpNotificationss from "./components/PopUpNotificationss";
 import { LoadingProvider } from "./components/LoadingContext";
+import GlobalLoader from "./components/GlobalLoader";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -272,6 +273,7 @@ function Layout({ showPopup }) {
   
   return (
     <>
+    <GlobalLoader/>
       {!isAdminRoute && <ResponsiveNavbar />}
       {isAdminRoute ? (
         <div className="admin-ka-panel-container">
