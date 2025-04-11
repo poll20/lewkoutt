@@ -124,7 +124,7 @@
 //     </>
 //   )
 // }
-
+import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import ResponsiveNavbar from "./components/Navbar";
@@ -176,7 +176,7 @@ import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 // import Toast from "./components/Toast";
 import PopUpNotificationss from "./components/PopUpNotificationss";
-import { LoadingProvider, useLoading } from "./components/LoadingContext";
+
 import GlobalLoader from "./components/GlobalLoader";
 
 export default function App() {
