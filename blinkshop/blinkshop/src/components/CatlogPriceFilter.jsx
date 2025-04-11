@@ -121,8 +121,8 @@ const CatlogPriceFilter = () => {
           />
         </div>
       </div> */}
-      <div className="range-sliderr">
-        <div className="slider-trackk"></div>
+      <div className="range-slider">
+        <div className="slider-track"></div>
         <input
           type="range"
           min={sliderMinValue}

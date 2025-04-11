@@ -1,5 +1,5 @@
 .double-slider-box {
-    border: 2px solid red;
+    /* border: 2px solid red; */
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
@@ -8,8 +8,8 @@
     margin: auto;
   }
   
-  .range-sliderr {
-    border: 1px solid blue;
+  .range-slider {
+    /* border: 1px solid blue; */
     position: relative;
     width: 100%;
     height: 5px;
@@ -18,8 +18,8 @@
     border-radius: 5px;
   }
   
-  .slider-trackk {
-    border: 2px solid pink;
+  .slider-track {
+    /* border: 2px solid pink; */
     height: 100%;
     position: absolute;
     background-color: #b6fcaf;
@@ -28,7 +28,7 @@
     border-radius: 5px;
   }
   
-  .range-sliderr input[type="range"] {
+  .range-slider input[type="range"] {
     position: absolute;
     width: 100%;
     top: 0;
@@ -86,7 +86,7 @@
   input[type="number"] {
     width: 40px;
     padding: 10px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-radius: 5px;
     text-align: center;
   }
