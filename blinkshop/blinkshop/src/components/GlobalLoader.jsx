@@ -22,8 +22,8 @@ const GlobalLoader = () => {
         alignItems: "center",
       }}
     >
-<div className="h-16 w-16 bg-black text-white text-center flex items-center justify-center rounded-full">
-  Loading...
+<div class="spinner-border" role="status">
+  <span class="visually-hidden">Loading...</span>
 </div>
     </div>
   );
