@@ -8,7 +8,7 @@
     margin: auto;
   }
   
-  .range-slider {
+  .range-sliderr {
     /* border: 1px solid blue; */
     position: relative;
     width: 100%;
@@ -18,7 +18,7 @@
     border-radius: 5px;
   }
   
-  .slider-track {
+  .slider-trackk {
     /* border: 2px solid pink; */
     height: 100%;
     position: absolute;
@@ -28,7 +28,7 @@
     border-radius: 5px;
   }
   
-  .range-slider input[type="range"] {
+  .range-sliderr input[type="range"] {
     position: absolute;
     width: 100%;
     top: 0;
