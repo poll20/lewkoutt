@@ -176,14 +176,14 @@ import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 // import Toast from "./components/Toast";
 import PopUpNotificationss from "./components/PopUpNotificationss";
-import { LoadingProvider } from "./components/LoadingContext";
+import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import GlobalLoader from "./components/GlobalLoader";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
   const [popupMessage, setPopupMessage] = useState("");
-
+  const { setIsLoading } = useLoading(); // ✅ add this inside the App component
   // useEffect(() => {
   //   // const fetchData = async () => {
     
@@ -211,6 +211,7 @@ export default function App() {
   //   fetchCartItems();
   // }, []);
   useEffect(() => {
+    console.log("GlobalLoader triggered..."); // Debug
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
