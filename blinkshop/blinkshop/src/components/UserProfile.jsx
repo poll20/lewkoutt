@@ -183,7 +183,7 @@ let navigate=useNavigate()
         <div className="profile-info">
           <AiOutlineUser className="profile-icon" />
           <div className="profile-details">
-            <p>{userprf.email}<br />+91{userprf.phone}</p>
+            <p>{userprf.email}<br />+91{userprf.phone[0]}</p>
           </div>
         </div>
         <button className="profile-add-button">Add</button>
