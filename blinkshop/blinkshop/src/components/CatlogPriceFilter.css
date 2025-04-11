@@ -1,5 +1,5 @@
 .double-slider-box {
-    /* border: 2px solid red; */
+    border: 2px solid red;
     background-color: #fff;
     border-radius: 10px;
     padding: 20px;
@@ -9,7 +9,7 @@
   }
   
   .range-sliderr {
-    /* border: 1px solid blue; */
+    border: 1px solid blue;
     position: relative;
     width: 100%;
     height: 5px;
@@ -19,7 +19,7 @@
   }
   
   .slider-trackk {
-    /* border: 2px solid pink; */
+    border: 2px solid pink;
     height: 100%;
     position: absolute;
     background-color: #b6fcaf;
@@ -43,7 +43,7 @@
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    /* border: 3px solid #fff; */
+    border: 3px solid #fff;
     background: #0bff54;
     pointer-events: auto;
     appearance: none;
