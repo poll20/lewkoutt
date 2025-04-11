@@ -179,7 +179,7 @@ if(!addtocartdatas){
        <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
          <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
-        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId,order);closePopup();}}>Wishlist</button>
+        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}>Wishlist</button>
        </div>
 
        
