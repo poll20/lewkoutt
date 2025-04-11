@@ -210,6 +210,12 @@ export default function App() {
   //   // fetchData();
   //   fetchCartItems();
   // }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, []);
   
   useEffect(() => {
     const keepAlive = setInterval(() => {

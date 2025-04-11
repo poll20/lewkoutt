@@ -6,7 +6,7 @@ const GlobalLoader = () => {
   const { isLoading } = useLoading();
 
   if (!isLoading) return null;
-
+  console.log("GlobalLoader mounted. isLoading:", isLoading);
   return (
     <div
       style={{
@@ -22,7 +22,9 @@ const GlobalLoader = () => {
         alignItems: "center",
       }}
     >
-      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-black"></div>
+<div className="h-16 w-16 bg-black text-white text-center flex items-center justify-center rounded-full">
+  Loading...
+</div>
     </div>
   );
 };
