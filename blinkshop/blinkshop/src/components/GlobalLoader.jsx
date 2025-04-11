@@ -1,6 +1,7 @@
 // src/components/GlobalLoader.js
 import React from "react";
-import { useLoading } from "../context/LoadingContext";
+import { useLoading } from "./LoadingContext";
+
 
 const GlobalLoader = () => {
   const { isLoading } = useLoading();
