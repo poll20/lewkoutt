@@ -330,7 +330,7 @@ const OtpLogin = () => {
                 className="w-full px-4 py-3 border-2 rounded-lg text-gray-700
                            focus:border-indigo-500 focus:outline-none
                            transition-all duration-200"
-                maxLength="10"
+                // maxLength="10"
               />
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
