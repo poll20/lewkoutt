@@ -427,7 +427,7 @@ const OtpLogin = () => {
               type="tel"
               placeholder="Enter your phone number"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber("+91"+e.target.value)}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               className="w-full px-4 py-3 border-2 rounded-lg text-gray-700 focus:border-indigo-500 focus:outline-none"
             />
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
