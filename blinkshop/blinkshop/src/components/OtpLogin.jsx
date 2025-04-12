@@ -502,7 +502,8 @@
 // export default OtpLogin;
 
 import React, { useState, useRef, useEffect } from "react";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./firebase";
+// import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./firebase";
+import { auth, signInWithPhoneNumber, generateRecaptcha } from "./firebase";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { MdSecurity } from "react-icons/md";
 
@@ -537,38 +538,65 @@ const OtpLogin = () => {
   }, [timer, canResend]);
 
   
-    const setupRecaptcha = () => {
-        if (!window.recaptchaVerifier) {
-          window.recaptchaVerifier = new RecaptchaVerifier(
-            "recaptcha-container",
-            {
-              size: "invisible",
-              callback: () => {
-                console.log("reCAPTCHA Resolved");
-              },
-            },
-            auth
-          );
-          window.recaptchaVerifier.render().then((widgetId) => {
-            window.recaptchaWidgetId = widgetId;
-          });
-        }
-      };
+    // const setupRecaptcha = () => {
+    //     if (!window.recaptchaVerifier) {
+    //       window.recaptchaVerifier = new RecaptchaVerifier(
+    //         "recaptcha-container",
+    //         {
+    //           size: "invisible",
+    //           callback: () => {
+    //             console.log("reCAPTCHA Resolved");
+    //           },
+    //         },
+    //         auth
+    //       );
+    //       window.recaptchaVerifier.render().then((widgetId) => {
+    //         window.recaptchaWidgetId = widgetId;
+    //       });
+    //     }
+    //   };
     
 
   
-  const handleSendOtp = async () => {
-    setupRecaptcha();
+//   const handleSendOtp = async () => {
+//     // setupRecaptcha();
+//     setError("");
+//     if (!phoneNumber || phoneNumber.length !== 10) {
+//       setError("Please enter a valid 10-digit phone number.");
+//       return;
+//     }
+
+//     setLoading(true);
+//     setupRecaptcha();
+//     const appVerifier = window.recaptchaVerifier;
+
+//     try {
+//       const result = await signInWithPhoneNumber(auth, "+91" + phoneNumber, appVerifier);
+//       setConfirmationResult(result);
+//       setShowOTP(true);
+//       setTimer(30);
+//       setCanResend(false);
+//       setOtp(new Array(6).fill(""));
+//     } catch (err) {
+//       setError("Failed to send OTP. Try again.");
+//       console.error("Error sending OTP:", err);
+//     }
+//     setLoading(false);
+//   };
+const handleSendOtp = async () => {
     setError("");
+  
     if (!phoneNumber || phoneNumber.length !== 10) {
       setError("Please enter a valid 10-digit phone number.");
       return;
     }
-
+  
     setLoading(true);
-    // setupRecaptcha();
+  
+    // ✅ Use the generateRecaptcha function from firebase.js
+    generateRecaptcha();
     const appVerifier = window.recaptchaVerifier;
-
+  
     try {
       const result = await signInWithPhoneNumber(auth, "+91" + phoneNumber, appVerifier);
       setConfirmationResult(result);
@@ -580,9 +608,10 @@ const OtpLogin = () => {
       setError("Failed to send OTP. Try again.");
       console.error("Error sending OTP:", err);
     }
+  
     setLoading(false);
   };
-
+  
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError("");
