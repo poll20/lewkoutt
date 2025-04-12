@@ -330,14 +330,15 @@ const OtpLogin = () => {
 
   const setupRecaptcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
       "recaptcha-container",
       {
         size: "invisible",
         callback: () => handleSendOtp(),
-      },
-      auth
+      }
     );
   };
+  
 
   const handleSendOtp = async () => {
     setError("");
