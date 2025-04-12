@@ -225,6 +225,7 @@ import { useState, useRef, useEffect } from "react";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { BiTime } from "react-icons/bi";
 import { MdSecurity } from "react-icons/md";
+import { auth, RecaptchaVerifier, signInWithPhoneNumber,PhoneAuthProvider,signInWithCredential } from "./firebase";
 
 const OtpLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -236,6 +237,47 @@ const OtpLogin = () => {
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef([]);
+
+  // Setup reCAPTCHA verifier
+  const setupRecaptcha = (phoneNumber) => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("reCAPTCHA solved:", response);
+          },
+        }
+      );
+    }
+  
+    const appVerifier = window.recaptchaVerifier;
+  
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        setVerificationId(confirmationResult.verificationId);
+        setIsOtpSent(true);
+        console.log("OTP Sent Successfully!");
+      })
+      .catch((error) => {
+        console.error("Error during phone authentication:", error);
+      });
+  };
+  
+  // Handle OTP Verification
+  const verifyOtp = () => {
+    const credential = PhoneAuthProvider.credential(verificationId, otp);
+  
+    signInWithCredential(auth, credential)
+      .then((userCredential) => {
+        console.log("User signed in successfully:", userCredential.user);
+      })
+      .catch((error) => {
+        console.error("Error verifying OTP:", error);
+      });
+  };
 
   useEffect(() => {
     if (timer > 0 && !canResend) {
