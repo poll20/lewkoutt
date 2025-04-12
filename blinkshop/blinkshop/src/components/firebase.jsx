@@ -39,6 +39,7 @@ auth.languageCode = 'en';
 const generateRecaptcha = () => {
   if (!window.recaptchaVerifier) {
     window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+        auth,
       size: 'invisible',
       callback: (response) => {
         console.log('Recaptcha Resolved');
@@ -46,7 +47,7 @@ const generateRecaptcha = () => {
       'expired-callback': () => {
         console.log('Recaptcha expired');
       }
-    }, auth);
+    });
   }
 };
 
