@@ -240,7 +240,7 @@ import { useState, useRef, useEffect } from "react";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { BiTime } from "react-icons/bi";
 import { MdSecurity } from "react-icons/md";
-
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./firebase";
 const OtpLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOTP, setShowOTP] = useState(false);
