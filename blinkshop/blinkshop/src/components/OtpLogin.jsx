@@ -536,7 +536,7 @@ const OtpLogin = () => {
     }
   }, [timer, canResend]);
 
-  useEffect(() => {
+  
     const setupRecaptcha = () => {
         if (!window.recaptchaVerifier) {
           window.recaptchaVerifier = new RecaptchaVerifier(
@@ -555,9 +555,10 @@ const OtpLogin = () => {
         }
       };
     
-  }, []);
+
   
   const handleSendOtp = async () => {
+    setupRecaptcha();
     setError("");
     if (!phoneNumber || phoneNumber.length !== 10) {
       setError("Please enter a valid 10-digit phone number.");
@@ -565,7 +566,7 @@ const OtpLogin = () => {
     }
 
     setLoading(true);
-    setupRecaptcha();
+    // setupRecaptcha();
     const appVerifier = window.recaptchaVerifier;
 
     try {
