@@ -329,36 +329,62 @@ const OtpLogin = () => {
   }, [timer, canResend]);
 
   const setupRecaptcha = () => {
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      auth,
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: () => handleSendOtp(),
-      }
-    );
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("reCAPTCHA solved", response);
+          },
+        }
+      );
+    }
   };
   
+  
 
-  const handleSendOtp = async () => {
-    setError("");
-    setLoading(true);
-    setupRecaptcha();
-    const appVerifier = window.recaptchaVerifier;
+//   const handleSendOtp = async () => {
+//     setError("");
+//     setLoading(true);
+//     setupRecaptcha();
+//     const appVerifier = window.recaptchaVerifier;
 
-    try {
-      const result = await signInWithPhoneNumber(auth, "+91" + phoneNumber, appVerifier);
-      setConfirmationResult(result);
-      setShowOTP(true);
-      setTimer(30);
-      setCanResend(false);
-    } catch (err) {
-      setError("Failed to send OTP. Try again.");
-      console.error(err);
+//     try {
+//       const result = await signInWithPhoneNumber(auth, "+91" + phoneNumber, appVerifier);
+//       setConfirmationResult(result);
+//       setShowOTP(true);
+//       setTimer(30);
+//       setCanResend(false);
+//     } catch (err) {
+//       setError("Failed to send OTP. Try again.");
+//       console.error(err);
+//     }
+
+//     setLoading(false);
+//   };
+const handleSendOtp = async () => {
+    if (phone.length !== 10) {
+      toast.error("Enter a valid 10-digit phone number");
+      return;
     }
-
-    setLoading(false);
+  
+    const phoneNumber = "+91" + phone;
+    setupRecaptcha(); // safe with check inside now
+    const appVerifier = window.recaptchaVerifier;
+  
+    try {
+      const confirmation = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+      setConfirmObj(confirmation);
+      setShowOTP(true);
+      toast.success("OTP sent successfully!");
+    } catch (error) {
+      console.log("OTP send error:", error);
+      toast.error(error.message);
+    }
   };
+  
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
