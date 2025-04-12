@@ -536,24 +536,27 @@ const OtpLogin = () => {
     }
   }, [timer, canResend]);
 
-  const setupRecaptcha = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => {
-            console.log("reCAPTCHA Resolved");
-          },
-        },
-        auth
-      );
-      window.recaptchaVerifier.render().then((widgetId) => {
-        window.recaptchaWidgetId = widgetId;
-      });
-    }
-  };
-
+  useEffect(() => {
+    const setupRecaptcha = () => {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            "recaptcha-container",
+            {
+              size: "invisible",
+              callback: () => {
+                console.log("reCAPTCHA Resolved");
+              },
+            },
+            auth
+          );
+          window.recaptchaVerifier.render().then((widgetId) => {
+            window.recaptchaWidgetId = widgetId;
+          });
+        }
+      };
+    
+  }, []);
+  
   const handleSendOtp = async () => {
     setError("");
     if (!phoneNumber || phoneNumber.length !== 10) {
