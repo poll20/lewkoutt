@@ -345,46 +345,25 @@ const OtpLogin = () => {
   
   
 
-//   const handleSendOtp = async () => {
-//     setError("");
-//     setLoading(true);
-//     setupRecaptcha();
-//     const appVerifier = window.recaptchaVerifier;
-
-//     try {
-//       const result = await signInWithPhoneNumber(auth, "+91" + phoneNumber, appVerifier);
-//       setConfirmationResult(result);
-//       setShowOTP(true);
-//       setTimer(30);
-//       setCanResend(false);
-//     } catch (err) {
-//       setError("Failed to send OTP. Try again.");
-//       console.error(err);
-//     }
-
-//     setLoading(false);
-//   };
-const handleSendOtp = async () => {
-    if (phone.length !== 10) {
-      toast.error("Enter a valid 10-digit phone number");
-      return;
-    }
-  
-    const phoneNumber = "+91" + phone;
-    setupRecaptcha(); // safe with check inside now
+  const handleSendOtp = async () => {
+    setError("");
+    setLoading(true);
+    setupRecaptcha();
     const appVerifier = window.recaptchaVerifier;
-  
+
     try {
-      const confirmation = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-      setConfirmObj(confirmation);
+      const result = await signInWithPhoneNumber(auth, "+91" + phoneNumber, appVerifier);
+      setConfirmationResult(result);
       setShowOTP(true);
-      toast.success("OTP sent successfully!");
-    } catch (error) {
-      console.log("OTP send error:", error);
-      toast.error(error.message);
+      setTimer(30);
+      setCanResend(false);
+    } catch (err) {
+      setError("Failed to send OTP. Try again.");
+      console.error(err);
     }
+
+    setLoading(false);
   };
-  
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
