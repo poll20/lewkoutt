@@ -335,13 +335,18 @@ const OtpLogin = () => {
         {
           size: "invisible",
           callback: (response) => {
-            console.log("reCAPTCHA solved", response);
+            console.log("reCAPTCHA Resolved");
           },
-        }
+        },
+        auth // 👈 VERY IMPORTANT
       );
-      window.recaptchaVerifier.render(); // Add this line to ensure rendering
+  
+      window.recaptchaVerifier.render().then((widgetId) => {
+        window.recaptchaWidgetId = widgetId;
+      });
     }
   };
+  
   
   
   
