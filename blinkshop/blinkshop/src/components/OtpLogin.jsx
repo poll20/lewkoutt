@@ -330,19 +330,19 @@ const OtpLogin = () => {
 
   const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(
-            "recaptcha-container",
-            {
-              size: "invisible",
-              callback: (response) => {
-                console.log("reCAPTCHA solved", response);
-              },
-            },
-            auth
-          );
-          
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("reCAPTCHA solved", response);
+          },
+        }
+      );
+      window.recaptchaVerifier.render(); // Add this line to ensure rendering
     }
   };
+  
   
   
 
