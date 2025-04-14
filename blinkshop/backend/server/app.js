@@ -384,15 +384,17 @@ app.get("/wear",async(req,res)=>{
 //user created or registered
 app.post("/user/register", async (req, res) => {
   console.log("Request received at /user/register:", req.body); // ✅ Backend logging
-  const { name, email, updated_at } = req.body;
-  if (email) {
+  // const { name, email, updated_at } = req.body;
+  const { phoneNumber, updated_at } = req.body
+  if (phoneNumber) {
     try {
       // Check if user already exists
-      const existingUser = await userr.findOne({ email });
+      const existingUser = await userr.findOne({ phoneNumber });
       if (!existingUser) {
         const newUser = new userr({
-          name: name,
-          email: email,
+          // name: name,
+          // email: email,
+          phonenumber:phoneNumber,
           created_at: updated_at,
         });
         console.log("dekghte h",newUser)
