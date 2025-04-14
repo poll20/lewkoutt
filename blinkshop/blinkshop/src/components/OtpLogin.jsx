@@ -819,16 +819,26 @@ const OtpLogin = () => {
     }
   }, [timer, canResend]);
 
-  useEffect(() => {
-    if (window.recaptchaVerifier) return; // Avoid initializing twice
+//   useEffect(() => {
+//     if (window.recaptchaVerifier) return; // Avoid initializing twice
 
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-      size: 'invisible',
-      callback: (response) => {
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-        console.log("Recaptcha verified");
-      },
-    });
+//     window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+//       size: 'invisible',
+//       callback: (response) => {
+//         // reCAPTCHA solved, allow signInWithPhoneNumber.
+//         console.log("Recaptcha verified");
+//       },
+//     });
+//   }, []);
+useEffect(() => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible',
+        callback: (response) => {
+          console.log("Recaptcha verified");
+        },
+      }, auth);
+    }
   }, []);
 
   const handlePhoneSubmit = async (e) => {
