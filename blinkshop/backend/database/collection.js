@@ -90,8 +90,9 @@ const otpSchema = new mongoose.Schema({
 const generateRandomCode = () => Math.random().toString(36).substring(2, 7).toUpperCase();
 
 let users=mongoose.Schema({
-    name: String,
-    email: String,
+    // name: String,
+    // email: String,
+    phonenumber,
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     address:[addressSchema],  
     lat: Number,  // User latitude
