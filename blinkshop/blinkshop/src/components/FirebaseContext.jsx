@@ -131,7 +131,10 @@ export const FirebaseAuthProvider = ({ children }) => {
   // Register User API call
   const registerUser = async () => {
     try {
-      if (currentUser && !isRegistered) {
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (user && !isRegistered) {
         setLoading(true);
         const response = await fetch(`${apiUrl}/user/register`, {
           method: "POST",
@@ -139,18 +142,16 @@ export const FirebaseAuthProvider = ({ children }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            // email: currentUser.email,
-            // uid: currentUser.uid,
-            phoneNumber: currentUser.phoneNumber,
+            phoneNumber: user.phoneNumber,
           }),
         });
-
+  
         if (!response.ok) {
           throw new Error(`Registration failed: ${response.statusText}`);
         }
-
+  
         const data = await response.json();
-        setUserDetails(data); // Store user details after registration
+        setUserDetails(data);
         setIsRegistered(true);
       }
     } catch (e) {
