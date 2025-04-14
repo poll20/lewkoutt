@@ -37,18 +37,23 @@ const auth = getAuth(app);
 auth.languageCode = 'en';
 
 const generateRecaptcha = () => {
-  if (!window.recaptchaVerifier) {
-    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-        auth,
-      size: 'invisible',
-      callback: (response) => {
-        console.log('Recaptcha Resolved');
-      },
-      'expired-callback': () => {
-        console.log('Recaptcha expired');
-      }
-    });
-  }
-};
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        'recaptcha-container',
+        {
+          size: 'invisible',
+          callback: (response) => {
+            console.log('Recaptcha Resolved');
+          },
+          'expired-callback': () => {
+            console.log('Recaptcha expired');
+          }
+        },
+        auth // ✅ Pass `auth` as third parameter
+      );
+      window.recaptchaVerifier.render(); // optional, ensures it's rendered
+    }
+  };
+  
 
 export { auth, RecaptchaVerifier, signInWithPhoneNumber, PhoneAuthProvider, signInWithCredential, generateRecaptcha };
