@@ -503,7 +503,9 @@
 
 import React, { useState, useRef, useEffect } from "react";
 // import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./firebase";
-import { auth, signInWithPhoneNumber, generateRecaptcha } from "./firebase";
+import { auth } from "./firebase";
+// import { auth, signInWithPhoneNumber, generateRecaptcha } from "./firebase";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { MdSecurity } from "react-icons/md";
 
