@@ -386,6 +386,7 @@ app.post("/user/register", async (req, res) => {
   console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   // const { name, email, updated_at } = req.body;
   const { phoneNumber, updated_at } = req.body
+  console.log("phonenumberrrrr",phoneNumber)
   if (phoneNumber) {
     try {
       // Check if user already exists
