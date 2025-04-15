@@ -363,10 +363,10 @@ export const FirebaseAuthProvider = ({ children }) => {
   // ✅ Setup Recaptcha once on mount
   useEffect(() => {
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container', {
         size: 'invisible',
         callback: () => console.log("✅ reCAPTCHA verified"),
-      }, auth);
+      });
     }
   }, []);
 
