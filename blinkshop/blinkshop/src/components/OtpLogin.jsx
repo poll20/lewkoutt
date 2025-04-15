@@ -249,8 +249,12 @@ import { useState, useRef, useEffect } from "react";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { BiTime } from "react-icons/bi";
 import { MdSecurity } from "react-icons/md";
-import { useFirebaseAuth } from "./firebaseContext"; // Import Firebase Context
-import { useUser } from "./userContext"; // Import User Context
+// import { useFirebaseAuth } from "./firebaseContext"; // Import Firebase Context
+
+// import { useUser } from "./userContext"; // Import User Context
+
+import { useFirebaseAuth } from "./FirebaseContext";
+import { useUser } from "./UserContext";
 
 const OtpLogin = () => {
   const { sendOTP, verifyOTP, loading } = useFirebaseAuth();
