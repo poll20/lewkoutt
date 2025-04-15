@@ -342,8 +342,8 @@ import {
   signInWithPhoneNumber,
   signOut,
   onAuthStateChanged,
-} from "firebase/auth";
-// import { app } from "./firebase";
+} from "./firebase";
+//  import {auth} from "./firebase";
 
 // const auth = getAuth(app);
 const FirebaseAuthContext = createContext();
