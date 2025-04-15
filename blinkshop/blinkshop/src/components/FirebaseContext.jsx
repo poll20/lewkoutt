@@ -384,7 +384,7 @@ export const FirebaseAuthProvider = ({ children }) => {
     try {
       await new Promise((res) => setTimeout(res, 500)); // Ensure auth.currentUser is set
 
-      const user = auth.currentUser;
+      const user = auth?.currentUser;
       console.log("📲 Trying to register:", user?.phoneNumber);
       if (!user || isRegistered) return;
 
