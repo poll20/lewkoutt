@@ -133,7 +133,7 @@ export const FirebaseAuthProvider = ({ children }) => {
     try {
       const auth = getAuth();
       const user = auth.currentUser;
-  
+  console.log("usr h na",user)
       if (user && !isRegistered) {
         setLoading(true);
         const response = await fetch(`${apiUrl}/user/register`, {
@@ -184,6 +184,7 @@ export const FirebaseAuthProvider = ({ children }) => {
 
   // Automatically register user when authenticated
   useEffect(() => {
+    console.log("current user bhi hai naa",currentUser)
     if (currentUser) {
       registerUser();
     }
