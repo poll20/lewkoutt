@@ -380,34 +380,72 @@ export const FirebaseAuthProvider = ({ children }) => {
   }, []);
 
   // ✅ Register user to backend
-  const registerUser = async () => {
+//   const registerUser = async () => {
+//     try {
+//       await new Promise((res) => setTimeout(res, 500)); // Ensure auth.currentUser is set
+
+//       const user = auth?.currentUser;
+//       console.log("📲 Trying to register:", user.phoneNumber);
+//       if (!user || isRegistered) return;
+
+//       setLoading(true);
+
+//       console.log("🌐 Sending registration request to:", `${apiUrl}/user/register`);
+//       const response = await fetch(`${apiUrl}/user/register`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ phoneNumber: user.phoneNumber }),
+//       });
+
+//       if (!response.ok) {
+//         const text = await response.text();
+//         throw new Error(`❌ Registration failed: ${text}`);
+//       }
+
+//       const data = await response.json();
+//       console.log("✅ User registered:", data);
+//       setUserDetails(data);
+//       setIsRegistered(true);
+//     } catch (e) {
+//       console.error("❌ Registration error:", e.message);
+//       setError(`Registration error: ${e.message}`);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+const registerUser = async () => {
     try {
-      await new Promise((res) => setTimeout(res, 500)); // Ensure auth.currentUser is set
-
-      const user = auth?.currentUser;
-      console.log("📲 Trying to register:", user?.phoneNumber);
-      if (!user || isRegistered) return;
-
-      setLoading(true);
-
-      console.log("🌐 Sending registration request to:", `${apiUrl}/user/register`);
-      const response = await fetch(`${apiUrl}/user/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ phoneNumber: user.phoneNumber }),
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`❌ Registration failed: ${text}`);
+      const user = auth.currentUser;
+      console.log("🔥 Inside registerUser", user);
+  
+      if (user && !isRegistered) {
+        console.log("📦 Registering user:", user.phoneNumber);
+        setLoading(true);
+  
+        const response = await fetch(`${apiUrl}/user/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ phoneNumber: user.phoneNumber }),
+        });
+  
+        console.log("📥 Response status:", response.status);
+  
+        if (!response.ok) {
+          throw new Error(`Registration failed: ${response.statusText}`);
+        }
+  
+        const data = await response.json();
+        console.log("✅ Registered user details:", data);
+  
+        setUserDetails(data);
+        setIsRegistered(true);
+      } else {
+        console.warn("⛔ No user or already registered:", user, isRegistered);
       }
-
-      const data = await response.json();
-      console.log("✅ User registered:", data);
-      setUserDetails(data);
-      setIsRegistered(true);
     } catch (e) {
       console.error("❌ Registration error:", e.message);
       setError(`Registration error: ${e.message}`);
@@ -415,6 +453,7 @@ export const FirebaseAuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  
 
   // ✅ Verify OTP & Register User
   const verifyOTP = async (otp) => {
