@@ -186,6 +186,7 @@ export const FirebaseAuthProvider = ({ children }) => {
   useEffect(() => {
     console.log("current user bhi hai naa",currentUser)
     if (currentUser) {
+        console.log("chall bhi ja sjan")
       registerUser();
     }
   }, [currentUser]);
