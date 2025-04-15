@@ -4,8 +4,12 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App.jsx'
 import './index.css'
 import { LoadingProvider } from './components/LoadingContext.jsx';
-import { FirebaseAuthProvider } from './firebaseContext'; // Firebase context
-import { UserProvider } from './userContext'; // User context
+// import { FirebaseAuthProvider } from './componentsfirebaseContext'; // Firebase context
+
+// import { UserProvider } from './userContext'; // User context
+
+import { FirebaseAuthProvider } from './components/FirebaseContext.jsx';
+import { UserProvider } from './components/UserContext.jsx';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
    <LoadingProvider>
