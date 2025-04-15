@@ -337,15 +337,15 @@
 
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import {
-  getAuth,
+  auth,
   RecaptchaVerifier,
   signInWithPhoneNumber,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { app } from "./firebase";
+// import { app } from "./firebase";
 
-const auth = getAuth(app);
+// const auth = getAuth(app);
 const FirebaseAuthContext = createContext();
 
 export const useFirebaseAuth = () => useContext(FirebaseAuthContext);
