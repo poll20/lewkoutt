@@ -12,8 +12,10 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_APP_ID,
     measurementId:import.meta.env.VITE_MEASUREMENT_ID
 };
+console.log("Firebase config:", firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
+console.log("App initialized:", app);
 const auth = getAuth(app);
 
 export { auth, RecaptchaVerifier, signInWithPhoneNumber,PhoneAuthProvider,signInWithCredential,signOut,onAuthStateChanged};
