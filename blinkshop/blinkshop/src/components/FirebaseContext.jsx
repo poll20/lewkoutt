@@ -424,6 +424,9 @@ const registerUser = async () => {
   const verifyOTP = async (otp) => {
     setLoading(true);
     try {
+        if (!confirmationResult) {
+            throw new Error("OTP confirmation object not found. Please request OTP again.");
+          }
       const result = await confirmationResult.confirm(otp);
       const user = result.user;
       setCurrentUser(user);
