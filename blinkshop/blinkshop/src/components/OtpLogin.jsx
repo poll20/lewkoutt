@@ -270,12 +270,14 @@ import { useState, useRef, useEffect } from "react";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { BiTime } from "react-icons/bi";
 import { MdSecurity } from "react-icons/md";
+
 // import { useFirebaseAuth } from "./firebaseContext"; // Import Firebase Context
 
 // import { useUser } from "./userContext"; // Import User Context
 
 import { useFirebaseAuth } from "./FirebaseContext";
 import { useUser } from "./UserContext";
+import { useNavigate } from "react-router-dom";
 
 const OtpLogin = () => {
   const { sendOTP, verifyOTP, loading ,initRecaptcha} = useFirebaseAuth();
@@ -290,7 +292,7 @@ const OtpLogin = () => {
   const inputRefs = useRef([]);
   const [confirmationResult, setConfirmationResult] = useState(null);
 
-
+const navigate=useNavigate()
   useEffect(() => {
     initRecaptcha(); // from context
   }, []);
@@ -349,7 +351,10 @@ const OtpLogin = () => {
     const { success, user, error } = await verifyOTP(otp.join(""));
     if (success) {
       setUser(user); // Store user data in context
-      alert("OTP Verified Successfully");
+    //   alert("OTP Verified Successfully");
+    setTimeout(() => {
+        navigate("/profile")
+    }, 200);
     } else {
       setError(error || "Invalid OTP. Please try again.");
     }

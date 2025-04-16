@@ -221,29 +221,48 @@
 import React from "react";
 import { CiUser } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa6";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext"; // Import the custom hook
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase/firebase"; // adjust path
 
+import { useFirebaseAuth } from "./FirebaseContext";
 const LoginButton = () => {
-  const {
-    user,
-    isAuthenticated,
-    loginWithRedirect,
-    handleLogout,
-    loading,
-    error,
-  } = useAuth();
-
+  // const {
+  //   user,
+  //   isAuthenticated,
+  //   loginWithRedirect,
+  //   handleLogout,
+  //   loading,
+  //   error,
+  // } = useAuth();
+  const navigate=useNavigate()
+const{
+  user,
+  userDetails,
+  isRegistered,
+  loading,
+  error,
+  sendOTP,
+  verifyOTP,
+  logout,
+  fetchUserDetails,
+  initRecaptcha
+}=useFirebaseAuth()
   return (
     <div>
       {/* {loading && <p>Loading...</p>} */}
-      { isAuthenticated ? (
+      { isRegistered ? (
       <NavLink to={"/Profile"}><CiUser size={30}></CiUser></NavLink>
-     ) : (
-       <CiUser size={30} onClick={() => loginWithRedirect({
-        redirect_uri: window.location.origin, // Automatically sets correct URL
-      })}></CiUser>
-    )}
+     ) : 
+     (
+      <CiUser size={30} onClick={() =>navigate("/loginn") }></CiUser>
+     )
+    //  (
+    //    <CiUser size={30} onClick={() => loginWithRedirect({
+    //     redirect_uri: window.location.origin, // Automatically sets correct URL
+    //   })}></CiUser>
+    // )
+    }
     </div>
   );
 };
