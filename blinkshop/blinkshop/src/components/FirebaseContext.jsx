@@ -487,6 +487,44 @@ useEffect(() => {
 //   }, []);
   
     
+// const registerUser = async () => {
+//     try {
+//       const user = auth.currentUser;
+//       console.log("🔥 Inside registerUser", user);
+  
+//       if (user && !isRegistered) {
+//         console.log("📦 Registering user:", user.phoneNumber);
+//         setLoading(true);
+  
+//         const response = await fetch(`${apiUrl}/user/register`, {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({ phoneNumber: user.phoneNumber }),
+//         });
+  
+//         console.log("📥 Response status:", response.status);
+  
+//         if (!response.ok) {
+//           throw new Error(`Registration failed: ${response.statusText}`);
+//         }
+  
+//         const data = await response.json();
+//         console.log("✅ Registered user details:", data);
+  
+//         setUserDetails(data);
+//         setIsRegistered(true);
+//       } else {
+//         console.warn("⛔ No user or already registered:", user, isRegistered);
+//       }
+//     } catch (e) {
+//       console.error("❌ Registration error:", e.message);
+//       setError(`Registration error: ${e.message}`);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 const registerUser = async () => {
     try {
       const user = auth.currentUser;
@@ -498,9 +536,7 @@ const registerUser = async () => {
   
         const response = await fetch(`${apiUrl}/user/register`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ phoneNumber: user.phoneNumber }),
         });
   
@@ -515,6 +551,7 @@ const registerUser = async () => {
   
         setUserDetails(data);
         setIsRegistered(true);
+        await fetchUserDetails(); // ✅ Now call here after setting state
       } else {
         console.warn("⛔ No user or already registered:", user, isRegistered);
       }
@@ -525,6 +562,7 @@ const registerUser = async () => {
       setLoading(false);
     }
   };
+  
   
 
   // ✅ Verify OTP & Register User
@@ -653,16 +691,16 @@ const sendOTP = async (phoneNumber) => {
   };
 
   // ✅ Fetch profile only when registered
-  useEffect(() => {
-    if (user && isRegistered) {
-        console.log("current user to aa hi jayegaa",user)
-      fetchUserDetails();
-    }
-if(userDetails){
-console.log("agyi m tooo",userDetails)    
-}
+//   useEffect(() => {
+//     if (user && isRegistered) {
+//         console.log("current user to aa hi jayegaa",user)
+//       fetchUserDetails();
+//     }
+// if(userDetails){
+// console.log("agyi m tooo",userDetails)    
+// }
     
-  }, [user, isRegistered]);
+//   }, [user, isRegistered]);
 
   
   return (
