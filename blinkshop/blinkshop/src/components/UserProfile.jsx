@@ -152,8 +152,8 @@ import { useFirebaseAuth } from './FirebaseContext';
 
 const UserProfile = () => {
   const [userprf,setuserprf]=useState([])
-  let {logout}=useAuth()
-  let {user,userDetails}=useFirebaseAuth()
+  // let {logout}=useAuth()
+  let {user,userDetails,logout}=useFirebaseAuth()
   let [popup,setPopup]=useState(false)
 let navigate=useNavigate()
   useEffect(()=>{ 
