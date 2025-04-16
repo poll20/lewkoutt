@@ -172,7 +172,7 @@ import ReturnDataTable from "./components/dashboardforadmin/ReturnDataTable";
 import Faq from "./components/Faq";
 import AboutUs from "./components/AboutUs";
 import MyLogin from "./components/MyLogin";
-import OTPLogin from "./components/OtpLogin";
+// import OTPLogin from "./components/OtpLogin";
 import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 // import Toast from "./components/Toast";
 import PopUpNotificationss from "./components/PopUpNotificationss";
@@ -334,7 +334,7 @@ function Layout({ showPopup }) {
             
             <Route path="/shopkeeper" element={<ShopkeeperDashboard />} />
             <Route path="/return/:id" element={<ReturnRequest/>} />
-            <Route path="/loginn" element={<OTPLogin/>} />
+            {/* <Route path="/loginn" element={<OTPLogin/>} /> */}
             <Route path="/maps" element={<MapWithAutocompelete/>} />
             {/* { toastmsg.length>0?(<Toast message={toastmsg}  />):('')
         
