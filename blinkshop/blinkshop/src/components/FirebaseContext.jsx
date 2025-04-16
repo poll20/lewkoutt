@@ -473,6 +473,19 @@ useEffect(() => {
       unsubscribe();
     };
   }, []);
+
+  // 🔁 Manual fallback in case auth listener delays agr optmized  verify otp code usele to tb use lena isse bhiii
+// useEffect(() => {
+//     const timeout = setTimeout(() => {
+//       if (!currentUser && auth.currentUser) {
+//         console.warn("⏱ Fallback: Setting currentUser manually from auth.currentUser");
+//         setCurrentUser(auth.currentUser);
+//       }
+//     }, 2000); // wait 2s
+  
+//     return () => clearTimeout(timeout);
+//   }, []);
+  
     
 const registerUser = async () => {
     try {
@@ -534,7 +547,36 @@ const registerUser = async () => {
       setLoading(false);
     }
   };
-
+  //ye verify otp ka or optimized code h isse use krna agr signed ke badd bhi user null aaaye too okk
+//   const verifyOTP = async (otp) => {
+//     setLoading(true);
+//     try {
+//       if (!confirmationResult) {
+//         throw new Error("OTP confirmation object not found. Please request OTP again.");
+//       }
+  
+//       const result = await confirmationResult.confirm(otp);
+//       const user = result.user;
+  
+//       // ✅ Manually set user right away
+//       setCurrentUser(user);
+//       console.log("✅ OTP Verified & user signed in:", user.phoneNumber);
+  
+//       // ✅ Optional: manually trigger auth state listener fallback
+//       if (!auth.currentUser) {
+//         auth.currentUser = user;
+//       }
+  
+//       await registerUser();
+//       return { success: true, user };
+//     } catch (err) {
+//       console.error("❌ OTP verification failed:", err);
+//       return { success: false, error: err.message };
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+  
   // ✅ Send OTP
 //   const sendOTP = async (phoneNumber) => {
 //     setLoading(true);
@@ -597,7 +639,7 @@ const sendOTP = async (phoneNumber) => {
     if (!currentUser) return;
     try {
       setLoading(true);
-      const response = await fetch(`${apiUrl}/user/profile?email=${currentUser.email}`);
+      const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${currentUser.phoneNumber}`);
       if (!response.ok) throw new Error(`Fetch error: ${response.statusText}`);
       const data = await response.json();
       setUserDetails(data);
@@ -618,9 +660,7 @@ const sendOTP = async (phoneNumber) => {
     
   }, [currentUser, isRegistered]);
 
-  if(auth.currentUser){
-    console.log("mere paaas hai h signed in user heheheh ",auth.currentUser)
-  }
+  
   return (
     <FirebaseAuthContext.Provider
       value={{

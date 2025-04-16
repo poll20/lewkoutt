@@ -913,12 +913,12 @@ console.log("addddddddrrrrrr",addr)
 
 // Route to get a specific user's profile by email
 app.get("/user/profile", async (req, res) => {
-  const { email } = req.query; // Accept email as a query parameter
-if(email){
+  const { phoneNumber } = req.query; // Accept email as a query parameter
+if(phoneNumber){
   console.log("emmm",email)
 }
   try {
-    const user = await userr.findOne({ email: email }); // Find user by email
+    const user = await userr.findOne({ phoneNumber:phoneNumber }); // Find user by email
     if (user) {
       console.log(user)
       res.status(200).json(user); // Send user data as JSON
