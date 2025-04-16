@@ -27,7 +27,8 @@ const app = initializeApp(firebaseConfig);
 console.log("App initialized:", app);
 const auth = getAuth(app);
 console.log("auth",auth)
-export { auth, RecaptchaVerifier, signInWithPhoneNumber,PhoneAuthProvider,signInWithCredential,signOut,onAuthStateChanged};
+// export { auth, RecaptchaVerifier, signInWithPhoneNumber,PhoneAuthProvider,signInWithCredential,signOut,onAuthStateChanged};
+export { auth};
 
 // firebase.js file
 // import { initializeApp } from "firebase/app";

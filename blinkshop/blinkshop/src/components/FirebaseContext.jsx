@@ -354,12 +354,13 @@
 
 
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import { RecaptchaVerifier, signInWithPhoneNumber ,PhoneAuthProvider,signInWithCredential, signOut,onAuthStateChanged } from "firebase/auth";
 import {
   auth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  signOut,
-  onAuthStateChanged,
+//   RecaptchaVerifier,
+//   signInWithPhoneNumber,
+//   signOut,
+//   onAuthStateChanged,
 } from "./firebase";
 //  import {auth} from "./firebase";
 
@@ -412,14 +413,13 @@ export const FirebaseAuthProvider = ({ children }) => {
 //   }, []);
   
 useEffect(() => {
-    console.log("🧪 Firebase Auth Object:", auth); // confirm it's defined
-  
-    if (!window.recaptchaVerifier && auth) {
+    // ✅ Check if auth exists before using it
+    if (auth && !window.recaptchaVerifier) {
       try {
         window.recaptchaVerifier = new RecaptchaVerifier(
-          "recaptcha-container",
+          'recaptcha-container',
           {
-            size: "invisible",
+            size: 'invisible',
             callback: (response) => {
               console.log("✅ reCAPTCHA verified");
             },
@@ -434,6 +434,8 @@ useEffect(() => {
       } catch (error) {
         console.error("❌ reCAPTCHA setup error:", error);
       }
+    } else {
+      console.warn("⚠️ Firebase auth not ready yet.");
     }
   }, []);
   
