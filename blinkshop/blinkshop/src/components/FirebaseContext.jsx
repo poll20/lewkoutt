@@ -638,6 +638,7 @@ const sendOTP = async (phoneNumber) => {
   const fetchUserDetails = async () => {
     if (!currentUser) return;
     try {
+        console.log("mai usersss ko fetchh kr rha huuu........")
       setLoading(true);
       const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${currentUser.phoneNumber}`);
       if (!response.ok) throw new Error(`Fetch error: ${response.statusText}`);
