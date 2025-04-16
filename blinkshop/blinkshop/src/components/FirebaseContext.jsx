@@ -474,17 +474,17 @@ useEffect(() => {
     };
   }, []);
 
-  // 🔁 Manual fallback in case auth listener delays agr optmized  verify otp code usele to tb use lena isse bhiii
-// useEffect(() => {
-//     const timeout = setTimeout(() => {
-//       if (!currentUser && auth.currentUser) {
-//         console.warn("⏱ Fallback: Setting currentUser manually from auth.currentUser");
-//         setCurrentUser(auth.currentUser);
-//       }
-//     }, 2000); // wait 2s
+//   🔁 Manual fallback in case auth listener delays agr optmized  verify otp code usele to tb use lena isse bhiii
+useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!currentUser && auth.currentUser) {
+        console.warn("⏱ Fallback: Setting currentUser manually from auth.currentUser");
+        setCurrentUser(auth.currentUser);
+      }
+    }, 2000); // wait 2s
   
-//     return () => clearTimeout(timeout);
-//   }, []);
+    return () => clearTimeout(timeout);
+  }, []);
   
     
 // const registerUser = async () => {
@@ -566,46 +566,17 @@ const registerUser = async () => {
   
 
   // ✅ Verify OTP & Register User
-  const verifyOTP = async (otp) => {
-    setLoading(true);
-    try {
-        if (!confirmationResult) {
-            throw new Error("OTP confirmation object not found. Please request OTP again.");
-          }
-      const result = await confirmationResult.confirm(otp);
-      const user = result.user;
-      setCurrentUser(user);
-      console.log("✅ OTP Verified:", user.phoneNumber);
-      await registerUser(); // ✅ Register after OTP success
-      return { success: true, user };
-    } catch (err) {
-      console.error("❌ OTP verification failed:", err);
-      return { success: false, error: err.message };
-    } finally {
-      setLoading(false);
-    }
-  };
-  //ye verify otp ka or optimized code h isse use krna agr signed ke badd bhi user null aaaye too okk
 //   const verifyOTP = async (otp) => {
 //     setLoading(true);
 //     try {
-//       if (!confirmationResult) {
-//         throw new Error("OTP confirmation object not found. Please request OTP again.");
-//       }
-  
+//         if (!confirmationResult) {
+//             throw new Error("OTP confirmation object not found. Please request OTP again.");
+//           }
 //       const result = await confirmationResult.confirm(otp);
 //       const user = result.user;
-  
-//       // ✅ Manually set user right away
 //       setCurrentUser(user);
-//       console.log("✅ OTP Verified & user signed in:", user.phoneNumber);
-  
-//       // ✅ Optional: manually trigger auth state listener fallback
-//       if (!auth.currentUser) {
-//         auth.currentUser = user;
-//       }
-  
-//       await registerUser();
+//       console.log("✅ OTP Verified:", user.phoneNumber);
+//       await registerUser(); // ✅ Register after OTP success
 //       return { success: true, user };
 //     } catch (err) {
 //       console.error("❌ OTP verification failed:", err);
@@ -614,6 +585,35 @@ const registerUser = async () => {
 //       setLoading(false);
 //     }
 //   };
+  //ye verify otp ka or optimized code h isse use krna agr signed ke badd bhi user null aaaye too okk
+  const verifyOTP = async (otp) => {
+    setLoading(true);
+    try {
+      if (!confirmationResult) {
+        throw new Error("OTP confirmation object not found. Please request OTP again.");
+      }
+  
+      const result = await confirmationResult.confirm(otp);
+      const user = result.user;
+  
+      // ✅ Manually set user right away
+      setCurrentUser(user);
+      console.log("✅ OTP Verified & user signed in:", user.phoneNumber);
+  
+      // ✅ Optional: manually trigger auth state listener fallback
+      if (!auth.currentUser) {
+        auth.currentUser = user;
+      }
+  
+      await registerUser();
+      return { success: true, user };
+    } catch (err) {
+      console.error("❌ OTP verification failed:", err);
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
   
   // ✅ Send OTP
 //   const sendOTP = async (phoneNumber) => {
