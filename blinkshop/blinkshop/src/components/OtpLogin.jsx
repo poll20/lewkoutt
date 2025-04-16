@@ -359,7 +359,7 @@ const OtpLogin = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div id="recaptcha-container"></div>
+      <div id="recaptcha-container"style={{ display: 'none' }}></div>
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-8">
         <div className="text-center">
           <div className="mb-4 inline-block p-3 rounded-full bg-indigo-100">

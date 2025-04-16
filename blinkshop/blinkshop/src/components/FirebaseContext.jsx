@@ -403,31 +403,33 @@ export const FirebaseAuthProvider = ({ children }) => {
 //       console.log("🔄 reCAPTCHA already initialized.");
 //     }
 //   }, []);
+const hasInitialized = useRef(false); // 🚨 Firebase strict mode repeat ko avoid karta hai
+
 useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!window.recaptchaVerifier) {
-        console.log("🔄 Initializing reCAPTCHA...");
-        const recaptchaContainer = document.getElementById("recaptcha-container");
-        if (recaptchaContainer) {
-          try {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-              size: "invisible",
-              callback: () => console.log("✅ reCAPTCHA verified"),
-            });
-            console.log("✅ reCAPTCHA initialized successfully.");
-          } catch (error) {
-            console.error("❌ Error initializing reCAPTCHA:", error.message);
-          }
-        } else {
-          console.error("❌ reCAPTCHA container element not found.");
-        }
-      } else {
-        console.log("🔄 reCAPTCHA already initialized.");
-      }
-    }, 0); // 0 ms ka delay bhi kaafi hota hai
-  
-    return () => clearTimeout(timeout); // Cleanup
-  }, []);
+  if (hasInitialized.current) return;
+
+  const container = document.getElementById("recaptcha-container");
+
+  if (container && !window.recaptchaVerifier) {
+    try {
+      console.log("🔄 Initializing reCAPTCHA...");
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+        callback: (response) => {
+          console.log("✅ reCAPTCHA verified", response);
+        },
+      });
+      window.recaptchaVerifier.render().then(() => {
+        console.log("✅ reCAPTCHA rendered successfully");
+        hasInitialized.current = true;
+      });
+    } catch (error) {
+      console.error("❌ Error initializing reCAPTCHA:", error.message);
+    }
+  } else {
+    console.log("⚠️ reCAPTCHA container not found or already initialized");
+  }
+}, []);
   
 
   
