@@ -411,24 +411,29 @@ export const FirebaseAuthProvider = ({ children }) => {
 //     }
 //   }, []);
   
-useEffect(() => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        'recaptcha-container',
-        {
-          size: 'invisible',
-          callback: (response) => {
-            console.log("✅ reCAPTCHA verified");
-          },
-        },
-        auth
-      );
+uuseEffect(() => {
+    console.log("🧪 Firebase Auth Object:", auth); // confirm it's defined
   
-      // Force rendering it immediately
-      window.recaptchaVerifier.render().then((widgetId) => {
-        window.recaptchaWidgetId = widgetId;
-        console.log("🔧 reCAPTCHA widget rendered:", widgetId);
-      });
+    if (!window.recaptchaVerifier && auth) {
+      try {
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          "recaptcha-container",
+          {
+            size: "invisible",
+            callback: (response) => {
+              console.log("✅ reCAPTCHA verified");
+            },
+          },
+          auth
+        );
+  
+        window.recaptchaVerifier.render().then((widgetId) => {
+          window.recaptchaWidgetId = widgetId;
+          console.log("🔧 reCAPTCHA widget rendered:", widgetId);
+        });
+      } catch (error) {
+        console.error("❌ reCAPTCHA setup error:", error);
+      }
     }
   }, []);
   
