@@ -506,13 +506,36 @@ const registerUser = async () => {
   };
 
   // ✅ Send OTP
-  const sendOTP = async (phoneNumber) => {
+//   const sendOTP = async (phoneNumber) => {
+//     setLoading(true);
+//     try {
+//         if (!window.recaptchaVerifier) {
+//             throw new Error("reCAPTCHA not initialized yet");
+//           }
+//       const appVerifier = window.recaptchaVerifier;
+//       const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
+//       setConfirmationResult(result);
+//       console.log("📤 OTP sent to:", phoneNumber);
+//       return { success: true };
+//     } catch (err) {
+//       console.error("❌ Error sending OTP:", err);
+//       return { success: false, error: err.message };
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+const sendOTP = async (phoneNumber) => {
     setLoading(true);
     try {
-        if (!window.recaptchaVerifier) {
-            throw new Error("reCAPTCHA not initialized yet");
-          }
+      if (!window.recaptchaVerifier) {
+        throw new Error("reCAPTCHA not initialized yet");
+      }
+  
       const appVerifier = window.recaptchaVerifier;
+  
+      // ✅ Make sure reCAPTCHA is fully rendered before proceeding
+      await appVerifier.render();
+  
       const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
       setConfirmationResult(result);
       console.log("📤 OTP sent to:", phoneNumber);
@@ -524,6 +547,7 @@ const registerUser = async () => {
       setLoading(false);
     }
   };
+  
 
   // ✅ Logout
   const logout = async () => {
