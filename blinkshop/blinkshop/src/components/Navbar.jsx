@@ -21,7 +21,7 @@ import { useBio } from './BioContext';
 // import { set } from 'mongoose';
 import { useAuth } from './AuthContext';
 import { useFirebaseAuth } from './FirebaseContext';
-u
+
 const ResponsiveNavbar = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()
