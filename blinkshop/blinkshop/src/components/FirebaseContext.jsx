@@ -595,13 +595,12 @@ const sendOTP = async (phoneNumber) => {
   // ✅ Fetch profile only when registered
   useEffect(() => {
     if (currentUser && isRegistered) {
+        console.log("current user to aa hi jayegaa",currentUser)
       fetchUserDetails();
     }
   }, [currentUser, isRegistered]);
 
-  if(currentUser){
-    console.log("currentuser ajana ",currentUser)
-  }
+  
   return (
     <FirebaseAuthContext.Provider
       value={{
