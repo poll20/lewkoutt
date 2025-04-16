@@ -413,7 +413,7 @@ export const FirebaseAuthProvider = ({ children }) => {
   
 useEffect(() => {
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
+      window.recaptchaVerifier = new RecaptchaVerifier(auth,
         'recaptcha-container',
         {
           size: 'invisible',
@@ -421,7 +421,7 @@ useEffect(() => {
             console.log("✅ reCAPTCHA verified");
           },
         },
-        auth
+        
       );
   
       // Force rendering it immediately
