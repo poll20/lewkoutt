@@ -1037,8 +1037,8 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
 console.log("toastmsg",toastmsg)
 
-if(currentUser && userDetailss){
-  console.log("plz dono bche ajao",currentUser)
+if(user && userDetails){
+  console.log("plz dono bche ajao",user)
 }
   return (
     <>
