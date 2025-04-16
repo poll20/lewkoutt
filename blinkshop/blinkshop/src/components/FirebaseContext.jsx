@@ -378,15 +378,39 @@ export const FirebaseAuthProvider = ({ children }) => {
   const [confirmationResult, setConfirmationResult] = useState(null);
   const inputRefs = useRef([]);
 
-  // ✅ Setup Recaptcha once on mount
-  useEffect(() => {
+//   // ✅ Setup Recaptcha once on mount
+//   useEffect(() => {
+//     if (!window.recaptchaVerifier) {
+//       window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container', {
+//         size: 'invisible',
+//         callback: () => console.log("✅ reCAPTCHA verified"),
+//       });
+//     }
+//   }, []);
+useEffect(() => {
+    // Check if recaptchaVerifier is already initialized
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container', {
-        size: 'invisible',
-        callback: () => console.log("✅ reCAPTCHA verified"),
-      });
+      console.log("🔄 Initializing reCAPTCHA...");
+      // Check if the container element exists before initializing
+      const recaptchaContainer = document.getElementById("recaptcha-container");
+      if (recaptchaContainer) {
+        try {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+            size: "invisible",
+            callback: () => console.log("✅ reCAPTCHA verified"),
+          });
+          console.log("✅ reCAPTCHA initialized successfully.");
+        } catch (error) {
+          console.error("❌ Error initializing reCAPTCHA:", error.message);
+        }
+      } else {
+        console.error("❌ reCAPTCHA container element not found.");
+      }
+    } else {
+      console.log("🔄 reCAPTCHA already initialized.");
     }
   }, []);
+  
 
   // ✅ Firebase auth state listener
   useEffect(() => {
