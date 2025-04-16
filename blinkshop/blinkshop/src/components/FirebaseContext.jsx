@@ -694,8 +694,8 @@ const sendOTP = async (phoneNumber) => {
 
 //   ✅ Fetch profile only when registered
   useEffect(() => {
-    if (user ) {
-        console.log("current user to aa hi jayegaa",user)
+    if (user && isRegistered) {
+        console.log("current user to aa hi jayegaa",user,isRegistered)
       fetchUserDetails();
     }
 if(userDetails){
