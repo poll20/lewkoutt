@@ -918,10 +918,9 @@ if(phoneNumber){
   console.log("emmm",phoneNumber)
   
 }
-let phn="+"+phoneNumber
-console.log("phn ka stru",phn)
+
   try {
-    const user = await userr.findOne({ phonenumber:phn}); // Find user by email
+    const user = await userr.findOne({ phonenumber:phoneNumber}); // Find user by email
     if (user) {
       console.log(user)
       res.status(200).json(user); // Send user data as JSON

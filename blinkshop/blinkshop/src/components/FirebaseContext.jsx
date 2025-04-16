@@ -679,7 +679,8 @@ const sendOTP = async (phoneNumber) => {
     try {
         console.log("mai usersss ko fetchh kr rha huuu........")
       setLoading(true);
-      const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${user.phoneNumber}`);
+      const encodedPhone = encodeURIComponent(user.phoneNumber);
+      const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${encodedPhone}`);
       if (!response.ok) throw new Error(`Fetch error: ${response.statusText}`);
       const data = await response.json();
       console.log("yha milega usr ka data",data)
