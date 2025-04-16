@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import img1 from "./image/img1.jpg"
 import { useLoading } from './LoadingContext';
-
+import { useFirebaseAuth } from "./FirebaseContext";
 // import { ToastContainer, toast } from 'react-toastify';
 // import Toast from './Toast';
 
@@ -15,6 +15,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   console.log("urll",apiUrl)
   const { user,userDetails } = useAuth();
+    const {currentUser, userDetailss, } = useFirebaseAuth();
   const { setIsLoading } = useLoading();
   const [cart, setCart] = useState([]);
   const[searchvalue,setsearchvalue]=useState("")
@@ -1036,7 +1037,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
 console.log("toastmsg",toastmsg)
 
-
+if(currentUser && userDetailss){
+  console.log("plz dono bche ajao",currentUser,userDetailss)
+}
   return (
     <>
     {

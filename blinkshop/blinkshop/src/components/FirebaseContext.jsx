@@ -371,7 +371,7 @@ export const useFirebaseAuth = () => useContext(FirebaseAuthContext);
 export const FirebaseAuthProvider = ({ children }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [currentUser, setCurrentUser] = useState(null);
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetailss, setUserDetails] = useState({});
   const [isRegistered, setIsRegistered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -540,7 +540,7 @@ const registerUser = async () => {
     <FirebaseAuthContext.Provider
       value={{
         currentUser,
-        userDetails,
+        userDetailss,
         isRegistered,
         loading,
         error,
