@@ -223,7 +223,7 @@ import { CiUser } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext"; // Import the custom hook
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase/firebase"; // adjust path
+// import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebase/firebase"; // adjust path
 
 import { useFirebaseAuth } from "./FirebaseContext";
 const LoginButton = () => {
