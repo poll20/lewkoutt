@@ -477,7 +477,7 @@ useEffect(() => {
 //   🔁 Manual fallback in case auth listener delays agr optmized  verify otp code usele to tb use lena isse bhiii
 useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!currentUser && auth.currentUser) {
+      if (!userDetails && auth.currentUser) {
         console.warn("⏱ Fallback: Setting currentUser manually from auth.currentUser");
         setCurrentUser(auth.currentUser);
       }
