@@ -914,6 +914,8 @@ export const FirebaseAuthProvider = ({ children }) => {
         sendOTP,
         verifyOTP,
         logout,
+        initRecaptcha,
+        fetchUserDetails,
       }}
     >
       {children}
