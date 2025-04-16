@@ -20,9 +20,12 @@ import { BsShop } from "react-icons/bs";
 import { useBio } from './BioContext';
 // import { set } from 'mongoose';
 import { useAuth } from './AuthContext';
+import { useFirebaseAuth } from './FirebaseContext';
+u
 const ResponsiveNavbar = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  let {user,userDetails}=useAuth()
+  // let {user,userDetails}=useAuth()
+  let {user,userDetails}=useFirebaseAuth()
   let {setcatehicate,addtocartdatas}=useBio()
   const [dropdown, setDropdown] = useState(false);
   const [sideNavbarOpen, setSideNavbarOpen] = useState(false);

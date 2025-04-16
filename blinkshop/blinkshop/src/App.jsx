@@ -178,6 +178,7 @@ import MapWithAutocompelete from "./components/MapWithAutoCompelete";
 import PopUpNotificationss from "./components/PopUpNotificationss";
 
 import GlobalLoader from "./components/GlobalLoader";
+import { FirebaseAuthProvider } from "./components/FirebaseContext";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -241,7 +242,7 @@ export default function App() {
 
 
   return (
-    
+    <FirebaseAuthProvider>
     <AuthProvider>
     <DashboardProvider>
     
@@ -268,6 +269,7 @@ export default function App() {
     
     </DashboardProvider>
     </AuthProvider>
+    </FirebaseAuthProvider>
   
   );
 }

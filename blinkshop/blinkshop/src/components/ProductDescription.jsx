@@ -19,6 +19,7 @@ import HeartButton from "./HeartButton";
 import { ToastContainer, toast } from 'react-toastify';
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import Card from "./Card";
+import { useFirebaseAuth } from "./FirebaseContext";
 
 
 // import { BioContext } from "./CartContext";
@@ -44,7 +45,8 @@ const cartRef = useRef();
   console.log("fwff",id)
   let navigate=useNavigate()
   let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail}=useBio()
-  const { user,userDetails } = useAuth();
+  // const { user,userDetails } = useAuth();
+  const { user,userDetails } = useFirebaseAuth()
   // useEffect(() => {
   //   const fetchCartData = async () => {
   //     if(userDetails || userDetails._id )

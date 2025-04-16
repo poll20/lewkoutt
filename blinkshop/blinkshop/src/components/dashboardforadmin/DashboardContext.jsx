@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState,useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { User } from "@auth0/auth0-react";
+import { useFirebaseAuth } from "../FirebaseContext";
 
 // ✅ 1️⃣ Create the context
 const DashboardContext = createContext();
@@ -8,7 +9,8 @@ const DashboardContext = createContext();
 // ✅ 2️⃣ Create the provider component
 export const DashboardProvider = ({ children }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
-    const{user,userDetails}=useAuth()
+    // const{user,userDetails}=useAuth()
+    const{user,userDetails}=useFirebaseAuth()
     const [users, setUsers] = useState([]);
     const [userorder,setuserorder]=useState([])
     const[shopkeeperprd,setshopkeeperprd]=useState([])

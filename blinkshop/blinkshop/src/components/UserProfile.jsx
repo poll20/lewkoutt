@@ -148,9 +148,12 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useFirebaseAuth } from './FirebaseContext';
+
 const UserProfile = () => {
   const [userprf,setuserprf]=useState([])
-  let {user,userDetails, handleLogout ,logout}=useAuth()
+  let {logout}=useAuth()
+  let {user,userDetails}=useFirebaseAuth()
   let [popup,setPopup]=useState(false)
 let navigate=useNavigate()
   useEffect(()=>{ 

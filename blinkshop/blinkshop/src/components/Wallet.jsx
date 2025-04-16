@@ -1,9 +1,12 @@
   import React, { useState } from "react";
   import "./Wallet.css";
   import { useAuth } from "./AuthContext";
+import { useFirebaseAuth } from "./FirebaseContext";
+  
   const Wallet = ({ cashback, points }) => {
     const [activeTab, setActiveTab] = useState("cashback");
-    const {userDetails}=useAuth()
+    // const {userDetails}=useAuth()
+    const {userDetails}=useFirebaseAuth()
     if(!userDetails){
       return (<p>loading...</p>)
     }

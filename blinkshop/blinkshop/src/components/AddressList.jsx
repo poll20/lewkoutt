@@ -6,6 +6,8 @@ import { HiH1 } from "react-icons/hi2";
 import { useBio } from "./BioContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { use } from "react";
+import { useFirebaseAuth } from "./FirebaseContext";
+
 const AddressList = () => {
   
   const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
@@ -23,7 +25,8 @@ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
- const{user,userDetails, fetchUserDetails }=useAuth()
+//  const{user,userDetails, fetchUserDetails }=useAuth()
+const{user,userDetails, fetchUserDetails }=useFirebaseAuth()
 const [userprf,setuserprf]=useState({ address: [] })
 const [editingAddressId, setEditingAddressId] = useState(null); // Track which one is being edited
 const [editedAddress, setEditedAddress] = useState({}); // Temp store for editing

@@ -6,14 +6,17 @@ import { useDashboard } from "./dashboardforadmin/DashboardContext";
 import { IoIosArrowForward } from "react-icons/io";
 import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+
 import TimeSlots from "./TimeSlots"
+import { useFirebaseAuth } from "./FirebaseContext";
 const Checkout = () => {
 
 
  
 
 const { buydata, addresssetkro,orderplaced,walletkapesa,timeslotlelo} = useBio();
-const{userDetails}=useAuth()
+// const{userDetails}=useAuth()
+const{userDetails}=useFirebaseAuth()
 const{recordMultipleSales}=useDashboard()
   const location = useLocation();
   const navigate = useNavigate(); // ✅ Hook to detect navigation

@@ -186,11 +186,14 @@ import { useBio } from "./BioContext";
 import img1 from "./image/img3.jpg";
 import { FaStar } from "react-icons/fa";
 import { useAuth } from "./AuthContext";
+
 import { NavLink } from "react-router-dom";
+import { useFirebaseAuth } from "./FirebaseContext";
 
 const UserOrder = () => {
   const { userorder, submitRating, fetchRatings, rating } = useBio();
-  const { userDetails } = useAuth();
+  // const { userDetails } = useAuth();
+  const{userDetails}=useFirebaseAuth()
 
   if (!userorder && !userDetails) {
     return <p>Loading...</p>;

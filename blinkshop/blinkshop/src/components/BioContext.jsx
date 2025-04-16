@@ -14,8 +14,8 @@ export const BioContext = createContext();
 export const BioProvider = ({children,addtocartitem,showPopup }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   console.log("urll",apiUrl)
-  const { user,userDetails } = useAuth();
-    const {currentUser, userDetailss, } = useFirebaseAuth();
+  // const { user,userDetails } = useAuth();
+    const {user, userDetails, } = useFirebaseAuth();
   const { setIsLoading } = useLoading();
   const [cart, setCart] = useState([]);
   const[searchvalue,setsearchvalue]=useState("")
@@ -1038,7 +1038,7 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 console.log("toastmsg",toastmsg)
 
 if(currentUser && userDetailss){
-  console.log("plz dono bche ajao",currentUser,userDetailss)
+  console.log("plz dono bche ajao",currentUser)
 }
   return (
     <>
