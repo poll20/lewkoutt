@@ -551,7 +551,7 @@ const registerUser = async () => {
   
         setUserDetails(data);
         setIsRegistered(true);
-        await fetchUserDetails(); // ✅ Now call here after setting state
+       
       } else {
         console.warn("⛔ No user or already registered:", user, isRegistered);
       }
@@ -690,17 +690,17 @@ const sendOTP = async (phoneNumber) => {
     }
   };
 
-  // ✅ Fetch profile only when registered
-//   useEffect(() => {
-//     if (user && isRegistered) {
-//         console.log("current user to aa hi jayegaa",user)
-//       fetchUserDetails();
-//     }
-// if(userDetails){
-// console.log("agyi m tooo",userDetails)    
-// }
+//   ✅ Fetch profile only when registered
+  useEffect(() => {
+    if (user ) {
+        console.log("current user to aa hi jayegaa",user)
+      fetchUserDetails();
+    }
+if(userDetails){
+console.log("agyi m tooo",userDetails)    
+}
     
-//   }, [user, isRegistered]);
+  }, [user]);
 
   
   return (
