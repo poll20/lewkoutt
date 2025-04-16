@@ -13,10 +13,10 @@ console.log("API Key:", import.meta.env.VITE_PROJECT_ID);
 //     measurementId:import.meta.env.VITE_MEASUREMENT_ID
 // };
 const firebaseConfig = {
-    apiKey: "AIzaSyCpLrvP0mFks8Fg0BvTRqa4yPb3Jco3--w",
+    apiKey: "AIzaSyCygJkXmV9nEHzShM6xrW5qX5qYq9c2nLg",
     authDomain: "lewkout-bcf84.firebaseapp.com",
     projectId: "lewkout-bcf84",
-    storageBucket: "lewkout-bcf84.firebasestorage.app",
+    storageBucket: "lewkout-bcf84.appspot.com",
     messagingSenderId: "315965564771",
     appId: "1:315965564771:web:dfd6439dd1330ce8925556",
     measurementId: "G-EYX24MYHNB"
