@@ -411,7 +411,7 @@ export const FirebaseAuthProvider = ({ children }) => {
 //     }
 //   }, []);
   
-uuseEffect(() => {
+useEffect(() => {
     console.log("🧪 Firebase Auth Object:", auth); // confirm it's defined
   
     if (!window.recaptchaVerifier && auth) {
