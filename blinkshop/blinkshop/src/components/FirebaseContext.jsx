@@ -416,7 +416,7 @@ useEffect(() => {
     // ✅ Check if auth exists before using it
     if (auth && !window.recaptchaVerifier) {
       try {
-        window.recaptchaVerifier = new RecaptchaVerifier(
+        window.recaptchaVerifier = new RecaptchaVerifier(auth,
           'recaptcha-container',
           {
             size: 'invisible',
@@ -424,7 +424,7 @@ useEffect(() => {
               console.log("✅ reCAPTCHA verified");
             },
           },
-          auth
+          
         );
   
         window.recaptchaVerifier.render().then((widgetId) => {
