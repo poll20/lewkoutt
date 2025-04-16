@@ -636,11 +636,11 @@ const sendOTP = async (phoneNumber) => {
 
   // ✅ Fetch profile from backend
   const fetchUserDetails = async () => {
-    if (!currentUser) return;
+    if (!user) return;
     try {
         console.log("mai usersss ko fetchh kr rha huuu........")
       setLoading(true);
-      const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${currentUser.phoneNumber}`);
+      const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${user.phoneNumber}`);
       if (!response.ok) throw new Error(`Fetch error: ${response.statusText}`);
       const data = await response.json();
       setUserDetails(data);
@@ -653,13 +653,13 @@ const sendOTP = async (phoneNumber) => {
 
   // ✅ Fetch profile only when registered
   useEffect(() => {
-    if (currentUser && isRegistered) {
-        console.log("current user to aa hi jayegaa",currentUser)
+    if (user && isRegistered) {
+        console.log("current user to aa hi jayegaa",user)
       fetchUserDetails();
     }
 
     
-  }, [currentUser, isRegistered]);
+  }, [user, isRegistered]);
 
   
   return (
