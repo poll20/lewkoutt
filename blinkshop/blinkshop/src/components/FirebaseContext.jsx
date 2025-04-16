@@ -449,15 +449,31 @@ const initRecaptcha = () => {
   
 
   // ✅ Firebase auth state listener
-  useEffect(() => {
+//   useEffect(() => {
+//     const unsubscribe = onAuthStateChanged(auth, (user) => {
+//       console.log("🔁 Auth state changed:", user?.phoneNumber);
+//       setCurrentUser(user);
+//     });
+//     return () => unsubscribe();
+//   }, []);
+
+useEffect(() => {
+    console.log("👀 Setting up auth state listener...");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("🔁 Auth state changed:", user?.phoneNumber);
+      if (user) {
+        console.log("✅ User signed in:", user.phoneNumber);
+      } else {
+        console.log("❌ No user signed in");
+      }
       setCurrentUser(user);
     });
-    return () => unsubscribe();
-  }, []);
-
   
+    return () => {
+      console.log("🧹 Cleaning up listener...");
+      unsubscribe();
+    };
+  }, []);
+    
 const registerUser = async () => {
     try {
       const user = auth.currentUser;
