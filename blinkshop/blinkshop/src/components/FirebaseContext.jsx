@@ -599,6 +599,9 @@ const sendOTP = async (phoneNumber) => {
     }
   }, [currentUser, isRegistered]);
 
+  if(currentUser){
+    console.log("currentuser ajana ",currentUser)
+  }
   return (
     <FirebaseAuthContext.Provider
       value={{
