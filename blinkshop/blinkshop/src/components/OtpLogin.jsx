@@ -278,7 +278,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import { useUser } from "./UserContext";
 
 const OtpLogin = () => {
-  const { sendOTP, verifyOTP, loading } = useFirebaseAuth();
+  const { sendOTP, verifyOTP, loading ,initRecaptcha} = useFirebaseAuth();
   const { setUser } = useUser();
   
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -289,6 +289,11 @@ const OtpLogin = () => {
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef([]);
   const [confirmationResult, setConfirmationResult] = useState(null);
+
+
+  useEffect(() => {
+    initRecaptcha(); // from context
+  }, []);
 
   useEffect(() => {
     if (timer > 0 && !canResend) {
