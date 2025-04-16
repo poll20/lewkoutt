@@ -682,6 +682,7 @@ const sendOTP = async (phoneNumber) => {
       const response = await fetch(`${apiUrl}/user/profile?phoneNumber=${user.phoneNumber}`);
       if (!response.ok) throw new Error(`Fetch error: ${response.statusText}`);
       const data = await response.json();
+      console.log("yha milega usr ka data",data)
       setUserDetails(data);
     } catch (e) {
       setError(`Fetch error: ${e.message}`);
