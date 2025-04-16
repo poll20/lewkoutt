@@ -636,6 +636,7 @@ const sendOTP = async (phoneNumber) => {
 
   // ✅ Fetch profile from backend
   const fetchUserDetails = async () => {
+    console.log("call ho randiii")
     if (!user) return;
     try {
         console.log("mai usersss ko fetchh kr rha huuu........")
@@ -657,7 +658,9 @@ const sendOTP = async (phoneNumber) => {
         console.log("current user to aa hi jayegaa",user)
       fetchUserDetails();
     }
-
+if(userDetails){
+console.log("agyi m tooo",userDetails)    
+}
     
   }, [user, isRegistered]);
 
