@@ -876,7 +876,7 @@ export const FirebaseAuthProvider = ({ children }) => {
       setLoading(true);
       const phone = firebaseUser.phoneNumber;
       const encodedPhone = encodeURIComponent(phone);
-      const res = await fetch(`${apiUrl}/user/details?phoneNumber=${encodedPhone}`);
+      const res = await fetch(`${apiUrl}/user/profile?phoneNumber=${encodedPhone}`);
       if (!res.ok) throw new Error("User details fetch failed");
 
       const data = await res.json();
