@@ -387,27 +387,48 @@ export const FirebaseAuthProvider = ({ children }) => {
 //       });
 //     }
 //   }, []);
+// useEffect(() => {
+//     // Check if recaptchaVerifier is already initialized
+//     if (!window.recaptchaVerifier) {
+//       console.log("🔄 Initializing reCAPTCHA...");
+//       // Check if the container element exists before initializing
+//       const recaptchaContainer = document.getElementById("recaptcha-container");
+//       if (recaptchaContainer) {
+//         try {
+//           window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+//             size: "invisible",
+//             callback: () => console.log("✅ reCAPTCHA verified"),
+//           });
+//           console.log("✅ reCAPTCHA initialized successfully.");
+//         } catch (error) {
+//           console.error("❌ Error initializing reCAPTCHA:", error.message);
+//         }
+//       } else {
+//         console.error("❌ reCAPTCHA container element not found.");
+//       }
+//     } else {
+//       console.log("🔄 reCAPTCHA already initialized.");
+//     }
+//   }, []);
+  
 useEffect(() => {
-    // Check if recaptchaVerifier is already initialized
     if (!window.recaptchaVerifier) {
-      console.log("🔄 Initializing reCAPTCHA...");
-      // Check if the container element exists before initializing
-      const recaptchaContainer = document.getElementById("recaptcha-container");
-      if (recaptchaContainer) {
-        try {
-          window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-            size: "invisible",
-            callback: () => console.log("✅ reCAPTCHA verified"),
-          });
-          console.log("✅ reCAPTCHA initialized successfully.");
-        } catch (error) {
-          console.error("❌ Error initializing reCAPTCHA:", error.message);
-        }
-      } else {
-        console.error("❌ reCAPTCHA container element not found.");
-      }
-    } else {
-      console.log("🔄 reCAPTCHA already initialized.");
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        'recaptcha-container',
+        {
+          size: 'invisible',
+          callback: (response) => {
+            console.log("✅ reCAPTCHA verified");
+          },
+        },
+        auth
+      );
+  
+      // Force rendering it immediately
+      window.recaptchaVerifier.render().then((widgetId) => {
+        window.recaptchaWidgetId = widgetId;
+        console.log("🔧 reCAPTCHA widget rendered:", widgetId);
+      });
     }
   }, []);
   
@@ -487,6 +508,9 @@ const registerUser = async () => {
   const sendOTP = async (phoneNumber) => {
     setLoading(true);
     try {
+        if (!window.recaptchaVerifier) {
+            throw new Error("reCAPTCHA not initialized yet");
+          }
       const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
       setConfirmationResult(result);
