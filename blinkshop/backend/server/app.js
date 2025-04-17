@@ -390,7 +390,7 @@ app.post("/user/register", async (req, res) => {
   if (phoneNumber) {
     try {
       // Check if user already exists
-      const existingUser = await userr.findOne({ phoneNumber });
+      const existingUser = await userr.findOne({ phonenumber: phoneNumber });
       if (!existingUser) {
         const newUser = new userr({
           // name: name,
