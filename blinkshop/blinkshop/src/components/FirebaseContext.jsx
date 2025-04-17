@@ -870,7 +870,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
 
       setUserDetails(data);
       setIsRegistered(true);
-      await fetchUserDetails()
+      await fetchUserDetails(firebaseUser)
     } catch (e) {
       console.error("❌ Registration error:", e.message);
       setError(e.message);
@@ -936,7 +936,7 @@ setTimeout(() => {
 useEffect(() => {
         if (isRegistered) {
             console.log("current user to aa hi jayegaa",user,isRegistered)
-          fetchUserDetails();
+          fetchUserDetails(user);
         }
    
         
