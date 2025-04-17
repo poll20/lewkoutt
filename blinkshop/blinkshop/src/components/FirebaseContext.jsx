@@ -843,7 +843,9 @@ export const FirebaseAuthProvider = ({ children }) => {
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+    }, 300);
 
     }
   };
@@ -914,7 +916,10 @@ export const FirebaseAuthProvider = ({ children }) => {
       hasRecaptchaInitialized.current = false; // 👈 force re-init
       console.log("👋 Logged out successfully");
 
-      window.location.reload();
+setTimeout(() => {
+    window.location.reload();
+}, 300);
+      
 
     } catch (err) {
       console.error("❌ Logout failed:", err.message);
