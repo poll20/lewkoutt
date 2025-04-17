@@ -185,7 +185,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
 //  const{user,userDetails, fetchUserDetails}=useAuth()
-const{user,userDetails, fetchUserDetails}=useAuth()
+const{user,userDetails, fetchUserDetails}=useFirebaseAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
   if(userDetails ){
