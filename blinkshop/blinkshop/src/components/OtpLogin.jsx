@@ -417,7 +417,7 @@ const navigate=useNavigate()
               {otp.map((digit, index) => (
                 <input
                   key={index}
-                  type="text"
+                  type="tel"
                   maxLength="1"
                   ref={(ref) => (inputRefs.current[index] = ref)}
                   value={digit}
