@@ -157,6 +157,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useBio } from "./BioContext";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useFirebaseAuth } from "./FirebaseContext";
 
 const MapWithAutocomplete = () => {
   const [selectedAddresss, setSelectedAddresss] = useState("");
@@ -183,7 +184,8 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
- const{user,userDetails, fetchUserDetails}=useAuth()
+//  const{user,userDetails, fetchUserDetails}=useAuth()
+const{user,userDetails, fetchUserDetails}=useAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
   if(userDetails ){

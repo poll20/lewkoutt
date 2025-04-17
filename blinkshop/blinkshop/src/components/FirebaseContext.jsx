@@ -760,7 +760,7 @@ import { auth } from "./firebase";
 const FirebaseAuthContext = createContext();
 export const useFirebaseAuth = () => useContext(FirebaseAuthContext);
 
-export const FirebaseAuthProvider = ({ children }) => {
+export const FirebaseAuthProvider = ({ children,showPopup }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState({});
@@ -836,6 +836,7 @@ export const FirebaseAuthProvider = ({ children }) => {
       console.log("✅ OTP Verified:", signedInUser.phoneNumber);
 
       await registerUser(signedInUser);
+      
       return { success: true };
       
     } catch (err) {

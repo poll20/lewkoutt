@@ -242,7 +242,7 @@ export default function App() {
 
 
   return (
-    <FirebaseAuthProvider>
+    <FirebaseAuthProvider showPopup={showPopup}>
     <AuthProvider>
     <DashboardProvider>
     
