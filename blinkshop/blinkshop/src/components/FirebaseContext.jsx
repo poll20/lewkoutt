@@ -837,11 +837,14 @@ export const FirebaseAuthProvider = ({ children }) => {
 
       await registerUser(signedInUser);
       return { success: true };
+      
     } catch (err) {
       console.error("❌ OTP verification failed:", err);
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
+      window.location.reload();
+
     }
   };
 
@@ -910,6 +913,9 @@ export const FirebaseAuthProvider = ({ children }) => {
   
       hasRecaptchaInitialized.current = false; // 👈 force re-init
       console.log("👋 Logged out successfully");
+
+      window.location.reload();
+
     } catch (err) {
       console.error("❌ Logout failed:", err.message);
     }
