@@ -293,12 +293,7 @@ const OtpLogin = () => {
   const [confirmationResult, setConfirmationResult] = useState(null);
 
 const navigate=useNavigate()
-useEffect(() => {
-    // DOM ready and component mounted
-    if (document.getElementById("recaptcha-container")) {
-      initRecaptcha(); // ✅ Call from context
-    }
-  }, []);
+
 
   useEffect(() => {
     if (timer > 0 && !canResend) {
@@ -369,6 +364,13 @@ useEffect(() => {
     setOtp(new Array(6).fill("")); 
     setError("");
   };
+
+  useEffect(() => {
+    // DOM ready and component mounted
+    if (document.getElementById("recaptcha-container")) {
+      initRecaptcha(); // ✅ Call from context
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
