@@ -879,6 +879,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
 
   // ✅ Fetch user details (like profile info)
   const fetchUserDetails = async (firebaseUser) => {
+    console.log("phonumber ke liye hai ye huh",firebaseUser)
     try {
       setLoading(true);
       const phone = firebaseUser.phoneNumber;
