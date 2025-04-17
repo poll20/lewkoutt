@@ -410,7 +410,7 @@ app.post("/user/register", async (req, res) => {
       res.status(500).json({ message: e.message });
     }
   } else {
-    console.error("Error saving user:", e); // 👈 Error ko log karo
+    console.error("Error saving user:"); // 👈 Error ko log karo
 
     res.status(400).json({ message: "Email is required" });
   }
