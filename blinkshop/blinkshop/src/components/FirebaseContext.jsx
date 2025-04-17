@@ -897,10 +897,25 @@ export const FirebaseAuthProvider = ({ children }) => {
       setUser(null);
       setUserDetails({});
       setIsRegistered(false);
+      // Clear recaptcha
+    if (window.recaptchaVerifier) {
+        try {
+          window.recaptchaVerifier.clear();
+        } catch (err) {
+          console.warn("⚠️ Error clearing recaptcha:", err.message);
+        }
+        window.recaptchaVerifier = null;
+      }
+  
+      hasRecaptchaInitialized.current = false; // 👈 force re-init
       console.log("👋 Logged out successfully");
     } catch (err) {
       console.error("❌ Logout failed:", err.message);
     }
+      console.log("👋 Logged out successfully");
+    // } catch (err) {
+    //   console.error("❌ Logout failed:", err.message);
+    // }
   };
 
   return (

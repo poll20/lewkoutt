@@ -293,8 +293,11 @@ const OtpLogin = () => {
   const [confirmationResult, setConfirmationResult] = useState(null);
 
 const navigate=useNavigate()
-  useEffect(() => {
-    initRecaptcha(); // from context
+useEffect(() => {
+    // DOM ready and component mounted
+    if (document.getElementById("recaptcha-container")) {
+      initRecaptcha(); // ✅ Call from context
+    }
   }, []);
 
   useEffect(() => {
