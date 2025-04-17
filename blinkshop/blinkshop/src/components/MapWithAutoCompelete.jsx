@@ -181,6 +181,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
    const [chooseaddress,setchooseaddress]=useState([])
    const[showaddresspanel,setshowadresspanel]=useState("")
    const [isAddressPanelOpen, setIsAddressPanelOpen] = useState(false);
+   const[fireuser,setfireuser]=useState([])
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -188,11 +189,12 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const{user,userDetails, fetchUserDetails}=useFirebaseAuth()
 const [userprf,setuserprf]=useState({ address: [] })
  useEffect(()=>{
-  if(userDetails ){
+  if(userDetails && user ){
     console.log("uer",userDetails)
     setuserprf(userDetails)
+    setfireuser(user)
   }
- },[userDetails])
+ },[userDetails,user])
 
 
 
@@ -224,7 +226,7 @@ const saveAddress =async  (panel) => {
   if(newAddress){
     console.log("adddfrr",newAddress)
   await handlenewaddress(newAddress,userDetails)
-   await fetchUserDetails(); // ✅ Fetch latest user details
+   await fetchUserDetails(fireuser); // ✅ Fetch latest user details
    
     setTimeout(() => {
         navigate("/address")

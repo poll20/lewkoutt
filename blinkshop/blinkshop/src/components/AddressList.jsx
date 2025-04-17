@@ -22,6 +22,7 @@ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
    const [chooseaddress,setchooseaddress]=useState([])
    const[showaddresspanel,setshowadresspanel]=useState("")
    const [isAddressPanelOpen, setIsAddressPanelOpen] = useState(false);
+   const[fireuser,setfireuser]=useState([])
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -35,6 +36,7 @@ const [editedAddress, setEditedAddress] = useState({}); // Temp store for editin
   if(userDetails && user){
     console.log("uer",userDetails)
     setuserprf(userDetails)
+    setfireuser(user)
   }
  },[userDetails,user])
 
@@ -64,7 +66,7 @@ const saveAddress =async (panel) => {
     isDefault,
   }
   if(panel=="addaddress")
-  {
+  { 
   if(newAddress && user){
     console.log("adddfrr",newAddress)
   await handlenewaddress(newAddress,userDetails)
@@ -76,7 +78,7 @@ else if(panel=="edit"){
   if(newAddress){
     console.log("lop",actionss,panel)
    await deleteandeditaddrress(actionss,panel,userDetails,newAddress)
-  await  fetchUserDetails()
+  await  fetchUserDetails(fireuser)
     setshowadresspanel("")
     return
   }
@@ -116,7 +118,7 @@ const getUserLocation = () => {
 const deleteoreditaddress=async(addressid,action,addr)=>{
 
  await deleteandeditaddrress(addressid,action,userDetails,addr)
- await  fetchUserDetails()
+ await  fetchUserDetails(fireuser)
 }
 
 
