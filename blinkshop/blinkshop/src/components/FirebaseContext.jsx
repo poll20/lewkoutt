@@ -864,6 +864,7 @@ export const FirebaseAuthProvider = ({ children }) => {
 
       setUserDetails(data);
       setIsRegistered(true);
+      await fetchUserDetails()
     } catch (e) {
       console.error("❌ Registration error:", e.message);
       setError(e.message);
