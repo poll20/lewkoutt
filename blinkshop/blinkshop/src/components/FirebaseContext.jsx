@@ -887,6 +887,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       if (!res.ok) throw new Error("User details fetch failed");
 
       const data = await res.json();
+      console.log("dat mil afirbasekeauth se",data)
       setUserDetails(data);
       setIsRegistered(true);
     } catch (err) {
@@ -930,7 +931,17 @@ setTimeout(() => {
     //   console.error("❌ Logout failed:", err.message);
     // }
   };
-
+// //   ✅ Fetch profile only when registered
+useEffect(() => {
+        if (isRegistered) {
+            console.log("current user to aa hi jayegaa",user,isRegistered)
+          fetchUserDetails();
+        }
+   
+        
+      }, [isRegistered]);
+    
+      
   return (
     <FirebaseAuthContext.Provider
       value={{
