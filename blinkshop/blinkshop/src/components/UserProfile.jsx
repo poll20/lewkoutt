@@ -252,7 +252,7 @@ let navigate=useNavigate()
       </div>
       <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
-         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logout();setTimeout(()=>{navigate("/loginn")},400)}}>Logout</button> 
+         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logout();setTimeout(()=>{navigate("/loginn")},200)}}>Logout</button> 
         {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}></button> */}
        </div>
     </div>
