@@ -54,9 +54,9 @@ const ReferAndEarn = () => {
   return (
     <div
       style={{
-        border:"1px solid red",
+        // border:"1px solid red",
         marginTop:"10px",
-        marginBottom:"60px",
+        marginBottom:"30px",
         backgroundColor: 'black',
         color: 'white',
         minHeight: '100vh',
@@ -205,7 +205,7 @@ const ReferAndEarn = () => {
         📱 WhatsApp
       </NavLink>
        {/* Instagram */}
-       <NavLink
+       {/* <NavLink
         to={`https://wa.me/?text=Hey! Use my referral code *${referralCode}* to get ₹500 off your first order! 🎉🔥`}
         target="_blank"
         rel="noopener noreferrer"
@@ -223,7 +223,29 @@ const ReferAndEarn = () => {
       >
                📸 Instagram
 
-      </NavLink>
+      </NavLink> */}
+      <NavLink
+  onClick={() => {
+    navigator.clipboard.writeText(
+      `Use my referral code ${referralCode} to get ₹500 off your first order! 🔥`
+    );
+    window.open("https://www.instagram.com/direct/inbox/", "_blank");
+    alert("Message copied! Paste it in Instagram DMs or Story.");
+  }}
+  style={{
+    display: 'block',
+    color: 'white',
+    padding: '10px',
+    borderRadius: '8px',
+    backgroundColor: '#E1306C',
+    marginBottom: '10px',
+    textAlign: 'center',
+    textDecoration: 'none',
+    fontWeight: '600',
+  }}
+>
+  📸 Instagram
+</NavLink>
        
         {/* <button className="buy-buttonss" style={{width:"140px"}} >Wishlist</button> */}
        </div>
