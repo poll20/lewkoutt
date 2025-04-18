@@ -241,7 +241,7 @@ setapplybtndisplay(false)
             
                 <div className="myfilter-name">
                     <h2 style={{color:"green",fontWeight:"bold"}} >Filter</h2>
-                    <div className="filter-list">
+                    <div className="filter-list"style={{display:"flex",alignItems:"start",justifyContent:"space-around"}}>
                         <div className={`filter-item ${selectedFilter === 'pricerange' ? 'active' : ''}`} onClick={() => handleFilterClick('pricerange')}>price range{filters.pricerangemax<3000||filters.pricerangemin>300?("*"):("")}</div>
                         <div  className={`filter-item ${selectedFilter === 'sizes' ? 'active' : ''}`}onClick={() => handleFilterClick('sizes')}>sizes{filters.sizes.length>0?(" *"):("")}</div>
                         <div className={`filter-item ${selectedFilter === 'colors' ? 'active' : ''}`} onClick={() => handleFilterClick('colors')}>colors{filters.color.length>0?(" *"):("")}</div>
