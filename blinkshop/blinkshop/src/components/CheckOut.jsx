@@ -9,6 +9,11 @@ import { useAuth } from "./AuthContext";
 
 import TimeSlots from "./TimeSlots"
 import { useFirebaseAuth } from "./FirebaseContext";
+// import phonepay from "./image/phonepay"
+import paytm from "./image/paytm.png"
+import phonepay from "./image/phonepay.png"
+import gpay from "./image/gpay.webp"
+import upi from "./image/upi.jpeg"
 const Checkout = () => {
 
 
@@ -139,6 +144,155 @@ const handleSelect = (option) => {
   }
   setMywalletDropdownOpen(false); // Select karte hi dropdown band ho jayega
 };
+
+
+const paymentContainer = {
+  background: '#fff',
+  padding: '16px',
+  fontFamily: 'sans-serif',
+  maxWidth: '480px',
+  margin: 'auto',
+  borderRadius: '10px',
+};
+
+const sectionTitle = {
+  fontWeight: 'bold',
+  fontSize: '18px',
+  marginBottom: '8px',
+};
+
+const discountNote = {
+  color: 'purple',
+  fontSize: '14px',
+  marginBottom: '16px',
+};
+
+const upiBox = {
+  border: '1px solid #ddd',
+  borderRadius: '12px',
+  padding: '16px',
+  marginBottom: '16px',
+  position: 'relative',
+};
+
+const badge = {
+  position: 'absolute',
+  top: '-10px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  backgroundColor: '#00c389',
+  color: 'white',
+  fontSize: '12px',
+  padding: '2px 10px',
+  borderRadius: '12px',
+};
+
+const upiIcons = {
+  display: 'flex',
+  justifyContent: 'space-around',
+  marginTop: '12px',
+  marginBottom: '12px',
+};
+
+const phnupiIcon = {
+  
+  width: '50px',
+  height: '50px',
+  borderRadius: '12px',
+  backgroundColor: '#f3e9fb',
+  padding: '6px',
+};
+const gpayupiIcon = {
+  
+  width: '50px',
+  height: '50px',
+  borderRadius: '12px',
+  backgroundColor: '#fdecec',
+  padding: '6px',
+};
+const paytmupiIcon = {
+  
+  width: '50px',
+  height: '50px',
+  borderRadius: '12px',
+  backgroundColor: '#e8f3fd',
+  padding: '6px',
+};
+const anyupiIcon = {
+  
+  width: '50px',
+  height: '50px',
+  borderRadius: '12px',
+  backgroundColor: '#e8f8f3',
+  padding: '6px',
+};
+
+const payBox = {
+  display: 'flex',
+  gap: '8px',
+  marginTop: '12px',
+};
+
+const input = {
+  flex: 1,
+  padding: '8px 12px',
+  borderRadius: '8px',
+  border: '1px solid #ccc',
+};
+
+const payBtn = {
+  backgroundColor: 'black',
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  padding: '8px 16px',
+  cursor: 'pointer',
+};
+
+const method = {
+  position: 'relative',
+  backgroundColor: 'black',
+  color: 'white',
+  padding: '16px',
+  marginBottom: '12px',
+  borderRadius: '12px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  fontSize: '16px',
+};
+
+const discountBadge = {
+  position: 'absolute',
+  top: '-10px',
+  left: '90px',
+  backgroundColor: '#00c389',
+  color: 'white',
+  fontSize: '12px',
+  padding: '2px 10px',
+  borderRadius: '12px',
+  zIndex: 1,
+
+};
+
+const codBadge = {
+  position: 'absolute',
+  top: '-10px',
+  left: '90px',
+  backgroundColor: '#e53935',
+  color: 'white',
+  fontSize: '12px',
+  padding: '2px 10px',
+  borderRadius: '12px',
+  zIndex: 1,
+
+};
+
+const icon = {
+  marginRight: '8px',
+};
+
+
   return (
     <div className="checkout-container-checkoutbuy">
       <h2 className="checkout-title-checkoutbuy">Checkout</h2>
@@ -166,7 +320,7 @@ const handleSelect = (option) => {
       </div>
 
       {/* Payment Options */}
-      <div className="payment-options-checkoutbuy">
+      {/* <div className="payment-options-checkoutbuy">
         <h3>Payment Options</h3>
         <div className="payment-methods-checkoutbuy">
           <label className="payment-option-checkoutbuy">
@@ -214,8 +368,66 @@ const handleSelect = (option) => {
             <p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice +30):(totalDiscountPrice + 30)}.0</p>
           </label>
         </div>
+      </div> */}
+<div style={paymentContainer}>
+      <div style={sectionTitle}>Payment Options</div>
+      <div style={discountNote}>Additional 5% discount upto 20 on Prepaid Orders</div>
+
+      {/* UPI Section */}
+      <div style={upiBox}>
+        <div style={badge}>Get 5% discount</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ fontWeight: 'bold' }}>UPI</div>
+          <div style={{ fontWeight: 'bold' }}><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p> </div>
+        </div>
+
+        <div style={upiIcons} >
+          <img style={phnupiIcon} src={phonepay} alt="PhonePe"/>
+          <img style={gpayupiIcon} src={gpay} alt="GPay" />
+          <img style={paytmupiIcon} src={paytm} alt="Paytm" />
+          <img style={anyupiIcon} src={upi} alt="Paytm" />
+          {/* <img style={upiIcon} src= alt="Any UPI" /> */}
+        </div>
+
+        <div style={payBox}>
+          <input style={input} type="text" placeholder="Enter your UPI ID" />
+          <button style={payBtn}>Pay</button>
+        </div>
       </div>
 
+      {/* Other Methods */}
+      <div style={{ position: 'relative' }}>
+        <div style={discountBadge}>Get 5% discount</div>
+        <div style={method}>
+          <span>💳 Pay via Card</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative' }}>
+        <div style={discountBadge}>Get 5% discount</div>
+        <div style={method}>
+          <span>👛 Pay via Wallets</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative' }}>
+        <div style={discountBadge}>Get 5% discount</div>
+        <div style={method}>
+          <span>🏦 Pay via Netbanking</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative' }}>
+        <div style={codBadge}>₹59 COD fee added</div>
+        <div style={method}>
+          <span>💵 Cash on Delivery</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+        </div>
+      </div>
+    </div>
       {/* Order Details */}
       <div className="order-details-checkoutbuy">
         <h3>Order Details</h3>
