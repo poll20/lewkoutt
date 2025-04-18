@@ -178,6 +178,17 @@ let navigate=useNavigate()
     setPopup(false);
     // setPopupProductId(null);
   };
+  let logouttheuser=async()=>{
+    
+        const { success, user, error } = await logout();
+        if (success) {
+        setTimeout(() => {
+            navigate("/loginn")
+        }, 200);
+        } else {
+        setError(error || "failed logout");
+        }
+  }
   return (
     <div className="profile-container">
       <h2>{userprf.name}</h2>
@@ -252,7 +263,7 @@ let navigate=useNavigate()
       </div>
       <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
-         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logout();setTimeout(()=>{navigate("/loginn")},200)}}>Logout</button> 
+         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logouttheuser()}}>Logout</button> 
         {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}></button> */}
        </div>
     </div>

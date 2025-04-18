@@ -899,15 +899,49 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
     }
   };
 
-  // ✅ Logout
-  const logout = async () => {
+//   // ✅ Logout
+//   const logout = async () => {
+//     try {
+//       await signOut(auth);
+//       setUser(null);
+//       setUserDetails({});
+//       setIsRegistered(false);
+//       // Clear recaptcha
+//     if (window.recaptchaVerifier) {
+//         try {
+//           window.recaptchaVerifier.clear();
+//         } catch (err) {
+//           console.warn("⚠️ Error clearing recaptcha:", err.message);
+//         }
+//         window.recaptchaVerifier = null;
+//       }
+  
+//       hasRecaptchaInitialized.current = false; // 👈 force re-init
+//       console.log("👋 Logged out successfully");
+
+// setTimeout(() => {
+//     window.location.reload();
+// }, 300);
+      
+
+//     } catch (err) {
+//       console.error("❌ Logout failed:", err.message);
+//     }
+//       console.log("👋 Logged out successfully");
+//     // } catch (err) {
+//     //   console.error("❌ Logout failed:", err.message);
+//     // }
+//   };
+// ✅ Logout
+const logout = async () => {
     try {
       await signOut(auth);
       setUser(null);
       setUserDetails({});
       setIsRegistered(false);
+  
       // Clear recaptcha
-    if (window.recaptchaVerifier) {
+      if (window.recaptchaVerifier) {
         try {
           window.recaptchaVerifier.clear();
         } catch (err) {
@@ -918,20 +952,19 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   
       hasRecaptchaInitialized.current = false; // 👈 force re-init
       console.log("👋 Logged out successfully");
-
-setTimeout(() => {
-    window.location.reload();
-}, 300);
-      
-
+  
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+  
+      return { success: true };
+  
     } catch (err) {
       console.error("❌ Logout failed:", err.message);
+      return { success: false, error: err.message };
     }
-      console.log("👋 Logged out successfully");
-    // } catch (err) {
-    //   console.error("❌ Logout failed:", err.message);
-    // }
   };
+  
 // //   ✅ Fetch profile only when registered
 useEffect(() => {
         if (isRegistered) {
