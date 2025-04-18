@@ -279,6 +279,7 @@ function Layout({ showPopup }) {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
+  const isref = location.pathname.startsWith("/refferal");
   
   return (
     <>
@@ -352,7 +353,7 @@ function Layout({ showPopup }) {
      
       
 
-      {!isAdminRoute && !isabout  && <Footer />}
+      {!isAdminRoute && !isabout && !isref  && <Footer />}
     </>
   );
 }

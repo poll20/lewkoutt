@@ -332,7 +332,7 @@ setapplybtndisplay(false)
                         </div>
                     ) : ("")}
 
-                       {selectedFilter === "occasion" ? (
+                       {/* {selectedFilter === "occasion" ? (
                         <div className="filter-value occasionss">
                             <div className="color-options">
                                 {['Casual', 'Party', 'Lounge', 'Outgoing', 'Formal'].map((occasion) => (
@@ -348,9 +348,9 @@ setapplybtndisplay(false)
                                 ))}
                             </div>
                         </div>
-                    ) : ("")}
+                    ) : ("")} */}
 
-{selectedFilter === "nakeline" ? (
+{/* {selectedFilter === "nakeline" ? (
                         <div className="filter-value occasionss">
                             <div className="color-options">
                                 {['Round Neck', 'V Neck', 'Crew Neck', 'Square Neck', 'Tube Neck','Halter Neck'].map((occasion) => (
@@ -366,10 +366,10 @@ setapplybtndisplay(false)
                                 ))}
                             </div>
                         </div>
-                    ) : ("")}
+                    ) : ("")} */}
 
 
-{selectedFilter === "clothing material" ? (
+{/* {selectedFilter === "clothing material" ? (
                         <div className="filter-value occasionss">
                             <div className="color-options">
                                 {['Polyester Blend', 'Acrylic', 'Polyester', 'Cotton'].map((occasion) => (
@@ -385,10 +385,10 @@ setapplybtndisplay(false)
                                 ))}
                             </div>
                         </div>
-                    ) : ("")}
+                    ) : ("")} */}
 
 
-{selectedFilter === "print type" ? (
+{/* {selectedFilter === "print type" ? (
                         <div className="filter-value occasionss">
                             <div className="color-options">
                                 {['Solid', 'Floral', 'Graphic', 'Printed', 'Abstract'].map((occasion) => (
@@ -404,10 +404,10 @@ setapplybtndisplay(false)
                                 ))}
                             </div>
                         </div>
-                    ) : ("")}
+                    ) : ("")} */}
 
 
-{selectedFilter === "style type" ? (
+{/* {selectedFilter === "style type" ? (
                         <div className="filter-value occasionss">
                             <div className="color-options">
                                 {['Fitted', 'Regular', 'Bodycon', 'Oversized', 'Regular Fit'].map((occasion) => (
@@ -423,7 +423,7 @@ setapplybtndisplay(false)
                                 ))}
                             </div>
                         </div>
-                    ) : ("")}
+                    ) : ("")} */}
 
 
 {selectedFilter === "discount" ? (
