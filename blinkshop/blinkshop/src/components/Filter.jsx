@@ -246,11 +246,11 @@ setapplybtndisplay(false)
                         <div  className={`filter-item ${selectedFilter === 'sizes' ? 'active' : ''}`}onClick={() => handleFilterClick('sizes')}>sizes{filters.sizes.length>0?(" *"):("")}</div>
                         <div className={`filter-item ${selectedFilter === 'colors' ? 'active' : ''}`} onClick={() => handleFilterClick('colors')}>colors{filters.color.length>0?(" *"):("")}</div>
                         <div className={`filter-item ${selectedFilter === 'category' ? 'active' : ''}`} onClick={() => handleFilterClick('category')}>category{filters.categories.length>0?(" *"):("")}</div>
-                        <div className={`filter-item ${selectedFilter === 'occasion' ? 'active' : ''}`} onClick={() => handleFilterClick('occasion')}>Occasion{filters.occasion.length>0?(" *"):("")}</div>
-                        <div className={`filter-item ${selectedFilter === 'nakeline' ? 'active' : ''}`} onClick={() => handleFilterClick('nakeline')}>Neckline{filters.nackline.length>0?(" *"):("")}</div>
-                        <div className={`filter-item ${selectedFilter === 'clothing material' ? 'active' : ''}`} onClick={() => handleFilterClick('clothing material')}>Material{filters.clothingmaterial.length>0?(" *"):("")}</div>
-                        <div className={`filter-item ${selectedFilter === 'print type' ? 'active' : ''}`} onClick={() => handleFilterClick('print type')}>Print Type{filters.printtype.length>0?(" *"):("")}</div>
-                        <div className={`filter-item ${selectedFilter === 'style type' ? 'active' : ''}`}onClick={() => handleFilterClick('style type')}>Style Type{filters.styletype.length>0?(" *"):("")}</div>
+                        {/* <div className={`filter-item ${selectedFilter === 'occasion' ? 'active' : ''}`} onClick={() => handleFilterClick('occasion')}>Occasion{filters.occasion.length>0?(" *"):("")}</div> */}
+                        {/* <div className={`filter-item ${selectedFilter === 'nakeline' ? 'active' : ''}`} onClick={() => handleFilterClick('nakeline')}>Neckline{filters.nackline.length>0?(" *"):("")}</div> */}
+                        {/* <div className={`filter-item ${selectedFilter === 'clothing material' ? 'active' : ''}`} onClick={() => handleFilterClick('clothing material')}>Material{filters.clothingmaterial.length>0?(" *"):("")}</div> */}
+                        {/* <div className={`filter-item ${selectedFilter === 'print type' ? 'active' : ''}`} onClick={() => handleFilterClick('print type')}>Print Type{filters.printtype.length>0?(" *"):("")}</div> */}
+                        {/* <div className={`filter-item ${selectedFilter === 'style type' ? 'active' : ''}`}onClick={() => handleFilterClick('style type')}>Style Type{filters.styletype.length>0?(" *"):("")}</div> */}
                         <div className={`filter-item ${selectedFilter === 'discount' ? 'active' : ''}`} onClick={() => handleFilterClick('discount')}>Discount{filters.discount.length>0?(" *"):("")}</div>
                         
                         
