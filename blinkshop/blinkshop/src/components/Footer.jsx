@@ -112,11 +112,11 @@ let distinctcat=[... new Set(data)]
           <h2 className="font-semibold mb-2"style={{color:"white",textAlign:"center",paddingRight:"30px"}}>Quick Links</h2>
           <ul className="space-y-1" style={{listStyle:"none",display:"flex",flexDirection:"column",textAlign:"start"}}>
             <li><NavLink to='/' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Home</NavLink></li>
-            <li><NavLink to='/shop' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Shop</NavLink></li>
-            <li><NavLink to='about' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>About Us</NavLink></li>
-            <li><NavLink to='/f&q' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Contact</NavLink></li>
-            <li><NavLink to='' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Privacy Policy</NavLink></li>
-            <li><NavLink to='' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Terms & Conditions</NavLink></li>
+            <li><NavLink to='/store/store' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Shop</NavLink></li>
+            <li><NavLink to='aboutus' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>About Us</NavLink></li>
+            <li><NavLink to='/faq' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Contact</NavLink></li>
+            <li><NavLink to='/faq' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Privacy Policy</NavLink></li>
+            <li><NavLink to='/faq' className="hover:underline navlink" style={{textDecoration:"none",color:"white"}}>Terms & Conditions</NavLink></li>
           </ul>
         </div>
 
