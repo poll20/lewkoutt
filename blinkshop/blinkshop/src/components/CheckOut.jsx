@@ -400,7 +400,7 @@ const icon = {
         <div style={discountBadge}>Get 5% discount</div>
         <div style={method}>
           <span>💳 Pay via Card</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
 
@@ -408,7 +408,7 @@ const icon = {
         <div style={discountBadge}>Get 5% discount</div>
         <div style={method}>
           <span>👛 Pay via Wallets</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
 
@@ -416,7 +416,7 @@ const icon = {
         <div style={discountBadge}>Get 5% discount</div>
         <div style={method}>
           <span>🏦 Pay via Netbanking</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
 
@@ -424,7 +424,7 @@ const icon = {
         <div style={codBadge}>₹59 COD fee added</div>
         <div style={method}>
           <span>💵 Cash on Delivery</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p>›</span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
     </div>
