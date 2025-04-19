@@ -158,7 +158,7 @@ import { useBio } from "./BioContext";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
-
+import "./mapaddress.css"
 const MapWithAutocomplete = () => {
   const [selectedAddresss, setSelectedAddresss] = useState("");
 //   const [phone, setPhone] = useState("");
@@ -423,6 +423,19 @@ useEffect(() => {
     loadGoogleMaps();
   }, []);
 
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const isFieldEmpty = (fieldValue) => fieldValue.trim() === '';
+  const isFormValid =
+    !isFieldEmpty(pincode) &&
+    !isFieldEmpty(phone) &&
+    !isFieldEmpty(building) &&
+    !isFieldEmpty(locality) &&
+    (!otpSent || (otpSent && !isFieldEmpty(otp)));
+
   return (
     <div style={{ padding: "10px", fontFamily: "sans-serif" }}>
       <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
@@ -500,13 +513,12 @@ useEffect(() => {
               >
                 Add Address
               </button> */}
-               <div className="address-containerrr">
-      {/* <h2 className="address-title">Add Your Address</h2> */}
+               {/* <div className="address-containerrr">
+     
 
       <div className="address-form">
         <h3 className="section-title">Address Information</h3>
 
-        {/* <button className="use-location" onClick={getUserLocation}>{location?(location):('use my location')}</button> */}
 
         <input
           type="text"
@@ -566,6 +578,97 @@ useEffect(() => {
         </div>
 
         <button className="save-address" onClick={()=>{saveAddress("addaddress")}}>Save my address</button>
+      </div>
+    </div> */}
+    <div className="address-containerrr">
+      <div className="address-form">
+        <h3 className="section-title">Address Information</h3>
+
+        <input
+          type="text"
+          placeholder="Pincode*"
+          value={pincode}
+          onChange={(e) => setPincode(e.target.value)}
+          onBlur={() => handleBlur('pincode')}
+        />
+        {touched.pincode && isFieldEmpty(pincode) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
+
+        <input
+          type="text"
+          placeholder="Phone no.*"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          onBlur={() => handleBlur('phone')}
+        />
+        {touched.phone && isFieldEmpty(phone) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
+
+        <input
+          type="text"
+          placeholder="Flat no / building name*"
+          value={building}
+          onChange={(e) => setBuilding(e.target.value)}
+          onBlur={() => handleBlur('building')}
+        />
+        {touched.building && isFieldEmpty(building) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
+
+        <input
+          type="text"
+          placeholder="Locality / Area / Street*"
+          value={locality}
+          onChange={(e) => setLocality(e.target.value)}
+          onBlur={() => handleBlur('locality')}
+        />
+        {touched.locality && isFieldEmpty(locality) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
+
+        {otpSent && (
+          <>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              onBlur={() => handleBlur('otp')}
+            />
+            {touched.otp && isFieldEmpty(otp) && (
+              <p className="text-red-600 text-sm mt-1">This field is required</p>
+            )}
+          </>
+        )}
+
+        <div className="city-state">
+          <input type="text" value="Jaipur" readOnly />
+          <input type="text" value="Rajasthan" readOnly />
+        </div>
+
+        <div className="default-address">
+          <span>⭐ Set as Default Address</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={isDefault}
+              onChange={() => setIsDefault(!isDefault)}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
+
+        <button
+          className={`save-address ${
+            !isFormValid ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          onClick={() => saveAddress('addaddress')}
+          disabled={!isFormValid}
+        >
+          Save my address
+        </button>
       </div>
     </div>
             </>

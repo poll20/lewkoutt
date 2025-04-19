@@ -177,6 +177,29 @@
 //   );
 // }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState } from 'react';
 import { useBio } from './BioContext';
 
@@ -280,9 +303,11 @@ export default function DeliveryTimeSlot() {
         return (
           <label
             key={index}
-            className={`flex items-center mb-2 cursor-pointer ${
-              disabled ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`flex items-center mb-2 cursor-pointer p-2 rounded ${
+                disabled
+                  ? 'opacity-50 cursor-not-allowed border-l-4 border-red-600'
+                  : 'hover:bg-gray-100'
+              }`}
           >
             <input
               type="radio"
