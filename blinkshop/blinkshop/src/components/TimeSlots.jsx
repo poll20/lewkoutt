@@ -424,7 +424,7 @@ export default function DeliveryTimeSlot() {
       setSelectedDate(e.target.value);
       setSelectedSlot(null); // Reset previous selection
     } else {
-      alert("You can only select tomorrow's date.");
+      alert("You can only book for tomorrow—4 days later, even trends move on!");
       setSelectedDate(null);
     }
   };

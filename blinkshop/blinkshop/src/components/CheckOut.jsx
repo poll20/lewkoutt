@@ -298,18 +298,22 @@ const icon = {
       <h2 className="checkout-title-checkoutbuy">Checkout</h2>
 
       {/* Address Section */}
+      <NavLink to='/address' className="navlink">
       <div className="address-section-checkoutbuy">
       <p>
   {deleveryaddress.length > 0
     ? `${deleveryaddress[0].building}/${deleveryaddress[0].locality}, ${deleveryaddress[0].city}`
     : "No address available"}
+    <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward>
 </p>
+
       </div>
+      </NavLink>
 
       {/* Review Item Section */}
       <div className="review-item-section-checkoutbuy">
         <p onClick={()=>{setShowSheet(true)}}>Review item</p>
-        <IoIosArrowForward></IoIosArrowForward>
+        <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward>
         {/* <p>₹1,899</p> */}
       </div>
 
@@ -515,10 +519,11 @@ const icon = {
             className="product-image-sheet"
           />
           <div className="item-details">
+            <span className="item-price">₹{e.discountprice}</span>
             <h4>{e.description}</h4>
             <p>Size: {e.size} &nbsp;&nbsp; Qty: {e.qty}</p>
             <p className="delivery-info">
-              Deliver by <span className="delivery-date">16 Feb - 17 Feb</span>
+              Deliver by <span className="delivery-date">60 minute delivery</span>
             </p>
           </div>
         </div>
