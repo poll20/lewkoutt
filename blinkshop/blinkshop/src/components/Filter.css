@@ -59,6 +59,7 @@ justify-content: space-between;
   width: 15px;
   height: 15px;
   border-radius: 50%;
+  /* border: 1px solid gray; */
 }
 .occasion-btn{
     width: 15px;

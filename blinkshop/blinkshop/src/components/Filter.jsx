@@ -294,7 +294,7 @@ setapplybtndisplay(false)
                             <div className="color-options">
                                 {['red', 'blue', 'green', 'black', 'pink', 'gray', 'white', 'purple'].map((color) => (
                                     <div key={color} style={{ width: "100%", display: "flex", justifyContent: "space-between", padding: '10px' }}>
-                                        <button style={{ backgroundColor: color.toLowerCase(), borderRadius: "50%", border:"none" }} className='color-btn'></button>
+                                        <button style={{ backgroundColor: color.toLowerCase(), borderRadius: "50%", border:color=='white'?("1px solid black"):("none") }} className='color-btn'></button>
                                         <input
                                             type='checkbox'
                                             className={`color-btn ${filters.color.includes(color) ? 'active' : ''}`}
