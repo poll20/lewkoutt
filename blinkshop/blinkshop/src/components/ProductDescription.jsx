@@ -212,7 +212,7 @@ const cartRef = useRef();
   if(user)
   {
  if (selectedSize.length==0) {
-  prop.showPopup("plzz selete a size")
+  prop.showPopup("Please Selete a Size")
       return;
     }
    try {
@@ -434,7 +434,7 @@ console.log("kop",data,siz,qtys)
 navigate("/address")
     }
     else{
-      alert("select size")
+      prop.showPopup("Please Selete a Size")
     }
   }
   else{

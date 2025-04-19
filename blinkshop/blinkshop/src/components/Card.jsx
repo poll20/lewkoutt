@@ -115,7 +115,7 @@ const Card = (props) => {
       if (option === "") {
         removeSortFilter(); // Handle case where sort is cleared
       } else {
-        setSelectedSortOption(option);
+        setSelectedSortOption("*");
         const filteredData = applyFilters(products); // Apply sorting
         setProducts(filteredData);
       }
@@ -501,7 +501,7 @@ if(searchvalue){
             
               {selectedSortOption ? (
                 <div className="selected-filter">
-                  {selectedSortOption}{" "}
+                  {"Sort By"}<span style={{color:"red",fontWeight:"bolder"}}>{selectedSortOption}</span>
                   <span
                     className="remove-filter"
                     onClick={(e) => {
@@ -523,7 +523,7 @@ if(searchvalue){
                 .flatMap(([category, sizes]) =>
                   sizes.map((size) => (
                     <span className="selected-filter" key={`${category}-${size}`}>
-                      {category}: {size}{" "}
+                      {"Size"}<span style={{color:"red",fontWeight:"bolder"}}>*</span>
                       <span
                         className="remove-filter"
                         onClick={(e) => {
@@ -544,7 +544,7 @@ if(searchvalue){
               {!Object.values(selectedSizes).flat().length &&   <span>Size <IoIosArrowDown/></span>}
             </div>
             <div className="filter-btn">
-            <NavLink className='navlink' to={`/filter`}><span>Filter</span> <IoIosArrowDown /></NavLink> 
+            <NavLink className='navlink' to={`/filter`}><span>{filters.pricerangemax!=3000 || filters.pricerangemin!=300 || filters.sizes.length!=0 || filters.color.length!=0 || filters.categories.length!=0  ?( <span style={{color:"red",fontWeight:"bolder"}}><span style={{color:"black",fontWeight:"normal"}}>Filter</span> *</span>):(<span>Filter</span>)}</span> <IoIosArrowDown /></NavLink> 
             </div>
             
           </div>
