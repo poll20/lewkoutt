@@ -513,12 +513,14 @@ useEffect(() => {
           placeholder="Pincode*"
           value={pincode}
           onChange={(e) => setPincode(e.target.value)}
+          required
         />
          <input
           type="text"
           placeholder="Phone no.*"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          required
         />
 
         <input
@@ -526,12 +528,14 @@ useEffect(() => {
           placeholder="Flat no / building name*"
           value={building}
           onChange={(e) => setBuilding(e.target.value)}
+          required
         />
         <input
           type="text"
           placeholder="Locality / Area / Street*"
           value={locality}
           onChange={(e) => setLocality(e.target.value)}
+          required
         />
         {otpSent && (
   <input
@@ -539,6 +543,7 @@ useEffect(() => {
     placeholder="Enter OTP"
     value={otp}
     onChange={(e) => setOtp(e.target.value)}
+    required
   />
 )}
         
