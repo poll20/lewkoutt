@@ -7,7 +7,8 @@ const jwt = require("jsonwebtoken");
 // const socketIo = require("socket.io"); // ✅ Import Socket.io
 const EventEmitter = require('events');
 const orderEvent = new EventEmitter();
-
+const verifyFirebaseToken = require("../authMiddleware");
+const isAdmin = require("./adminCheck");
 
 let port=process.env.PORT || 3000
 
@@ -135,22 +136,22 @@ app.get("/events", (req, res) => {
 
 
 // ✅ Middleware to Verify Auth0 JWT
-const verifyToken = async (req, res, next) => {
-  const token = req.header("Authorization");
-  if (!token) return res.status(401).json({ error: "Access denied" });
+// const verifyToken = async (req, res, next) => {
+//   const token = req.header("Authorization");
+//   if (!token) return res.status(401).json({ error: "Access denied" });
 
-  try {
-    const response = await axios.get(
-      `https://${process.env.AUTH0_DOMAIN}/userinfo`,
-      { headers: { Authorization: token } }
-    );
+//   try {
+//     const response = await axios.get(
+//       `https://${process.env.AUTH0_DOMAIN}/userinfo`,
+//       { headers: { Authorization: token } }
+//     );
 
-    req.user = response.data;
-    next();
-  } catch (error) {
-    res.status(400).json({ error: "Invalid token" });
-  }
-};
+//     req.user = response.data;
+//     next();
+//   } catch (error) {
+//     res.status(400).json({ error: "Invalid token" });
+//   }
+// };
 
 
 const client = twilio(process.env.ACCOUNTSID,process.env.AUTHTOKEN);
@@ -385,17 +386,18 @@ app.get("/wear",async(req,res)=>{
 app.post("/user/register", async (req, res) => {
   console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   // const { name, email, updated_at } = req.body;
-  const { phoneNumber, updated_at } = req.body
+  const { phoneNumber,uid, updated_at } = req.body
   console.log("phonenumberrrrr",phoneNumber)
-  if (phoneNumber) {
+  if (phoneNumber && uid) {
     try {
       // Check if user already exists
-      const existingUser = await userr.findOne({ phonenumber: phoneNumber });
+      const existingUser = await userr.findOne({ uid:uid });
       if (!existingUser) {
         const newUser = new userr({
           // name: name,
           // email: email,
           phonenumber:phoneNumber,
+          uid:uid,
           created_at: updated_at,
         });
         console.log("dekghte h",newUser)

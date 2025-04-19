@@ -113,7 +113,13 @@ useEffect(() => {
     const fetchCartItems = async () => {
       try {
         setIsLoading(true)
-        let response = await fetch(`${apiUrl}/cart/${userDetails._id}`);
+        let response = await fetch(`${apiUrl}/cart/${userDetails._id}`, 
+        //   {
+        //   headers: {
+        //     Authorization: `Bearer ${user.accessToken}`,
+        //   },
+        // }
+      );
         let data = await response.json();
         // console.log("data in cart",data)
         // if(data)
@@ -147,7 +153,13 @@ useEffect(() => {
       const fetchCartItems = async () => {
         try {
           setIsLoading(true)
-          let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`);
+          let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
+          //   , {
+          //   headers: {
+          //     Authorization: `Bearer ${user.accessToken}`,
+          //   },
+          // }
+        );
           let data = await response.json();
           if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
             console.error("Invalid response format:", data);
@@ -252,12 +264,14 @@ useEffect(() => {
       const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
       console.log("delete", itemInCart);
   
-      if (!itemInCart) {
-        const response = await fetch(`${apiUrl}/cart`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(matchItem),
-        });
+        if (!itemInCart) {
+          const response = await fetch(`${apiUrl}/cart`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json",
+              // Authorization: `Bearer ${user.accessToken}`,
+            },
+            body: JSON.stringify(matchItem),
+          });
   
         if (response.ok) {
           const addedItem = await response.json();
@@ -271,6 +285,9 @@ useEffect(() => {
       } else {
         const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
           method: "DELETE",
+          // headers: {
+          //   Authorization: `Bearer ${user.accessToken}`,
+          // },
         });
   
         if (response.ok) {
@@ -297,6 +314,9 @@ useEffect(() => {
       setIsLoading(true)
       const response = await fetch(`${apiUrl}/cart/${id}`, {
         method: "DELETE",
+        // headers: { 
+        //   Authorization: `Bearer ${user.accessToken}`,
+        // },
       });
 
       const data = await response.json(); // Server se response parse karo
@@ -392,7 +412,9 @@ console.log("iredandid",prd,id)
       
         const response = await fetch(`${apiUrl}/cart`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json",
+            // Authorization: `Bearer ${user.accessToken}`,
+          },
           body: JSON.stringify(matchItem),
         });
   
@@ -439,7 +461,9 @@ finally{
       
         const response = await fetch(`${apiUrl}/addtocart`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json",
+            // Authorization: `Bearer ${user.accessToken}`,
+          },
           body: JSON.stringify(prd),
         });
 
@@ -493,6 +517,9 @@ finally{
    {
     const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
       method: 'DELETE',
+      // headers: { 
+      //   Authorization: `Bearer ${user.accessToken}`,
+      // },
        });
  
        if (response.ok) {
@@ -632,6 +659,9 @@ finally{(false)}
       console.log("xdx",data)
       let res = await fetch(`${apiUrl}/cart/${data._id}`, {
         method: "DELETE",
+        // headers: { 
+        //   Authorization: `Bearer ${user.accessToken}`,
+        // },
       });
       if(res.ok){
       //  toast.success("itme removed successfulyy")
@@ -791,7 +821,10 @@ let handlenewaddress = async (address, user) => {
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+    
+      headers: { "Content-Type": "application/json",
+        // Authorization: `Bearer ${user.accessToken}`,
+      },
       body: JSON.stringify(address),
     });
 
@@ -825,8 +858,8 @@ let deleteandeditaddrress=async(addresid,action,user,addr)=>{
   setIsLoading(true)
   const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
     method: "PATCH",  // Using PATCH request to update the address
-    headers: {
-      "Content-Type": "application/json",  // Specify that we're sending JSON
+    headers: { "Content-Type": "application/json",
+      // Authorization: `Bearer ${user.accessToken}`,
     },
     body: JSON.stringify({addresid,action}),  // Convert newAddress to JSON
   });
@@ -858,8 +891,9 @@ else{
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
       method: "PATCH",  // Using PATCH request to update the address
-      headers: {
-        "Content-Type": "application/json",  // Specify that we're sending JSON
+     
+      headers: { "Content-Type": "application/json",
+        // Authorization: `Bearer ${user.accessToken}`,
       },
       body: JSON.stringify({addresid,action,addr}),  // Convert newAddress to JSON
     });
@@ -901,8 +935,9 @@ if(user && userDetails){
     setIsLoading(true)
     let orderpost=await fetch(`${apiUrl}/order`,{
       method:"POST",
-      headers: {
-        "Content-Type": "application/json",  // Specify that we're sending JSON
+     
+      headers: { "Content-Type": "application/json",
+        // Authorization: `Bearer ${user.accessToken}`,
       },
       body: JSON.stringify({order,address,userDetails}), 
 
@@ -933,7 +968,13 @@ const fetchUserOrders = async (userId) => {
           console.error("❌ User ID is missing!");
           return;
       }
-      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`);
+      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`
+      //   ,{
+      //   headers: { 
+      //     Authorization: `Bearer ${user.accessToken}`,
+      //   },
+      // }
+    );
       if (!res.ok) {
           throw new Error("Failed to fetch user orders");
       }
@@ -958,7 +999,9 @@ const submitRating = async (productId, userId, rating, review) => {
     setIsLoading(true)
       const response = await fetch(`${apiUrl}/rate`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json",
+            // Authorization: `Bearer ${user.accessToken}`,
+          },
           body: JSON.stringify({ userId, productId, rating, review })
       });
 
@@ -979,7 +1022,13 @@ const fetchRatings = async (productId) => {
       console.error("❌ User ID is missing!");
       return;
     }
-    let res = await fetch(`${apiUrl}/ratings/${userDetails._id}/${productId}`);
+    let res = await fetch(`${apiUrl}/ratings/${userDetails._id}/${productId}`,
+    //   {
+    //   headers: { 
+    //     Authorization: `Bearer ${user.accessToken}`,
+    //   },
+    // }
+  );
     if (!res.ok) {
         throw new Error("Failed to fetch iusers rating");
     }
@@ -1011,8 +1060,9 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
     setIsLoading(true)
     let orderpost=await fetch(`${apiUrl}/return`,{
       method:"POST",
-      headers: {
-        "Content-Type": "application/json",  // Specify that we're sending JSON
+     
+      headers: { "Content-Type": "application/json",
+        // Authorization: `Bearer ${user.accessToken}`,
       },
       body: JSON.stringify({reason,subreason,selectedOption,orderdata}), 
 
