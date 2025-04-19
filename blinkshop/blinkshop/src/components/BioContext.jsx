@@ -852,7 +852,7 @@ let handlenewaddress = async (address, user) => {
 
 
 let deleteandeditaddrress=async(addresid,action,user,addr)=>{
-
+console.log("sara add mil jaye",addresid,action,user,addr)
   if(action=="delete"){
  try{
   setIsLoading(true)
