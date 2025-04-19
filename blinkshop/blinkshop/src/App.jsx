@@ -314,7 +314,7 @@ function Layout({ showPopup }) {
             <Route path="/" element={<Home />} />
             <Route path="/card" element={<Card />} />
             <Route path="/productmodel/:section" element={<Card />} />
-            <Route path="/productdescription/:id" element={<ProductDescription />} />
+            <Route path="/productdescription/:id" element={<ProductDescription showPopup={showPopup}/>} />
             <Route path="/cart" element={<AddToCart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/searchme" element={<SearchComponent />} />

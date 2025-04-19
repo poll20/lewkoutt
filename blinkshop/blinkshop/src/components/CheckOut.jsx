@@ -304,7 +304,7 @@ const icon = {
   {deleveryaddress.length > 0
     ? `${deleveryaddress[0].building}/${deleveryaddress[0].locality}, ${deleveryaddress[0].city}`
     : "No address available"}
-    <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward>
+    {/* <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward> */}
 </p>
 
       </div>
@@ -507,9 +507,9 @@ const icon = {
         {
           purchaseproduct.map((e)=>(
             <>
-            <div className="sheet-header">
+            {/* <div className="sheet-header">
         <p className="item-price">₹{e.discountprice}</p>
-        </div>
+        </div> */}
       <div className="sheet-content">
         <div className="item-info">
           

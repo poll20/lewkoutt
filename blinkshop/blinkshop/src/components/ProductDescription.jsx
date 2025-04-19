@@ -25,7 +25,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 // import { BioContext } from "./CartContext";
 // import { useContext } from "react";
 // const {addtocartitem,cartitem} = useContext(BioContext);
-const ProductDescription = () => {
+const ProductDescription = (prop) => {
    
   const [loading, setLoading] = useState(true);
 const [cartData, setCartData] = useState([]);
@@ -212,7 +212,7 @@ const cartRef = useRef();
   if(user)
   {
  if (selectedSize.length==0) {
-      toast.info("Please select a size before adding to the cart.");
+  prop.showPopup("plzz selete a size")
       return;
     }
    try {
