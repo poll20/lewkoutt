@@ -92,7 +92,7 @@ const generateRandomCode = () => Math.random().toString(36).substring(2, 7).toUp
 let users=mongoose.Schema({
     // name: String,
     // email: String,
-    uid: { type: String, required: true },
+    // uid: { type: String, required: true },
     phonenumber:{type:String},
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     address:[addressSchema],  
