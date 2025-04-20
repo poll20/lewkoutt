@@ -32,7 +32,7 @@ export default function Home() {
   return (
     <>
     <div className='home'>
-      <Carousel images={[img1,img2,img3,img4]}/>
+      <Carousel images={image}/>
       <CardLayout />
        <CategoriesLayout/>
 
