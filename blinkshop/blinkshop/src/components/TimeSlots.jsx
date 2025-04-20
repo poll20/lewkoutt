@@ -372,17 +372,54 @@ const timeSlots = [
 
 export default function DeliveryTimeSlot() {
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const { settimeslotlelo } = useBio();
+//   const [selectedDate, setSelectedDate] = useState(null);
+const [selectedDate, setSelectedDate] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() );
+    return tomorrow.toISOString().split("T")[0];
+  });
+  
+const { settimeslotlelo } = useBio();
 
-  const isDisabled = (slot) => {
+//   const isDisabled = (slot) => {
+//     const now = new Date();
+
+//     // If user selected tomorrow, none are disabled
+//     if (selectedDate) {
+//       const tomorrow = new Date();
+//       tomorrow.setDate(tomorrow.getDate() + 1);
+
+//       const selected = new Date(selectedDate);
+//       if (
+//         selected.getDate() === tomorrow.getDate() &&
+//         selected.getMonth() === tomorrow.getMonth() &&
+//         selected.getFullYear() === tomorrow.getFullYear()
+//       ) {
+//         return false;
+//       }
+//     }
+
+//     // Today only: disable past slots
+//     if (slot.label === 'Within 60 minutes') return false;
+
+//     const slotEndTime = new Date(now);
+//     slotEndTime.setHours(slot.end, 0, 0, 0);
+
+//     const minutesRemaining = (slotEndTime - now) / (1000 * 60);
+
+//     if (minutesRemaining <= 0) return true;
+//     if (minutesRemaining < 60) return true;
+
+//     return false;
+//   };
+const isDisabled = (slot) => {
     const now = new Date();
-
-    // If user selected tomorrow, none are disabled
+  
+    // ✅ Selected date is tomorrow? → All slots enabled
     if (selectedDate) {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-
+  
       const selected = new Date(selectedDate);
       if (
         selected.getDate() === tomorrow.getDate() &&
@@ -392,43 +429,78 @@ export default function DeliveryTimeSlot() {
         return false;
       }
     }
-
-    // Today only: disable past slots
-    if (slot.label === 'Within 60 minutes') return false;
-
-    const slotEndTime = new Date(now);
-    slotEndTime.setHours(slot.end, 0, 0, 0);
-
-    const minutesRemaining = (slotEndTime - now) / (1000 * 60);
-
-    if (minutesRemaining <= 0) return true;
-    if (minutesRemaining < 60) return true;
-
-    return false;
+  
+    // ✅ For regular time slots (not "Within 60 minutes")
+    if (slot.label !== 'Within 60 minutes') {
+      const slotEndTime = new Date(now);
+      slotEndTime.setHours(slot.end, 0, 0, 0);
+  
+      const minutesRemaining = (slotEndTime - now) / (1000 * 60);
+  
+      if (minutesRemaining <= 0 || minutesRemaining < 60) return true;
+      return false;
+    }
+  
+    // ✅ For "Within 60 minutes" slot
+    const otherSlots = timeSlots.filter(s => s.label !== 'Within 60 minutes');
+    const allOtherSlotsDisabled = otherSlots.every(s => isDisabled(s));
+  
+    // ❌ Disable if it's past 9:00 PM
+    const isAfter9PM = now.getHours() >= 21;
+  
+    if (allOtherSlotsDisabled || isAfter9PM) return true;
+  
+    return false; // else still allow
   };
+  
 
   const handleSelect = (slotLabel) => {
     setSelectedSlot(slotLabel);
   };
 
-  const handleDateChange = (e) => {
-    const selected = new Date(e.target.value);
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+//   const handleDateChange = (e) => {
+//     const selected = new Date(e.target.value);
+//     const tomorrow = new Date();
+//     tomorrow.setDate(tomorrow.getDate() + 1);
 
+//     if (
+//       selected.getDate() === tomorrow.getDate() &&
+//       selected.getMonth() === tomorrow.getMonth() &&
+//       selected.getFullYear() === tomorrow.getFullYear()
+//     ) {
+//       setSelectedDate(e.target.value);
+//       setSelectedSlot(null); // Reset previous selection
+//     } else {
+//       alert("You can only book for tomorrow—4 days later, even trends move on!");
+//       setSelectedDate(null);
+//     }
+//   };
+// const [selectedDate, setSelectedDate] = useState("");
+
+// 📅 Handle Date Change
+const handleDateChange = (e) => {
+    const selected = new Date(e.target.value);
+    const today = new Date();
+    const tomorrow = new Date();
+    today.setHours(0, 0, 0, 0);
+    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+  
+    // Allow only today and tomorrow
     if (
-      selected.getDate() === tomorrow.getDate() &&
-      selected.getMonth() === tomorrow.getMonth() &&
-      selected.getFullYear() === tomorrow.getFullYear()
+      selected.toDateString() !== today.toDateString() &&
+      selected.toDateString() !== tomorrow.toDateString()
     ) {
-      setSelectedDate(e.target.value);
-      setSelectedSlot(null); // Reset previous selection
+      alert("Please select either today or tomorrow only.");
+  
+      // Reset to tomorrow
+      const formattedTomorrow = tomorrow.toISOString().split("T")[0];
+      setSelectedDate(formattedTomorrow);
     } else {
-      alert("You can only book for tomorrow—4 days later, even trends move on!");
-      setSelectedDate(null);
+      setSelectedDate(e.target.value);
     }
   };
-
+  
   if (selectedSlot) {
     settimeslotlelo(selectedSlot);
   }
@@ -446,38 +518,81 @@ export default function DeliveryTimeSlot() {
       >
         Select Delivery Date
       </button>
-      <input
+      {/* <input
         id="datePicker"
         type="date"
         onChange={handleDateChange}
         className="mb-4 w-full p-2 border rounded"
         min={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
-      />
+      /> */}
+      <input
+  id="datePicker"
+  type="date"
+  value={selectedDate}
+  onChange={handleDateChange}
+  className="mb-4 w-full p-2 border rounded"
+  min={new Date().toISOString().split('T')[0]}
+  max={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
+/>
 
       <p className="font-semibold mb-2">Select Time Window:</p>
 
       {timeSlots.map((slot, index) => {
         const disabled = isDisabled(slot);
         return (
-          <label
-            key={index}
-            className={`flex items-center mb-2 cursor-pointer p-2 rounded ${
-              disabled
-                ? 'opacity-50 cursor-not-allowed border-l-4 border-red-600'
-                : 'hover:bg-gray-100'
-            }`}
-          >
-            <input
-              type="radio"
-              name="delivery-slot"
-              value={slot.label}
-              disabled={disabled}
-              checked={selectedSlot === slot.label}
-              onChange={() => handleSelect(slot.label)}
-              className="mr-2"
-            />
-            <span style={{ marginLeft: '4px', fontWeight: 'lighter' }}>{slot.label}</span>
-          </label>
+        //   <label
+        //     key={index}
+        //     className={`flex items-center mb-2 cursor-pointer p-2 rounded ${
+        //       disabled
+        //         ? 'opacity-50 cursor-not-allowed border-l-4 border-red-600'
+        //         : 'hover:bg-gray-100'
+        //     }`}
+        //   >
+        //     <input
+        //       type="radio"
+        //       name="delivery-slot"
+        //       value={slot.label}
+        //       disabled={disabled}
+        //       checked={selectedSlot === slot.label}
+        //       onChange={() => handleSelect(slot.label)}
+        //       className="mr-2"
+        //     />
+        //     <span style={{ marginLeft: '4px', fontWeight: 'lighter' }}>{slot.label}</span>
+        //   </label>
+        <label
+  key={index}
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '8px',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    padding: '8px',
+    borderRadius: '4px',
+    backgroundColor: disabled ? '#fee2e2' : 'transparent', // light red background
+    border: disabled ? '1px solid #dc2626' : '1px solid #d1d5db', // red or gray border
+    color: disabled ? '#b91c1c' : '#000000', // red text for disabled
+    opacity: disabled ? 0.7 : 1,
+    transition: 'background-color 0.3s',
+  }}
+  onMouseEnter={(e) => {
+    if (!disabled) e.currentTarget.style.backgroundColor = '#f3f4f6'; // light gray on hover
+  }}
+  onMouseLeave={(e) => {
+    if (!disabled) e.currentTarget.style.backgroundColor = 'transparent';
+  }}
+>
+  <input
+    type="radio"
+    name="delivery-slot"
+    value={slot.label}
+    disabled={disabled}
+    checked={selectedSlot === slot.label}
+    onChange={() => handleSelect(slot.label)}
+    style={{ marginRight: '8px' }}
+  />
+  <span style={{ marginLeft: '4px', fontWeight: '300' }}>{slot.label}</span>
+</label>
+
         );
       })}
 
