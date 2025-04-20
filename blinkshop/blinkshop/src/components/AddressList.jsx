@@ -326,7 +326,7 @@ useEffect(() => {
           </>
         )}
         {
-          userprf?.address.length<=0?( <NavLink to='/' className='navlink'>
+          userprf?.address?.length<=0?( <NavLink to='/' className='navlink'>
             <button className="back-to-home" style={{position:"absolute",bottom:"80px",left:"140px"}}>Back to home</button>
             </NavLink>):('')
         }

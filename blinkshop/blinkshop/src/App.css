@@ -1,3 +1,8 @@
+
+*{
+  user-select: none;
+  -webkit-user-select: none;
+}
 /* Full page layout plzzz sab kuch fix ho jaye kaash */
 html, body, #root {
         height: 100%;
