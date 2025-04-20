@@ -29,7 +29,7 @@ const ResponsiveNavbar = () => {
   let {setcatehicate,addtocartdatas}=useBio()
   const [dropdown, setDropdown] = useState(false);
   const [sideNavbarOpen, setSideNavbarOpen] = useState(false);
-
+const navigate=useNavigate()
   // Toggle for the category dropdown
   const handleDropdownToggle = () => {
     setDropdown(!dropdown);
@@ -229,8 +229,10 @@ let closeslidecategorynav=()=>{
 
           <div className="homeeee">
           
-          <li style={{textAlign:"center"}}><LoginButton/><span onClick={(e) => {e.stopPropagation(); // Click andar na jaye
+          <li style={{textAlign:"center"}}><LoginButton/>
+          <span onClick={() => {navigate("/profile"); // Click andar na jaye
           }}
+          
       style={{ cursor: "default" }}
     >
       Account
