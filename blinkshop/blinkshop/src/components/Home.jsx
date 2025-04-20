@@ -22,7 +22,7 @@ export default function Home() {
         { id: 6, image: 'https://via.placeholder.com/150', price: '$100', description: 'Product 6' },
       
       ];
-    let image=  [
+    let image=[
         { image:img1, category: "top" },
         { image:img2, category: "bottom" },
         { image:img3, category: "top" },

@@ -8,10 +8,21 @@
   overflow: hidden;
 }
 
-.carousel-slide {
+/* .carousel-slide {
   height: 100%;
   width: 100%;
   transition: background-image 0.8s ease-in-out;
+} */
+.carousel-slide {
+  display: block;
+  height: 400px; /* ya jo bhi height chahiye */
+  width: 100%;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  text-decoration: none;
+  z-index: 0;
 }
 
 .carousel-arrow {
