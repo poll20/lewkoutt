@@ -281,7 +281,7 @@
     import { useNavigate } from "react-router-dom";
 
     const OtpLogin = () => {
-    const { sendOTP, verifyOTP, loading ,initRecaptcha} = useFirebaseAuth();
+    const { sendOTP, verifyOTP, loading ,initRecaptcha,user, isRegistered} = useFirebaseAuth();
     const { setUser } = useUser();
     
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -298,7 +298,9 @@
 
     const location = useLocation();
     
-  
+  if( isRegistered){
+    navigate("/profile")
+  }
     useEffect(() => {
       const params = new URLSearchParams(location.search);
       const ref = params.get("ref");
