@@ -268,6 +268,7 @@
 
     import { useState, useRef, useEffect } from "react";
     import { FaLock, FaPhone } from "react-icons/fa";
+    import { useLocation } from "react-router-dom";
     import { BiTime } from "react-icons/bi";
     import { MdSecurity } from "react-icons/md";
 
@@ -291,9 +292,20 @@
     const [canResend, setCanResend] = useState(false);
     const inputRefs = useRef([]);
     const [confirmationResult, setConfirmationResult] = useState(null);
-
+    const [referralCode, setReferralCode] = useState("");
     const navigate=useNavigate()
 
+
+    const location = useLocation();
+    
+  
+    useEffect(() => {
+      const params = new URLSearchParams(location.search);
+      const ref = params.get("ref");
+      if (ref) {
+        setReferralCode(ref);
+      }
+    }, [location]);
 
     useEffect(() => {
         if (timer > 0 && !canResend) {
@@ -487,6 +499,18 @@
             </form>
             )}
         </div>
+        {referralCode && (
+        <div
+          style={{
+            backgroundColor: "#f0f0f0",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "15px",
+          }}
+        >
+          <strong>Referral Code:</strong> {referralCode}
+        </div>
+      )}
         </div>
     );
     };

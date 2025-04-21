@@ -49,7 +49,7 @@ const ReferAndEarn = () => {
   const closePopup = () => {
     setPopup(false);
   };
-
+let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
 
   return (
     <div
@@ -187,7 +187,7 @@ const ReferAndEarn = () => {
        <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-around", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
        <NavLink
-        to={`https://wa.me/?text=Hey! Use my referral code *${referralCode}* to get ₹500 off your first order! 🎉🔥`}
+        to={`https://wa.me/?text=Hey! Use my referral code *${referralCode}* to get ₹500 off your first order! 🎉🔥 ${codeurl}`}
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -227,7 +227,7 @@ const ReferAndEarn = () => {
       <NavLink
   onClick={() => {
     navigator.clipboard.writeText(
-      `Use my referral code ${referralCode} to get ₹500 off your first order! 🔥`
+      `Use my referral code ${referralCode} to get ₹500 off your first order!🔥 ${codeurl}` 
     );
     window.open("https://www.instagram.com/direct/inbox/", "_blank");
     alert("Message copied! Paste it in Instagram DMs or Story.");
