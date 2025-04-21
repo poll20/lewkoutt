@@ -184,7 +184,7 @@ let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
   </button>
 
       
-       <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-around", borderRadius:'0',border:"1px solid white"}}>
+       {/* <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-around", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
        <NavLink
         to={`https://wa.me/?text=Hey! Use my referral code *${referralCode}* to get ₹500 off your first order! 🎉🔥 ${codeurl}`}
@@ -204,26 +204,7 @@ let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
       >
         📱 WhatsApp
       </NavLink>
-       {/* Instagram */}
-       {/* <NavLink
-        to={`https://wa.me/?text=Hey! Use my referral code *${referralCode}* to get ₹500 off your first order! 🎉🔥`}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'block',
-          color: 'white',
-          padding: '10px',
-          borderRadius: '8px',
-          backgroundColor: '#E1306C',
-          marginBottom: '10px',
-          textAlign: 'center',
-          textDecoration: 'none',
-          fontWeight: '600',
-        }}
-      >
-               📸 Instagram
-
-      </NavLink> */}
+      
       <NavLink
   onClick={() => {
     navigator.clipboard.writeText(
@@ -247,8 +228,38 @@ let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
   📸 Instagram
 </NavLink>
        
-        {/* <button className="buy-buttonss" style={{width:"140px"}} >Wishlist</button> */}
-       </div>
+       
+       </div> */}
+       <button
+  onClick={() => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Refer and Earn 💸',
+        text: `Use my referral code ${referralCode} to get ₹500 off your first order! 🔥`,
+        url: codeurl,
+      })
+      .then(() => console.log('Share successful!'))
+      .catch((error) => console.log('Sharing failed', error));
+    } else {
+      alert("Sharing is not supported on this device. Please copy the code manually.");
+    }
+  }}
+  style={{
+    width: '100%',
+    backgroundColor: 'white',
+    color: 'black',
+    fontWeight: '600',
+    padding: '12px',
+    borderRadius: '999px',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '16px',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+  }}
+>
+  🚀 Invite Friends
+</button>
+
     </div>
   );
 };
