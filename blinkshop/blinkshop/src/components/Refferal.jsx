@@ -165,7 +165,7 @@ let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
         )}
       </div>
 
-      <button
+      {/* <button
     onClick={() =>setPopup(true)}
     style={{
       width: '100%',
@@ -181,7 +181,7 @@ let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
     }}
   >
     🚀 Invite Friends
-  </button>
+  </button> */}
 
       
        {/* <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-around", borderRadius:'0',border:"1px solid white"}}>
