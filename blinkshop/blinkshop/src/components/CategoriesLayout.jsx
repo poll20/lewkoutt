@@ -15,6 +15,7 @@ const CtegoriesLayout = () => {
   }
   console.log("yha bhi mil gya",productdata)
   const limitedProductData = productdata.slice(0, 7); // 👈 limit to 7 items
+  console.log("7 length honi chaiye",limitedProductData)
   const cards = [
     {
       id: 1,
