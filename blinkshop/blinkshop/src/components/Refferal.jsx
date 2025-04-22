@@ -25,16 +25,26 @@
 
 // export default Refferal;
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import img from "./image/rae.avif"
 import { NavLink } from 'react-router-dom';
+import { useFirebaseAuth } from './FirebaseContext';
+
 const ReferAndEarn = () => {
   const [copied, setCopied] = useState(false);
-  const referralCode = '414A7U';
+  const [referralCode,setrefcode]=useState('')
   const bannerImg = 'https://via.placeholder.com/600x200?text=Refer+Now'; // Replace this with your image
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [popup, setPopup] = useState(false);
+  const{user,userDetails}=useFirebaseAuth()
+
+  useEffect(()=>{
+    if(userDetails){
+    setrefcode(userDetails.refcode)
+    }
+  },[user,userDetails])
+  
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
     setCopied(true);
