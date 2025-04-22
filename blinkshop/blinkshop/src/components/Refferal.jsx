@@ -41,7 +41,7 @@ const ReferAndEarn = () => {
 
   useEffect(()=>{
     if(userDetails){
-    setrefcode(userDetails.refcode)
+    setrefcode(userDetails.code)
     }
   },[user,userDetails])
   
