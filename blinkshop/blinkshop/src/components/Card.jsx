@@ -654,7 +654,7 @@ if(searchvalue){
             ))
           ) : (
             
-              !wish?(<p>No products available.</p>):( <EmptyCart endpoint={window.location.pathname.substring(1)} />)
+              !wish?(<p>No products available.</p>):( <div style={{width:"90vw",padding:"0",margin:"0",backgroundColor:"white"}}><EmptyCart endpoint={window.location.pathname.substring(1)} /></div>)
             
             
           )}

@@ -14,6 +14,7 @@ const CtegoriesLayout = () => {
     return <p>loading....</p>
   }
   console.log("yha bhi mil gya",productdata)
+  const limitedProductData = productdata.slice(0, 7); // 👈 limit to 7 items
   const cards = [
     {
       id: 1,
@@ -62,7 +63,7 @@ const CtegoriesLayout = () => {
   return (
     <>
     {
-      productdata?.map((e)=>(
+      limitedProductData?.map((e)=>(
         <div className="horizontal-card-layout">
       <h1 style={{textAlign:"center"}} >{e.category}</h1>
       {/* Parent Card */}

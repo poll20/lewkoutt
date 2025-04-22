@@ -42,6 +42,7 @@ const CardLayout = () => {
   } else {
     console.log('No products found');
   }
+  const limitedProductData = filteredProducts.slice(0, 7); // 👈 limit to 7 items
   const cards = [
     {
       id: 1,
@@ -139,7 +140,7 @@ let Clickcard=(id)=>{
     <h2 className='om-newarrival' style={{textAlign:'center',marginTop:"10px",fontFamily: "'Poppins', sans-serif"}}  >NEW ARRIVAL</h2>
     
     <div className="om-card-container">
-      {filteredProducts.map((card) => (
+      {limitedProductData.map((card) => (
         
         // <div key={card.id} className="om-card" style={{borderRadius:"0px"}}>
         // <NavLink to={`/productdescription/${card.id}`} className="om-a"> 

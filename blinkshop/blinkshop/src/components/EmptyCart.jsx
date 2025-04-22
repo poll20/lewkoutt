@@ -10,11 +10,11 @@ const EmptyCart = (props) => {
   };
 
   return (
-    <div className="empty-cart-container">
+    <div className="empty-cart-container"style={{background:"white"}}>
      {props.endpoint=="cart"?( <FaShoppingCart className="cart-icon" />):(<FaHeart className="cart-icon"/>)}
-      <h2>{props.endpoint} is Empty</h2>
-      <p>Please shop now to add items to your cart!</p>
-      <button onClick={handleShopNow} className="shop-now-button">
+      <h2>{props.endpoint.slice(0,8)} is Empty</h2>
+      <p>Look like you hav'nt added anythong yet. Start exploring and save your favorites</p>
+      <button onClick={handleShopNow} className="shop-now-button" >
         Shop Now
       </button>
     </div>

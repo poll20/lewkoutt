@@ -137,9 +137,11 @@ if(!addtocartdatas){
                   <input type="checkbox" style={{padding:"1px"}}  checked={choosebuy.some((item) => item._id === order._id)}
                     onChange={(e) => handlechoosebuy(order, e.target.checked)} />
                 </div>
+                <NavLink to={`/productdescription/${order._id}`} className='navlink'>
                 <div>
                   <img src={newme} alt={order.title} className="order-imagee-addtocart" />
                 </div>
+                </NavLink>
                 <div>
                   <div className="order-info-addtocart">
                     <h3 className="order-title-addtocart">

@@ -239,7 +239,8 @@ const UserOrder = () => {
             <div className="order-details">
               {order.products.map((product) => (
                 <div key={product._id} className="product-container">
-                  <img src={img1} alt={product.tag} className="order-image" />
+                  <NavLink to={`/productdescription/${product._id}`} className='navlink'>                 
+                     <img src={img1} alt={product.tag} className="order-image" />
                   <div className="order-info">
                     <h3 className="ordeer-title">{product.tag}</h3>
                     <p className="order-meta">
@@ -249,6 +250,7 @@ const UserOrder = () => {
                       <span>📦 ordered on {order.orderedAt}</span>
                     </p>
                   </div>
+                  </NavLink>
 
                   {/* ⭐ Condition: 
                       - If order is "Delivered" 
