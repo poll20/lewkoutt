@@ -59,7 +59,7 @@ const ReferAndEarn = () => {
   const closePopup = () => {
     setPopup(false);
   };
-let codeurl='https://lewkout.netlify.app/loginn?ref=abc123'
+let codeurl=`https://lewkout.netlify.app/loginn?ref=${referralCode}`
 
   return (
     <div
