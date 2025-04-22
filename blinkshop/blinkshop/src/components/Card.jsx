@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react";
   import { RxCross1 } from "react-icons/rx";
   import HeartButton from "./HeartButton";
   import { AiOutlineDelete } from "react-icons/ai";
+  import EmptyCart from './EmptyCart';
   // import FaChevronDown from "react-icons/fa";
 const Card = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -652,7 +653,10 @@ if(searchvalue){
       </div>
             ))
           ) : (
-            <p>No products available.</p>
+            
+              !wish?(<p>No products available.</p>):( <EmptyCart endpoint={window.location.pathname.substring(1)} />)
+            
+            
           )}
         
         </div>
