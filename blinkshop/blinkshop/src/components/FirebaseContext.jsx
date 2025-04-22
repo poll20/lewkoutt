@@ -823,7 +823,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   };
 
   // ✅ Verify OTP
-  const verifyOTP = async (otp) => {
+  const verifyOTP = async (otp,refcode) => {
     setLoading(true);
     try {
       if (!confirmationResult) {
@@ -835,7 +835,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       setUser(signedInUser);
       console.log("✅ OTP Verified:", signedInUser.phoneNumber);
 
-      await registerUser(signedInUser);
+      await registerUser({signedInUser,refcode});
       
       return { success: true };
       
@@ -852,7 +852,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   };
 
   // ✅ Register user in backend
-  const registerUser = async (firebaseUser) => {
+  const registerUser = async (firebaseUser,refcode) => {
     try {
       if (!firebaseUser || isRegistered) return;
 
@@ -860,7 +860,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       const res = await fetch(`${apiUrl}/user/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: firebaseUser.phoneNumber,uid:firebaseUser.uid }),
+        body: JSON.stringify({ phoneNumber: firebaseUser.phoneNumber,uid:firebaseUser.uid ,refcode:refcode}),
       });
 
       if (!res.ok) throw new Error(`Failed to register: ${res.statusText}`);

@@ -353,14 +353,14 @@
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e,refcode) => {
         e.preventDefault();
         if (otp.join("").length !== 6) {
         setError("Please enter a valid 6-digit OTP");
         return;
         }
 
-        const { success, user, error } = await verifyOTP(otp.join(""));
+        const { success, user, error } = await verifyOTP(otp.join(""),referralCode);
         if (success) {
         setUser(user); // Store user data in context
         //   alert("OTP Verified Successfully");

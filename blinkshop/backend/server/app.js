@@ -386,9 +386,9 @@ app.get("/wear",async(req,res)=>{
 app.post("/user/register", async (req, res) => {
   console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   // const { name, email, updated_at } = req.body;
-  const { phoneNumber,uid, updated_at } = req.body
+  const { phoneNumber,uid,refcode, updated_at } = req.body
   console.log("phonenumberrrrr",phoneNumber)
-  if (phoneNumber && uid) {
+  if (phoneNumber && uid && !refcode) { 
     try {
       // Check if user already exists
       const existingUser = await userr.findOne({ uid:uid });
@@ -411,7 +411,44 @@ app.post("/user/register", async (req, res) => {
       console.error("Database error:", e);
       res.status(500).json({ message: e.message });
     }
-  } else {
+  }
+  else if (phoneNumber && uid && refcode) { 
+    try {
+      // Check if user already exists
+      const existingUser = await userr.findOne({ uid: uid });
+      if (!existingUser) {
+        // Find the user who owns the referral code
+        const referringUser = await userr.findOne({ code: refcode });
+  
+        if (referringUser) {
+          // Increment codecount by 1
+          referringUser.codecount = (referringUser.codecount || 0) + 1;
+          referringUser.codepoint=(referringUser.codepoint || 0) + 5
+          await referringUser.save(); // save the updated count
+        }
+  
+        const newUser = new userr({
+          phonenumber: phoneNumber,
+          uid: uid,
+          created_at: updated_at,
+          // code: generatedCode, // if you're generating a code for new user
+        });
+  
+        console.log("dekghte h", newUser);
+        const savedUser = await newUser.save();
+        console.log("User saved:", savedUser);
+  
+        res.status(201).json({ message: "User saved successfully", savedUser });
+      } else {
+        res.status(200).json({ message: "User already exists" });
+      }
+    } catch (e) {
+      console.error("Database error:", e);
+      res.status(500).json({ message: e.message });
+    }
+  }
+  
+  else {
     console.error("Error saving user:"); // 👈 Error ko log karo
 
     res.status(400).json({ message: "Email is required" });
