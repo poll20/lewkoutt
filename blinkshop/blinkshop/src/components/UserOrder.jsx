@@ -243,7 +243,7 @@ const UserOrder = () => {
             <div className="order-details">
               {order.products?.map((product) => (
                 <div key={product._id} className="product-container">
-                  <NavLink to={`/productdescription/${product?.productId}`} className='navlink'>                 
+                  <NavLink to={`/productdescription/${product.productId}`} className='navlink'>                 
                      <img src={img1} alt={product.tag} className="order-image" />
                   <div className="order-info">
                     <h3 className="ordeer-title">{product.tag}</h3>
