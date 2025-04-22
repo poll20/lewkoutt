@@ -180,7 +180,7 @@
 
 // export default UserOrder;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UserOrders.css";
 import { useBio } from "./BioContext";
 import img1 from "./image/img3.jpg";
@@ -192,6 +192,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 
 const UserOrder = () => {
   const { userorder, submitRating, fetchRatings, rating } = useBio();
+  const[userorderr,setuserorder]=useState([])
   // const { userDetails } = useAuth();
   const{userDetails}=useFirebaseAuth()
 
@@ -214,12 +215,15 @@ const UserOrder = () => {
     }, 1000);
   };
 
+  useEffect((e)=>{
+    setuserorder(userorder)
+  },[userorder])
   return (
     <div className="order-container">
       <h2 className="order-header">Your Orders</h2>
       <div className="help-button">Help</div>
 
-      {userorder.map((order) => {
+      {userorderr.map((order) => {
         // ✅ Calculate time difference if status is delivered
         let diffInHours = 0;
         if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
@@ -239,7 +243,7 @@ const UserOrder = () => {
             <div className="order-details">
               {order.products.map((product) => (
                 <div key={product._id} className="product-container">
-                  <NavLink to={`/productdescription/${product._id}`} className='navlink'>                 
+                  <NavLink to={`/productdescription/${product.productId}`} className='navlink'>                 
                      <img src={img1} alt={product.tag} className="order-image" />
                   <div className="order-info">
                     <h3 className="ordeer-title">{product.tag}</h3>
