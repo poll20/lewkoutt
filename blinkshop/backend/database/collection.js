@@ -118,8 +118,7 @@ let orders=mongoose.Schema({
   name:String,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   email:String,
-  address:[String],
-  phone:String,
+  address:[String], 
   products: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
