@@ -1580,7 +1580,7 @@ app.post('/order', async (req, res) => {
 console.log("orderaaarr",ordersArray)
  // 🟢 Map products correctly inside the Order Schema
  const products = ordersArray.map(item => ({
-  productId: mongoose.Types.ObjectId(item.productid || item._id),
+     productId: item.productid==null || item.productid==undefined ?(item.id):(item.productid),
      tag:item.tag,
      discription:item.description,
      image:item.image,
