@@ -1581,7 +1581,7 @@ console.log("orderaaarr",ordersArray)
  // 🟢 Map products correctly inside the Order Schema
  const products = ordersArray.map(item => ({
     //  productId: item.productid?(item.productid):(item._id),
-    productId: item.productid ?? item._id,  // ✅ safe and future-ready
+    productId: item.productId ?? item._id,  // ✅ safe and future-ready
     // productId:item._id,
      tag:item.tag,
      discription:item.description,
