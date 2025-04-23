@@ -1580,7 +1580,7 @@ app.post('/order', async (req, res) => {
 console.log("orderaaarr",ordersArray)
  // 🟢 Map products correctly inside the Order Schema
  const products = ordersArray.map(item => ({
-     productId: item.productid?(item.productid):(item._id),
+  productId: mongoose.Types.ObjectId(item.productid || item._id),,
      tag:item.tag,
      discription:item.description,
      image:item.image,
@@ -1669,7 +1669,7 @@ app.get('/orders/user/:userId', async (req, res) => {
       }
 
       // 🔍 Fetch orders by User ID
-      const userOrders = await orderr.find({ userId }).populate('product.productId');
+      const userOrders = await orderr.find({ userId }).populate('products.productId');
       if (!userOrders || userOrders.length === 0) {
         return res.status(404).json({ message: "No orders found!" });
       }
