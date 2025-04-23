@@ -979,6 +979,7 @@ const fetchUserOrders = async (userId) => {
           throw new Error("Failed to fetch user orders");
       }
       let data = await res.json();
+      console.log("order ke data yhamilte",data)
       setuserorder(data);
   } catch (err) {
       console.log(err);
@@ -990,7 +991,7 @@ useEffect(() => {
   if (userDetails?._id) {
       fetchUserOrders(userDetails._id);
   }
-}, [userDetails?._id]);
+}, [user, userDetails?._id]);
 
 
 const submitRating = async (productId, userId, rating, review) => {
