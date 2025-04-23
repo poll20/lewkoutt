@@ -217,6 +217,7 @@ const UserOrder = () => {
 
   useEffect((e)=>{
     setuserorder(userorder)
+    console.log("user ne kiya h orderhiorder",userorder)
   },[userorder])
   return (
     <div className="order-container">
@@ -242,6 +243,7 @@ const UserOrder = () => {
 
             <div className="order-details">
               {order.products?.map((product) => (
+              
                 <div key={product._id} className="product-container">
                   <NavLink to={`/productdescription/${product.productId}`} className='navlink'>                 
                      <img src={img1} alt={product.tag} className="order-image" />
