@@ -1581,7 +1581,7 @@ console.log("orderaaarr",ordersArray)
  // 🟢 Map products correctly inside the Order Schema
  const products = ordersArray.map(item => ({
     //  productId: item.productid?(item.productid):(item._id),
-    productId: item.productId ?? item._id,  // ✅ safe and future-ready
+    productId: mongoose.Types.ObjectId(item.productid) ?? mongoose.Types.ObjectId(item._id),  // ✅ safe and future-ready
     // productId:item._id,
      tag:item.tag,
      discription:item.description,
@@ -1621,7 +1621,7 @@ for (const item of ordersArray) {
       await newOrder.save();
       orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
       // Send WhatsApp Notification
-      sendWhatsAppMessage(newOrder);
+      //  sendWhatsAppMessage(newOrder);
 
       res.status(201).json({ message: "Order Placed & Admin Notified!" });
       let orderprice = ordersArray.reduce((total, e) => total + (Array.isArray(e.discountprice) 
