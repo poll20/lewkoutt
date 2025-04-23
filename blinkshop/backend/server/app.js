@@ -1581,7 +1581,7 @@ console.log("orderaaarr",ordersArray)
  // 🟢 Map products correctly inside the Order Schema
  const products = ordersArray.map(item => ({
     //  productId: item.productid?(item.productid):(item._id),
-    productId: mongoose.Types.ObjectId(item.productid) ?? mongoose.Types.ObjectId(item._id),  // ✅ safe and future-ready
+    productId:new mongoose.Types.ObjectId(item.productid) ?? new mongoose.Types.ObjectId(item._id),  // ✅ safe and future-ready
     // productId:item._id,
      tag:item.tag,
      discription:item.description,
