@@ -430,6 +430,7 @@ app.post("/user/register", async (req, res) => {
         const newUser = new userr({
           phonenumber: phoneNumber,
           uid: uid,
+          refercode:refcode,
           created_at: updated_at,
           // code: generatedCode, // if you're generating a code for new user
         });

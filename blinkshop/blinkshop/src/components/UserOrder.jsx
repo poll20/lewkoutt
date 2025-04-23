@@ -215,16 +215,13 @@ const UserOrder = () => {
     }, 1000);
   };
 
-  useEffect((e)=>{
-    setuserorder(userorder)
-    console.log("user ne kiya h orderhiorder",userorder)
-  },[userorder])
+  
   return (
     <div className="order-container">
       <h2 className="order-header">Your Orders</h2>
       <div className="help-button">Help</div>
 
-      {userorderr.map((order) => {
+      {userorder.map((order) => {
         // ✅ Calculate time difference if status is delivered
         let diffInHours = 0;
         if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
