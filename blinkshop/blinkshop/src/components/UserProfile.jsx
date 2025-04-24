@@ -153,7 +153,7 @@ import { useFirebaseAuth } from './FirebaseContext';
 const UserProfile = () => {
   const [userprf,setuserprf]=useState([])
   // let {logout}=useAuth()
-  let {user,userDetails,logout}=useFirebaseAuth()
+  let {user,userDetails,logout,addnameemail}=useFirebaseAuth()
   let [popup,setPopup]=useState(false)
   const [showOverlayForm, setShowOverlayForm] = useState(false);
 const [formData, setFormData] = useState({
@@ -194,6 +194,15 @@ let navigate=useNavigate()
         } else {
         setError(error || "failed logout");
         }
+  }
+  let sendtofirebase=()=>{
+    console.log("call hua mai bhiii",formData)
+    if(userDetails){
+    addnameemail(formData,userDetails._id)
+    }
+    setTimeout(()=>{
+      setShowOverlayForm(false)
+    },200)
   }
   return (
     <div className="profile-container">
@@ -294,7 +303,7 @@ let navigate=useNavigate()
         value={formData.dob}
         onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
       />
-      <button className="submit-btn" onClick={() => console.log(formData)}>Submit</button>
+      <button className="submit-btn" onClick={() => sendtofirebase()}>Submit</button>
     </div>
   </div>
 )}

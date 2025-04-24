@@ -878,6 +878,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   };
 
   const addnameemail = async (data,userid) => {
+    console.log("datform ka or userid",data,userid)
     try {
       const response = await fetch(`${apiUrl}/useredit`, {
         method: 'PATCH',
