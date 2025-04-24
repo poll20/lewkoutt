@@ -1671,7 +1671,8 @@ app.get('/orders/user/:userId', async (req, res) => {
       }
 
       // 🔍 Fetch orders by User ID
-      const userOrders = await orderr.find({ userId }).populate('products.productId');
+      // const userOrders = await orderr.find({ userId }).populate('products.productId');
+      const userOrders = await orderr.find({ userId });
       if (!userOrders || userOrders.length === 0) {
         return res.status(404).json({ message: "No orders found!" });
       }
