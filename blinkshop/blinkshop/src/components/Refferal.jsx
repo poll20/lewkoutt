@@ -30,21 +30,27 @@ import { FaRegCopy } from 'react-icons/fa';
 import img from "./image/rae.avif"
 import { NavLink } from 'react-router-dom';
 import { useFirebaseAuth } from './FirebaseContext';
+import { useBio } from './BioContext';
 
 const ReferAndEarn = () => {
   const [copied, setCopied] = useState(false);
   const [referralCode,setrefcode]=useState('')
+  const[codepoint,setcodepoint]=useState(0)
+  const[codecount,setcodecount]=useState(0)
   const bannerImg = 'https://via.placeholder.com/600x200?text=Refer+Now'; // Replace this with your image
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [popup, setPopup] = useState(false);
   const{user,userDetails}=useFirebaseAuth()
-
+  const{alluser}=useBio()
+  const [showRankingList, setShowRankingList] = useState(false);
   useEffect(()=>{
     if(userDetails){
     setrefcode(userDetails.code)
+    setcodepoint(userDetails.codepoint)
+    setcodecount(userDetails.codecount)
     }
   },[user,userDetails])
-  
+
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
     setCopied(true);
@@ -61,6 +67,10 @@ const ReferAndEarn = () => {
   };
 let codeurl=`https://lewkout.netlify.app/loginn?ref=${referralCode}`
 
+if(!alluser){
+  return (<p>loading...</p>)
+}
+console.log("alluserrefercode",alluser)
   return (
     <div
       style={{
@@ -104,11 +114,11 @@ let codeurl=`https://lewkout.netlify.app/loginn?ref=${referralCode}`
       >
         <div>
           <p style={{ color: '#ccc', margin: 0 }}>Total Earning</p>
-          <p style={{ fontWeight: '600', margin: 0 }}>₹0</p>
+          <p style={{ fontWeight: '600', margin: 0 }}>₹{codepoint}</p>
         </div>
         <div>
           <p style={{ color: '#ccc', margin: 0 }}>Friend's Signup</p>
-          <p style={{ fontWeight: '600', margin: 0 }}>0</p>
+          <p style={{ fontWeight: '600', margin: 0 }}>{codecount}</p>
         </div>
       </div>
 
@@ -269,6 +279,85 @@ let codeurl=`https://lewkout.netlify.app/loginn?ref=${referralCode}`
 >
   🚀 Invite Friends
 </button>
+{/* Ranking List Button */}
+<button
+  onClick={() => setShowRankingList(true)}
+  style={{
+    width: '100%',
+    marginTop: '16px',
+    backgroundColor: '#222',
+    color: 'white',
+    fontWeight: '600',
+    padding: '12px',
+    borderRadius: '999px',
+    border: '1px solid white',
+    cursor: 'pointer',
+    fontSize: '16px',
+  }}
+>
+  🏆 Show Ranking List
+</button>
+
+{/* Fullscreen Overlay for Ranking List */}
+{alluser && (
+  <div
+    style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(0, 0, 0, 0.95)',
+      color: 'white',
+      zIndex: 1000,
+      overflowY: 'auto',
+      padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}
+  >
+    {/* Close Icon */}
+    <button
+      onClick={() => setShowRankingList(false)}
+      style={{
+        alignSelf: 'flex-end',
+        fontSize: '24px',
+        background: 'transparent',
+        border: 'none',
+        color: 'white',
+        cursor: 'pointer',
+        marginBottom: '10px',
+      }}
+    >
+      ✖
+    </button>
+
+    {/* Title */}
+    <h2 style={{ marginBottom: '20px', fontSize: '22px' }}>🏅 Top Referrers</h2>
+
+    {/* Ranking List */}
+    <div style={{ width: '100%', maxWidth: '500px' }}>
+      {alluser.map((rank) => (
+        <div
+          key={rank}
+          style={{
+            backgroundColor: '#1e1e1e',
+            marginBottom: '12px',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <span>👤{rank.phone}</span>
+          <span>💸 ₹{500 * (6 - rank.codepoint)}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
     </div>
   );

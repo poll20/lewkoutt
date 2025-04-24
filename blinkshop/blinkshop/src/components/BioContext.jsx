@@ -41,6 +41,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
  const[walletkapesa,setwalletkapesa]=useState(0)
  const[toastmsg,settoastmsg]=useState("")
  const toastRef = useRef(null);
+ const[alluser,setalluser]=useState([])
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -182,7 +183,36 @@ useEffect(() => {
     
     }, [user,userDetails]);
 
-  
+  useEffect(()=>{
+    if(user&& userDetails._id){
+      const fetchalluser = async () => {
+        try {
+          setIsLoading(true)
+          let response = await fetch(`${apiUrl}/user`
+          //   , {
+          //   headers: {
+          //     Authorization: `Bearer ${user.accessToken}`,
+          //   },
+          // }
+        );
+          let data = await response.json();
+          if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+            console.error("Invalid response format:", data);
+            return;
+          }
+          console.log("data in cart",data)
+          setalluser(data)
+          
+        } catch (error) {
+          console.error("Error fetching cart items:", error);
+        }
+        finally{
+          setIsLoading(false)
+        }
+      };
+      fetchalluser()
+    }
+  },[user,userDetails])
   // const handleClick = async (prd,id) => {
   //   try {
   //     // const matchItem = allproductdata.find((e) => e._id === id);
@@ -1156,6 +1186,7 @@ if(user && userDetails){
         walletkapesa,
         settimeslotlelo,
         timeslotlelo,
+        alluser
         
     
   }}
