@@ -299,7 +299,7 @@ console.log("alluserrefercode",alluser)
 </button>
 
 {/* Fullscreen Overlay for Ranking List */}
-{alluser && (
+{showRankingList && (
   <div
     style={{
       position: 'fixed',
@@ -351,7 +351,7 @@ console.log("alluserrefercode",alluser)
             alignItems: 'center',
           }}
         >
-          <span>👤{rank.phone}</span>
+          <span>👤{rank.phonenumber}</span>
           <span>💸 ₹{500 * (6 - rank.codepoint)}</span>
         </div>
       ))}
