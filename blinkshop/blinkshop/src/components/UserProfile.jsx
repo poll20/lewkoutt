@@ -208,7 +208,7 @@ let navigate=useNavigate()
     <div className="profile-container">
       <h2>{userDetails.name}</h2>
       <div className="scroll">
-      <div className="profile-header">
+      {/* <div className="profile-header">
         <div className="profile-info">
           <AiOutlineUser className="profile-icon" />
           <div className="profile-details">
@@ -216,7 +216,28 @@ let navigate=useNavigate()
           </div>
         </div>
         <button className="profile-add-button"onClick={() => setShowOverlayForm(true)}>Add</button>
-      </div>
+      </div> */}
+      <div className="profile-header">
+  <div className="profile-info">
+    <AiOutlineUser className="profile-icon" />
+    <div className="profile-details">
+      <p>{userDetails.email}<br />{userDetails.phonenumber}</p>
+    </div>
+  </div>
+  {
+    (!userDetails.name || !userDetails.email) ? (
+      <button className="profile-add-button" onClick={() => {
+        setFormData({ name: '', email: '', dob: '' });
+        setShowOverlayForm(true);
+      }}>Add</button>
+    ) : (
+      <button className="profile-add-button" onClick={() => {
+        setFormData({ name: userDetails.name, email: userDetails.email, dob: userDetails.dob || '' });
+        setShowOverlayForm(true);
+      }}>Edit</button>
+    )
+  }
+</div>
       <div className="profile-balance">
         <div className="balance-item">
           <FaWallet />
