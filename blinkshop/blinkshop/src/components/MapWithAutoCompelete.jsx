@@ -172,8 +172,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
  const {handlenewaddress,handlechooseaddress,deleteandeditaddrress}=useBio()
   const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
  const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
- const [username, setusername] = useState("");
- const [useremail, setuseremail] = useState("");
+ 
   const [pincode, setPincode] = useState("");
   const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
@@ -586,12 +585,8 @@ useEffect(() => {
     <div className="address-containerrr">
       <div className="address-form">
         <h3 className="section-title">Address Information</h3>
-       
 
-        {userDetails.name && userDetails.email ? (
-  <>
-
-         <input
+        <input
           type="text"
           placeholder="Pincode*"
           value={pincode}
@@ -649,152 +644,7 @@ useEffect(() => {
             )}
           </>
         )}
-  </>
-) : <>
-<input
-  type="text"
-  placeholder="User Name*"
-  value={username}
-  onChange={(e) => setusername(e.target.value)}
-  onBlur={() => handleBlur('username')}
-/>
-{touched.username && isFieldEmpty(username) && (
-  <p className="text-red-600 text-sm mt-1">This field is required</p>
-)}
- <input
-      type="text"
-      placeholder="User Email*"
-      value={useremail}
-      onChange={(e) => setuseremail(e.target.value)}
-      onBlur={() => handleBlur('useremail')}
-    />
-    {touched.useremail && isFieldEmpty(useremail) && (
-      <p className="text-red-600 text-sm mt-1">This field is required</p>
-    )}
 
-    
-<input
-      type="text"
-      placeholder="Pincode*"
-      value={pincode}
-      onChange={(e) => setPincode(e.target.value)}
-      onBlur={() => handleBlur('pincode')}
-    />
-    {touched.pincode && isFieldEmpty(pincode) && (
-      <p className="text-red-600 text-sm mt-1">This field is required</p>
-    )}
-
-    <input
-      type="text"
-      placeholder="Phone no.*"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      onBlur={() => handleBlur('phone')}
-    />
-    {touched.phone && isFieldEmpty(phone) && (
-      <p className="text-red-600 text-sm mt-1">This field is required</p>
-    )}
-
-    <input
-      type="text"
-      placeholder="Flat no / building name*"
-      value={building}
-      onChange={(e) => setBuilding(e.target.value)}
-      onBlur={() => handleBlur('building')}
-    />
-    {touched.building && isFieldEmpty(building) && (
-      <p className="text-red-600 text-sm mt-1">This field is required</p>
-    )}
-
-    <input
-      type="text"
-      placeholder="Locality / Area / Street*"
-      value={locality}
-      onChange={(e) => setLocality(e.target.value)}
-      onBlur={() => handleBlur('locality')}
-    />
-    {touched.locality && isFieldEmpty(locality) && (
-      <p className="text-red-600 text-sm mt-1">This field is required</p>
-    )}
-
-    {otpSent && (
-      <>
-        <input
-          type="text"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          onBlur={() => handleBlur('otp')}
-        />
-        {touched.otp && isFieldEmpty(otp) && (
-          <p className="text-red-600 text-sm mt-1">This field is required</p>
-        )}
-      </>
-    )}
-</>}
-        
-
-     
-{/* 
-          <input
-          type="text"
-          placeholder="Pincode*"
-          value={pincode}
-          onChange={(e) => setPincode(e.target.value)}
-          onBlur={() => handleBlur('pincode')}
-        />
-        {touched.pincode && isFieldEmpty(pincode) && (
-          <p className="text-red-600 text-sm mt-1">This field is required</p>
-        )}
-
-        <input
-          type="text"
-          placeholder="Phone no.*"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          onBlur={() => handleBlur('phone')}
-        />
-        {touched.phone && isFieldEmpty(phone) && (
-          <p className="text-red-600 text-sm mt-1">This field is required</p>
-        )}
-
-        <input
-          type="text"
-          placeholder="Flat no / building name*"
-          value={building}
-          onChange={(e) => setBuilding(e.target.value)}
-          onBlur={() => handleBlur('building')}
-        />
-        {touched.building && isFieldEmpty(building) && (
-          <p className="text-red-600 text-sm mt-1">This field is required</p>
-        )}
-
-        <input
-          type="text"
-          placeholder="Locality / Area / Street*"
-          value={locality}
-          onChange={(e) => setLocality(e.target.value)}
-          onBlur={() => handleBlur('locality')}
-        />
-        {touched.locality && isFieldEmpty(locality) && (
-          <p className="text-red-600 text-sm mt-1">This field is required</p>
-        )}
-
-        {otpSent && (
-          <>
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              onBlur={() => handleBlur('otp')}
-            />
-            {touched.otp && isFieldEmpty(otp) && (
-              <p className="text-red-600 text-sm mt-1">This field is required</p>
-            )}
-          </>
-        )} */}
-         
         <div className="city-state">
           <input type="text" value="Jaipur" readOnly />
           <input type="text" value="Rajasthan" readOnly />

@@ -386,7 +386,7 @@ app.get("/wear",async(req,res)=>{
 app.post("/user/register", async (req, res) => {
   console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   // const { name, email, updated_at } = req.body;
-  const { phoneNumber,uid,refcode, updated_at } = req.body
+  const {phoneNumber,uid,refcode, updated_at } = req.body
   console.log("phonenumberrrrr",phoneNumber)
   if (phoneNumber && uid && !refcode) { 
     try {
@@ -453,6 +453,37 @@ app.post("/user/register", async (req, res) => {
     console.error("Error saving user:"); // 👈 Error ko log karo
 
     res.status(400).json({ message: "Email is required" });
+  }
+});
+
+// 🔧 PATCH Route
+app.patch('/useredit', async (req, res) => {
+  const { formData, userid } = req.body;
+
+  try {
+    const updatedUser = await userr.findByIdAndUpdate(
+      userid,
+      {
+        $set: {
+          name: formData.name,
+          email: formData.email,
+          dob: formData.dob,
+        },
+      },
+      { new: true } // returns the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found!' });
+    }
+
+    res.status(200).json({
+      message: 'User updated successfully!',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

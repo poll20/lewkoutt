@@ -155,6 +155,12 @@ const UserProfile = () => {
   // let {logout}=useAuth()
   let {user,userDetails,logout}=useFirebaseAuth()
   let [popup,setPopup]=useState(false)
+  const [showOverlayForm, setShowOverlayForm] = useState(false);
+const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  dob: '',
+});
 let navigate=useNavigate()
   useEffect(()=>{ 
     
@@ -200,7 +206,7 @@ let navigate=useNavigate()
             <p>{userprf.email}<br />{userDetails.phonenumber}</p>
           </div>
         </div>
-        <button className="profile-add-button">Add</button>
+        <button className="profile-add-button"onClick={() => setShowOverlayForm(true)}>Add</button>
       </div>
       <div className="profile-balance">
         <div className="balance-item">
@@ -266,6 +272,33 @@ let navigate=useNavigate()
          <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logouttheuser()}}>Logout</button> 
         {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}></button> */}
        </div>
+       {showOverlayForm && (
+  <div className="overlay-form">
+    <div className="form-container">
+      <button className="close-btn" onClick={() => setShowOverlayForm(false)}>✖</button>
+      <h2>Edit Profile</h2>
+      <input
+        type="text"
+        placeholder="Full Name"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      />
+      <input
+        type="date"
+        value={formData.dob}
+        onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+      />
+      <button className="submit-btn" onClick={() => console.log(formData)}>Submit</button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

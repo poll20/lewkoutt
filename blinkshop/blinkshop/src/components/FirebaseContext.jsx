@@ -835,7 +835,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       setUser(signedInUser);
       console.log("✅ OTP Verified:", signedInUser.phoneNumber);
 
-      await registerUser({signedInUser,refcode});
+      await registerUser(signedInUser,refcode);
       
       return { success: true };
       
@@ -876,6 +876,31 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       setError(e.message);
     }
   };
+
+  const addnameemail = async (data,userid) => {
+    try {
+      const response = await fetch(`${apiUrl}/useredit`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({data,userid}),
+      });
+  
+      const result = await response.json();
+      console.log('Response:', result);
+  
+      if (response.ok) {
+       fetchUserDetails()
+      } else {
+        alert('Something went wrong!');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Server error!');
+    }
+  };
+  
 
   // ✅ Fetch user details (like profile info)
   const fetchUserDetails = async (firebaseUser) => {
@@ -933,6 +958,8 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
 //     // }
 //   };
 // ✅ Logout
+
+
 const logout = async () => {
     try {
       await signOut(auth);
@@ -989,6 +1016,7 @@ useEffect(() => {
         logout,
         initRecaptcha,
         fetchUserDetails,
+        addnameemail
       }}
     >
       {children}

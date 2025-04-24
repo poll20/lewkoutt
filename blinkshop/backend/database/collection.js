@@ -93,12 +93,14 @@ let users=mongoose.Schema({
     // name: String,
     // email: String,
     // uid: { type: String, required: true },
+    name:{type:String},
+    email:{type:String},
     phonenumber:{type:String},
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     refercode:{type: String},
     uid:{String},
-    codecount:{type:Number},
-    codepoint:{type:Number},
+    codecount:{type:Number,default:0},
+    codepoint:{type:Number,default:0},
     address:[addressSchema],  
     lat: Number,  // User latitude
     long: Number , // User longitude
