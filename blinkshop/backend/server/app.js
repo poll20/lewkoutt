@@ -458,16 +458,16 @@ app.post("/user/register", async (req, res) => {
 
 // 🔧 PATCH Route
 app.patch('/useredit', async (req, res) => {
-  const { formData, userid } = req.body;
+  const { data, userid } = req.body;
 
   try {
     const updatedUser = await userr.findByIdAndUpdate(
       userid,
       {
         $set: {
-          name: formData.name,
-          email: formData.email,
-          dob: formData.dob,
+          name: data.name,
+          email: data.email,
+          dob: data.dob,
         },
       },
       { new: true } // returns the updated document
