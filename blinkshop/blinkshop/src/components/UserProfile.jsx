@@ -206,13 +206,13 @@ let navigate=useNavigate()
   }
   return (
     <div className="profile-container">
-      <h2>{userprf.name}</h2>
+      <h2>{userDetails.name}</h2>
       <div className="scroll">
       <div className="profile-header">
         <div className="profile-info">
           <AiOutlineUser className="profile-icon" />
           <div className="profile-details">
-            <p>{userprf.email}<br />{userDetails.phonenumber}</p>
+            <p>{userDetails.email}<br />{userDetails.phonenumber}</p>
           </div>
         </div>
         <button className="profile-add-button"onClick={() => setShowOverlayForm(true)}>Add</button>
