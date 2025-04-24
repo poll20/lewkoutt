@@ -95,6 +95,7 @@ let users=mongoose.Schema({
     // uid: { type: String, required: true },
     name:{type:String},
     email:{type:String},
+    dob:{type:Date},
     phonenumber:{type:String},
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     refercode:{type: String},
