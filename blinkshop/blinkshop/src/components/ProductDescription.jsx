@@ -39,6 +39,7 @@ const [cartData, setCartData] = useState([]);
   const [popupImage, setPopupImage] = useState(""); // State to store the clicked image
   const [Selectedcolor,setSelectedcolor]=useState([])
 const[product,setproduct]=useState([])
+const[mainProductt,setmainprodutt]=useState([])
 const imageRef = useRef();
 const cartRef = useRef();
   let { id } = useParams();
@@ -98,6 +99,72 @@ const cartRef = useRef();
 //   return(<p>loading...</p>)
 //  }
 //  console.log("koko",productdata)
+
+
+
+useEffect(() => {
+  console.log("🔥 useEffect Triggered! Checking for Data Update");
+  if (!productdataonlydetail || productdataonlydetail.length === 0) {
+    // return <p>Loading...</p>;
+    console.log("no ddata")
+  }
+  
+  const mainProductt = productdataonlydetail.find((e) => e._id === id);
+  console.log("mainprdd",mainProductt)
+  setmainprodutt(mainProductt)
+  if (productdataonlydetail.length > 0) {
+    console.log("✅ Product Data Loaded, Running useEffect");
+    const mainProduct = productdataonlydetail.find((e) => e._id === id);
+    const varientprd = productdataonlydetail
+    .map(product => {
+      const matchingColor = product.colors.find(color => color._id === id);
+      if (matchingColor) {
+        return {
+          ...product,  // Saara product data
+          colors: [matchingColor] // Sirf matching color object ek array me
+        };
+      }
+      return null; // Agar matching color na mile toh null return karo
+    }).filter(product => product !== null); // Sirf valid products rakho
+    console.log("mainProduct inside useEffect:", mainProduct);
+    console.log("vareintProduct inside useEffect:", varientprd);
+    console.log("selected color",Selectedcolor)
+    if (mainProduct) {
+      
+      const defaultVariant =mainProduct.colors.find(
+        (e) => e.color === Selectedcolor
+      ) || mainProduct.colors.find((e) => e.color === mainProduct.defaultColor) || mainProduct.colors[0];
+
+      if (defaultVariant) {
+        console.log("defaultVariant:", defaultVariant);
+        setproduct({
+          ...defaultVariant,
+          price: mainProduct.price,
+          discountprice: mainProduct.discountprice,
+          shopname: mainProduct.shopname,
+          shopaddress: mainProduct.shopaddress,
+          discount: mainProduct.discount,
+          cate: mainProduct.cate,
+          image:mainProduct.image[0]
+        });
+      }
+    }
+    else{
+      setproduct({
+        ...varientprd[0].colors[0],
+        price: varientprd[0].price,
+        discountprice: varientprd[0].discountprice,
+        shopname: varientprd[0].shopname,
+        shopaddress: varientprd[0].shopaddress,
+        discount: varientprd[0].discount,
+        cate: varientprd[0].cate,
+        image:varientprd[0].image[0]
+      });
+
+    }
+    
+  }
+}, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
 
  
 
@@ -288,11 +355,14 @@ const cartRef = useRef();
 //     }
 //   };
   
-productdata.map((e)=>{  
-e.productdetails.map((ee)=>{
-  console.log("wsw",ee)
-})
-})
+// if(productdata)
+// {
+// productdata.map((e)=>{  
+// e.productdetails.map((ee)=>{
+//   console.log("wsw",ee)
+// })
+// })
+// }
 
   // let idss=[]
   // let drl=productdata.map((e)=>(e.productdetails))
@@ -310,68 +380,68 @@ e.productdetails.map((ee)=>{
   // console.log("Component Rendered! productdataonlydetail:", productdataonlydetail);
   // console.log("Component Rendered! id:", id);
 
-  if (!productdataonlydetail || productdataonlydetail.length === 0) {
-    return <p>Loading...</p>;
-  }
+  // if (!productdataonlydetail || productdataonlydetail.length === 0) {
+  //   return <p>Loading...</p>;
+  // }
   
-  const mainProductt = productdataonlydetail.find((e) => e._id === id);
-  console.log("mainprdd",mainProductt)
-  useEffect(() => {
-    console.log("🔥 useEffect Triggered! Checking for Data Update");
+  // const mainProductt = productdataonlydetail.find((e) => e._id === id);
+  // console.log("mainprdd",mainProductt)
+  // useEffect(() => {
+  //   console.log("🔥 useEffect Triggered! Checking for Data Update");
   
-    if (productdataonlydetail.length > 0) {
-      console.log("✅ Product Data Loaded, Running useEffect");
-      const mainProduct = productdataonlydetail.find((e) => e._id === id);
-      const varientprd = productdataonlydetail
-      .map(product => {
-        const matchingColor = product.colors.find(color => color._id === id);
-        if (matchingColor) {
-          return {
-            ...product,  // Saara product data
-            colors: [matchingColor] // Sirf matching color object ek array me
-          };
-        }
-        return null; // Agar matching color na mile toh null return karo
-      }).filter(product => product !== null); // Sirf valid products rakho
-      console.log("mainProduct inside useEffect:", mainProduct);
-      console.log("vareintProduct inside useEffect:", varientprd);
-      console.log("selected color",Selectedcolor)
-      if (mainProduct) {
+  //   if (productdataonlydetail.length > 0) {
+  //     console.log("✅ Product Data Loaded, Running useEffect");
+  //     const mainProduct = productdataonlydetail.find((e) => e._id === id);
+  //     const varientprd = productdataonlydetail
+  //     .map(product => {
+  //       const matchingColor = product.colors.find(color => color._id === id);
+  //       if (matchingColor) {
+  //         return {
+  //           ...product,  // Saara product data
+  //           colors: [matchingColor] // Sirf matching color object ek array me
+  //         };
+  //       }
+  //       return null; // Agar matching color na mile toh null return karo
+  //     }).filter(product => product !== null); // Sirf valid products rakho
+  //     console.log("mainProduct inside useEffect:", mainProduct);
+  //     console.log("vareintProduct inside useEffect:", varientprd);
+  //     console.log("selected color",Selectedcolor)
+  //     if (mainProduct) {
         
-        const defaultVariant =mainProduct.colors.find(
-          (e) => e.color === Selectedcolor
-        ) || mainProduct.colors.find((e) => e.color === mainProduct.defaultColor) || mainProduct.colors[0];
+  //       const defaultVariant =mainProduct.colors.find(
+  //         (e) => e.color === Selectedcolor
+  //       ) || mainProduct.colors.find((e) => e.color === mainProduct.defaultColor) || mainProduct.colors[0];
   
-        if (defaultVariant) {
-          console.log("defaultVariant:", defaultVariant);
-          setproduct({
-            ...defaultVariant,
-            price: mainProduct.price,
-            discountprice: mainProduct.discountprice,
-            shopname: mainProduct.shopname,
-            shopaddress: mainProduct.shopaddress,
-            discount: mainProduct.discount,
-            cate: mainProduct.cate,
-            image:mainProduct.image[0]
-          });
-        }
-      }
-      else{
-        setproduct({
-          ...varientprd[0].colors[0],
-          price: varientprd[0].price,
-          discountprice: varientprd[0].discountprice,
-          shopname: varientprd[0].shopname,
-          shopaddress: varientprd[0].shopaddress,
-          discount: varientprd[0].discount,
-          cate: varientprd[0].cate,
-          image:varientprd[0].image[0]
-        });
+  //       if (defaultVariant) {
+  //         console.log("defaultVariant:", defaultVariant);
+  //         setproduct({
+  //           ...defaultVariant,
+  //           price: mainProduct.price,
+  //           discountprice: mainProduct.discountprice,
+  //           shopname: mainProduct.shopname,
+  //           shopaddress: mainProduct.shopaddress,
+  //           discount: mainProduct.discount,
+  //           cate: mainProduct.cate,
+  //           image:mainProduct.image[0]
+  //         });
+  //       }
+  //     }
+  //     else{
+  //       setproduct({
+  //         ...varientprd[0].colors[0],
+  //         price: varientprd[0].price,
+  //         discountprice: varientprd[0].discountprice,
+  //         shopname: varientprd[0].shopname,
+  //         shopaddress: varientprd[0].shopaddress,
+  //         discount: varientprd[0].discount,
+  //         cate: varientprd[0].cate,
+  //         image:varientprd[0].image[0]
+  //       });
 
-      }
+  //     }
       
-    }
-  }, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
+  //   }
+  // }, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
   
 
   
@@ -386,7 +456,7 @@ e.productdetails.map((ee)=>{
     return <p>Loading...</p>;
   }
 
-console.log("lplp",product)
+// console.log("lplp",product)
 
 
   let ar = cards.map((e) => {

@@ -179,6 +179,7 @@ import PopUpNotificationss from "./components/PopUpNotificationss";
 
 import GlobalLoader from "./components/GlobalLoader";
 import { FirebaseAuthProvider } from "./components/FirebaseContext";
+import TermsAndConditions from "./components/TermsAndConditions";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -334,7 +335,7 @@ function Layout({ showPopup }) {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/faq" element={<Faq/>} />
             <Route path="/aboutus" element={<AboutUs/>} />
-            
+            <Route path="/terms" element={<TermsAndConditions/>} />
             <Route path="/shopkeeper" element={<ShopkeeperDashboard />} />
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
