@@ -285,6 +285,7 @@ console.log("alluserrefercode",alluser)
   style={{
     width: '100%',
     marginTop: '16px',
+    marginBottom:"35px",
     backgroundColor: '#222',
     color: 'white',
     fontWeight: '600',
