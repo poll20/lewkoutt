@@ -71,6 +71,7 @@ if(!alluser){
   return (<p>loading...</p>)
 }
 console.log("alluserrefercode",alluser)
+const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
   return (
     <div
       style={{
@@ -114,11 +115,11 @@ console.log("alluserrefercode",alluser)
       >
         <div>
           <p style={{ color: '#ccc', margin: 0 }}>Total Earning</p>
-          <p style={{ fontWeight: '600', margin: 0 }}>₹{codepoint}</p>
+          <p style={{ fontWeight: '600', margin: 0 }}>₹{codepoint?(codepoint):(0)}</p>
         </div>
         <div>
           <p style={{ color: '#ccc', margin: 0 }}>Friend's Signup</p>
-          <p style={{ fontWeight: '600', margin: 0 }}>{codecount}</p>
+          <p style={{ fontWeight: '600', margin: 0 }}>{codecount?(codecount):(0)}</p>
         </div>
       </div>
 
@@ -337,9 +338,9 @@ console.log("alluserrefercode",alluser)
     {/* Title */}
     <h2 style={{ marginBottom: '20px', fontSize: '22px' }}>🏅 Top Referrers</h2>
 
-    {/* Ranking List */}
+    {/* Ranking List
     <div style={{ width: '100%', maxWidth: '500px' }}>
-      {alluser.map((rank) => (
+      {filteredUsers.map((rank) => (
         <div
           key={rank}
           style={{
@@ -356,7 +357,32 @@ console.log("alluserrefercode",alluser)
           <span>💸 ₹{500 * (6 - rank.codepoint)}</span>
         </div>
       ))}
-    </div>
+    </div> */}
+    {/* Ranking List */}
+<div style={{ width: '100%', maxWidth: '500px' }}>
+  {filteredUsers.length === 0 ? (
+    <p style={{ color: 'gray', textAlign: 'center', marginTop: '20px' }}>List is empty</p>
+  ) : (
+    filteredUsers.map((rank) => (
+      <div
+        key={rank.phonenumber}
+        style={{
+          backgroundColor: '#1e1e1e',
+          marginBottom: '12px',
+          padding: '12px 16px',
+          borderRadius: '8px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <span>👤 {rank.phonenumber}</span>
+        <span>💸 ₹{500 * (6 - rank.codepoint)}</span>
+      </div>
+    ))
+  )}
+</div>
+
   </div>
 )}
 
