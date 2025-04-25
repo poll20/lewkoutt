@@ -892,7 +892,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       console.log('Response:', result);
   
       if (response.ok) {
-       fetchUserDetails()
+       fetchUserDetails(user)
       } else {
         alert('Something went wrong!');
       }
