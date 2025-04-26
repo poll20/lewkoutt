@@ -78,8 +78,8 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
         // border:"1px solid red",
         marginTop:"10px",
         marginBottom:"30px",
-        backgroundColor: 'black',
-        color: 'white',
+        backgroundColor: '#fff2d7',
+        color: 'black',
         minHeight: '100vh',
         padding: '16px',
         fontFamily: 'Arial, sans-serif',
@@ -111,46 +111,49 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
           justifyContent: 'space-between',
           fontSize: '14px',
           marginBottom: '16px',
+          color:"black"
         }}
       >
-        <div>
-          <p style={{ color: '#ccc', margin: 0 }}>Total Earning</p>
-          <p style={{ fontWeight: '600', margin: 0 }}>₹{codepoint?(codepoint):(0)}</p>
+        <div >
+          <p style={{ color: '#ccc', margin: 0,color:"black" }}>Total Earning</p>
+          <p style={{ fontWeight: '600', margin: 0,color:"black" }}>₹{codepoint?(codepoint):(0)}</p>
         </div>
         <div>
-          <p style={{ color: '#ccc', margin: 0 }}>Friend's Signup</p>
-          <p style={{ fontWeight: '600', margin: 0 }}>{codecount?(codecount):(0)}</p>
+          <p style={{ color: '#ccc', margin: 0,color:"black" }}>Friend's Signup</p>
+          <p style={{ fontWeight: '600', margin: 0,color:"black" }}>{codecount?(codecount):(0)}</p>
         </div>
       </div>
 
       {/* Main Info Box */}
       <div
         style={{
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#fff2d7',
           padding: '16px',
           borderRadius: '12px',
           marginBottom: '16px',
+          
         }}
       >
-        <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>
+        <p style={{ fontWeight: 'bold', marginBottom: '8px',color:"black" }}>
           🔥 Earn ₹500 for each friend you refer!!
         </p>
-        <p style={{ fontSize: '14px', color: '#ccc', marginBottom: '12px' }}>
+        <p style={{ fontSize: '14px', color:"black", marginBottom: '12px' }}>
           Better to tell your friends about us before they find out on their own because this way
           you earn their trust, social capital and some reward points!
         </p>
         <ul
           style={{
             fontSize: '14px',
-            color: '#ccc',
+            // color: '#ccc',
+            color:"black",
             paddingLeft: '20px',
             marginBottom: '12px',
           }}
         >
-          <li>Share the referral code with your friends</li>
+          <li style={{color:"black"}}>Share the referral code with your friends</li>
           <li>
             You and Your friend both{' '}
-            <span style={{ fontWeight: '600', color: 'white' }}>get ₹500</span> when your friend
+            <span style={{ fontWeight: '600', color: "black" }}>get ₹500</span> when your friend
             places their first order using your referral code
           </li>
           <li>Redeemable on purchase of ₹999 and more</li>
@@ -168,7 +171,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
             backgroundColor: 'black',
           }}
         >
-          <span style={{ fontSize: '18px', letterSpacing: '2px' }}>{referralCode}</span>
+          <span style={{ fontSize: '18px', letterSpacing: '2px' ,color:"white" }}>{referralCode}</span>
           <button
             onClick={handleCopy}
             style={{

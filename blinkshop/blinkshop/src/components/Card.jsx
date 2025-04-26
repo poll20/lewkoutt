@@ -495,7 +495,7 @@ if(searchvalue){
     return (
       <>
       {
-        !wish?(<div className={!props.category?("filter-containerrr"):("hidefiltersec")} style={{borderBottom:"1px solid gray"}}>
+        !wish?(<div className={!props.category?("filter-containerrr"):("hidefiltersec")} style={{borderBottom:"1px solid gray",backgroundColor:' #fff2d7'}}>
           <div className="filter-row">
           
             <div className="filter-btn" onClick={() => togglePanel("sort")}>
@@ -600,7 +600,7 @@ if(searchvalue){
               ))}
             </div>
           )}
-        </div>):(<div className="filter-containerrr" style={{padding:"0",textAlign:'center'}} ><h2 style={{paddingTop:"3px"}}>Your Wishlist</h2></div>)
+        </div>):(<div className="filter-containerrr" style={{padding:"0",textAlign:'center'}} ><h2 style={{paddingTop:"3px",backgroundColor: '#fff2d7'}}>Your Wishlist</h2></div>)
       
 
       }
@@ -654,7 +654,7 @@ if(searchvalue){
             ))
           ) : (
             
-              !wish?(<p>No products available.</p>):( <div style={{width:"90vw",padding:"0",margin:"0",backgroundColor:"white"}}><EmptyCart endpoint={window.location.pathname.substring(1)} /></div>)
+              !wish?(<p>No products available.</p>):( <div style={{width:"90vw",padding:"0",margin:"0"}}><EmptyCart endpoint={window.location.pathname.substring(1)} /></div>)
             
             
           )}

@@ -12,6 +12,7 @@
   padding-top: 40px; /* Ensure additional space at the top */
   max-width: 100%;
   margin: 0 auto; /* Center the grid */
+  background-color: #fff2d7;
 }
 
 /* Styling for individual product cards */
@@ -128,10 +129,11 @@
 .filter-containerrr {
   /* border: 2px solid red; */
     padding: 15px;
-    background: rgb(255, 255, 255);
+    /* background: rgb(255, 255, 255); */
     border-bottom: 1px solid #ddd;
     position: relative;
     top:0;
+    /* background-color: #fff2d7; */
     
   }
   
@@ -141,6 +143,7 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
+    
   }
   
   .filter-btn {
@@ -152,6 +155,7 @@
     
     border-radius:0;
     cursor: pointer;
+    
   }
   
   .filter-btn:hover {
@@ -170,6 +174,7 @@
     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
     animation: slide-up 0.3s ease-in-out;
     z-index: 1000;
+    
   }
   
   @keyframes slide-up {

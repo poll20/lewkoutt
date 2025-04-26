@@ -6,6 +6,7 @@
     height: 100vh;
     background: linear-gradient(to bottom right, #f9fafb, #e0e7ff);
     padding: 20px;
+    
   }
   
   /* Referral Content */
@@ -29,7 +30,7 @@
   /* Text */
   .referral-text {
     font-size: 16px;
-    color: #6b7280;
+    color: #121213;
     margin-bottom: 20px;
   }
   

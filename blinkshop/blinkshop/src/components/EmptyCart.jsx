@@ -10,7 +10,7 @@ const EmptyCart = (props) => {
   };
 
   return (
-    <div className="empty-cart-container"style={{background:"white"}}>
+    <div className="empty-cart-container">
      {props.endpoint=="cart"?( <FaShoppingCart className="cart-icon" />):(<FaHeart className="cart-icon"/>)}
       <h2>{props.endpoint.slice(0,8)} is Empty</h2>
       <p>Look like you hav'nt added anythong yet. Start exploring and save your favorites</p>

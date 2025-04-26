@@ -96,7 +96,7 @@ if(!addtocartdatas){
         <h2 style={{ marginBottom: "5px" }}>Shopping Bag</h2>
       </div>
 
-      <div className="order-container-addtocart">
+      <div className="order-container-addtocart"style={{backgroundColor:'#fff2d7'}}>
       {addtocartdatas.length > 0 ? (
           addtocartdatas.map((order) => (
             <div className="order-card-addtocart" key={order._id}>

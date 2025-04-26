@@ -393,8 +393,8 @@
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
         <div id="recaptcha-container"style={{ display: 'none' }}></div>
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-8">
-            <div className="text-center">
+        <div className="max-w-md w-full bg-black rounded-2xl shadow-xl p-8 space-y-8" style={{backgroundColor:"#fff2d7"}}>
+            <div className="text-center"style={{backgroundColor:"#fff2d7"}}>
             <div className="mb-4 inline-block p-3 rounded-full bg-indigo-100">
                 {showOTP ? <FaLock className="text-indigo-600 text-2xl" /> : <FaPhone className="text-indigo-600 text-2xl" />}
             </div>
@@ -406,7 +406,7 @@
 
             {!showOTP ? (
             <form onSubmit={handlePhoneSubmit} className="space-y-6">
-                <div className="space-y-4">
+                <div className="space-y-4" style={{backgroundColor:"#fff2d7"}}>
                 <input
                     type="tel"
                     placeholder="Enter your phone number"
@@ -436,7 +436,7 @@
             </form>
             ) : (
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", width: "100%", maxWidth: "400px", margin: "auto" }}>
-                <div style={{ display: "flex", width: "100%", gap: "8px" }}>
+                <div style={{ display: "flex", width: "100%", gap: "8px",backgroundColor:"#fff2d7"}}>
                 {otp.map((digit, index) => (
                     <input
                     key={index}
