@@ -185,7 +185,7 @@ let Clickcard=(id)=>{
     <div className="om-btnnn">
                
         <NavLink to="/productmodel/newarrivals">
-        <button style={{width:"100%",margin:"auto",width:"90vw",padding:"10px 0",borderRadius:"8px", border:"1px solid rgb(190, 190, 190)",backgroundColor:"#f98866"}}>
+        <button style={{width:"100%",margin:"auto",width:"90vw",padding:"10px 0",borderRadius:"8px", border:"1px solid rgb(190, 190, 190)",backgroundColor:"white"}}>
           VIEW ALL</button>
           </NavLink>
       </div>
