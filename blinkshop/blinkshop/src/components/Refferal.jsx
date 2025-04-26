@@ -78,7 +78,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
         // border:"1px solid red",
         marginTop:"10px",
         marginBottom:"30px",
-        backgroundColor: '#fff2d7',
+        backgroundColor: white,
         color: 'black',
         minHeight: '100vh',
         padding: '16px',
@@ -127,7 +127,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
       {/* Main Info Box */}
       <div
         style={{
-          backgroundColor: '#fff2d7',
+          backgroundColor: white,
           padding: '16px',
           borderRadius: '12px',
           marginBottom: '16px',
@@ -171,7 +171,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
             backgroundColor: 'black',
           }}
         >
-          <span style={{ fontSize: '18px', letterSpacing: '2px' ,color:"white" }}>{referralCode}</span>
+          <span style={{ fontSize: '18px', letterSpacing: '2px' ,color:"" }}>{referralCode}</span>
           <button
             onClick={handleCopy}
             style={{

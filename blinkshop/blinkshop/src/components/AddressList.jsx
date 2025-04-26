@@ -165,9 +165,9 @@ useEffect(() => {
 }, [isAddressPanelOpen, showaddresspanel]);
   return (
     
-      <div className="address-container" style={{backgroundColor:"#fff2d7"}}>
+      <div className="address-container" style={{backgroundColor:"white"}}>
         {userprf?.address?.length === 0 ? (
-          <div style={{display:'flex',alignItems:'center',justifyContent:"space-between",backgroundColor:"#fff2d7"}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:"space-between",backgroundColor:"white"}}>
           <h2>Address</h2>
           <NavLink to='/maps' className="navlink">
           <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} >+ Add Addddress</button>

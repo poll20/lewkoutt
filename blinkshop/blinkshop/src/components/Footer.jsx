@@ -100,7 +100,7 @@ let distinctcat=[... new Set(data)]
   //       <p>&copy; 2024 Your Company. All rights reserved.</p>
   //     </div>
   //   </footer>
-  <footer className="bg-black text-white px-6 py-10 md:px-20 footer" style={{backgroundColor:"#fff2d7",color:"black"}} >
+  <footer className="bg-black text-white px-6 py-10 md:px-20 footer" style={{backgroundColor:"white",color:"black"}} >
       <div className="text-center mb-8 footer-container"style={{color:"black"}}>
         <h1 className="text-4xl font-bold font-serif italic">Lewkout</h1>
         <p className="text-sm mt-2">Fast. Fierce. Fashion in 60 minutes!</p>
