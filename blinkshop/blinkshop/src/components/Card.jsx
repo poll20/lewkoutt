@@ -495,7 +495,7 @@ if(searchvalue){
     return (
       <>
       {
-        !wish?(<div className={!props.category?("filter-containerrr"):("hidefiltersec")} style={{borderBottom:"1px solid gray",backgroundColor:' #fff2d7'}}>
+        !wish?(<div className={!props.category?("filter-containerrr"):("hidefiltersec")} style={{borderBottom:"1px solid gray",backgroundColor:' white'}}>
           <div className="filter-row">
           
             <div className="filter-btn" onClick={() => togglePanel("sort")}>
@@ -600,7 +600,7 @@ if(searchvalue){
               ))}
             </div>
           )}
-        </div>):(<div className="filter-containerrr" style={{padding:"0",textAlign:'center'}} ><h2 style={{paddingTop:"3px",backgroundColor: '#fff2d7'}}>Your Wishlist</h2></div>)
+        </div>):(<div className="filter-containerrr" style={{padding:"0",textAlign:'center'}} ><h2 style={{paddingTop:"3px",backgroundColor: 'white'}}>Your Wishlist</h2></div>)
       
 
       }
@@ -639,7 +639,7 @@ if(searchvalue){
         </div>
 
         {/* Details Section */}
-        <div className="product-details" style={{backgroundColor:"#fff2d7"}}>
+        <div className="product-details" style={{backgroundColor:"white"}}>
           <p className="product-title">{product.description.length>19?(product.description.slice(0,18)+`...`):(product.description)}</p>
           <div className="product-pricing">
             <span className="current-price">₹{product.discountprice}</span>

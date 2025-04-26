@@ -97,7 +97,7 @@ const CtegoriesLayout = () => {
 
       </div>
       
-      <NavLink to={`/productmodel/${e.category}`} style={{margin:"auto"}}><button className="catebtn" style={{width:"100%",margin:"auto",width:"90vw",padding:"10px 0",borderRadius:"8px"}}>View All</button></NavLink>
+      <NavLink to={`/productmodel/${e.category}`} style={{margin:"auto"}}><button className="catebtn" style={{width:"100%",margin:"auto",width:"90vw",padding:"10px 0",borderRadius:"8px",backgroundColor:"#f98866"}}>View All</button></NavLink>
     </div>
       ))
     }

@@ -21,6 +21,7 @@ html, body, #root {
       }
       button{
         font-family: 'Montserrat', sans-serif;
+        /* background-color:#f98866; */
       }
       #popup-wrapper {
         position: fixed;
