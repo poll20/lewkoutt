@@ -170,7 +170,7 @@ useEffect(() => {
           <div style={{display:'flex',alignItems:'center',justifyContent:"space-between",backgroundColor:"white"}}>
           <h2>Address</h2>
           <NavLink to='/maps' className="navlink">
-          <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} >+ Add Addddress</button>
+          <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Addddress</button>
           </NavLink>
           </div>
         ) : (
@@ -178,7 +178,7 @@ useEffect(() => {
             <div className="address-header">
               <h2>Select Address</h2>
               <NavLink to='/maps' className="navlink">
-              <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}}>+ Add Addressdd</button>
+              <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Addressdd</button>
               </NavLink>
             </div>
     
@@ -401,7 +401,7 @@ useEffect(() => {
     </div> */}
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0'}}>
-        <button className="buy-buttonss" style={{width:"290px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>
+        <button className="buy-buttonss" style={{width:"290px",backgroundColor:"#F15A29"}} onClick={()=>{sendtocheckout()}} >Buy Now</button>
        </div>
       </div>
   );

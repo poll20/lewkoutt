@@ -645,7 +645,7 @@ let cate=product.cate
           
           <div className="button-group" style={{display:"flex",alignItems:"center",justifyContent:"start",marginBottom:"20px"}}>
            
-          <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}}>Add to Cart</button>
+          <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}} style={{backgroundColor:"#F15A29"}}>Add to Cart</button>
          <button className="add-to-cart" onClick={()=>{buydata(product,selectedSize,quantity)}} style={{backgroundColor:"#F15A29"}}>Buy Now</button>
             
           </div>
