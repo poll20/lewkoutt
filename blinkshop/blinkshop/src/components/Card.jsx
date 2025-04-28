@@ -661,42 +661,29 @@ if(searchvalue){
         
         </div>
         {/* {sizesshow==true?(<div className="showprdsizes">{prdallsizes.map((e)=>(<p onClick={()=>{handleAddToCart(addtocartkeliyeid,1,e)}}  className="ppsize">{e}</p>))}<RxCross1 style={{position:'fixed',right:'10px',top:'70px'}} onClick={()=>{setsizesshow(false)}}/></div>):('')}  */}
-        <div className="bottom-sheet" style={{display:sizesshow?('block'):('none')}}>
-        <p>Review item</p>
-        <button onClick={()=>{setsizesshow(false)}} className="closed-button">
-                  ✖
-                </button>
-        
-                {
-                  prdallsizes.map((e)=>(
-                    <>
-                    {/* <div className="sheet-header">
-                <p className="item-price">₹{e.discountprice}</p>
-                </div> */}
-              <div className="sheet-content">
-                <div className="item-info">
-                  
-                  {/* <img
-                    src={img1} // Replace with your product image URL
-                    alt="Product"
-                    className="product-image-sheet"
-                  /> */}
-                  <div className="item-details">
-                  {/* <p onClick={()=>{handleAddToCart(addtocartkeliyeid,1,e)}}  className="ppsize">{e}</p> */}
-                  <div className="showprdsizes">{prdallsizes.map((e)=>(<p onClick={()=>{handleAddToCart(addtocartkeliyeid,1,e)}}  className="ppsize">{e}</p>))}</div>
-                    {/* <h4>{e.description}</h4> */}
-                    {/* <p>Size: {e.size} &nbsp;&nbsp; Qty: {e.qty}</p> */}
-                    {/* <p className="delivery-info">
-                      Deliver by <span className="delivery-date">60 minute delivery</span>
-                    </p> */}
-                  </div>
-                </div>
-              </div>
-              </>
-                  ))
-                }
-              
-            </div>   
+        <div 
+  className={`abhayraj-bottom-sheet ${sizesshow ? 'abhayraj-show' : ''}`}
+>
+  <div className="abhayraj-sheet-header">
+    <p>Select Size</p>
+    <button onClick={() => setsizesshow(false)} className="abhayraj-close-button">
+      ✖
+    </button>
+  </div>
+
+  <div className="abhayraj-size-buttons-wrapper">
+    {prdallsizes.map((size, index) => (
+      <button
+        key={index}
+        className="abhayraj-size-button"
+        onClick={() => handleAddToCart(addtocartkeliyeid, 1, size)}
+      >
+        {size}
+      </button>
+    ))}
+  </div>
+</div>
+
       </>
     );
   };
