@@ -682,7 +682,8 @@ if(searchvalue){
                     className="product-image-sheet"
                   /> */}
                   <div className="item-details">
-                  <p onClick={()=>{handleAddToCart(addtocartkeliyeid,1,e)}}  className="ppsize">{e}</p>
+                  {/* <p onClick={()=>{handleAddToCart(addtocartkeliyeid,1,e)}}  className="ppsize">{e}</p> */}
+                  <div className="showprdsizes">{prdallsizes.map((e)=>(<p onClick={()=>{handleAddToCart(addtocartkeliyeid,1,e)}}  className="ppsize">{e}</p>))}</div>
                     {/* <h4>{e.description}</h4> */}
                     {/* <p>Size: {e.size} &nbsp;&nbsp; Qty: {e.qty}</p> */}
                     {/* <p className="delivery-info">
