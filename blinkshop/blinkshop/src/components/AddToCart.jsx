@@ -176,7 +176,7 @@ if(!addtocartdatas){
          <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
          <span className="original-price">₹{cprice}</span>
          </div>
-        <button className="buy-buttonss" style={{width:"140px"}} onClick={()=>{sendtocheckout()}}>Buy Now</button>
+        <button className="buy-buttonss" style={{width:"140px",backgroundColor:"#F15A29"}} onClick={()=>{sendtocheckout()}} >Buy Now</button>
        </div>
        <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
