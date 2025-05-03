@@ -200,6 +200,7 @@
 import React, { useState } from "react";
 import { useDashboard } from "./DashboardContext";
 import { FaEdit, FaSave } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 export default function RegisterUser() {
   let { users, updateUserRole } = useDashboard();
@@ -253,11 +254,14 @@ export default function RegisterUser() {
         </thead>
         <tbody>
           {users.map((user) => (
+              <NavLink to={`/admin/useractivity/${user._id}`}>
             <tr key={user._id} className="hover:bg-gray-50">
+             
               <td className="px-4 py-2 border">{user._id}</td>
               <td className="px-4 py-2 border">{user.name}</td>
               <td className="px-4 py-2 border">{user.email}</td>
               <td className="px-4 py-2 border">{user.phone}</td>
+              
               <td className="px-4 py-2 border">
                 {editUserId === user._id ? (
                   <select
@@ -323,6 +327,7 @@ export default function RegisterUser() {
                 )}
               </td>
             </tr>
+            </NavLink>
           ))}
         </tbody>
       </table>

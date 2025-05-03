@@ -180,6 +180,10 @@ import PopUpNotificationss from "./components/PopUpNotificationss";
 import GlobalLoader from "./components/GlobalLoader";
 import { FirebaseAuthProvider } from "./components/FirebaseContext";
 import TermsAndConditions from "./components/TermsAndConditions";
+import Moodcom from "./components/Moodcom";
+import MoodMsgType from "./components/dashboardforadmin/MoodMsgType";
+import MoodMagManager from "./components/dashboardforadmin/MoodMsgManager";
+import UserActivity from "./components/dashboardforadmin/UserActivity";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -220,15 +224,15 @@ export default function App() {
     }, 3000);
   }, []);
   
-  useEffect(() => {
-    const keepAlive = setInterval(() => {
-      fetch("https://lewkoutt.onrender.com/ping")
-        .then((res) => console.log("Keeping Server Alive"))
-        .catch((err) => console.error(err));
-    }, 300000); // 5 min
+  // useEffect(() => {
+  //   const keepAlive = setInterval(() => {
+  //     fetch("https://lewkoutt.onrender.com/ping")
+  //       .then((res) => console.log("Keeping Server Alive"))
+  //       .catch((err) => console.error(err));
+  //   }, 300000); // 5 min
 
-    return () => clearInterval(keepAlive); // Cleanup when unmounting
-  }, []);
+  //   return () => clearInterval(keepAlive); // Cleanup when unmounting
+  // }, []);
   // useEffect(() => {
   //   const script = document.createElement("script");
   //   script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&libraries=places`;
@@ -281,6 +285,7 @@ function Layout({ showPopup }) {
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
   const isref = location.pathname.startsWith("/refferal");
+  const mood = location.pathname.startsWith("/mood");
   
   return (
     <>
@@ -302,6 +307,11 @@ function Layout({ showPopup }) {
               <Route path="/admin/newarrival" element={<NewArrival/>} />
               <Route path="/admin/userorder" element={<Ordersofusers/>} />
               <Route path="/admin/returnmyorder" element={<ReturnDataTable/>} />
+              <Route path="/admin/moodmsg" element={<MoodMsgType/>} />
+              <Route path="/admin/moodmngr" element={<MoodMagManager/>} />
+              <Route path="/admin/useractivity/:id" element={<UserActivity/>} />
+
+
 
 
             </Routes>
@@ -339,6 +349,7 @@ function Layout({ showPopup }) {
             <Route path="/shopkeeper" element={<ShopkeeperDashboard />} />
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
+            <Route path="/mood" element={<Moodcom/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
             {/* { toastmsg.length>0?(<Toast message={toastmsg}  />):('')
         
@@ -354,7 +365,7 @@ function Layout({ showPopup }) {
      
       
 
-      {!isAdminRoute && !isabout && !isref  && <Footer />}
+      {!isAdminRoute && !isabout && !isref  && !mood &&<Footer />}
     </>
   );
 }

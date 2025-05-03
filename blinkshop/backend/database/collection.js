@@ -206,8 +206,12 @@ const colorSchema = new mongoose.Schema({
     },
     title:{type:String},
     tag:{type:String},
-    description:{type:String},  
-    sizes: [sizeSchema]
+    description:{type:String},
+    cartcount:{type:Number},
+    wishlistcount:{tye:Number},
+    ordercount:{tye:Number},
+returncount:{tye:Number},
+sizes: [sizeSchema]
 },{_id:true});
 const CategorySchema = new mongoose.Schema({
     tag: {
@@ -345,6 +349,14 @@ let returnscema=mongoose.Schema({
   returnDate:{ type: Date, default: Date.now }
 })
 
+const moodMessageSchema = new mongoose.Schema({
+  moodemoji: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
+  moodcolor: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
+  moodtype: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
+  msgwithoffer: { type: String, required: true },
+  msgwithoutoffer: { type: String, required: true },
+});
+
 let wishmodel=new mongoose.model("cart",cartscema)
 
 let addtocart=mongoose.model("addtocart",cartz)
@@ -362,6 +374,7 @@ let rentt=mongoose.model("rent",rent)
 let wallettrans=mongoose.model("wallettransection",WalletTransactionSchema)
 const SalesModel = mongoose.model("Sales", salesSchema);
 const returnmodel = mongoose.model("return",returnscema);
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel}
+let moodmodel=mongoose.model("moodmessage",moodMessageSchema)
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel}
 
 

@@ -22,7 +22,12 @@ export const DashboardProvider = ({ children }) => {
         dismax:50,
     });
     const [alertMessage, setAlertMessage] = useState("");
-    
+    const[moodmsgs,setmoodmsg]=useState('')
+    const[addtocartdata,setaddtocartdata]=useState([])
+    const[addtocartdataonly,setaddtocartdataonly]=useState([])
+    const[wishlistdata,setwishlistdata]=useState([])
+    const[wishlist,setWishlist]=useState([])
+    const[userorderr,setuserorderr]=useState([])
     let showalert=()=>{
         alert("low stock alert")
     }
@@ -396,12 +401,192 @@ useEffect(()=>{
       updateOrdersWithReturnDetails();
     }, []);
     
+   
+    // useEffect(() => {
+    //   const getMoodMessages = async () => {
+    //     if (!user) return;
+    
+    //     try {
+    //       const res = await fetch(`${apiUrl}/moodmessage`);
+    
+    //       if (!res.ok) {
+    //         throw new Error(`HTTP error! Status: ${res.status}`);
+    //       }
+    
+    //       const data = await res.json();
+    //       setmoodmsg(data); // Assuming backend returns mood messages directly
+    //     } catch (error) {
+    //       console.error("❌ Failed to fetch mood messages:", error);
+    //     }
+    //   };
+    
+    //   getMoodMessages();
+    // }, [user]);
+    // 🔁 Reusable Fetch Function
+  const getMoodMessages = async () => {
+    if (!user) return;
+    try {
+      
+      const res = await fetch(`${apiUrl}/moodmessage`);
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+      const data = await res.json();
+      setmoodmsg(data);
+    } catch (error) {
+      console.error("❌ Failed to fetch mood messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    getMoodMessages();
+  }, [user]);
+    let moodmsg=async(data)=>{
+      try{
+      let response=await fetch(`${apiUrl}/moodmsg`,{
+        method:'POST',
+        headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({moodemoji:data.moodemoji,moodcolor:data.moodcolor,moodtype:data.moodtype,msgwithoffer:data.msgwithoffer,msgwithoutoffer:data.msgwithoutoffer }), // Send an array
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const dataa = await response.json();
+    await getMoodMessages()
+    console.log("✅ Multiple sales recorded successfully:", dataa);
+    }
+    catch(e){
+      console.log("error",e)
+    }
+    }
     
     
+    // DELETE mood message
+const deleteMoodMsg = async (id) => {
+  try {
+    let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error("Delete failed");
+  await  getMoodMessages() // refresh
+  } catch (err) {
+    console.error("Delete error:", err);
+  }
+};
+
+// UPDATE mood message
+const updateMoodMsg = async (id, updatedData) => {
+  try {
+    let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData)
+    });
+    if (!res.ok) throw new Error("Update failed");
+    await getMoodMessages(); // refresh
+  } catch (err) {
+    console.error("Update error:", err);
+  }
+};
     
+    
+
+const fetchCartItems = async (id) => {
+  try {
+    // setIsLoading(true)
+    let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
+    //   , {
+    //   headers: {
+    //     Authorization: `Bearer ${user.accessToken}`,
+    //   },
+    // }
+  );
+    let data = await response.json();
+    if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+      console.error("Invalid response format:", data);
+      return;
+    }
+    console.log("data in cart",data)
+    setaddtocartdata(data)
+    let cartItemIds = data.map(item => item.id); // Collect the ids of the items in the cart
+    setaddtocartdataonly(cartItemIds);  // Set the ids in the state to keep the icons red
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+  }
+  // finally{
+  //   setIsLoading(false)
+  // }
+};
+
+
+const fetchCartItemss = async (id) => {
+  try {
+    // setIsLoading(true)
+    let response = await fetch(`${apiUrl}/cart/${userDetails._id}`, 
+    //   {
+    //   headers: {
+    //     Authorization: `Bearer ${user.accessToken}`,
+    //   },
+    // }
+  );
+    let data = await response.json();
+    // console.log("data in cart",data)
+    // if(data)
+    //   {
+    //    console.log("data kokoin cart",data)
+    //   }
+    if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+      console.error("Invalid response format:", data);
+      return;
+    }
+    // console.log("data kokoin cart",data)
+    setwishlistdata(data)
+    let cartItemIds = data.map(item => item.itemid); // Collect the ids of the items in the cart
+    setWishlist(cartItemIds);  // Set the ids in the state to keep the icons red
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+  }
+  // finally{
+  //   setIsLoading(false)
+  // }
+};
+
+
+const fetchUserOrders = async (userId) => {
+  try {
+    // setIsLoading(true)
+      if (!userDetails._id) {
+          console.error("❌ User ID is missing!");
+          return;
+      }
+      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`
+      //   ,{
+      //   headers: { 
+      //     Authorization: `Bearer ${user.accessToken}`,
+      //   },
+      // }
+    );
+      if (!res.ok) {
+          throw new Error("Failed to fetch user orders");
+      }
+      let data = await res.json();
+      console.log("order ke data yhamilte",data)
+      setuserorderr(data);
+  } catch (err) {
+      console.log(err);
+  }
+  // finally{
+  //   setIsLoading(false)
+  // }
+};
+
   return (
     <DashboardContext.Provider
-      value={{adddatatoexistingcategory , addnewcategory ,users,editordeleteinexisitingcategory,deletefromexistingproduct,dis, setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,shopkeepersale,updateOrdersWithReturnDetails,returndata}}
+      value={{adddatatoexistingcategory , addnewcategory ,users,editordeleteinexisitingcategory,deletefromexistingproduct,dis, 
+        setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,
+        shopkeepersale,updateOrdersWithReturnDetails,
+        returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
+        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders}}
     >
       {children}
     </DashboardContext.Provider>

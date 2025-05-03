@@ -994,6 +994,7 @@ if(productdataonlydetail){
 
 const fetchUserOrders = async (userId) => {
   try {
+    setIsLoading(true)
       if (!userDetails._id) {
           console.error("❌ User ID is missing!");
           return;
@@ -1013,6 +1014,9 @@ const fetchUserOrders = async (userId) => {
       setuserorder(data);
   } catch (err) {
       console.log(err);
+  }
+  finally{
+    setIsLoading(false)
   }
 };
 

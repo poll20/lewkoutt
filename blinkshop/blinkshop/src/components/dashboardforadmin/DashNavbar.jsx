@@ -7,6 +7,7 @@ const DashNavbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ❗ Default: Always open on desktop
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
   const [isUserOpen, setUserOpen] = useState(false);
+  const [isMoodOpen, setMoodOpen] = useState(false);
 
   useEffect(() => {
     // ✅ Check screen size & toggle sidebar only for mobile
@@ -67,6 +68,30 @@ const DashNavbar = () => {
                 <NavLink to="/admin/activeuser"><li>Active User</li></NavLink>
                 <NavLink to="/admin/userorder"><li>Orders</li></NavLink>
                 <NavLink to="/admin/returnmyorder"><li>Return Order</li></NavLink>
+                {/* <NavLink to="/admin/moodmsg"><li>Mood Message</li></NavLink>
+                <NavLink to="/admin/moodmngr"><li>Mood Manager</li></NavLink> */}
+                {/* <NavLink to="/admin/useractivity/id"><li>User data</li></NavLink> */}
+
+
+              </ul>
+            )}
+           
+          </li>
+        </ul>
+
+        <ul className="admin-ka-panel-menu">
+          <li>
+            <button
+              className="admin-ka-panel-dropdown-btn"
+              onClick={() => setMoodOpen(!isMoodOpen)}
+            >
+              Mood msg<span>{isUserOpen ? "▲" : "▼"}</span>
+            </button>
+            {isMoodOpen && (
+              <ul className="admin-ka-panel-dropdown">
+                <NavLink to="/admin/moodmsg"><li>moodmsgtype</li></NavLink>
+                <NavLink to="/admin/moodmngr"><li>moodmagmanager</li></NavLink>
+                
                
               </ul>
             )}

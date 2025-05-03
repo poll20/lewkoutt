@@ -285,6 +285,9 @@ let closeslidecategorynav=()=>{
             <NavLink to='/loginn'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} onClick={closeslidecategorynav}>Login</li>
             </NavLink>
+            <NavLink to='/mood'>
+            <li style={{ fontFamily: "'Poppins', sans-serif" }} >Mood</li>
+            </NavLink>
             {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")}
           </ul>
         </div>

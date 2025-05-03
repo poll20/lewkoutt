@@ -41,7 +41,7 @@ const twilio = require("twilio");
 // let wishmodel=require("../database/collection.js")
 let bodyparser=require("body-parser")
 // let addtocart=require("../database/collection.js")
-let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel}=require("../database/collection.js")
+let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel}=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const products = [
   
@@ -58,12 +58,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
-app.use(cors({
-  origin: "https://lewkout.netlify.app", // Your frontend URL
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
+app.use(cors());//te localhost m h
+// app.use(cors({
+//   origin: "https://lewkout.netlify.app", // Your frontend URL
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
+// }));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -310,9 +310,7 @@ app.get("/addtocart/:uid",async(req,res)=>{
   let { uid } = req.params;
 
   // ✅ Validate UID before using ObjectId
-  if (!uid || !mongoose.Types.ObjectId.isValid(uid)) {
-    return res.status(400).json({ error: "Invalid User ID" });
-  }
+ 
   try{
   // let cartdata=await addtocart.find()
   const objectId = new mongoose.Types.ObjectId(uid);
@@ -2219,6 +2217,74 @@ app.get("/return", async (req, res) => {
   } catch (error) {
     console.error("Error updating orders with return details:", error);
     res.status(500).json({ message: "Server error.", error: error.message });
+  }
+});
+
+app.post("/moodmsg", async (req, res) => {
+  try {
+    const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
+
+    // 🔐 Basic validation
+    if (!moodemoji,!moodcolor,!moodtype || !msgwithoffer || !msgwithoutoffer) {
+      return res.status(400).json({ success: false, message: "All fields are required" });
+    }
+
+    // ✅ Create new mood message
+    const newMoodMsg = new moodmodel({
+      moodemoji,
+      moodcolor,
+      moodtype,
+      msgwithoffer,
+      msgwithoutoffer,
+    });
+
+    // 💾 Save to DB
+    await newMoodMsg.save();
+
+    res.status(201).json({ success: true, message: "Mood message created successfully", data: newMoodMsg });
+  } catch (error) {
+    console.error("Error saving mood message:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+app.get("/moodmessage", async (req, res) => {
+  try {
+    // Fetch all return records from the Return collection
+    const returns = await moodmodel.find();
+
+    if (!returns || returns.length === 0) {
+      return res.status(200).json({ message: "No return records found." });
+    }
+
+   res.status(200).json({message: "Orders updated with return details.",returns});
+  } catch (error) {
+    console.error("Error updating orders with return details:", error);
+    res.status(500).json({ message: "Server error.", error: error.message });
+  }
+});
+
+// DELETE
+app.delete("/moodmsg/:id", async (req, res) => {
+  try {
+    await moodmodel.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: "Deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Delete failed" });
+  }
+});
+
+// UPDATE
+app.put("/moodmsg/:id", async (req, res) => {
+  try {
+    const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
+    const updated = await moodmodel.findByIdAndUpdate(
+      req.params.id,
+      {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer },
+      { new: true }
+    );
+    res.json({ success: true, message: "Updated", data: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Update failed" });
   }
 });
 
