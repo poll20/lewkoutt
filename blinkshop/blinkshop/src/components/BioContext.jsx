@@ -1154,7 +1154,7 @@ if(user && userDetails){
         setFilters,
         rentdata,
         wishlistdata,
-        addToCart,
+        // addToCart,
         removeFromCart,
         addtocartitem,
         handleClick,
