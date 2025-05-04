@@ -711,18 +711,18 @@ finally{(false)}
 
 
 // Add to Cart
-  const addToCart = (item) => {
-    axios.post('/api/cart/add', { productId: item.id }, { headers: { Authorization: `Bearer ${user.token}` } })
-      .then(response => setCart(response.data.cart))
-      .catch(err => console.log('Error adding to cart', err));
-  };
+  // const addToCart = (item) => {
+  //   axios.post('/api/cart/add', { productId: item.id }, { headers: { Authorization: `Bearer ${user.token}` } })
+  //     .then(response => setCart(response.data.cart))
+  //     .catch(err => console.log('Error adding to cart', err));
+  // };
 
-  // Remove from Cart
-  const removeFromCart = (itemId) => {
-    axios.post('/api/cart/remove', { productId: itemId }, { headers: { Authorization: `Bearer ${user.token}` } })
-      .then(response => setCart(response.data.cart))
-      .catch(err => console.log('Error removing from cart', err));
-  };
+  // // Remove from Cart
+  // const removeFromCart = (itemId) => {
+  //   axios.post('/api/cart/remove', { productId: itemId }, { headers: { Authorization: `Bearer ${user.token}` } })
+  //     .then(response => setCart(response.data.cart))
+  //     .catch(err => console.log('Error removing from cart', err));
+  // };
 //  const productfetch=async()=>{ 
 //   try{
 //   let data=await fetch("${apiUrl}/productmodel?operation=all")
