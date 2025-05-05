@@ -349,6 +349,17 @@ let returnscema=mongoose.Schema({
   returnDate:{ type: Date, default: Date.now }
 })
 
+users.index({ phonenumber: 1 });
+users.index({ code: 1 });
+ratingSchema.index({ userId: 1, productId: 1 }, { unique: true });
+cartscema.index({ userId: 1 });
+cartz.index({ userId: 1 });
+orders.index({ userId: 1, orderedAt: -1 }); // for latest orders first
+orders.index({ status: 1 });
+salesSchema.index({ shopname: 1, saleDate: -1 });
+salesSchema.index({ productId: 1 });
+WalletTransactionSchema.index({ userId: 1, date: -1 });
+returnscema.index({ orderid: 1 });
 const moodMessageSchema = new mongoose.Schema({
   moodemoji: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
   moodcolor: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
