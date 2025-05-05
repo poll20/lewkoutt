@@ -238,7 +238,7 @@ app.get('/cart/:uid', async (req, res) => {
 
   try {
     const objectId = new mongoose.Types.ObjectId(uid);
-    const items = await wishmodel.find({ userId: objectId }).populate("productId");
+    const items = await wishmodel.find({ userId: objectId }).populate("productId").lean();
 
     res.status(200).json(items);
   } catch (err) {
@@ -314,7 +314,7 @@ app.get("/addtocart/:uid",async(req,res)=>{
   try{
   // let cartdata=await addtocart.find()
   const objectId = new mongoose.Types.ObjectId(uid);
-  let cartdata=await addtocart.find({ userId: objectId }).populate("productId")
+  let cartdata=await addtocart.find({ userId: objectId }).populate("productId").lean()
   console.log("cartdata",cartdata)
   // //console.log(cartdata)
     res.status(200).json(cartdata)
@@ -355,7 +355,7 @@ app.get("/wear",async(req,res)=>{
   try{
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata=await wear.find() 
+      let categorydata=await wear.find().lean()
       res.json(categorydata)
     }
     else if (operation === "filtered") {
@@ -847,7 +847,7 @@ app.patch('/user/:userId/address', async (req, res) => {
 // ✅ GET API to Fetch Users
 app.get("/user", async (req, res) => {
   try {
-    let users = await userr.find(); // ✅ Fetch all users from DB
+    let users = await userr.find().lean(); // ✅ Fetch all users from DB
     res.json(users); // ✅ Send users as response
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -989,7 +989,7 @@ if(phoneNumber){
 }
 
   try {
-    const user = await userr.findOne({ phonenumber:phoneNumber}); // Find user by phn
+    const user = await userr.findOne({ phonenumber:phoneNumber}).lean(); // Find user by phn
     if (user) {
       console.log(user)
       res.status(200).json(user); // Send user data as JSON
@@ -1007,7 +1007,7 @@ app.get("/rent",async(req,res)=>{
   try{
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata=await rentt.find() 
+      let categorydata=await rentt.find().lean() 
       res.json(categorydata)
     }
     else if (operation === "filtered") {
@@ -1034,7 +1034,7 @@ app.get("/rent",async(req,res)=>{
 
 app.get("/bestselling",async(req,res)=>{
 try{
-  let data=await bestseling.find()
+  let data=await bestseling.find().lean()
   if(data){
     
     res.status(200).send(data)
@@ -1105,7 +1105,7 @@ app.get("/productmodel",async(req,res)=>{
   try{
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata=await productsmodel.find() 
+      let categorydata=await productsmodel.find().lean() 
       console
       res.json(categorydata)
     }
@@ -1114,7 +1114,7 @@ app.get("/productmodel",async(req,res)=>{
       const cat = section;
       const subcat = subcategory;
      
-      const categoryData = await productsmodel.find({});
+      const categoryData = await productsmodel.find({}).lean();
       console.log("pm",categoryData)
       const finalData = categoryData.filter((item) => item.category == cat);
       const finalllData = finalData.map((item) => item.productdetails).flat();
@@ -1446,7 +1446,7 @@ app.patch("/deleteproductfromcate/:id", async (req, res) => {
 
 app.get("/newarrival",async(req,res)=>{
 try{
-  let resdata=await newarival.find()
+  let resdata=await newarival.find().lean()
   if(resdata){
     res.status(200).json(resdata)
   }
@@ -1667,7 +1667,7 @@ for (const item of ordersArray) {
 // 🔵 GET: Fetch all orders (For Admin)
 app.get('/orders', async (req, res) => {
   try {
-      const orders = await orderr.find().populate('products.productId'); // Populate product details
+      const orders = await orderr.find().populate('products.productId').lean(); // Populate product details
       res.status(200).json(orders);
   } catch (error) {
       console.error("Fetch Orders Error:", error);
@@ -1678,7 +1678,7 @@ app.get('/orders', async (req, res) => {
 // 🔵 GET: Fetch a single order by ID
 app.get('/order/:id', async (req, res) => {
   try {
-      const order = await orderr.findById(req.params.id).populate('products.productId');
+      const order = await orderr.findById(req.params.id).populate('products.productId').lean();
       if (!order) {
           return res.status(404).json({ error: "Order not found" });
       }
@@ -1701,7 +1701,7 @@ app.get('/orders/user/:userId', async (req, res) => {
 
       // 🔍 Fetch orders by User ID
       // const userOrders = await orderr.find({ userId }).populate('products.productId');
-      const userOrders = await orderr.find({ userId });
+      const userOrders = await orderr.find({ userId }).lean();
       if (!userOrders || userOrders.length === 0) {
         return res.status(404).json({ message: "No orders found!" });
       }
@@ -1865,7 +1865,7 @@ app.get("/ratings/:userId/:productId", async (req, res) => {
     const { userId, productId } = req.params;
 
     // Find the rating given by the specific user for the specific product
-    const rating = await Rating.find({ userId }).populate("userId", "name");
+    const rating = await Rating.find({ userId }).populate("userId", "name").lean();
 
     if (!rating) {
       return res.status(404).json({ message: "No rating found for this product by the user" });
@@ -1886,7 +1886,7 @@ app.get("/products/shop/:shopname", async (req, res) => {
       // 🔍 Searching for shopname inside "productdetails" array
       const products = await productsmodel.find({
           "productdetails.shopname": { $regex: new RegExp(shopname, "i") }
-      });
+      }).lean();
 
       console.log("🟢 Fetched products from DB:", products);
 
@@ -2183,7 +2183,7 @@ cron.schedule("*/5 * * * *", async () => {
 app.get("/return", async (req, res) => {
   try {
     // Fetch all return records from the Return collection
-    const returns = await returnmodel.find();
+    const returns = await returnmodel.find().lean();
 
     if (!returns || returns.length === 0) {
       return res.status(404).json({ message: "No return records found." });
@@ -2250,7 +2250,7 @@ app.post("/moodmsg", async (req, res) => {
 app.get("/moodmessage", async (req, res) => {
   try {
     // Fetch all return records from the Return collection
-    const returns = await moodmodel.find();
+    const returns = await moodmodel.find().lean();
 
     if (!returns || returns.length === 0) {
       return res.status(200).json({ message: "No return records found." });
