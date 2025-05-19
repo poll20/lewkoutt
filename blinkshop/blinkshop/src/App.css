@@ -103,5 +103,9 @@ html, body, #root {
     max-width: 425px; /* mobile screen width jaisa */
     margin: 0 auto;    /* center align on bigger screens */
   }
+  .product-card{
+    max-width: 425px; /* mobile screen width jaisa */
+    margin: 0 auto;    /* center align on bigger screens */
+  }
 }
 
