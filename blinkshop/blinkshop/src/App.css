@@ -88,3 +88,11 @@ html, body, #root {
         color: black;
 }
   
+
+/* Tablet & Laptop ke liye: mobile width jaisa hi dikhana */
+@media (min-width: 768px) {
+  .mainnn-contenttttttt {
+    max-width: 425px; /* mobile screen width jaisa */
+    margin: 0 auto;    /* center align on bigger screens */
+  }
+}
