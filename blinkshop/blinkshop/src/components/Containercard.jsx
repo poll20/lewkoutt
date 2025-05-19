@@ -137,7 +137,7 @@ let Clickcard=(id)=>{
 }
   return (
     <>
-    <h2 className='om-newarrival' style={{textAlign:'center',marginTop:"10px",fontFamily: "'Poppins', sans-serif"}}  >NEW ARRIVAL</h2>
+    <h2 className='om-newarrival ' style={{textAlign:'center',marginTop:"10px",fontFamily: "'Poppins', sans-serif"}}  >NEW ARRIVAL</h2>
     
     <div className="om-card-container">
       {filteredProducts.slice(0, 7).map((card) => (

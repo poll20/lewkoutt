@@ -95,4 +95,13 @@ html, body, #root {
     max-width: 425px; /* mobile screen width jaisa */
     margin: 0 auto;    /* center align on bigger screens */
   }
+  .om-newarrival{
+    max-width: 425px; /* mobile screen width jaisa */
+    margin: 0 auto;    /* center align on bigger screens */
+  }
+  .horizontal-card-layout {
+    max-width: 425px; /* mobile screen width jaisa */
+    margin: 0 auto;    /* center align on bigger screens */
+  }
 }
+
