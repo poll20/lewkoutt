@@ -190,6 +190,16 @@ export default function App() {
   // const [cartItem, setCartItem] = useState([]);
   const [popupMessage, setPopupMessage] = useState("");
   const { setIsLoading } = useLoading(); // ✅ add this inside the App component
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   // useEffect(() => {
   //   // const fetchData = async () => {
     
@@ -245,7 +255,14 @@ export default function App() {
     setPopupMessage(msg);
   };
 
-
+  if (!isMobile) {
+    return (
+      <div style={{ padding: "50px", textAlign: "center" }}>
+        <h2>This site is only accessible on mobile devices.</h2>
+        <p>Please open it on a mobile phone or resize your browser to mobile width.</p>
+      </div>
+    );
+  }
   return (
     <FirebaseAuthProvider showPopup={showPopup}>
     <AuthProvider>
@@ -278,6 +295,7 @@ export default function App() {
   
   );
 }
+
 
 // ✅ Separate Layout Component to Hide Navbar & Footer on Admin Routes
 function Layout({ showPopup }) {
