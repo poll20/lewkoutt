@@ -365,7 +365,7 @@ function Layout({ showPopup }) {
      
       
 
-      {!isAdminRoute && !isabout && !isref  && !mood &&<Footer />}
+      {!isAdminRoute && !isabout && !isref  && !mood && <div className="mainnn-contenttttttt"> <Footer /></div>}
     </>
   );
 }
