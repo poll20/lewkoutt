@@ -2,9 +2,9 @@
 .empty-cart-container {
   
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     align-items: center;
-    justify-content: center;
+    justify-content:start;
     height: 80vh;
     text-align: center;
     /* background: #f9f9f9; */
@@ -38,15 +38,16 @@
   
   /* Shop Now Button */
   .shop-now-button {
-    background: #e55b5b;
-    color: #fff;
+    background:transparent;
+    color: #000000;
     font-size: 16px;
     padding: 10px 20px;
     border: none;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4);
+    border: 2px solid rgb(99, 255, 255);
+    /* box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4); */
   }
   
   .shop-now-button:hover {

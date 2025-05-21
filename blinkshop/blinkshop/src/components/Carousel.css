@@ -15,6 +15,7 @@
 } */
 .carousel-slide {
   display: block;
+  
   height: 400px; /* ya jo bhi height chahiye */
   width: 100%;
   position: relative;

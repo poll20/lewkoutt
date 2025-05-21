@@ -1,0 +1,51 @@
+.vibe-sticker {
+  position: fixed;
+  bottom: 80px;
+  left: 10px;
+  z-index: 999;
+    transform: rotate(-10deg);
+}
+
+.sticker-content {
+  width: 72px;
+  height: 53px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: rotate(-10deg);
+  animation: bounce 2s infinite;
+  position: relative;
+  overflow: visible;
+}
+
+.cross-icon {
+  position: absolute;
+  right: -8px; /* Adjust to overlap left border */
+  top: 10%;
+  font-size: 16px;
+  color: black;
+  background:transparent;
+  z-index: 10;
+}
+
+.sticker-content .highlight {
+  color: #e91e63;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: rotate(-10deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-10deg) translateY(-10px);
+  }
+}

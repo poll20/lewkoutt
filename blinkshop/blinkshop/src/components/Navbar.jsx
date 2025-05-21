@@ -21,6 +21,7 @@ import { useBio } from './BioContext';
 // import { set } from 'mongoose';
 import { useAuth } from './AuthContext';
 import { useFirebaseAuth } from './FirebaseContext';
+import VibeSticker from './VibeSticker';
 
 const ResponsiveNavbar = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -196,6 +197,7 @@ let closeslidecategorynav=()=>{
       </nav>
 
       {/* Bottom Navbar for mobile screens */}
+      
       <nav className="navbar bottom-navbar">
         <ul className="nav-links">
           <div className="homeeee">
@@ -242,7 +244,7 @@ let closeslidecategorynav=()=>{
         </ul>
        
       </nav>
-        
+      
         
       {/* Sliding Side Navbar */}
       <div className={`side-navbar ${sideNavbarOpen ? 'open' : ''}`} >

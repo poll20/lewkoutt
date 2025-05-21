@@ -166,6 +166,7 @@ const Carousel = ({ images }) => {
 
   return (
     <div
+  
       className="carousel-container"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -190,7 +191,8 @@ const Carousel = ({ images }) => {
         </div>
       </NavLink>
 
-      <div className="carousel-indicators">
+      <div className="carousel-indicators" >
+        
         {images.map((_, index) => (
           <span
             key={index}
