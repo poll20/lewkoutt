@@ -1,7 +1,7 @@
 // src/components/GlobalLoader.js
 import React from "react";
 import { useLoading } from "./LoadingContext";
-
+import loading from "./image/loadingg.mp4"
 
 const GlobalLoader = () => {
   const { isLoading } = useLoading();
@@ -23,9 +23,9 @@ const GlobalLoader = () => {
         alignItems: "center",
       }}
     >
-<div className="h-16 w-16 bg-black text-white text-center flex items-center justify-center rounded-full">
-  Loading...
-</div>
+ <video autoPlay loop muted playsInline  preload="auto" >
+   <source src={loading} type="video/mp4"  />
+ </video>
     </div>
   );
 };
