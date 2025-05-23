@@ -14,16 +14,16 @@ const GlobalLoader = () => {
         position: "fixed",
         top: 0,
         left: 0,
-        zIndex: 9999,
+        // zIndex: 9999,
         width: "100vw",
         height: "100vh",
-        background: "rgba(255, 255, 255, 0.7)",
+        // background:"transparent",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
- <video autoPlay loop muted playsInline  preload="auto" >
+ <video autoPlay loop muted playsInline  preload="auto" style={{width:"20px",height:"20px"}}>
    <source src={loading} type="video/mp4"  />
  </video>
     </div>
