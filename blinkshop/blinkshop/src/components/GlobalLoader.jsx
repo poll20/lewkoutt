@@ -6,7 +6,7 @@ import { useLoading } from "./LoadingContext";
 const GlobalLoader = () => {
   const { isLoading } = useLoading();
 
-  // if (!isLoading) return null;
+  if (!isLoading) return null;
   console.log("GlobalLoader mounted. isLoading:", isLoading);
   return (
     <div
