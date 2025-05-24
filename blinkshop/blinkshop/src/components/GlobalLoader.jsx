@@ -1,7 +1,7 @@
 // src/components/GlobalLoader.js
 import React from "react";
 import { useLoading } from "./LoadingContext";
-import loading from "./image/loadingg-unscreen.gif"
+
 
 const GlobalLoader = () => {
   const { isLoading } = useLoading();
@@ -23,10 +23,8 @@ const GlobalLoader = () => {
         alignItems: "center",
       }}
     >
-<div className="h-16 w-16 bg-black text-white text-center flex items-center justify-center rounded-full">
-  <video autoPlay loop muted playsInline  preload="auto" style={{width:"180px",height:"180px",marginLeft:"10px",border:"2px solid red"}}>
-    <source src={loading} type="video/mp4"  />
-  </video>
+<div className="h-16 w-16 bg-black text-black text-center flex items-center justify-center rounded-full">
+  Loading...
 </div>
     </div>
   );
