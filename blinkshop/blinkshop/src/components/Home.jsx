@@ -13,6 +13,7 @@ import HorizontalScrollContainer from './HorizontalScrollContainer'
 import CustomerLove from './CustomerLove'
 import CategoriesLayout from './CategoriesLayout';
 import VibeSticker from './VibeSticker';
+import GlobalLoader from './GlobalLoader';
 export default function Home() {
     const products = [
         { id: 1, image: 'https://via.placeholder.com/150', price: '$50', description: 'Product 1' },
@@ -39,6 +40,7 @@ export default function Home() {
 
      {/* <HorizontalScrollContainer/>  */}
      <VibeSticker/>
+     
      <CustomerLove/>
      </div>
     </>

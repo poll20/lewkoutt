@@ -17,15 +17,17 @@ const GlobalLoader = () => {
         zIndex: 9999,
         width: "100vw",
         height: "100vh",
-        background:"transparent",
+        background: "rgba(255, 255, 255, 0.7)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
- <video autoPlay loop muted playsInline  preload="auto" style={{width:"20px",height:"20px"}}>
-   <source src={loading} type="video/mp4"  />
- </video>
+<div className="h-16 w-16 bg-black text-white text-center flex items-center justify-center rounded-full">
+  <video autoPlay loop muted playsInline  preload="auto" style={{width:"180px",height:"180px",marginLeft:"10px"}}>
+    <source src={loading} type="video/mp4"  />
+  </video>
+</div>
     </div>
   );
 };
