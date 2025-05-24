@@ -33,7 +33,9 @@ const HeartButton = ({cardid,w,h,mt}) => {
   return (
     <div className={`heart-container ${isItemInWishlist? 'clicked' : ''}`} onClick={handleClickk}>
       {/* <div className="heart" style={{width:w,height:h ,marginTop:mt}}></div> */}
-
+      <video autoPlay loop muted playsInline  preload="auto" style={{width:w,height:h ,marginTop:mt}}>
+        <source src={heart} type="video/mp4"  />
+      </video>
       {isClicked && <div className="sparkles"></div>}
     </div>
   );
