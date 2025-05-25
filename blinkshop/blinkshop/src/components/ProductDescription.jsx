@@ -579,7 +579,7 @@ let cate=product.cate
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
           <div className="icons" onClick={() => handleClick(product,product._id)}>
           
-<HeartButton   cardid={product._id} w={23} h={23} mt={6} 
+<HeartButton   cardid={product._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-10}
 />
 {/* <HiOutlineShoppingBag size={30}/> */}
 </div>

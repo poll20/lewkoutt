@@ -32,7 +32,7 @@ console.log("wishlist in coa",wishlistdata)
         />
         </NavLink> 
         {/* Heart Icon */}
-        <div className="heart-icon" onClick={()=>{handleClick(props.id,props.id.colors?.[0]?._id),setShowToast(true)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15}/></div>
+        <div className="heart-icon" onClick={()=>{handleClick(props.id,props.id.colors?.[0]?._id),setShowToast(true)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15} dw={30} dh={30} dmt={-8} dml={-8}/></div>
         {/* Rating */}
         <div className="rating">
           ⭐ 4.7 | 16

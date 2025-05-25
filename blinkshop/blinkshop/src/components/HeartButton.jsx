@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import './HeartButton.css';
 import { useBio } from './BioContext';
-const HeartButton = ({cardid,w,h,mt}) => {
+// import Lottie from "lottie-react";
+// import animationData from './image/hearttt.json'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+const HeartButton = ({cardid,w,h,mt,dw,dh,dmt,dml}) => {
   const [isClicked, setIsClicked] = useState(false);
   const {wishlistdata}=useBio()
 
@@ -31,7 +34,19 @@ const HeartButton = ({cardid,w,h,mt}) => {
 
   return (
     <div className={`heart-container ${isItemInWishlist? 'clicked' : ''}`} onClick={handleClickk}>
-      <div className="heart" style={{width:w,height:h ,marginTop:mt}}></div>
+      {
+
+!isItemInWishlist?(<div className="heart" style={{width:w,height:h ,marginTop:mt}}></div>):(<DotLottieReact
+      src="https://lottie.host/b1b4c240-b0fd-4da8-bcdc-6ba5a428f1ec/vKUwHyzP85.lottie"
+      
+      autoplay
+      // style={{width:"38px",height:"38px" ,marginTop:"-11px",marginLeft:"-11px"}}
+      style={{width:dw,height:dh ,marginTop:dmt,marginLeft:dml}}
+    />)      
+      
+       
+      }
+
       {isClicked && <div className="sparkles"></div>}
     </div>
   );
