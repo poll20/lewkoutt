@@ -69,7 +69,7 @@ const StickyButton = ({ onAddToCart, onBuyNow, targetRef }) => {
   }, [targetRef]);
 
   return (
-    <div className={`sticky-button-container ${isSticky ? 'sticky' : ''}`}>
+    <div className={`sticky-button-container ${isSticky ? 'sticky' : 'non-sticky'}`}>
      <button className="add-to-cart" onClick={onAddToCart} style={{backgroundColor:"#F15A29",padding:"12px 10px",width:"150px"}}>Add to Cart</button>
        <button className="add-to-cart" onClick={onBuyNow}style={{backgroundColor:"#F15A29",padding:"12px 10px",width:"150px"}}>Buy Now</button>
     </div>
