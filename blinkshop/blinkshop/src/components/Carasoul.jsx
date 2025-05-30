@@ -171,6 +171,7 @@ const Carousel = ({ images }) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      style={{borderRadius:"0"}}
     >
       <NavLink
         to={`/productmodel/${images[currentIndex].category}`}

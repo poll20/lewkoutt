@@ -171,6 +171,8 @@
       overflow-x: auto;
       gap: 15px;
       height: 350px;
+      /* border: 2px solid red; */
+      margin-top:-15px ;
   }
 
   .om-card-container::-webkit-scrollbar {

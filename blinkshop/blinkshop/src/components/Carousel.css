@@ -84,10 +84,11 @@
     /* border: 2px solid red; */
     position: relative;
     width: 100%;
-    min-height: 80vh;
+    min-height: 50vh;
     margin:0;
     padding: 0  ;
     overflow: hidden;
+    
   }
   
   .carousel-arrow {

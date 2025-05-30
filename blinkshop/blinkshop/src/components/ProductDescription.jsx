@@ -20,6 +20,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import Card from "./Card";
 import { useFirebaseAuth } from "./FirebaseContext";
+import { FaArrowLeft } from "react-icons/fa6";
+import RatingBadge from "./RatingBadge";
 
 
 // import { BioContext } from "./CartContext";
@@ -529,8 +531,11 @@ let cate=product.cate
             pauseOnHover
             theme="light" // You can change the theme: light or dark
           />
+          
     <div className="container">
+      
       <div className="product-page">
+        
         {/* Image Slider Section */}
         
         <div className="image-slider">
@@ -565,24 +570,30 @@ let cate=product.cate
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
               />
+              
+              
             </div>
           ))}
+          
         </div>
-
+ 
         </div>
       )}
       {/* <TimeSlotPicker/> */}
     </div>
+    <FaArrowLeft size={50} onClick={()=>{navigate(-1)}} style={{position:"absolute",top:"80px",left:"20px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px",background:"white"}}/>
     <div className="details-sectionnn">
           <div style={{display:"flex",  justifyContent:"space-between"}}>
           <p className="product-description">{product.description}<p style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span>{product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px"}}>{product.discount} discount</span></p></p>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
-          <div className="icons" onClick={() => handleClick(product,product._id)}>
+          <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"20px",bottom:"160px"}}>
           
-<HeartButton   cardid={product._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-10}
+<HeartButton   cardid={product._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-7} pdml={4}
+
 />
-{/* <HiOutlineShoppingBag size={30}/> */}
+
 </div>
+<RatingBadge rating={4}/>
         </div>
        
           

@@ -184,6 +184,7 @@ import Moodcom from "./components/Moodcom";
 import MoodMsgType from "./components/dashboardforadmin/MoodMsgType";
 import MoodMagManager from "./components/dashboardforadmin/MoodMsgManager";
 import UserActivity from "./components/dashboardforadmin/UserActivity";
+import OfferBanner from "./components/OfferBanner";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -311,7 +312,9 @@ function Layout({ showPopup }) {
       {!isAdminRoute && <ResponsiveNavbar />}
       {isAdminRoute ? (
         <div className="admin-ka-panel-container">
+
           <DashNavbar />
+          {/* <OfferBanner/> */}
           <GlobalAlert/>
           <div className="admin-ka-panel-main">
             <Routes>
