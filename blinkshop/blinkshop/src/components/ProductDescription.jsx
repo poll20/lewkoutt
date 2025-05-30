@@ -22,6 +22,7 @@ import Card from "./Card";
 import { useFirebaseAuth } from "./FirebaseContext";
 import { FaArrowLeft } from "react-icons/fa6";
 import RatingBadge from "./RatingBadge";
+import StickyButton from "./StickyButton";
 
 
 // import { BioContext } from "./CartContext";
@@ -43,7 +44,10 @@ const [cartData, setCartData] = useState([]);
 const[product,setproduct]=useState([])
 const[mainProductt,setmainprodutt]=useState([])
 const imageRef = useRef();
-const cartRef = useRef();
+// const cartRef = useRef();
+// const [isSticky, setIsSticky] = useState(true);
+//   const targetRef = useRef(null);
+const targetRef = useRef(null);
   let { id } = useParams();
   console.log("fwff",id)
   let navigate=useNavigate()
@@ -517,6 +521,29 @@ navigate("/address")
 
 }
 let cate=product.cate
+
+
+// useEffect(() => {
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         setIsSticky(!entry.isIntersecting);
+//       },
+//       {
+//         root: null,
+//         threshold: 0,
+//       }
+//     );
+
+//     if (targetRef.current) {
+//       observer.observe(targetRef.current);
+//     }
+
+//     // return () => {
+//     //   if (targetRef.current) {
+//     //     observer.unobserve(targetRef.current);
+//     //   }
+//     // };
+//   }, []);
   return (
     <>
     <ToastContainer 
@@ -654,16 +681,24 @@ let cate=product.cate
           {/* Buttons */}
           
           
-          <div className="button-group" style={{display:"flex",alignItems:"center",justifyContent:"start",marginBottom:"20px"}}>
+          {/* <div className="button-group" style={{display:"flex",alignItems:"center",justifyContent:"start",marginBottom:"20px"}}>
            
           <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}} style={{backgroundColor:"#F15A29"}}>Add to Cart</button>
          <button className="add-to-cart" onClick={()=>{buydata(product,selectedSize,quantity)}} style={{backgroundColor:"#F15A29"}}>Buy Now</button>
             
-          </div>
+          </div> */}
+         <StickyButton
+  onAddToCart={() => handleclick(product, quantity, selectedSize)}
+  onBuyNow={() => buydata(product, selectedSize, quantity)}
+  targetRef={targetRef}
+/>
+
+
+{/* <div ref={targetRef} id="intimate-essentials-section" /> */}
         </div>
     
     {/* <ProductReview/> */}
-    <div style={{border:"1px solid gray",display:"flex",alignItems:"center",flexDirection:"column"}}>
+    <div  ref={targetRef} style={{border:"1px solid gray",display:"flex",alignItems:"center",flexDirection:"column"}}>
     
      <div style={{display:"flex",width:"100%",alignItems:'center',gap:'10px'}}>  
       <p style={{fontSize:"20px",paddingLeft:"10px"}}>Similer To</p>

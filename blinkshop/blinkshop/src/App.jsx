@@ -305,6 +305,7 @@ function Layout({ showPopup }) {
   const isabout = location.pathname.startsWith("/aboutus");
   const isref = location.pathname.startsWith("/refferal");
   const mood = location.pathname.startsWith("/mood");
+    const pd = location.pathname.startsWith("/productdescription");
   
   return (
     <>
@@ -386,7 +387,9 @@ function Layout({ showPopup }) {
      
       
 
-      {!isAdminRoute && !isabout && !isref  && !mood && <div className="mainnn-contenttttttt"> <Footer /></div>}
+      {!isAdminRoute && !isabout && !isref  && !mood  && <div className="mainnn-contenttttttt"> <Footer /></div>}
+    
+    
     </>
   );
 }

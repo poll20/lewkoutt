@@ -306,7 +306,24 @@ margin-top: 3%
   background: linear-gradient(135deg, #7af5b7, #edece9);;
 }
 
+.sticky-button-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #fff;
+  transition: position 0.3s ease;
+}
 
+.sticky-button-container.sticky {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.sticky-button-container.non-sticky {
+  position: static;
+}
 /* RESPONSIVENESS */
 
 /* Larger screens */

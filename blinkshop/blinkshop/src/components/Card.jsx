@@ -113,10 +113,11 @@ const Card = (props) => {
     };
 
     const handleSortSelection = (option) => {
+      console.log("sort option is",option)
       if (option === "") {
         removeSortFilter(); // Handle case where sort is cleared
       } else {
-        setSelectedSortOption("*");
+        setSelectedSortOption(option);
         const filteredData = applyFilters(products); // Apply sorting
         setProducts(filteredData);
       }
@@ -502,7 +503,7 @@ if(searchvalue){
             
               {selectedSortOption ? (
                 <div className="selected-filter">
-                  {"Sort By"}<span style={{color:"red",fontWeight:"bolder"}}>{selectedSortOption}</span>
+                  {"Sort By"}<span style={{color:"red",fontWeight:"bolder"}}>*</span>
                   <span
                     className="remove-filter"
                     onClick={(e) => {
