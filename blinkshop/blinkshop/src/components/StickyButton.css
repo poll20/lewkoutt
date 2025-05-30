@@ -18,7 +18,7 @@
 .sticky-button-container.non-sticky {
   position: static;
 }
-.sticky-button-container {
+/* .sticky-button-container {
   display: flex;
   justify-content: space-around;
   padding: 10px;
@@ -38,4 +38,4 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-}
+} */
