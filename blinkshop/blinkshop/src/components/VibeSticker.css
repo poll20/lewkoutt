@@ -1,10 +1,10 @@
 .vibe-sticker {
   position: fixed;
   bottom: 55px;
-  left: -10px;
+  left: -8px;
   z-index: 999;
     transform: rotate(10deg);
-      /* animation: bounce 2s infinite; */
+      animation: bounce 2s infinite;
     
 }
 
@@ -30,8 +30,8 @@
 .cross-icon {
     /* border: 2px solid red; */
   position: absolute;
-  right: 35px; /* Adjust to overlap left border */
-  top: 20px;
+  right: 25px; /* Adjust to overlap left border */
+  top: 10px;
   font-size: 16px;
   color: black;
   background:transparent;

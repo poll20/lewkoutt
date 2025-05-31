@@ -637,11 +637,11 @@ let cate=product.cate
                   className={`size-btn ${selectedSize === size ? "active" : ""}` }
                   onClick={() => setSelectedSize(size)}>
 
-                  <span >⚡{size}</span>
+                  <span>⚡{size}</span>
                 </button>
               ))}
             </div>
-            <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label>
+            <label className="sizeguide"><NavLink style={{paddingLeft:"10px",color:"white",fontWeight:"lighter"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label>
           </div>
 
           <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}>

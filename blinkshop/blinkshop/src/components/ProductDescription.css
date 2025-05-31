@@ -303,7 +303,9 @@ margin-top: 3%
   /* border: 1px solid black; */
   margin-top: 2%;
   border-radius: 50px;
-  background: linear-gradient(135deg, #7af5b7, #edece9);;
+  /* background: linear-gradient(135deg, #7af5b7, #edece9);; */
+   background: linear-gradient(to right,rgb(0, 0, 0), #ee0979);
+
 }
 
 .sticky-button-container {

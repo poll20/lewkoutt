@@ -23,8 +23,8 @@ const GlobalLoader = () => {
         alignItems: "center",
       }}
     >
-<div className="h-16 w-16 bg-black text-black text-center flex items-center justify-center rounded-full">
-  <img src={loading}></img>
+<div className="h-16 w-16 bg-black text-black text-center flex items-center justify-center rounded-full"  >
+  <img src={loading} style={{height:"50px"}}></img>
 </div>
     </div>
   );
