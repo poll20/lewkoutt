@@ -1,7 +1,7 @@
 // src/components/GlobalLoader.js
 import React from "react";
 import { useLoading } from "./LoadingContext";
-
+import loading from "./image/loadingabh.gif"
 
 const GlobalLoader = () => {
   const { isLoading } = useLoading();
@@ -24,7 +24,7 @@ const GlobalLoader = () => {
       }}
     >
 <div className="h-16 w-16 bg-black text-black text-center flex items-center justify-center rounded-full">
-  Loading...
+  {loading}
 </div>
     </div>
   );
