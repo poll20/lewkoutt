@@ -24,7 +24,7 @@ const GlobalLoader = () => {
       }}
     >
 <div className="h-16 w-16 bg-black text-black text-center flex items-center justify-center rounded-full">
-  {loading}
+  <img src={loading}></img>
 </div>
     </div>
   );
