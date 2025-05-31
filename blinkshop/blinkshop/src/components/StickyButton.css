@@ -1,10 +1,10 @@
-.sticky-button-container {
+/* .sticky-button-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 10px;
   background-color: #fff;
-  /* box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); */
+
   z-index: 1000;
 }
 
@@ -17,25 +17,38 @@
 
 .sticky-button-container.non-sticky {
   position: static;
-}
-/* .sticky-button-container {
+} */
+
+.normal-button-container,
+.sticky-button-container {
   display: flex;
   justify-content: space-around;
-  padding: 10px;
-  background-color: #fff;
-  z-index: 1000;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  padding: 12px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   opacity: 0;
-  transform: translateY(100%);
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.normal-button-container.visible,
+.sticky-button-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.sticky-button-container {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  pointer-events: none;
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
-.sticky-button-container.sticky {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-} */
+.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}

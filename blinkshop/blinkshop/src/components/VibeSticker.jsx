@@ -21,7 +21,7 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa"; // Cross Icon
 import "./VibeSticker.css";
 import { NavLink } from "react-router-dom";
-import img from "./image/moodthoughtt.png"
+import img from "./image/cloudmooddd.png"
 const VibeSticker = () => {
     const [visi,setvisi] =useState(true)
   return (
@@ -31,7 +31,7 @@ const VibeSticker = () => {
      
         <span className="cross-icon" onClick={()=>{setvisi(!visi)}}><FaTimes onClick={()=>{setvisi(!visi)}}/></span>
          <NavLink to='/mood' className='navlink' style={{display:"flex"}}>
-        <img src={img} alt="" style={{width:"150px",height:"100px"}}/>
+        <img src={img} alt="" style={{width:"170px",height:"170px"}}/>
         </NavLink> 
     
       

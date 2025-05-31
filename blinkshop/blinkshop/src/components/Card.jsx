@@ -15,6 +15,7 @@ import React, { useState, useEffect } from "react";
 const Card = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
     const[prdallsizes,setprdallsizes]=useState([])
+    const[prdqqty,setprdqqty]=useState([])
     const [addtocartkeliyeid,setaddtocartkeliyeid]=useState("")
     const[sizesshow,setsizesshow]=useState(false)
     const [products, setProducts] = useState([]);
@@ -381,8 +382,10 @@ const Card = (props) => {
     console.log("prddd", prd);
 
     if (prd.length > 0) {
-        let siz = prd[0].colors[0].sizes.map(e => e.size);
+        let siz = prd[0].colors[0].sizes.map(e => e);
+        //  let qqty = prd[0].colors[0].sizes.map(e => e.quantity);
         setprdallsizes(siz);  
+        // setprdqqty(qqty)
         setaddtocartkeliyeid(prd[0].colors[0]); // Sirf ek object assign karo
         setsizesshow(true);
     }
@@ -601,7 +604,7 @@ if(searchvalue){
               ))}
             </div>
           )}
-        </div>):(<div className="filter-containerrr" style={{padding:"0",textAlign:'center'}} ><h2 style={{paddingTop:"3px",backgroundColor: 'white'}}>Your Wishlist</h2></div>)
+        </div>):(!wish?(<div className="filter-containerrr" style={{padding:"0",textAlign:'center'}} ><h2 style={{paddingTop:"3px",backgroundColor: 'white'}}>Your Wishlist</h2></div>):(''))
       
 
       }
@@ -674,14 +677,20 @@ if(searchvalue){
 
   <div className="abhayraj-size-buttons-wrapper">
     {prdallsizes.map((size, index) => (
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
       <button
         key={index}
         className="abhayraj-size-button"
-        onClick={() => handleAddToCart(addtocartkeliyeid, 1, size)}
+        onClick={() => handleAddToCart(addtocartkeliyeid, 1, size.size)}
+        
       >
-        {size}
+      <span style={{marginLeft:"-10px"}}>⚡{size.size}</span>
+     
       </button>
+      <span>{size.quantity} Left</span>
+    </div>
     ))}
+       
   </div>
 </div>
 

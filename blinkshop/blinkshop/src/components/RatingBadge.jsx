@@ -28,7 +28,7 @@ const RatingBadge = ({ rating }) => {
         color: textColor,
         fontWeight: 'bold',
         padding: '4px 8px',
-        borderRadius: '10px 10px 0 0',
+        borderRadius: '10px 0 10px 0',
         fontSize: '14px',
         border: '1px solid #ccc',
      textAlign:"center"

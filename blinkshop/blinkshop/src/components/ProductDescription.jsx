@@ -630,11 +630,14 @@ let cate=product.cate
             <div className="sizes">
 
               {sizes.map((size) => (
+                
                 <button
+                
                   key={size}
-                  className={`size-btn ${selectedSize === size ? "active" : ""}`}
+                  className={`size-btn ${selectedSize === size ? "active" : ""}` }
                   onClick={() => setSelectedSize(size)}>
-                  {size}
+
+                  <span >⚡{size}</span>
                 </button>
               ))}
             </div>

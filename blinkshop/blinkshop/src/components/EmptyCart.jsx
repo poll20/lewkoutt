@@ -15,7 +15,7 @@ const EmptyCart = (props) => {
      {props.endpoint=="cart"?( <FaShoppingCart className="cart-icon" />):(<video autoPlay loop muted playsInline  preload="auto" style={{width:"250px",height:"250px"}}>
   <source src={animation} type="video/mp4"  />
 </video>)}
-      <h style={{color:"black"}}>{props.endpoint.slice(0,8)} is as empty as your ex's promise </h>
+      <h style={{color:"black"}}>As empty as your ex's promise </h>
       <p style={{marginTop:"8px"}}>Add products to your wishlist, review them anytime and easily move to cart.</p>
       <button onClick={handleShopNow} className="shop-now-button">
         Continue Shopping

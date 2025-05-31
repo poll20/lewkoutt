@@ -342,18 +342,27 @@ padding:0;
 .abhayraj-size-buttons-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 25px;
   justify-content: start;
 }
 
 .abhayraj-size-button {
-  padding: 10px 20px;
+  
+  /* padding: 10px 20px; */
   border: 1px solid #000;
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
   background: white;
-  border-radius: 8px;
-  font-weight: 500;
+  /* border-radius: 8px; */
+  font-weight: 400;
+  font-size: small;
+  
   cursor: pointer;
   transition: background 0.3s;
+  display: flex;
+  
+    
 }
 
 .abhayraj-size-button:hover {
