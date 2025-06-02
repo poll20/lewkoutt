@@ -179,6 +179,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [locality, setLocality] = useState("");
     const [location, setLocation] = useState("Click to get location");
     const [isDefault, setIsDefault] = useState(false);
+      const [selectedTag, setSelectedTag] = useState(""); // New state for Save As tag
    const [chooseaddress,setchooseaddress]=useState([])
    const[showaddresspanel,setshowadresspanel]=useState("")
    const [isAddressPanelOpen, setIsAddressPanelOpen] = useState(false);
@@ -198,6 +199,12 @@ const [userprf,setuserprf]=useState({ address: [] })
   }
  },[userDetails,user])
 
+ const tags = [
+    { label: "Home", icon: <FaHome /> },
+    { label: "Work", icon: <FaBriefcase /> },
+    { label: "Friends and Family", icon: <FaUsers /> },
+    { label: "Other", icon: <FaMapMarkerAlt /> },
+  ];
 
 
  const addressinputcontainer=(bool,pnl)=>{
@@ -650,6 +657,24 @@ useEffect(() => {
           <input type="text" value="Rajasthan" readOnly />
         </div>
 
+
+ {/* Save As Section */}
+        <div className="save-as-section">
+          <p>SAVE AS</p>
+          <div className="tag-buttons">
+            {tags.map((tag) => (
+              <button
+                key={tag.label}
+                className={`tag-button ${
+                  selectedTag === tag.label ? "selected" : ""
+                }`}
+                onClick={() => setSelectedTag(tag.label)}
+              >
+                {tag.icon} {tag.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="default-address">
           <span>⭐ Set as Default Address</span>
           <label className="switch">

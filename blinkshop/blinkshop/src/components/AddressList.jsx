@@ -401,7 +401,7 @@ useEffect(() => {
     </div> */}
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
-        <button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Buy Now</button>
+        <button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>
        </div>
       </div>
   );

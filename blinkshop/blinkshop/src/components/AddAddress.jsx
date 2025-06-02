@@ -43,6 +43,8 @@ const AddAddress = () => {
           <input type="text" value="Rajasthan" readOnly />
         </div>
 
+        
+
         <div className="default-address">
           <span>⭐ Set as Default Address</span>
           <label className="switch">
