@@ -389,11 +389,15 @@ useEffect(() => {
       //   types: ["geocode"],
       //   componentRestrictions: { country: "in" },
       // });
-      const autocomplete = new window.google.maps.places.Autocomplete(input, {
-  types: ["geocode"],
-  // componentRestrictions: { country: "in" }, // Try removing this temporarily
-});
-autocomplete.setFields(["address_components", "formatted_address", "geometry"]);
+  const autocomplete = new window.google.maps.places.Autocomplete(input);
+// autocomplete.setFields(["address_components", "formatted_address", "geometry"]);
+autocomplete.setFields([
+  "place_id",
+  "geometry",
+  "formatted_address",
+  "name",
+  "address_components"
+]);
 
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
