@@ -613,7 +613,7 @@ let cate=product.cate
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
-          <span className="product-description" style={{fontFamily:"Poppins, sans-serif",fontSize:"28px",color:"black"}} >{product.description}</span>
+          <span className="product-description" style={{fontFamily:"Poppins, sans-serif",fontSize:"28px",color:"black",marginTop:"5px"}} >{product.description.slice(0,1).toUpperCase()+product.description.slice(1)}</span>
           <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px",color:"#c7522a"}}>{product.discount} off</span></span>
           <span
       style={{
@@ -648,8 +648,12 @@ let cate=product.cate
        
           
          
-          <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}>
-          <label>Size Selected</label>
+          {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}> */}
+          {/* <div className="size-options" style={{gap:"10px",padding:'10px 0', borderBottom:"1px solid black"}}> */}
+          <div className="size-options" style={{gap:"10px",padding:'10px 0'}}>
+
+
+          <label>Size:</label>
             <div className="sizes">
 
               {sizes.map((size) => (
@@ -660,15 +664,17 @@ let cate=product.cate
                   className={`size-btn ${selectedSize === size ? "active" : ""}` }
                   onClick={() => setSelectedSize(size)}>
 
-                  <span>{size}</span>
+                  <span>{size.toUpperCase()}</span>
                 </button>
               ))}
             </div>
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px",color:"white",fontWeight:"lighter"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label> */}
           </div>
 
-          <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}>
-          <label>Colors Available</label>
+          {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}> */}
+          <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0',marginTop:"4px"}}>
+
+          <label>Colors:</label>
             <div className="sizes">
               {
                 mainProductt?(mainProductt?.colors?.map((color) => (
@@ -686,7 +692,7 @@ let cate=product.cate
             
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>
- <div className="prd-ka-dropdown-container">
+ <div className="prd-ka-dropdown-container" style={{marginTop:"4px"}}>
       {/* Description */}
       <div
         className="prd-ka-dropdown-item"

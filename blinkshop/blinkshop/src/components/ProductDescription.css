@@ -120,7 +120,7 @@ margin-top: 3%
   
   /* padding: 8px 12px; */
   font-size: 14px;
-  border: 1px solid black;
+  border: 1px solid gray;
   background-color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -129,7 +129,8 @@ margin-top: 3%
 .size-btn.active {
   background-color: white;
   color: purple;
-  border: 1px solid purple;
+  font-weight:500;
+  border: 2px solid purple;
 }
 
 /* Product description text */
