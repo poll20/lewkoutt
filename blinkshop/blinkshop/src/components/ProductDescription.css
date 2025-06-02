@@ -127,8 +127,9 @@ margin-top: 3%
 }
 
 .size-btn.active {
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: purple;
+  border: 1px solid purple;
 }
 
 /* Product description text */
@@ -329,6 +330,68 @@ margin-top: 3%
 /* RESPONSIVENESS */
 
 /* Larger screens */
+
+.prd-ka-dropdown-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.prd-ka-dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.prd-ka-dropdown-arrow {
+  font-size: 20px;
+  transform: rotate(90deg);
+  color: #000;
+}
+
+.prd-ka-dropdown-description {
+  padding: 10px 16px;
+  background-color: #fafafa;
+}
+
+.prd-ka-dropdown-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.prd-ka-dropdown-label {
+  color: #555;
+}
+
+.prd-ka-dropdown-value {
+  font-weight: 500;
+}
+
+/* Mobile first responsive */
+@media (max-width: 600px) {
+  .prd-ka-dropdown-item {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .prd-ka-dropdown-description {
+    font-size: 14px;
+  }
+}
+
 @media (min-width: 1024px) {
   .product-page {
     flex-direction: row;

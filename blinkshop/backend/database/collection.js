@@ -237,6 +237,10 @@ const CategorySchema = new mongoose.Schema({
         type: Number,
        
       },
+      avgRating:{
+        type:Number,
+        default:5
+      },
       discountprice: {
         type: Number,
         

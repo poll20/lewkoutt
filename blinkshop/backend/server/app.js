@@ -58,12 +58,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
-app.use(cors({
-  origin: "https://lewkout.netlify.app", // Your frontend URL
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
+app.use(cors());//te localhost m h
+// app.use(cors({
+//   origin: "https://lewkout.netlify.app", // Your frontend URL
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
+// }));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -1815,7 +1815,7 @@ setInterval(async () => {
 
 // ✅ User se Rating Accept karna
 // ✅ User se Rating Accept karna
-app.post("/rate", async (req, res) => {
+app.post("/rate", async (req, res) => { 
   try {
     const { userId, productId, rating, review } = req.body;
 

@@ -41,6 +41,7 @@ const [cartData, setCartData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
   const [popupImage, setPopupImage] = useState(""); // State to store the clicked image
   const [Selectedcolor,setSelectedcolor]=useState([])
+   const [isOpen, setIsOpen] = useState(false);
 const[product,setproduct]=useState([])
 const[mainProductt,setmainprodutt]=useState([])
 const imageRef = useRef();
@@ -610,8 +611,30 @@ let cate=product.cate
     </div>
     <FaArrowLeft size={50} onClick={()=>{navigate(-1)}} style={{position:"absolute",top:"80px",left:"20px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px",background:"white"}}/>
     <div className="details-sectionnn">
-          <div style={{display:"flex",  justifyContent:"space-between"}}>
-          <p className="product-description">{product.description}<p style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span>{product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px"}}>{product.discount} discount</span></p></p>
+          <div style={{display:"flex"}}>
+            <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
+          <span className="product-description" style={{fontFamily:"Poppins, sans-serif",fontSize:"28px",color:"black"}} >{product.description}</span>
+          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px",color:"#c7522a"}}>{product.discount} off</span></span>
+          <span
+      style={{
+        display: 'flex',
+        alignItems: 'stat',
+        gap: '5px',
+      marginTop:"5px",
+      color:"orange",
+      fontWeight: 'bold',
+      paddingBottom: '4px ',
+      fontSize: '18px',
+      textAlign:"center"
+     }}
+    >
+      <span>{'★'.repeat(product.avgRate?(product.avgRate):(5))}</span>
+      <span style={{color:"gray",fontWeight:"lighter"}}>{product.avgRate?(product.avgRate):("5.0")}</span>
+      <span style={{color:"gray",fontWeight:"lighter"}}>-</span>
+       <span style={{color:"gray",fontWeight:"lighter"}}>{product.reviewCount?(product.reviewCount):(100)} Reviews</span>
+      <span></span>
+    </span>
+          </div>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
           <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"22px",bottom:"150px"}}>
           
@@ -620,7 +643,7 @@ let cate=product.cate
 />
 
 </div>
-<RatingBadge rating={4}/>
+{/* <RatingBadge rating={4}/> */}
         </div>
        
           
@@ -632,16 +655,16 @@ let cate=product.cate
               {sizes.map((size) => (
                 
                 <button
-                
+                style={{borderRadius:"30px",width:"50px"}}
                   key={size}
                   className={`size-btn ${selectedSize === size ? "active" : ""}` }
                   onClick={() => setSelectedSize(size)}>
 
-                  <span>⚡{size}</span>
+                  <span>{size}</span>
                 </button>
               ))}
             </div>
-            <label className="sizeguide"><NavLink style={{paddingLeft:"10px",color:"white",fontWeight:"lighter"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label>
+            {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px",color:"white",fontWeight:"lighter"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label> */}
           </div>
 
           <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}>
@@ -650,23 +673,66 @@ let cate=product.cate
               {
                 mainProductt?(mainProductt?.colors?.map((color) => (
                   <button
-                    
+                    style={{background:color.color,borderRadius:"100%",width:"20px",height:"20px"}}
                     className={`size-btn ${selectedSize === color ? "active" : ""}`}
                      onClick={() => setSelectedcolor(color.color)}>
                     
-                    {color.color}
+                    {/* {color.color} */}
                   </button>
                 ))):(<button className={`size-btn`}>{product.color}</button>)
               }
               
             </div>
+            
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>
+ <div className="prd-ka-dropdown-container">
+      {/* Description */}
+      <div
+        className="prd-ka-dropdown-item"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span>Description</span>
+        <span className="prd-ka-dropdown-arrow">›</span>
+      </div>
+      {isOpen && (
+        <div className="prd-ka-dropdown-description">
+          <div className="prd-ka-dropdown-row">
+            <span className="prd-ka-dropdown-label">Print type</span>
+            <span className="prd-ka-dropdown-value">{product.printtype?(product.printtype):("Solid")}</span>
+          </div>
+          <div className="prd-ka-dropdown-row">
+            <span className="prd-ka-dropdown-label">Color</span>
+            <span className="prd-ka-dropdown-value">{product.color}</span>
+          </div>
+          <div className="prd-ka-dropdown-row">
+            <span className="prd-ka-dropdown-label">Fabric</span>
+            <span className="prd-ka-dropdown-value">{product.material?(product.material):("Cotton")}</span>
+          </div>
 
+          <div className="prd-ka-dropdown-row">
+            <span className="prd-ka-dropdown-label">Occasion</span>
+            <span className="prd-ka-dropdown-value">{product.occasion?(product.occasion):("Party")}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Size Guide */}
+      <NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
+        <span>Size Guide</span>
+        <span className="prd-ka-dropdown-arrow">›</span>
+      </NavLink>
+
+      {/* Customer Reviews */}
+      <div className="prd-ka-dropdown-item">
+        <span>Customer Reviews</span>
+        <span className="prd-ka-dropdown-arrow">›</span>
+      </div>
+    </div>
           {/* <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}}>Add to Cart</button>   */}
          
           {/* Quantity Selector */}
-         <div className="quantity-controls">
+         {/* <div className="quantity-controls">
           <div>Qty:</div>
           
            <button className="quantity-btn" onClick={decrementQuantity}>
@@ -676,7 +742,7 @@ let cate=product.cate
            <button className="quantity-btn" onClick={incrementQuantity}>
             +
            </button>
-        </div>
+        </div> */}
         
 
           {/* Product Description */}
