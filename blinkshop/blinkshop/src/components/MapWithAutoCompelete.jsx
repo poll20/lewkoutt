@@ -665,7 +665,6 @@ useEffect(() => {
           <div className="tag-buttons">
             {tags.map((tag) => (
               <button
-              style={{background:"white",border:"1px solid gray",color:"black"}}
                 key={tag.label}
                 className={`tag-button ${
                   selectedTag === tag.label ? "selected" : ""

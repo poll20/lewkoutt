@@ -7,4 +7,37 @@
   .mt-1 {
     margin-top: 0.25rem;
   }
-  
+  .save-as-section {
+  margin: 20px 0;
+}
+
+.tag-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.tag-button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  background-color: #f7f7f7;
+  color: #333;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.tag-button:hover {
+  background-color: #eaeaea;
+}
+
+.tag-button.selected {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
