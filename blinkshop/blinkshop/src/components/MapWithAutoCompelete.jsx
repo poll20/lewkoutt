@@ -158,6 +158,7 @@ import { useBio } from "./BioContext";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
+import { FaHome, FaBriefcase, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
 import "./mapaddress.css"
 const MapWithAutocomplete = () => {
   const [selectedAddresss, setSelectedAddresss] = useState("");
