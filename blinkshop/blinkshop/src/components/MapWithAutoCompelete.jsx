@@ -204,7 +204,7 @@ const [userprf,setuserprf]=useState({ address: [] })
     { label: "Home", icon: <FaHome /> },
     { label: "Work", icon: <FaBriefcase /> },
     { label: "Friends and Family", icon: <FaUsers /> },
-    { label: "Other", icon: <FaMapMarkerAlt /> },
+    { label: "PG/Hostel", icon: <FaMapMarkerAlt  /> },
   ];
 
 
