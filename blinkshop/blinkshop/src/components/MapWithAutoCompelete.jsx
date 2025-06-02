@@ -380,12 +380,19 @@ useEffect(() => {
         draggable: true,
       });
 
-      const input = document.getElementById("autocomplete");
+      // const input = document.getElementById("autocomplete");
+      const input = inputRef.current;
 
+
+      // const autocomplete = new window.google.maps.places.Autocomplete(input, {
+      //   types: ["geocode"],
+      //   componentRestrictions: { country: "in" },
+      // });
       const autocomplete = new window.google.maps.places.Autocomplete(input, {
-        types: ["geocode"],
-        componentRestrictions: { country: "in" },
-      });
+  types: ["geocode"],
+  // componentRestrictions: { country: "in" }, // Try removing this temporarily
+});
+autocomplete.setFields(["address_components", "formatted_address", "geometry"]);
 
       autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
@@ -452,7 +459,7 @@ useEffect(() => {
         📍 Google Map with Autocomplete + Current Location
       </h3>
 
-      <input
+      {/* <input
         id="autocomplete"
         placeholder="Enter your address"
         style={{
@@ -463,8 +470,22 @@ useEffect(() => {
           border: "1px solid #ccc",
           marginBottom: "10px",
         }}
-      />
+      /> */}
 
+<input
+  ref={inputRef}
+  id="autocomplete"
+  placeholder="Enter your address"
+   style={{
+          width: "100%",
+          padding: "10px",
+          fontSize: "16px",
+          borderRadius: "8px",
+          border: "1px solid #ccc",
+          marginBottom: "10px",
+        }}
+  
+/>
       <div
         ref={mapRef}
         style={{
