@@ -133,6 +133,23 @@ margin-top: 3%
   border: 2px solid purple;
 }
 
+.colour-btn {
+  
+  /* padding: 8px 12px; */
+  font-size: 14px;
+  border: 1px solid gray;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.colour-btn.clractive{
+  /* background-color: white; */
+  /* color: purple; */
+  /* font-weight:500; */
+  border: 2px solid purple;
+}
+
+
 /* Product description text */
 .product-description {
   /* border: 1px solid pink; */

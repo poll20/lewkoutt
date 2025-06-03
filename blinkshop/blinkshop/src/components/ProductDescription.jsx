@@ -613,7 +613,7 @@ let cate=product.cate
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
-          <span className="product-description" style={{fontFamily:"Poppins, sans-serif",fontSize:"28px",color:"black",marginTop:"5px"}} >{product.description.slice(0,1).toUpperCase()+product.description.slice(1)}</span>
+          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"28px",color:"black",marginTop:"5px"}} >{product.description.slice(0,1).toUpperCase()+product.description.slice(1)}</span>
           <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px",color:"#c7522a"}}>{product.discount} off</span></span>
           <span
       style={{
@@ -650,7 +650,7 @@ let cate=product.cate
          
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}> */}
           {/* <div className="size-options" style={{gap:"10px",padding:'10px 0', borderBottom:"1px solid black"}}> */}
-          <div className="size-options" style={{gap:"10px",padding:'10px 0'}}>
+          <div className="size-options" style={{gap:"10px",padding:'10px 0',border:"1px solid white"}}>
 
 
           <label>Size:</label>
@@ -680,7 +680,7 @@ let cate=product.cate
                 mainProductt?(mainProductt?.colors?.map((color) => (
                   <button
                     style={{background:color.color,borderRadius:"100%",width:"20px",height:"20px"}}
-                    className={`size-btn ${selectedSize === color ? "active" : ""}`}
+                    className={`colour-btn ${Selectedcolor === color ? "clractive"   : ""}`}
                      onClick={() => setSelectedcolor(color.color)}>
                     
                     {/* {color.color} */}
