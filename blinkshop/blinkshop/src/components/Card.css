@@ -11,7 +11,7 @@
   padding: 20px; /* Add padding on all sides */
   padding-top: 40px; /* Ensure additional space at the top */
   max-width: 100%;
-  margin: 0 auto; /* Center the grid */
+  margin: 0 auto; /*Center the grid*/
   background-color: white;
 }
 
@@ -505,9 +505,9 @@ font-size: .8rem;
 @media screen and (max-width: 767px) {
   .unique-product-container {
     grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
-    gap: 15px; /* Adjust spacing for smaller screens */
+    gap: 10px; /* Adjust spacing for smaller screens */
     padding-top: 30px; /* Add space at the top for mobile */
-    margin-top: 10vh;
+    margin-top: 50px;
   }
   
 }
@@ -517,6 +517,6 @@ font-size: .8rem;
   .unique-product-container {
     grid-template-columns: repeat(2, 1fr); /* Ensure 2 cards per row */
     gap: 10px; /* Smaller gap for very small screens */
-    padding-top: 20px; /* Add space at the top for very small screens */
+    padding-top: 30px; /* Add space at the top for very small screens */
   }
 }

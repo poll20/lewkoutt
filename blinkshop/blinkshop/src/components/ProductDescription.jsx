@@ -609,7 +609,7 @@ let cate=product.cate
       )}
       {/* <TimeSlotPicker/> */}
     </div>
-    <FaArrowLeft size={50} onClick={()=>{navigate(-1)}} style={{position:"absolute",top:"80px",left:"20px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px",background:"white"}}/>
+    <FaArrowLeft size={50} onClick={()=>{navigate(-1)}} style={{position:"absolute",top:"24px",left:"20px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px",background:"white"}}/>
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
