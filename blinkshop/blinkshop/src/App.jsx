@@ -310,7 +310,7 @@ function Layout({ showPopup }) {
   return (
     <>
     <GlobalLoader/>
-      {!isAdminRoute && <ResponsiveNavbar />}
+      {!isAdminRoute && !pd && <ResponsiveNavbar />}
       {isAdminRoute ? (
         <div className="admin-ka-panel-container">
 
