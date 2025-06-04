@@ -108,7 +108,7 @@ const StickyButton = ({ targetRef, onAddToCart, onBuyNow }) => {
   return (
     <>
       {/* Regular Button (in flow) */}
-      <div className={`normal-button-container ${!isSticky ? 'visible' : 'hidden'}`}>
+      <div className={`normal-button-container ${!isSticky ? 'visible' : 'hidden'}`} >
         <button className="add-to-cart" onClick={onAddToCart} style={{backgroundColor:"white",color:"black",padding:"12px 10px",width:"150px",borderRadius:"30px",border:"2px solid #F15A29",color:"#F15A29"}}>ADD TO CART</button>
         <button className="add-to-cart" onClick={onBuyNow}style={{backgroundColor:"#F15A29",padding:"12px 10px",width:"150px",borderRadius:"30px"}}>BUY NOW</button>
       </div>

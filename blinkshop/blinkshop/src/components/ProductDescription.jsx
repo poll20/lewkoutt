@@ -560,7 +560,7 @@ let cate=product.cate
             theme="light" // You can change the theme: light or dark
           /> */}
           
-    <div className="container">
+    <div className="container"style={{border:"2px solid red"}}>
       
       <div className="product-page">
         
@@ -636,7 +636,7 @@ let cate=product.cate
     </span>
           </div>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
-          <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"22px",bottom:"150px"}}>
+          <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"22px",bottom:"120px"}}>
           
 <HeartButton   cardid={product._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-7} pdml={4}
 
@@ -762,7 +762,7 @@ let cate=product.cate
          <button className="add-to-cart" onClick={()=>{buydata(product,selectedSize,quantity)}} style={{backgroundColor:"#F15A29"}}>Buy Now</button>
             
           </div> */}
-         <StickyButton
+  <StickyButton
   onAddToCart={() => handleclick(product, quantity, selectedSize)}
   onBuyNow={() => buydata(product, selectedSize, quantity)}
   targetRef={targetRef}
