@@ -547,7 +547,7 @@ let cate=product.cate
 //   }, []);
   return (
     <>
-    <ToastContainer 
+    {/* <ToastContainer 
             position="top-center" // You can set the position of the toast
             autoClose={3000} // Automatically close after 3 seconds
             hideProgressBar={false}
@@ -558,7 +558,7 @@ let cate=product.cate
             draggable
             pauseOnHover
             theme="light" // You can change the theme: light or dark
-          />
+          /> */}
           
     <div className="container">
       
