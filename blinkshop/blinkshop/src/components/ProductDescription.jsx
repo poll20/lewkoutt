@@ -613,7 +613,7 @@ let cate=product.cate
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
-          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"28px",color:"black",marginTop:"5px"}} >{product.description.slice(0,1).toUpperCase()+product.description.slice(1)}</span>
+          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"28px",color:"black",marginTop:"5px",fontWeight:"bolder"}} >{product.description.slice(0,1).toUpperCase()+product.description.slice(1)}</span>
           <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px",color:"#c7522a"}}>{product.discount} off</span></span>
           <span
       style={{
