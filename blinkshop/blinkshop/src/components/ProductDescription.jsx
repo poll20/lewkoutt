@@ -636,7 +636,7 @@ let cate=product.cate
     </span>
           </div>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
-          <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"22px",bottom:"120px"}}>
+          <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"17px",bottom:"120px"}}>
           
 <HeartButton   cardid={product._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-7} pdml={4}
 

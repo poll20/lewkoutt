@@ -202,20 +202,22 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-   useEffect(() => {
-    const setRealVh = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
+  useEffect(() => {
+  const setVh = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
 
-    setRealVh();
-    window.addEventListener('resize', setRealVh);
+  setVh();
 
-    return () => window.removeEventListener('resize', setRealVh);
-  }, []);
-//   useEffect(() => {
-//   window.scrollTo(0, 1); // Scroll down 1px on load
-// }, []);  //ye code kha add kru short answer
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+
+  return () => {
+    window.removeEventListener('resize', setVh);
+    window.removeEventListener('orientationchange', setVh);
+  };
+}, []);
 
   // useEffect(() => {
   //   // const fetchData = async () => {
