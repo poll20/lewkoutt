@@ -33,6 +33,7 @@ const DashNavbar = () => {
         <ul className="admin-ka-panel-menu">
           <li>
             <button
+            style={{color:"white"}}
               className="admin-ka-panel-dropdown-btn"
               onClick={() => setIsInventoryOpen(!isInventoryOpen)}
             >
@@ -57,6 +58,7 @@ const DashNavbar = () => {
         <ul className="admin-ka-panel-menu">
           <li>
             <button
+            style={{color:"white"}}
               className="admin-ka-panel-dropdown-btn"
               onClick={() => setUserOpen(!isUserOpen)}
             >
@@ -82,6 +84,7 @@ const DashNavbar = () => {
         <ul className="admin-ka-panel-menu">
           <li>
             <button
+            style={{color:"white"}}
               className="admin-ka-panel-dropdown-btn"
               onClick={() => setMoodOpen(!isMoodOpen)}
             >
