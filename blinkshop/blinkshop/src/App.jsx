@@ -213,6 +213,9 @@ export default function App() {
 
     return () => window.removeEventListener('resize', setRealVh);
   }, []);
+  useEffect(() => {
+  window.scrollTo(0, 1); // Scroll down 1px on load
+}, []);  //ye code kha add kru short answer
 
   // useEffect(() => {
   //   // const fetchData = async () => {
