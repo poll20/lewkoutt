@@ -192,6 +192,7 @@ export default function App() {
   const [popupMessage, setPopupMessage] = useState("");
   const { setIsLoading } = useLoading(); // ✅ add this inside the App component
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
 
   useEffect(() => {
     const handleResize = () => {
@@ -274,7 +275,7 @@ export default function App() {
     setPopupMessage(msg);
   };
 
-  if (!isMobile) {
+  if (!isMobile && !isAdminRoute) {
     return (
       <div style={{ padding: "50px", textAlign: "center" }}>
         <h2>This site is only accessible on mobile devices.</h2>
