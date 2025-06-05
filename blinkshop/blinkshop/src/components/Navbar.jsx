@@ -125,8 +125,9 @@ useEffect(()=>{
 let closeslidecategorynav=()=>{
   setSideNavbarOpen(!sideNavbarOpen)
 }
+console.log("navbar m props.pdd value",props.pd)
   return (
-    <div style={{visibility:props.pd=="productdescription"?("hidden"):('')}}>
+    <div style={{visibility:props.pd==true?("hidden"):('')}}>
       {/* Top Navbar */}
       <nav className="navbar top-navbar" >
         <div className="mobile-menu-icon" onClick={handleSideNavbarToggle}>
