@@ -41,7 +41,7 @@
   /* your other styles */
 
 
-  overflow-y: hidden;
+  overflow-y: auto;
   
   scroll-snap-type: y mandatory;
   
