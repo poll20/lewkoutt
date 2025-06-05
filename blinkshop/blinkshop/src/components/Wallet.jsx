@@ -13,7 +13,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
     return (
       <div className="wallet-container-mera-wallet">
         {/* Tabs */}
-        <div className="wallet-tabs-mera-wallet">
+        <div className="wallet-tabs-mera-wallet ">
           <button
             className={`wallet-tab-mera-wallet ${activeTab === "cashback" ? "active-mera-wallet" : ""}`}
             onClick={() => setActiveTab("cashback")}
@@ -30,7 +30,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 
         {/* Cashback Section */}
         {activeTab === "cashback" && (
-          <div className="wallet-section-mera-wallet cashback-mera-wallet">
+          <div className="wallet-section-mera-wallet cashback-mera-wallet wallet-card">
             <h2>Cashback Balance</h2>
             <p className="pppp">₹{!userDetails.wallet.cashback?(0):(userDetails.wallet.cashback)}</p>
           </div>
@@ -38,7 +38,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 
         {/* Points Section */}
         {activeTab === "points" && (
-          <div className="wallet-section-mera-wallet points-mera-wallet">
+          <div className="wallet-section-mera-wallet points-mera-wallet wallet-card">
             <h2>Earned Points</h2>
             <p className="pppp">{!userDetails.wallet.points?(0):(userDetails.wallet.points)} pts</p>
           </div>

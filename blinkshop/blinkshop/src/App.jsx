@@ -201,6 +201,19 @@ export default function App() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+   useEffect(() => {
+    const setRealVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setRealVh();
+    window.addEventListener('resize', setRealVh);
+
+    return () => window.removeEventListener('resize', setRealVh);
+  }, []);
+
   // useEffect(() => {
   //   // const fetchData = async () => {
     

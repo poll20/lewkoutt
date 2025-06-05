@@ -239,10 +239,11 @@ let navigate=useNavigate()
   }
 </div>
       <div className="profile-balance">
-        <div className="balance-item">
+        <NavLink to="/wallet"  className="balance-item navlink">
           <FaWallet />
           <p>Wallet Balance<br /><span>₹0</span></p>
-        </div>
+        </NavLink>
+      
         <div className="balance-item">
           <FaUserFriends />
           <p>Referral Earnings<br /><span>₹0</span></p>
@@ -280,11 +281,11 @@ let navigate=useNavigate()
           <p onClick={() => openPopup()}>Logout</p>
           <IoIosArrowForward onClick={() => openPopup()}/>
         </NavLink>
-        <NavLink to='/wallet' className="menu-item navlink">
+        {/* <NavLink to='/wallet' className="menu-item navlink">
           <RiLogoutBoxLine/>
           <p>Wallet</p>
           <IoIosArrowForward />
-        </NavLink>
+        </NavLink> */}
         <NavLink className="menu-item navlink"to={'/aboutus'} >
            LO
           <p>About Us</p>

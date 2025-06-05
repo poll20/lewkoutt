@@ -22,6 +22,7 @@ import { useBio } from './BioContext';
 import { useAuth } from './AuthContext';
 import { useFirebaseAuth } from './FirebaseContext';
 import VibeSticker from './VibeSticker';
+import LewkoutLogo from './LewkoutLogo';
 
 const ResponsiveNavbar = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -131,7 +132,7 @@ let closeslidecategorynav=()=>{
         <div className="mobile-menu-icon" onClick={handleSideNavbarToggle}>
           <IoIosMenu  size={30} />
         </div>
-        <div className="logo lato-thin" >LEWKOUT</div>
+        <div className="logo lato-thin" ><LewkoutLogo/></div>
         
         <div style={{display:"flex",gap:"15%"}}>
         <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?('position-relative'):('')}`}>

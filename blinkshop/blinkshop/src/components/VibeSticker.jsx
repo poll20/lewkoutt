@@ -24,6 +24,7 @@ import { NavLink } from "react-router-dom";
 import img from "./image/cloudmooddd.png"
 const VibeSticker = () => {
     const [visi,setvisi] =useState(true)
+    
   return (
     
     <div className="vibe-sticker"style={{display:visi==true?("block"):("none")}}>
@@ -40,6 +41,8 @@ const VibeSticker = () => {
     </div>
     
   );
+  
 };
+
 
 export default VibeSticker;

@@ -560,7 +560,7 @@ let cate=product.cate
             theme="light" // You can change the theme: light or dark
           /> */}
           
-    <div className="container"style={{border:"2px solid red"}}>
+    <div className="container">
       
       <div className="product-page">
         
