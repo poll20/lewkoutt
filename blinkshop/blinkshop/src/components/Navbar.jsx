@@ -126,7 +126,7 @@ let closeslidecategorynav=()=>{
   setSideNavbarOpen(!sideNavbarOpen)
 }
   return (
-    <div style={{visibility:pd=="productdescription"?("hidden"):('')}}>
+    <div style={{visibility:props.pd=="productdescription"?("hidden"):('')}}>
       {/* Top Navbar */}
       <nav className="navbar top-navbar" >
         <div className="mobile-menu-icon" onClick={handleSideNavbarToggle}>
