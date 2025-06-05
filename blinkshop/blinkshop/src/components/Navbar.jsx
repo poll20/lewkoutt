@@ -24,7 +24,7 @@ import { useFirebaseAuth } from './FirebaseContext';
 import VibeSticker from './VibeSticker';
 import LewkoutLogo from './LewkoutLogo';
 
-const ResponsiveNavbar = () => {
+const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()
   let {user,userDetails}=useFirebaseAuth()
@@ -126,9 +126,9 @@ let closeslidecategorynav=()=>{
   setSideNavbarOpen(!sideNavbarOpen)
 }
   return (
-    <>
+    <div style={{visibility:pd=="productdescription"?("hidden"):('')}}>
       {/* Top Navbar */}
-      <nav className="navbar top-navbar">
+      <nav className="navbar top-navbar" >
         <div className="mobile-menu-icon" onClick={handleSideNavbarToggle}>
           <IoIosMenu  size={30} />
         </div>
@@ -321,7 +321,7 @@ let closeslidecategorynav=()=>{
 
       {/* Overlay for closing the side navbar when clicked outside */}
       {sideNavbarOpen && <div className="overlay" onClick={handleSideNavbarToggle}></div>}
-    </>
+    </div>
   );
 
 };
