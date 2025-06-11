@@ -644,7 +644,8 @@ if(searchvalue){
 
         {/* Details Section */}
         <div className="product-details" style={{backgroundColor:"white"}}>
-          <p className="product-title" style={{fontFamily: "'Inter', sans-serif"}}>{product.description?.length>19?(product.description?.slice(0,18)+`...`):(product.description)}</p>
+          {/* fontFamily: "'Inter', sans-serif */}
+          <p className="product-title" style={{fontFamily: "'Oswald', sans-serif",fontWeight:"400",fontSize:"15px"}}>{product.description?.length>19?(product.description?.slice(0,18)+`...`):(product.description)}</p>
           <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product.price}</span>
