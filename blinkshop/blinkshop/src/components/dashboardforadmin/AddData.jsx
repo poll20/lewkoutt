@@ -29,7 +29,7 @@ const [newCoupon, setNewCoupon] = useState("");
       image: [],
       price: "",
       discount: "",
-      discountprice:"",
+      discountprice:'',
       coupons:[],
       defaultColor: "",
       colors: [],
@@ -56,7 +56,7 @@ const [newCoupon, setNewCoupon] = useState("");
       image: [],
       price: "",
       discount: "",
-      discountprice:"",
+      discountprice:'',
       coupons:[],
       defaultColor: "",  // ✅ New field added here
       colors: [],

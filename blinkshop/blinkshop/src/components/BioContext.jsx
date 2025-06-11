@@ -1126,7 +1126,7 @@ const fetchCoupons = async (cate, title) => {
   try {
     setIsLoading(true);
 
-    const userId = "6847e7d4bdfe738efe36503c"
+    const userId = userDetails?._id
     console.log("userikid",userId)
     if (!userId || !cate || !title) {
       console.log("🚫 Missing params for fetchCoupons:", { userId, cate, title });

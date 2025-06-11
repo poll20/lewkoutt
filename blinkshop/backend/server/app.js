@@ -1088,49 +1088,58 @@ catch(e){
 //   }
 // });
 
-app.post("/productmodel", async (req, res) => {
-  try {
-    const productData = req.body;
-    const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
-    await newProduct.save();
-    res.status(201).json(newProduct);
-    console.log("ho gyaa",newProduct)
-  } catch (error) {
-    res.status(500).send("Error saving data");
-  }
-});
-
 // app.post("/productmodel", async (req, res) => {
 //   try {
-//     const productArray = req.body;
-
-//     // Check if array and has at least one product
-//     if (!Array.isArray(productArray) || productArray.length === 0) {
-//       return res.status(400).json({ error: "Invalid product data." });
-//     }
-
-//     // Get the first product object
-//     const productData = productArray[0];
-
-//     // ✅ Calculate discount price
-//     if (productData.price && productData.discount) {
-//       const discountAmount = (productData.price * productData.discount) / 100;
-//       productData.discountprice = Math.round(productData.price - discountAmount);
-//       console.log("mil rha h kyaa dp",productData.discountprice)
-//     }
-     
-
-//     // Save product
-//     const newProduct = new productsmodel(productData);
+//     const productData = req.body;
+//     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
 //     await newProduct.save();
-
-//     console.log("✔ Product saved:", newProduct);
 //     res.status(201).json(newProduct);
+//     console.log("ho gyaa",newProduct)
 //   } catch (error) {
-//     console.error("❌ Error saving product:", error);
 //     res.status(500).send("Error saving data");
 //   }
 // });
+
+app.post("/productmodel", async (req, res) => {
+  try {
+    const productArray = req.body;
+
+    // Check if array and has at least one product
+    if (!Array.isArray(productArray) || productArray.length === 0) {
+      return res.status(400).json({ error: "Invalid product data." });
+    }
+
+    // Get the first product object
+    const productData = productArray[0];
+
+    // ✅ Calculate discount price
+   if (
+  productData.productdetails &&
+  productData.productdetails.price &&
+  productData.productdetails.discount
+) {
+  const originalPrice = parseFloat(productData.productdetails.price);
+  const discountPercent = parseFloat(productData.productdetails.discount);
+
+  if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
+    const discountAmount = (originalPrice * discountPercent) / 100;
+    productData.productdetails.discountprice = Math.round(originalPrice - discountAmount);
+    console.log("✔ Calculated discount price:", productData.productdetails.discountprice);
+  }
+}
+     
+
+    // Save product
+    const newProduct = new productsmodel(productData);
+    await newProduct.save();
+
+    console.log("✔ Product saved:", newProduct);
+    res.status(201).json(newProduct);
+  } catch (error) {
+    console.error("❌ Error saving product:", error);
+    res.status(500).send("Error saving data");
+  }
+});
 
 const addIdsToSubCollections = async () => {
     try {
@@ -1368,6 +1377,67 @@ app.get("/productmodel",async(req,res)=>{
 //   }
 // });
 
+// app.patch('/productmodel/:id', async (req, res) => {
+//   console.log("haa yhi funtion ccal ho rha hai")
+//   const { id } = req.params;
+   
+//   // Validate ID format
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(400).json({ message: 'Invalid ID format!' });
+//   }
+
+//   try {
+//     let updateData = req.body;
+//     console.log("update data",Array.isArray(updateData.image))
+//     // Handle `image` field if it is a stringified array
+//     if (updateData.image) {
+//       if (typeof updateData.image === 'string') {
+//         try {
+//           // Parse the string back to an array
+//           updateData.image = JSON.parse(updateData.image);
+//         } catch (error) {
+//           return res.status(400).json({ message: 'Invalid image format!' });
+//         }
+//       }
+
+//       // Ensure `image` is an array of strings
+//       if (Array.isArray(updateData.image)) {
+//         updateData.image = updateData.image.map((item) => String(item));
+//       } else {
+//         return res.status(400).json({ message: '`image` must be an array!' });
+//       }
+//     }
+
+//     const updatedProduct = await productsmodel.findByIdAndUpdate(
+//       id,
+//       { $push: updateData },
+//       { new: true, runValidators: true }
+//     );
+//   console.log("updated my data",updatedProduct)
+//     if (!updatedProduct) {
+//       return res.status(404).json({ message: 'Product not found!' });
+//     }
+  
+//     // ✅ Check if product is low stock
+//     // updatedProduct.productdetails.forEach((detail) => {
+//     //   detail.colors.forEach((color) => {
+//     //     color.sizes.forEach((size) => {
+//     //       if (size.quantity <= 5) {
+//     //         notifyLowStock(updatedProduct);
+//     //       }
+//     //     });
+//     //   });
+//     // });
+//     res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
+
+   
+
+//   } catch (error) {
+//     console.error('Error updating product:', error.message);
+//     res.status(500).json({ message: 'Internal Server Error', error: error.message });
+//   }
+// });
+
 app.patch('/productmodel/:id', async (req, res) => {
   console.log("haa yhi funtion ccal ho rha hai")
   const { id } = req.params;
@@ -1379,19 +1449,34 @@ app.patch('/productmodel/:id', async (req, res) => {
 
   try {
     let updateData = req.body;
-    console.log("update data",Array.isArray(updateData.image))
-    // Handle `image` field if it is a stringified array
+    console.log("update data", Array.isArray(updateData.image));
+    console.log("ab to ubdatd",updateData)
+
+    // ✅ Calculate discount price if price and discount are present
+  if (
+  updateData.productdetails &&
+  updateData.productdetails.price &&
+  updateData.productdetails.discount
+) {
+  const originalPrice = parseFloat(updateData.productdetails.price);
+  const discountPercent = parseFloat(updateData.productdetails.discount);
+
+  if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
+    const discountAmount = (originalPrice * discountPercent) / 100;
+    updateData.productdetails.discountprice = Math.round(originalPrice - discountAmount);
+  }
+}
+
+    // ✅ Handle `image` field if it is a stringified array
     if (updateData.image) {
       if (typeof updateData.image === 'string') {
         try {
-          // Parse the string back to an array
           updateData.image = JSON.parse(updateData.image);
         } catch (error) {
           return res.status(400).json({ message: 'Invalid image format!' });
         }
       }
 
-      // Ensure `image` is an array of strings
       if (Array.isArray(updateData.image)) {
         updateData.image = updateData.image.map((item) => String(item));
       } else {
@@ -1404,24 +1489,14 @@ app.patch('/productmodel/:id', async (req, res) => {
       { $push: updateData },
       { new: true, runValidators: true }
     );
-  console.log("updated my data",updatedProduct)
+
+    console.log("updated my data", updatedProduct);
+
     if (!updatedProduct) {
       return res.status(404).json({ message: 'Product not found!' });
     }
-  
-    // ✅ Check if product is low stock
-    // updatedProduct.productdetails.forEach((detail) => {
-    //   detail.colors.forEach((color) => {
-    //     color.sizes.forEach((size) => {
-    //       if (size.quantity <= 5) {
-    //         notifyLowStock(updatedProduct);
-    //       }
-    //     });
-    //   });
-    // });
-    res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
 
-   
+    res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
 
   } catch (error) {
     console.error('Error updating product:', error.message);
