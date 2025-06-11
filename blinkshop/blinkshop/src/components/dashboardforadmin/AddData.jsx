@@ -11,7 +11,7 @@ const AddData = () => {
   const [step, setStep] = useState(0); // 0 = Options, 1 = Add New Category, 2 = Choose Category, 3 = Add Product
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
-
+const [newCoupon, setNewCoupon] = useState("");
   useEffect(() => {
     if (productdata) {
       let categoryList = productdata.map((e) => e.category);
@@ -28,7 +28,9 @@ const AddData = () => {
       description: "",
       image: [],
       price: "",
-      discountprice: "",
+      discount: "",
+      discountprice:"",
+      coupons:[],
       defaultColor: "",
       colors: [],
       occasion: "",
@@ -37,8 +39,8 @@ const AddData = () => {
       printtype: "",
       styletype: "",
       shopname:"",
-      shopaddress:"",
-      discount: "",
+      shopaddress:""
+      
     },
   });
 
@@ -53,7 +55,9 @@ const AddData = () => {
       description: "",
       image: [],
       price: "",
-      discountprice: "",
+      discount: "",
+      discountprice:"",
+      coupons:[],
       defaultColor: "",  // ✅ New field added here
       colors: [],
       occasion: "",
@@ -63,7 +67,7 @@ const AddData = () => {
       styletype: "",
       shopname:"",
       shopaddress:"",
-      discount: "",
+      
     },
   });
 
@@ -87,10 +91,35 @@ const AddData = () => {
   };
 
   // ✅ Handle category image upload
-  const handleCategoryImageUpload = (e) => {
-    const file = URL.createObjectURL(e.target.files[0]);
-    setNewProduct((prev) => ({ ...prev, image: file }));
-  };
+  // const handleCategoryImageUpload = (e) => {
+  //   const file = URL.createObjectURL(e.target.files[0]);
+  //   setNewProduct((prev) => ({ ...prev, image: file }));
+  // };
+  const handleCategoryImageUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "lewkout"); // ✅ your Cloudinary preset
+  formData.append("cloud_name", "ddbz9m39a");   // ✅ your Cloudinary cloud name
+
+  try {
+    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    const uploadedUrl = data.secure_url;
+
+    // ✅ Set the Cloudinary URL in state
+    setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
+  } catch (err) {
+    console.error("Category image upload failed:", err);
+    alert("Failed to upload category image.");
+  }
+};
+
 
   // ✅ Add Color
   const addColor = (isNewCategory) => {
@@ -111,23 +140,77 @@ const AddData = () => {
       setNewColor({ color: "", image: "" });
     }
   };
+  const addCoupon = (isNewCategory) => {
+  if (!newCoupon.trim()) return;
+  const targetForm = isNewCategory ? setNewProduct : setProduct;
+
+  targetForm((prev) => ({
+    ...prev,
+    productdetails: {
+      ...prev.productdetails,
+      coupons: [...prev.productdetails.coupons, newCoupon.trim()],
+    },
+  }));
+
+  setNewCoupon(""); // Clear input
+};
+
 
   // ✅ Add Size inside Color
-  const addSize = (colorIndex, isNewCategory) => {
-    const targetForm = isNewCategory ? newProduct : product;
-    const updatedColors = [...targetForm.productdetails.colors];
-    updatedColors[colorIndex].sizes.push(newSize);
-    isNewCategory
-      ? setNewProduct((prev) => ({
-          ...prev,
-          productdetails: { ...prev.productdetails, colors: updatedColors },
-        }))
-      : setProduct((prev) => ({
-          ...prev,
-          productdetails: { ...prev.productdetails, colors: updatedColors },
-        }));
-    setNewSize({ size: "", quantity: "", image: [] });
+  // const addSize = (colorIndex, isNewCategory) => {
+  //   const targetForm = isNewCategory ? newProduct : product;
+  //   const updatedColors = [...targetForm.productdetails.colors];
+  //   updatedColors[colorIndex].sizes.push(newSize);
+  //   isNewCategory
+  //     ? setNewProduct((prev) => ({
+  //         ...prev,
+  //         productdetails: { ...prev.productdetails, colors: updatedColors },
+  //       }))
+  //     : setProduct((prev) => ({
+  //         ...prev,
+  //         productdetails: { ...prev.productdetails, colors: updatedColors },
+  //       }));
+  //   setNewSize({ size: "", quantity: "", image: [] });
+  // };
+  const addSize = async (colorIndex, isNewCategory) => {
+  const targetForm = isNewCategory ? newProduct : product;
+  const updatedColors = [...targetForm.productdetails.colors];
+
+  // ✅ Upload size images before pushing
+  const fileInput = document.querySelector(`#size-image-${colorIndex}`);
+  const files = fileInput ? Array.from(fileInput.files) : [];
+
+  if (!newSize.size || !newSize.quantity || files.length === 0) {
+    alert("Please fill size, quantity, and upload at least one image.");
+    return;
+  }
+
+  const uploadedUrls = await uploadToCloudinary(files);
+
+  const sizeData = {
+    size: newSize.size,
+    quantity: newSize.quantity,
+    image: uploadedUrls, // ✅ Now valid URLs
   };
+
+  updatedColors[colorIndex].sizes.push(sizeData);
+
+  isNewCategory
+    ? setNewProduct((prev) => ({
+        ...prev,
+        productdetails: { ...prev.productdetails, colors: updatedColors },
+      }))
+    : setProduct((prev) => ({
+        ...prev,
+        productdetails: { ...prev.productdetails, colors: updatedColors },
+      }));
+
+  setNewSize({ size: "", quantity: "", image: [] });
+
+  // ✅ Clear input
+  if (fileInput) fileInput.value = "";
+};
+
 
 
     // ✅ Handle size image upload
@@ -136,19 +219,98 @@ const AddData = () => {
     setNewSize((prev) => ({ ...prev, image: [...prev.image, ...files] }));
   };
 
+    // ✅ Cloudinary Upload Function
+  const uploadToCloudinary = async (files) => {
+    const urls = [];
+    for (let file of files) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "lewkout"); // change this
+      formData.append("cloud_name", "ddbz9m39a");       // change this
+
+      const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+     const data = await res.json();
+    urls.push(data.secure_url);
+    }
+    return urls;
+  };
   // ✅ Handle form submission
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (step === 1) {
+  //     addnewcategory(newProduct);
+  //     alert("New Category Added Successfully!");
+  //   } else {
+  //     let cateid = productdata.find((e) => e.category === selectedCategory);
+  //     adddatatoexistingcategory(product, cateid._id);
+  //     console.log("ye h data mera ",product)
+  //     alert("Product Added Successfully!");
+  //   }
+  // };
+  // ✅ Modified Submit Handler
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (step === 1) {
-      addnewcategory(newProduct);
-      alert("New Category Added Successfully!");
-    } else {
-      let cateid = productdata.find((e) => e.category === selectedCategory);
-      adddatatoexistingcategory(product, cateid._id);
-      console.log("ye h data mera ",product)
-      alert("Product Added Successfully!");
+
+    try {
+      const isNew = step === 1;
+      const targetProduct = isNew ? newProduct : product;
+
+      // 🔄 Convert image preview URLs to File objects — only if using URL.createObjectURL earlier
+      const productImagesInput = document.querySelector('input[type="file"][multiple]');
+      const productFiles = productImagesInput ? Array.from(productImagesInput.files) : [];
+
+      const uploadedProductImages = await uploadToCloudinary(productFiles);
+
+      // 🔄 Upload color images (assume 1 image per color for simplicity)
+      const colorImages = targetProduct.productdetails.colors.map((c) => c.image).filter(Boolean);
+      const uploadedColorImages = await uploadToCloudinary(colorImages);
+
+      // 🔄 Upload size images
+      const sizeImages = targetProduct.productdetails.colors
+        .flatMap((color) => color.sizes.flatMap((size) => size.image).filter(Boolean));
+      const uploadedSizeImages = await uploadToCloudinary(sizeImages);
+
+      // ✅ Inject URLs
+      const updatedProduct = {
+        ...targetProduct,
+        productdetails: {
+          ...targetProduct.productdetails,
+          image: uploadedProductImages,
+          colors: targetProduct.productdetails.colors.map((color, i) => {
+            const sizes = color.sizes.map((size) => {
+              const sizeImageUrls = uploadedSizeImages.splice(0, size.image.length);
+              return { ...size, image: sizeImageUrls };
+            });
+
+            return {
+              ...color,
+              image: uploadedColorImages[i] || "",
+              sizes,
+            };
+          }),
+        },
+      };
+
+      // ✅ Submit to backend
+      if (isNew) {
+        
+        addnewcategory(updatedProduct);
+        alert("New Category Added Successfully!");
+      } else {
+        const cateid = productdata.find((e) => e.category === selectedCategory);
+        adddatatoexistingcategory(updatedProduct, cateid._id);
+        alert("Product Added Successfully!");
+      }
+
+    } catch (err) {
+      console.error("Image upload error:", err);
+      alert("Something went wrong while uploading images.");
     }
   };
+
 
   return (
     <div className="admin-adddata-container">
@@ -198,12 +360,29 @@ const AddData = () => {
                 <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
                 <input
                   type="text"
+                  
                   name={field}
                   value={step === 1 ? newProduct.productdetails[field] : product.productdetails[field]}
                   onChange={(e) => handleChange(e, step === 1)}
                 />
               </div>
             ))}
+            {/* ✅ Add Coupons */}
+<label>Coupons:</label>
+<input
+  type="text"
+  placeholder="Enter Coupon Code"
+  value={newCoupon}
+  onChange={(e) => setNewCoupon(e.target.value)}
+/>
+<button style={{color:"white"}} type="button" onClick={() => addCoupon(step === 1)}>Add Coupon</button>
+
+{/* ✅ Show added coupons */}
+<div className="coupon-list">
+  {(step === 1 ? newProduct.productdetails.coupons : product.productdetails.coupons).map((coupon, i) => (
+    <span key={i} className="coupon-chip">{coupon}</span>
+  ))}
+</div>
 
              {/* ✅ Upload Product Images */}
              <label>Upload Product Images:</label>
@@ -229,7 +408,8 @@ const AddData = () => {
                 <input type="text" placeholder="Size" value={newSize.size} onChange={(e) => setNewSize({ ...newSize, size: e.target.value })} />
                 {/* <input type="number" placeholder="Quantity" value={newSize.quantity} onChange={(e) => setNewSize({ ...newSize, quantity: e.target.value })} /> */}
                 <input type="number" placeholder="Quantity" value={newSize.quantity} onChange={(e) => setNewSize({ ...newSize, quantity: e.target.value })} />
-               <input type="file" multiple onChange={handleSizeImageUpload} />
+               <input type="file" multiple onChange={handleSizeImageUpload}  id={`size-image-${index}`}  // ✅ ADD HERE
+/>
                {/* <input type="file" multiple onChange={(e) => {
                const files = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
                step === 1

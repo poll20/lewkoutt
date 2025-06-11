@@ -100,6 +100,9 @@ let users=mongoose.Schema({
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     refercode:{type: String},
     uid:{String},
+    ordernum:{
+      type:Number
+    },
     codecount:{type:Number,default:0},
     codepoint:{type:Number,default:0},
     address:[addressSchema],  
@@ -237,6 +240,14 @@ const CategorySchema = new mongoose.Schema({
         type: Number,
        
       },
+       discount: {
+        type: Number,
+        
+      },
+      coupons: {
+    type: [String], // array of coupon category/type names like ['WELCOME10', 'SUMMER20']
+    default: [],
+  },
       avgRating:{
         type:Number,
         default:5
@@ -275,10 +286,6 @@ const CategorySchema = new mongoose.Schema({
       },
       shopaddress:{
         type:String
-      },
-      discount: {
-        type: String,
-        
       }
     //   location: {  
     //     type: { type: String, enum: ["Point"], default: "Point" }, // GeoJSON Type
@@ -352,6 +359,75 @@ let returnscema=mongoose.Schema({
   selectedOption:String,  
   returnDate:{ type: Date, default: Date.now }
 })
+// const mongoose = require("mongoose");
+
+const couponSchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  discountType: {
+    type: String,
+    enum: ["Percentage", "Fixed"],
+    required: true,
+  },
+  discountValue: {
+    type: Number,
+    required: true,
+  },
+  minOrderAmount: {
+    type: Number,
+    default: 0,
+  },
+  usageLimit: {
+    type: Number,
+  },
+  usageLimitPerUser: {
+    type: Number,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  expiryDate: {
+    type: Date,
+    required: true,
+  },
+  categories: [{
+    type: String,
+  }],
+  productNames: [{
+    type: String
+  }],
+  couponType: {
+    type: String,
+    enum: ["General", "User-Specific", "Crampy Cutie", "First Order"],
+    default: "General",
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+  description: {
+    type: String,
+  },
+  autoApply: {
+    type: Boolean,
+    default: false,
+  },
+  freeShipping: {
+    type: Boolean,
+    default: false,
+  },
+  userGender: {
+    type: String, // Optional targeting
+    enum: ["Male", "Female", "Other"],
+  },
+}, { timestamps: true });
+
+module.exports = mongoose.model("Coupon", couponSchema);
+
 
 users.index({ phonenumber: 1 });
 users.index({ code: 1 });
@@ -390,6 +466,7 @@ let wallettrans=mongoose.model("wallettransection",WalletTransactionSchema)
 const SalesModel = mongoose.model("Sales", salesSchema);
 const returnmodel = mongoose.model("return",returnscema);
 let moodmodel=mongoose.model("moodmessage",moodMessageSchema)
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel}
+let cpn=mongoose.model("coupon",couponSchema)
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn}
 
 

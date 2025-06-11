@@ -78,4 +78,24 @@
     border: 1px solid #ddd;
     border-radius: 5px;
   }
-  
+  .coupon-chip {
+  display: inline-block;
+  background: #f2f2f2;
+  padding: 4px 8px;
+  margin: 4px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+}
+.chip-list {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  background: #eee;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+}

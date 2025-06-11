@@ -579,14 +579,48 @@ const fetchUserOrders = async (userId) => {
   //   setIsLoading(false)
   // }
 };
+const createCoupon = async (cpn) => {
+  console.log("here com data come",cpn)
+  const couponData = {
+    name: "WELCOME10",              // Coupon code
+    type: "all",                    // "all", "category", or "special"
+    category: "",                   // Leave empty if type !== "category"
+    discountPercentage: 10,
+    minAmount: 1000,
+    maxDiscount: 200,
+    messageSend: false,
+    expiresAt: "2025-12-31",
+  };
 
+  try {
+    const response = await fetch(`${apiUrl}/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cpn),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert(result.message); // "Coupon created successfully"
+    } else {
+      alert(result.error); // Error message
+    }
+  } catch (error) {
+    console.log("cpn err",error)
+    alert("Something went wrong while creating the coupon.");
+    console.error(error);
+  }
+};
   return (
     <DashboardContext.Provider
       value={{adddatatoexistingcategory , addnewcategory ,users,editordeleteinexisitingcategory,deletefromexistingproduct,dis, 
         setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,
         shopkeepersale,updateOrdersWithReturnDetails,
         returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
-        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders}}
+        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon}}
     >
       {children}
     </DashboardContext.Provider>

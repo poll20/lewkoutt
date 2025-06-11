@@ -42,6 +42,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
  const[toastmsg,settoastmsg]=useState("")
  const toastRef = useRef(null);
  const[alluser,setalluser]=useState([])
+ const [coupons, setCoupons] = useState([]);
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -1120,11 +1121,57 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
 
 }
 
+
+const fetchCoupons = async (cate, title) => {
+  try {
+    setIsLoading(true);
+
+    const userId = "6847e7d4bdfe738efe36503c"
+    console.log("userikid",userId)
+    if (!userId || !cate || !title) {
+      console.log("🚫 Missing params for fetchCoupons:", { userId, cate, title });
+      return;
+    }
+
+    const queryParams = new URLSearchParams({
+      userId: userId,
+      category: cate,
+      productname: title,
+    });
+
+    console.log("📦 Fetching coupons with params:", queryParams.toString());
+
+    const response = await fetch(`${apiUrl}/get-coupons?${queryParams.toString()}`);
+
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("🎁 Coupons received:", data);
+    setCoupons(data);
+  } catch (err) {
+    console.error('❌ Error fetching coupons:', err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+    // if (product) {
+    //   fetchCoupons();
+    // }
+  
+
+
 console.log("toastmsg",toastmsg)
 
 if(user && userDetails){
   console.log("plz dono bche ajao",user,userDetails)
 }
+
+
+
   return (
     <>
     {
@@ -1190,7 +1237,9 @@ if(user && userDetails){
         walletkapesa,
         settimeslotlelo,
         timeslotlelo,
-        alluser
+        alluser,
+        fetchCoupons,
+        coupons
         
     
   }}

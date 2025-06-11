@@ -621,7 +621,7 @@ if(searchvalue){
         <div className="image-container">
           <NavLink to={`/productdescription/${!wish?(product._id):(product.itemid)}`}>
           <img
-            src={img2} // Replace with real image
+            src={product.image} // Replace with real image
             alt="Product"
             className="product-image"
           />
@@ -644,7 +644,7 @@ if(searchvalue){
 
         {/* Details Section */}
         <div className="product-details" style={{backgroundColor:"white"}}>
-          <p className="product-title" style={{fontFamily: "'Inter', sans-serif"}}>{product.description.length>19?(product.description.slice(0,18)+`...`):(product.description)}</p>
+          <p className="product-title" style={{fontFamily: "'Inter', sans-serif"}}>{product.description?.length>19?(product.description?.slice(0,18)+`...`):(product.description)}</p>
           <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product.price}</span>

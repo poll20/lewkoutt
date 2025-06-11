@@ -23,6 +23,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import { FaArrowLeft } from "react-icons/fa6";
 import RatingBadge from "./RatingBadge";
 import StickyButton from "./StickyButton";
+import CouponCard from "./CouponCard";
 
 
 // import { BioContext } from "./CartContext";
@@ -43,7 +44,9 @@ const [cartData, setCartData] = useState([]);
   const [Selectedcolor,setSelectedcolor]=useState([])
    const [isOpen, setIsOpen] = useState(false);
 const[product,setproduct]=useState([])
+
 const[mainProductt,setmainprodutt]=useState([])
+
 const imageRef = useRef();
 // const cartRef = useRef();
 // const [isSticky, setIsSticky] = useState(true);
@@ -52,9 +55,13 @@ const targetRef = useRef(null);
   let { id } = useParams();
   console.log("fwff",id)
   let navigate=useNavigate()
-  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail}=useBio()
+  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail,fetchCoupons,coupons}=useBio()
   // const { user,userDetails } = useAuth();
   const { user,userDetails } = useFirebaseAuth()
+  const [showModal, setShowModal] = useState(false);
+
+  const visibleCoupons = coupons.slice(0, 2);
+  const hasMore = coupons.length > 2;
   // useEffect(() => {
   //   const fetchCartData = async () => {
   //     if(userDetails || userDetails._id )
@@ -173,7 +180,20 @@ useEffect(() => {
   }
 }, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
 
- 
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    console.log("🍿 Checking if product has category and tag (delayed):", product);
+    if (product?.cate && product?.tag) {
+      console.log("📢 Calling fetchCoupons with:", product.cate, product.tag);
+      fetchCoupons(product.cate, product.tag);
+    }
+  }, 200);  // Delay by 200ms
+
+  return () => clearTimeout(timer);
+}, [product]);
+
+
 
   const cards = [
     {
@@ -463,7 +483,7 @@ useEffect(() => {
     return <p>Loading...</p>;
   }
 
-// console.log("lplp",product)
+console.log("lplp",product)
 
 
   let ar = cards.map((e) => {
@@ -545,6 +565,7 @@ let cate=product.cate
 //     //   }
 //     // };
 //   }, []);
+
   return (
     <>
     {/* <ToastContainer 
@@ -568,12 +589,12 @@ let cate=product.cate
         
         <div className="image-slider">
           
-          {ar.map((image, index) => (
+          {product.sizes[0].image.map((image, index) => (
             <div key={index} className="image-slide" >
               
               <img
               //  ref={imageRef}
-                src={image[2]}
+                src={image}
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
@@ -590,10 +611,10 @@ let cate=product.cate
       {isPopupOpen && (
         <div className="popup" onClick={closePopup} style={{backgroundColor:"black"}}>
           <div className="image-slider" >
-          {ar.map((image, index) => (
+          {product.sizes[0].image.map((image, index) => (
             <div key={index} className="image-slide"  >
               <img
-                src={image[0]}
+                src={image}
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
@@ -692,6 +713,63 @@ let cate=product.cate
             
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>
+    {/* <CouponCard coupon={{
+  code: coupons[0]?.code,
+  discountType: coupons[0]?.discountType,
+  discountValue: coupons[0]?.discountValue,
+  minOrderAmount: coupons[0]?.minOrderAmount,
+  usageLimit: coupons[0]?.usageLimit,
+  usageLimitPerUser: coupons[0]?.usageLimitPerUser,
+  startDate: coupons[0]?.startDate,
+  expiryDate: coupons[0]?.expiryDate,
+  categories: coupons[0]?.categories,
+  productNames: coupons[0]?.productNames,
+  couponType: coupons[0]?.couponType,
+  isActive: coupons[0]?.isActive,
+  description: coupons[0]?.description,
+  autoApply: coupons[0]?.autoApply,
+  freeShipping: coupons[0]?.freeShipping,
+  userGender: coupons[0]?.userGender,
+}} /> */}
+<span style={{fontSize:"16px",fontWeight:"bold"}}>View Coupons</span>
+{/* <div  style={{display:"flex",alignItems:"start",justifyContent:"start"}}>
+        {coupons.map(coupon => (
+          <div style={{marginTop:"8px",display:"flex",alignItems:"start",justifyContent:"start"}}> 
+          <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice}/>
+          </div>
+        ))}
+      </div> */}
+       <div style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+        {visibleCoupons.map(coupon => (
+          <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
+        ))}
+        {hasMore && (
+          <span 
+            style={{ color: "blue", cursor: "pointer", fontSize: "14px", marginTop: "8px" }}
+            onClick={() => setShowModal(true)}
+          >
+            Show More
+          </span>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h4 style={{marginBottom:"10px"}}>Available Coupons</h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {coupons.map(coupon => (
+                <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
+              ))}
+            </div>
+            <button onClick={() => setShowModal(false)} style={{ marginTop: "15px" }}>Close</button>
+          </div>
+        </div>
+      )}
+    </div>
+
  <div className="prd-ka-dropdown-container" style={{marginTop:"4px"}}>
       {/* Description */}
       <div

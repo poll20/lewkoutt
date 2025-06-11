@@ -15,8 +15,14 @@ import CategoriesLayout from './CategoriesLayout';
 import VibeSticker from './VibeSticker';
 import GlobalLoader from './GlobalLoader';
 import OfferBanner from './OfferBanner';
+import { useBio } from './BioContext';
+
 export default function Home() {
 
+  const {productdata}=useBio()
+    if(!productdata){
+      return <p>loading....</p>
+    }
     let image=[
         { image:img1, category: "top" },
         { image:img2, category: "bottom" },
@@ -24,12 +30,13 @@ export default function Home() {
         { image:img4, category: "bottom" },
         
       ] 
+      
   return (
     <>
     <div className='home'>
       
        <OfferBanner/>
-      <Carousel images={image}/>
+      <Carousel images={productdata}/>
       
       <CardLayout />
        <CategoriesLayout/>

@@ -185,6 +185,8 @@ import MoodMsgType from "./components/dashboardforadmin/MoodMsgType";
 import MoodMagManager from "./components/dashboardforadmin/MoodMsgManager";
 import UserActivity from "./components/dashboardforadmin/UserActivity";
 import OfferBanner from "./components/OfferBanner";
+import Coupon from "./components/dashboardforadmin/CouponForm";
+import CouponForm from "./components/dashboardforadmin/CouponForm";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
@@ -350,6 +352,7 @@ function Layout({ showPopup }) {
               <Route path="/admin/returnmyorder" element={<ReturnDataTable/>} />
               <Route path="/admin/moodmsg" element={<MoodMsgType/>} />
               <Route path="/admin/moodmngr" element={<MoodMagManager/>} />
+              <Route path="/admin/coupon" element={<CouponForm/>} />
               <Route path="/admin/useractivity/:id" element={<UserActivity/>} />
 
 

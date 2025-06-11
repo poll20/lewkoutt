@@ -7,8 +7,11 @@ const jwt = require("jsonwebtoken");
 // const socketIo = require("socket.io"); // ✅ Import Socket.io
 const EventEmitter = require('events');
 const orderEvent = new EventEmitter();
+
 // const verifyFirebaseToken = require("../authMiddleware");
 // const isAdmin = require("./adminCheck");
+const { upload, uploadToCloudinary } = require('./uploadToCloudinary');
+
 
 let port=process.env.PORT || 3000
 
@@ -41,7 +44,7 @@ const twilio = require("twilio");
 // let wishmodel=require("../database/collection.js")
 let bodyparser=require("body-parser")
 // let addtocart=require("../database/collection.js")
-let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel}=require("../database/collection.js")
+let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn  }=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const products = [
   
@@ -1051,6 +1054,40 @@ catch(e){
 })
 
 
+// app.post("/productmodel",upload.array('image'), uploadToCloudinary, async (req, res) => {
+//   try {
+//     const productData = req.body;
+//       // If image was uploaded
+//     if (req.imageUrl) {
+//       productData.image = [req.imageUrl]; // Save as array (optional)
+//     }
+//     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
+//     await newProduct.save();
+//     res.status(201).json(newProduct);
+//     console.log("ho gyaa",newProduct)
+//   } catch (error) {
+//     res.status(500).send("Error saving data");
+//   }
+// });
+// app.post("/productmodel", upload.array("image"), uploadToCloudinary, async (req, res) => {
+//   try {
+//     const productData = req.body;
+// console.log("dekhu to sahi",productData)
+//     // Add uploaded image URLs  
+//     if (req.imageUrls && req.imageUrls.length > 0) {
+//       productData.image = req.imageUrls; // Save array of URLs
+//     }
+
+//     const newProduct = new productsmodel(productData);
+//     await newProduct.save();
+
+//     res.status(201).json(newProduct);
+//   } catch (error) {
+//     console.error("Save error:", error);
+//     res.status(500).send("Error saving data");
+//   }
+// });
+
 app.post("/productmodel", async (req, res) => {
   try {
     const productData = req.body;
@@ -1062,6 +1099,38 @@ app.post("/productmodel", async (req, res) => {
     res.status(500).send("Error saving data");
   }
 });
+
+// app.post("/productmodel", async (req, res) => {
+//   try {
+//     const productArray = req.body;
+
+//     // Check if array and has at least one product
+//     if (!Array.isArray(productArray) || productArray.length === 0) {
+//       return res.status(400).json({ error: "Invalid product data." });
+//     }
+
+//     // Get the first product object
+//     const productData = productArray[0];
+
+//     // ✅ Calculate discount price
+//     if (productData.price && productData.discount) {
+//       const discountAmount = (productData.price * productData.discount) / 100;
+//       productData.discountprice = Math.round(productData.price - discountAmount);
+//       console.log("mil rha h kyaa dp",productData.discountprice)
+//     }
+     
+
+//     // Save product
+//     const newProduct = new productsmodel(productData);
+//     await newProduct.save();
+
+//     console.log("✔ Product saved:", newProduct);
+//     res.status(201).json(newProduct);
+//   } catch (error) {
+//     console.error("❌ Error saving product:", error);
+//     res.status(500).send("Error saving data");
+//   }
+// });
 
 const addIdsToSubCollections = async () => {
     try {
@@ -1196,6 +1265,109 @@ app.get("/productmodel",async(req,res)=>{
 
 
 
+// app.patch('/productmodel/:id', upload.single('image'), uploadToCloudinary,async (req, res) => {
+//   console.log("haa yhi funtion ccal ho rha hai")
+//   const { id } = req.params;
+   
+//   // Validate ID format
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(400).json({ message: 'Invalid ID format!' });
+//   }
+
+//   try {
+//     let updateData = req.body;
+
+    
+//     console.log("update data",Array.isArray(updateData.image))
+//     // Handle `image` field if it is a stringified array
+//     if (updateData.image) {       
+//       if (typeof updateData.image === 'string') {
+//         try {
+//           // Parse the string back to an array
+//           updateData.image = JSON.parse(updateData.image);
+//         } catch (error) {
+//           return res.status(400).json({ message: 'Invalid image format!' });
+//         }
+//       }
+
+//       // Ensure `image` is an array of strings
+//       if (Array.isArray(updateData.image)) {
+//         updateData.image = updateData.image.map((item) => String(item));
+//       } else {
+//         return res.status(400).json({ message: '`image` must be an array!' });
+//       }
+//     }
+
+//     const updatedProduct = await productsmodel.findByIdAndUpdate(
+//       id,
+//       { $push: updateData },
+//       { new: true, runValidators: true }
+//     );
+//   console.log("updated my data",updatedProduct)
+//     if (!updatedProduct) {
+//       return res.status(404).json({ message: 'Product not found!' });
+//     }
+  
+//     // ✅ Check if product is low stock
+//     // updatedProduct.productdetails.forEach((detail) => {
+//     //   detail.colors.forEach((color) => {
+//     //     color.sizes.forEach((size) => {
+//     //       if (size.quantity <= 5) {
+//     //         notifyLowStock(updatedProduct);
+//     //       }
+//     //     });
+//     //   });
+//     // });
+//     res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
+
+   
+
+//   } catch (error) {
+//     console.error('Error updating product:', error.message);
+//     res.status(500).json({ message: 'Internal Server Error', error: error.message });
+//   }
+// });
+
+
+// PATCH route
+// app.patch("/productmodel/:id", upload.array("image"), uploadToCloudinary, async (req, res) => {
+//   const { id } = req.params;
+
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     return res.status(400).json({ message: "Invalid ID format" });
+//   }
+
+//   try {
+//     let updateData = req.body;
+
+//     // Parse image field if sent as stringified array
+//     if (updateData.image && typeof updateData.image === 'string') {
+//       updateData.image = JSON.parse(updateData.image);
+//     }
+
+//     // Add new uploaded images if any
+//     if (req.imageUrls && req.imageUrls.length > 0) {
+//       if (!updateData.image) updateData.image = [];
+//       updateData.image = [...updateData.image, ...req.imageUrls];
+//     }
+
+//     const updatedProduct = await productsmodel.findByIdAndUpdate(
+//       id,
+//       { $push: { productdetails: updateData } },
+//       { new: true, runValidators: true }
+//     );
+
+//     if (!updatedProduct) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+
+//     res.status(200).json({ message: "Product updated", data: updatedProduct });
+//   } catch (error) {
+//     console.error("Update error:", error.message);
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// });
+
 app.patch('/productmodel/:id', async (req, res) => {
   console.log("haa yhi funtion ccal ho rha hai")
   const { id } = req.params;
@@ -1256,6 +1428,7 @@ app.patch('/productmodel/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 });
+
 
 // ✅ API: Fetch Low Stock Products
 // app.get("/lowstock", async (req, res) => {
@@ -2287,6 +2460,69 @@ app.put("/moodmsg/:id", async (req, res) => {
     res.status(500).json({ success: false, message: "Update failed" });
   }
 });
+
+app.post("/create", async (req, res) => {
+  try {
+    const newCoupon = new cpn(req.body);
+    await newCoupon.save();
+    res.status(201).json({ message: "Coupon created successfully" });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: "Failed to create coupon" });
+  }
+});
+
+app.get('/get-coupons', async (req, res) => {
+  console.log("📩 /get-coupons called");
+
+  const { userId, category, productname } = req.query;
+  console.log("📌 Query Params:", { userId, category, productname });
+
+  try {
+    if (!userId || !category || !productname) {
+      return res.status(400).json({ error: "Missing required parameters" });
+    }
+
+    const userOrders = await orderr.find({ userId })
+    console.log("userordersssss",userOrders)
+    const isFirstOrder = userOrders.length === 0;
+
+    // Dynamic OR condition building
+    let orConditions = [
+      { couponType: 'All' },
+      { category: category, productname: productname }
+    ];
+
+    if (isFirstOrder) {
+      orConditions.push({ couponType: 'First Order' });
+    }
+
+    const coupons = await cpn.find({ $or: orConditions });
+console.log("coupunss",coupons)
+    // Filter strictly by category and productname if needed
+    const filtered = coupons.filter(coupon => {
+      if (coupon.couponType === 'First Order' || coupon.couponType === 'All') return true;
+
+      // if they're arrays, use includes
+      const categoryMatch = Array.isArray(coupon.categories)
+        ? coupon.categories.includes(category)
+        : coupon.categories === category 
+
+      const nameMatch = Array.isArray(coupon.productNames)
+        ? coupon.productNames.includes(productname)
+        : coupon.productNames === productname;
+
+      return categoryMatch && nameMatch;
+    });
+
+    console.log("✅ Filtered Coupons:", filtered);
+    res.json(filtered);
+  } catch (err) {
+    console.error("❌ Server Error while fetching coupons:", err);
+    res.status(500).json({ error: 'Failed to fetch coupons' });
+  }
+});
+
 
 
 

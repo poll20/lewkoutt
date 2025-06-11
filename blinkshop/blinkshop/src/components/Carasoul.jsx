@@ -174,10 +174,10 @@ const Carousel = ({ images }) => {
       style={{borderRadius:"0"}}
     >
       <NavLink
-        to={`/productmodel/${images[currentIndex].category}`}
+        to={`/productmodel/${images[currentIndex]?.category}`}
         className="carousel-slide"
         style={{
-          backgroundImage: `url(${images[currentIndex].image})`,
+          backgroundImage: `url(${images[currentIndex]?.image})`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "cover",
@@ -194,7 +194,7 @@ const Carousel = ({ images }) => {
 
       <div className="carousel-indicators" >
         
-        {images.map((_, index) => (
+        {images?.map((_, index) => (
           <span
             key={index}
             className={`indicator ${currentIndex === index ? "active" : ""}`}
