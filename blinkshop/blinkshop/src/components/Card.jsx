@@ -621,7 +621,7 @@ if(searchvalue){
         <div className="image-container">
           <NavLink to={`/productdescription/${!wish?(product._id):(product.itemid)}`}>
           <img
-            src={product.image} // Replace with real image
+            src={product.image[0]} // Replace with real image
             alt="Product"
             className="product-image"
           />
