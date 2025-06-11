@@ -1088,58 +1088,58 @@ catch(e){
 //   }
 // });
 
-// app.post("/productmodel", async (req, res) => {
-//   try {
-//     const productData = req.body;
-//     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
-//     await newProduct.save();
-//     res.status(201).json(newProduct);
-//     console.log("ho gyaa",newProduct)
-//   } catch (error) {
-//     res.status(500).send("Error saving data");
-//   }
-// });
-
 app.post("/productmodel", async (req, res) => {
   try {
-    const productArray = req.body;
-
-    // Check if array and has at least one product
-    if (!Array.isArray(productArray) || productArray.length === 0) {
-      return res.status(400).json({ error: "Invalid product data." });
-    }
-
-    // Get the first product object
-    const productData = productArray[0];
-
-    // ✅ Calculate discount price
-   if (
-  productData.productdetails &&
-  productData.productdetails.price &&
-  productData.productdetails.discount
-) {
-  const originalPrice = parseFloat(productData.productdetails.price);
-  const discountPercent = parseFloat(productData.productdetails.discount);
-
-  if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
-    const discountAmount = (originalPrice * discountPercent) / 100;
-    productData.productdetails.discountprice = Math.round(originalPrice - discountAmount);
-    console.log("✔ Calculated discount price:", productData.productdetails.discountprice);
-  }
-}
-     
-
-    // Save product
-    const newProduct = new productsmodel(productData);
+    const productData = req.body;
+    const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
     await newProduct.save();
-
-    console.log("✔ Product saved:", newProduct);
     res.status(201).json(newProduct);
+    console.log("ho gyaa",newProduct)
   } catch (error) {
-    console.error("❌ Error saving product:", error);
     res.status(500).send("Error saving data");
   }
 });
+
+// app.post("/productmodel", async (req, res) => {
+//   try {
+//     const productArray = req.body;
+
+//     // Check if array and has at least one product
+//     if (!Array.isArray(productArray) || productArray.length === 0) {
+//       return res.status(400).json({ error: "Invalid product data." });
+//     }
+
+//     // Get the first product object
+//     const productData = productArray[0];
+
+//     // ✅ Calculate discount price
+//    if (
+//   productData.productdetails &&
+//   productData.productdetails.price &&
+//   productData.productdetails.discount
+// ) {
+//   const originalPrice = parseFloat(productData.productdetails.price);
+//   const discountPercent = parseFloat(productData.productdetails.discount);
+
+//   if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
+//     const discountAmount = (originalPrice * discountPercent) / 100;
+//     productData.productdetails.discountprice = Math.round(originalPrice - discountAmount);
+//     console.log("✔ Calculated discount price:", productData.productdetails.discountprice);
+//   }
+// }
+     
+
+//     // Save product
+//     const newProduct = new productsmodel(productData);
+//     await newProduct.save();
+
+//     console.log("✔ Product saved:", newProduct);
+//     res.status(201).json(newProduct);
+//   } catch (error) {
+//     console.error("❌ Error saving product:", error);
+//     res.status(500).send("Error saving data");
+//   }
+// });
 
 const addIdsToSubCollections = async () => {
     try {
