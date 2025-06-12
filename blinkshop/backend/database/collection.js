@@ -430,7 +430,7 @@ module.exports = mongoose.model("Coupon", couponSchema);
 
 
 users.index({ phonenumber: 1 });
-users.index({ uid: 1 }, { unique: true });
+// users.index({ uid: 1 }, { unique: true });
 users.index({ code: 1 });
 ratingSchema.index({ userId: 1, productId: 1 }, { unique: true });
 cartscema.index({ userId: 1 });
