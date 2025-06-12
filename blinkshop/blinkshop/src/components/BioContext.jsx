@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext'; // Import AuthContext for Authenticatio
 import img1 from "./image/img1.jpg"
 import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
+import { useFetcher } from 'react-router-dom';
 // import { ToastContainer, toast } from 'react-toastify';
 // import Toast from './Toast';
 
@@ -43,6 +44,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
  const toastRef = useRef(null);
  const[alluser,setalluser]=useState([])
  const [coupons, setCoupons] = useState([]);
+ const[karocode,setkarocode]=useState("")
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -1126,7 +1128,7 @@ const fetchCoupons = async (cate, title) => {
   try {
     setIsLoading(true);
 
-    const userId = userDetails?._id
+    const userId = "6847e7d4bdfe738efe36503c"
     console.log("userikid",userId)
     if (!userId || !cate || !title) {
       console.log("🚫 Missing params for fetchCoupons:", { userId, cate, title });
@@ -1239,7 +1241,9 @@ if(user && userDetails){
         timeslotlelo,
         alluser,
         fetchCoupons,
-        coupons
+        coupons,
+        setkarocode,
+        karocode
         
     
   }}

@@ -14,18 +14,24 @@ import paytm from "./image/paytm.png"
 import phonepay from "./image/phonepay.png"
 import gpay from "./image/gpay.webp"
 import upi from "./image/upi.jpeg"
+import CouponCard from "./CouponCard";
+import Slideuptoast from "./Slideuptoast";
 const Checkout = () => {
 
 
  
 
-const { buydata, addresssetkro,orderplaced,walletkapesa,timeslotlelo} = useBio();
+const { buydata, addresssetkro,orderplaced,walletkapesa,timeslotlelo,fetchCoupons,coupons,karocode} = useBio();
 // const{userDetails}=useAuth()
 const{userDetails}=useFirebaseAuth()
 const{recordMultipleSales}=useDashboard()
   const location = useLocation();
   const navigate = useNavigate(); // ✅ Hook to detect navigation
   const [showSheet, setShowSheet] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const[firstcode,setfirstcode]=useState('')
+  const[firstcpn,setfirstcpn]=useState([])
+const[amountafteraddcoupon,setamountafteraddcoupon]=useState()
   // ✅ Load Data from Local Storage on Page Load
   const [selectedPayment, setSelectedPayment] = useState(
     localStorage.getItem("selectedPayment") || "UPI"
@@ -120,7 +126,17 @@ const{recordMultipleSales}=useDashboard()
     // Listen for navigation away from checkout
     return () => handleRouteChange(); // Cleanup when component unmounts
   }, [navigate]);
+useEffect(() => {
+  const timer = setTimeout(() => {
+    console.log("🍿 Checking if product has category and tag (delayed) in checkout:", purchaseproduct);
+    if (purchaseproduct[0]?.cate && purchaseproduct[0]?.tag) {
+      console.log("📢 Calling fetchCoupons with checkout:", purchaseproduct[0].cate, purchaseproduct[0].tag);
+      fetchCoupons(purchaseproduct[0].cate, purchaseproduct[0].tag);
+    }
+  }, 200);  // Delay by 200ms
 
+  return () => clearTimeout(timer);
+}, [purchaseproduct]);
  
   const toggleSheet = () => setShowSheet(!showSheet);
 if(buydata){
@@ -292,6 +308,138 @@ const icon = {
   marginRight: '8px',
 };
 
+useEffect(() => {
+  console.log("dekhte h gusse kya inske andar")
+  if(karocode.length==0)
+  {
+  if (coupons && Array.isArray(coupons)) {
+    const firstOrderCoupon = coupons.find(c => c.couponType === "First Order" );
+    setfirstcpn(firstOrderCoupon)
+    console.log("dekhte h gusse kya inske andar",firstOrderCoupon)
+    if (firstOrderCoupon) {
+      const original = totalDiscountPrice .toFixed(2);
+      console.log("dekhte h gusse kya inske andar",original)
+      let discounted;
+
+      // Check if discount is percentage or flat
+      if (firstOrderCoupon.discountType === "Percentage") {
+        const discountAmount = (totalDiscountPrice  * firstOrderCoupon.discountValue) / 100;
+        console.log("final amount kya h ",discountAmount)
+        setamountafteraddcoupon(discountAmount)
+        discounted = (totalDiscountPrice  - discountAmount).toFixed(2);
+      } else {
+        // default to flat discount
+        discounted = (totalDiscountPrice  - firstOrderCoupon.discountValue).toFixed(2);
+        setamountafteraddcoupon(discounted)
+        console.log("final amount kya h ",discountAmount)
+      }
+
+      const toast = document.createElement("div");
+      toast.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 40px;">🎉</div>
+          <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
+          <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
+          <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
+          <div style="margin-top: 12px;">
+            <a href="#" style="font-weight: 500; font-size: 14px; color: #1a73e8; text-decoration: underline;">okay,. got it</a>
+          </div>
+        </div>
+      `;
+
+      Object.assign(toast.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "#e6f5ec",
+        borderRadius: "16px",
+        padding: "20px 30px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+        maxWidth: "300px",
+        zIndex: 9999,
+        fontFamily: "sans-serif",
+        transition: "opacity 0.3s ease-in-out",
+      });
+
+      document.body.appendChild(toast);
+
+      // Auto remove toast after 4 seconds
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+          
+        }, 300);
+      }, 4000);
+    }
+  }
+}
+else{
+  if (coupons && Array.isArray(coupons)) {
+    const firstOrderCoupon = coupons.find(c => c.code === karocode );
+    setfirstcpn(firstOrderCoupon)
+    console.log("dekhte h gusse kya inske andar",firstOrderCoupon)
+    if (firstOrderCoupon) {
+      const original = totalDiscountPrice .toFixed(2);
+      console.log("dekhte h gusse kya inske andar",original)
+      let discounted;
+
+      // Check if discount is percentage or flat
+      if (firstOrderCoupon.discountType === "Percentage") {
+        const discountAmount = (totalDiscountPrice  * firstOrderCoupon.discountValue) / 100;
+        console.log("final amount kya h ",discountAmount)
+        setamountafteraddcoupon(discountAmount)
+        discounted = (totalDiscountPrice  - discountAmount).toFixed(2);
+      } else {
+        // default to flat discount
+        discounted = (totalDiscountPrice  - firstOrderCoupon.discountValue).toFixed(2);
+        console.log("final amount kya h ",discountAmount)
+        setamountafteraddcoupon(discounted)
+      }
+
+      const toast = document.createElement("div");
+      toast.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 40px;">🎉</div>
+          <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
+          <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
+          <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
+          <div style="margin-top: 12px;">
+            <a href="#" style="font-weight: 500; font-size: 14px; color: #1a73e8; text-decoration: underline;">okay,. got it</a>
+          </div>
+        </div>
+      `;
+
+      Object.assign(toast.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "#e6f5ec",
+        borderRadius: "16px",
+        padding: "20px 30px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+        maxWidth: "300px",
+        zIndex: 9999,
+        fontFamily: "sans-serif",
+        transition: "opacity 0.3s ease-in-out",
+      });
+
+      document.body.appendChild(toast);
+
+      // Auto remove toast after 4 seconds
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+          
+        }, 300);
+      }, 4000);
+    }
+  }
+}
+}, [coupons, totalDiscountPrice,karocode]);
+
+
 
   return (
     <div className="checkout-container-checkoutbuy">
@@ -318,8 +466,8 @@ const icon = {
       </div>
 
       {/* Coupons Section */}
-      <div className="coupons-section-checkoutbuy">
-        <p>View coupons</p>
+      <div className="coupons-section-checkoutbuy" onClick={() => setShowToast(true)}>
+        <p>{firstcpn?.couponType}</p>
         <IoIosArrowForward/>
       </div>
 
@@ -382,7 +530,7 @@ const icon = {
         <div style={badge}>Get 5% discount</div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontWeight: 'bold' }}>UPI</div>
-          <div style={{ fontWeight: 'bold' }}><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</p> </div>
+          <div style={{ fontWeight: 'bold' }}><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice):(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)}.0</p> </div>
         </div>
 
         <div style={upiIcons} >
@@ -404,7 +552,7 @@ const icon = {
         <div style={discountBadge}>Get 5% discount</div>
         <div style={method}>
           <span>💳 Pay via Card</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice):(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
 
@@ -412,7 +560,7 @@ const icon = {
         <div style={discountBadge}>Get 5% discount</div>
         <div style={method}>
           <span>👛 Pay via Wallets</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice):(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
 
@@ -420,7 +568,7 @@ const icon = {
         <div style={discountBadge}>Get 5% discount</div>
         <div style={method}>
           <span>🏦 Pay via Netbanking</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice):(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
 
@@ -428,7 +576,7 @@ const icon = {
         <div style={codBadge}>₹59 COD fee added</div>
         <div style={method}>
           <span>💵 Cash on Delivery</span>
-          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0 ›</p></span>
+          <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice):(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)}.0 ›</p></span>
         </div>
       </div>
     </div>
@@ -443,6 +591,17 @@ const icon = {
           <span>Discount on MRP</span>
           {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
           <span>₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice):(totalPrice-totalDiscountPrice)}.0</span>
+        </div>
+
+         <div className="order-row-checkoutbuy">
+          <span>Discounted Price</span>
+          {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</span>
+        </div>
+         <div className="order-row-checkoutbuy">
+          <span>Amount After Coupon {firstcpn?.code ||karocode} Applied</span>
+          {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].price-purchaseproduct[0].discountprice):(Math.round((totalDiscountPrice)-amountafteraddcoupon) || totalPrice-totalDiscountPrice)}.0</span>
         </div>
         
         {/* <div className="order-row-checkoutbuy">
@@ -487,9 +646,9 @@ const icon = {
         </div>
         <div className="order-row-checkoutbuy payable-row-checkoutbuy">
           <span>Payable amount</span>
-          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice)-mywalletAmount:(totalDiscountPrice)-mywalletAmount}.0</span>
+          <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice)-mywalletAmount:(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)-mywalletAmount}.0</span>
         </div>
-        <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(purchaseproduct[0].price-purchaseproduct[0].discountprice+mywalletAmount):(totalPrice-totalDiscountPrice+mywalletAmount)}.0 on the final amount</p>
+        <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(Math.abs(amountafteraddcoupon+mywalletAmount) || purchaseproduct[0].price-purchaseproduct[0].discountprice+mywalletAmount):(Math.abs(amountafteraddcoupon+mywalletAmount) || totalPrice-totalDiscountPrice+mywalletAmount)}.0 on the final amount</p>
       </div>
 
       <TimeSlots/>
@@ -528,6 +687,7 @@ const icon = {
           </div>
         </div>
       </div>
+      {showToast && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setShowToast(false)} />}
       </>
           ))
         }

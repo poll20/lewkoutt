@@ -99,13 +99,13 @@ let users=mongoose.Schema({
     phonenumber:{type:String},
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     refercode:{type: String},
-    uid:{String},
+    uid: { type: String, required: true, unique: true },
     ordernum:{
       type:Number
     },
     codecount:{type:Number,default:0},
     codepoint:{type:Number,default:0},
-    address:[addressSchema],  
+    address:[addressSchema],    
     lat: Number,  // User latitude
     long: Number , // User longitude
     phone:[{ type: String}],
@@ -430,6 +430,7 @@ module.exports = mongoose.model("Coupon", couponSchema);
 
 
 users.index({ phonenumber: 1 });
+users.index({ uid: 1 }, { unique: true });
 users.index({ code: 1 });
 ratingSchema.index({ userId: 1, productId: 1 }, { unique: true });
 cartscema.index({ userId: 1 });

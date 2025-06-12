@@ -668,7 +668,36 @@ let cate=product.cate
         </div>
        
           
-         
+         <div style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+        {visibleCoupons.map(coupon => (
+          <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
+        ))}
+        {hasMore && (
+          <span 
+            style={{ color: "blue", cursor: "pointer", fontSize: "14px", marginTop: "8px" }}
+            onClick={() => setShowModal(true)}
+          >
+            Show More
+          </span>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h4 style={{marginBottom:"10px"}}>Available Coupons</h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {coupons.map(coupon => (
+                <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
+              ))}
+            </div>
+            <button onClick={() => setShowModal(false)} style={{ marginTop: "15px" }}>Close</button>
+          </div>
+        </div>
+      )}
+    </div>
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}> */}
           {/* <div className="size-options" style={{gap:"10px",padding:'10px 0', borderBottom:"1px solid black"}}> */}
           <div className="size-options" style={{gap:"10px",padding:'10px 0',border:"1px solid white"}}>
@@ -731,7 +760,7 @@ let cate=product.cate
   freeShipping: coupons[0]?.freeShipping,
   userGender: coupons[0]?.userGender,
 }} /> */}
-<span style={{fontSize:"16px",fontWeight:"bold"}}>View Coupons</span>
+{/* <span style={{fontSize:"16px",fontWeight:"bold"}}>View Coupons</span> */}
 {/* <div  style={{display:"flex",alignItems:"start",justifyContent:"start"}}>
         {coupons.map(coupon => (
           <div style={{marginTop:"8px",display:"flex",alignItems:"start",justifyContent:"start"}}> 
@@ -739,7 +768,9 @@ let cate=product.cate
           </div>
         ))}
       </div> */}
-       <div style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
+
+
+       {/* <div style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
         {visibleCoupons.map(coupon => (
           <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
@@ -754,7 +785,7 @@ let cate=product.cate
         )}
       </div>
 
-      {/* Modal */}
+      
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -768,7 +799,7 @@ let cate=product.cate
           </div>
         </div>
       )}
-    </div>
+    </div> */}
 
  <div className="prd-ka-dropdown-container" style={{marginTop:"4px"}}>
       {/* Description */}
