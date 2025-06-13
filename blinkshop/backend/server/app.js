@@ -61,12 +61,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
-app.use(cors({
-  origin: "https://lewkout.netlify.app", // Your frontend URL
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
+app.use(cors());//te localhost m h
+// app.use(cors({
+//   origin: "https://lewkout.netlify.app", // Your frontend URL
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
+// }));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -392,7 +392,7 @@ app.post("/user/register", async (req, res) => {
   if (phoneNumber && uid && !refcode) { 
     try {
       // Check if user already exists
-      const existingUser = await userr.findOne({ uid:uid });
+      const existingUser = await userr.findOne({ phonenumber:phoneNumber });
       if (!existingUser) {
         const newUser = new userr({
           // name: name,
@@ -2554,7 +2554,10 @@ app.get('/get-coupons', async (req, res) => {
   console.log("📌 Query Params:", { userId, category, productname });
 
   try {
-    if (!userId || !category || !productname) {
+    // if (!userId || !category || !productname) {
+    //   return res.status(400).json({ error: "Missing required parameters" });
+    // }
+    if (!category || !productname) {
       return res.status(400).json({ error: "Missing required parameters" });
     }
 

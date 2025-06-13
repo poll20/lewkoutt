@@ -1130,11 +1130,14 @@ const fetchCoupons = async (cate, title) => {
 
     const userId = "6847e7d4bdfe738efe36503c"
     console.log("userikid",userId)
-    if (!userId || !cate || !title) {
-      console.log("🚫 Missing params for fetchCoupons:", { userId, cate, title });
+    // if (!userId || !cate || !title) {
+    //   console.log("🚫 Missing params for fetchCoupons:", { userId, cate, title });
+    //   return;
+    // }
+ if (!cate || !title) {
+      console.log("🚫 Missing params for fetchCoupons:", { cate, title });
       return;
     }
-
     const queryParams = new URLSearchParams({
       userId: userId,
       category: cate,

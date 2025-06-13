@@ -467,7 +467,8 @@ else{
 
       {/* Coupons Section */}
       <div className="coupons-section-checkoutbuy" onClick={() => setShowToast(true)}>
-        <p>{firstcpn?.couponType}</p>
+        <p style={{fontWeight:"600"}}>'{firstcpn?.code}' Applied</p>
+       
         <IoIosArrowForward/>
       </div>
 
