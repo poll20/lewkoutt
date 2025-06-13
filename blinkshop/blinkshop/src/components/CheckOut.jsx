@@ -31,7 +31,9 @@ const{recordMultipleSales}=useDashboard()
   const [showToast, setShowToast] = useState(false);
   const[firstcode,setfirstcode]=useState('')
   const[firstcpn,setfirstcpn]=useState([])
+
 const[amountafteraddcoupon,setamountafteraddcoupon]=useState()
+const[yppicode,setyppicode]=useState(false)
   // ✅ Load Data from Local Storage on Page Load
   const [selectedPayment, setSelectedPayment] = useState(
     localStorage.getItem("selectedPayment") || "UPI"
@@ -333,44 +335,47 @@ useEffect(() => {
         setamountafteraddcoupon(discounted)
         console.log("final amount kya h ",discountAmount)
       }
+      setyppicode(true)
+setTimeout(()=>{
+            setyppicode(false)
+          },5000)
+      // const toast = document.createElement("div");
+      // toast.innerHTML = `
+      //   <div style="text-align: center;">
+      //     <div style="font-size: 40px;">🎉</div>
+      //     <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
+      //     <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
+      //     <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
+      //     <div style="margin-top: 12px;">
+      //       <span style="font-weight: 500; font-size: 14px;  text-decoration: underline;">okay,. got it</span>
+      //     </div>
+      //   </div>
+      // `;
 
-      const toast = document.createElement("div");
-      toast.innerHTML = `
-        <div style="text-align: center;">
-          <div style="font-size: 40px;">🎉</div>
-          <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
-          <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
-          <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
-          <div style="margin-top: 12px;">
-            <a href="#" style="font-weight: 500; font-size: 14px; color: #1a73e8; text-decoration: underline;">okay,. got it</a>
-          </div>
-        </div>
-      `;
+      // Object.assign(toast.style, {
+      //   position: "fixed",
+      //   top: "50%",
+      //   left: "50%",
+      //   transform: "translate(-50%, -50%)",
+      //   backgroundColor: "#e6f5ec",
+      //   borderRadius: "16px",
+      //   padding: "20px 30px",
+      //   boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+      //   maxWidth: "300px",
+      //   zIndex: 9999,
+      //   fontFamily: "sans-serif",
+      //   transition: "opacity 0.3s ease-in-out",
+      // });
 
-      Object.assign(toast.style, {
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "#e6f5ec",
-        borderRadius: "16px",
-        padding: "20px 30px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-        maxWidth: "300px",
-        zIndex: 9999,
-        fontFamily: "sans-serif",
-        transition: "opacity 0.3s ease-in-out",
-      });
+      // document.body.appendChild(toast);
 
-      document.body.appendChild(toast);
-
-      // Auto remove toast after 4 seconds
-      setTimeout(() => {
-        toast.style.opacity = "0";
-        setTimeout(() => {
+      // // Auto remove toast after 4 seconds
+      // setTimeout(() => {
+      //   toast.style.opacity = "0";
+      //   setTimeout(() => {
           
-        }, 300);
-      }, 4000);
+      //   }, 300);
+      // }, 4000);
     }
   }
 }
@@ -396,44 +401,47 @@ else{
         console.log("final amount kya h ",discountAmount)
         setamountafteraddcoupon(discounted)
       }
+setyppicode(true)
+setTimeout(()=>{
+            setyppicode(false)
+          },5000)
+      // const toast = document.createElement("div");
+      // toast.innerHTML = `
+      //   <div style="text-align: center;">
+      //     <div style="font-size: 40px;">🎉</div>
+      //     <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
+      //     <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
+      //     <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
+      //     <div style="margin-top: 12px;">
+      //       <span style="font-weight: 500; font-size: 14px;  text-decoration: underline;">okay,. got it</span>
+      //     </div>
+      //   </div>
+      // `;
 
-      const toast = document.createElement("div");
-      toast.innerHTML = `
-        <div style="text-align: center;">
-          <div style="font-size: 40px;">🎉</div>
-          <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
-          <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
-          <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
-          <div style="margin-top: 12px;">
-            <a href="#" style="font-weight: 500; font-size: 14px; color: #1a73e8; text-decoration: underline;">okay,. got it</a>
-          </div>
-        </div>
-      `;
+      // Object.assign(toast.style, {
+      //   position: "fixed",
+      //   top: "50%",
+      //   left: "50%",
+      //   transform: "translate(-50%, -50%)",
+      //   backgroundColor: "#e6f5ec",
+      //   borderRadius: "16px",
+      //   padding: "20px 30px",
+      //   boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+      //   maxWidth: "300px",
+      //   zIndex: 9999,
+      //   fontFamily: "sans-serif",
+      //   transition: "opacity 0.3s ease-in-out",
+      // });
 
-      Object.assign(toast.style, {
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "#e6f5ec",
-        borderRadius: "16px",
-        padding: "20px 30px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-        maxWidth: "300px",
-        zIndex: 9999,
-        fontFamily: "sans-serif",
-        transition: "opacity 0.3s ease-in-out",
-      });
+      // document.body.appendChild(toast);
 
-      document.body.appendChild(toast);
-
-      // Auto remove toast after 4 seconds
-      setTimeout(() => {
-        toast.style.opacity = "0";
-        setTimeout(() => {
+      // // Auto remove toast after 4 seconds
+      // setTimeout(() => {
+      //   toast.style.opacity = "0";
+      //   setTimeout(() => {
           
-        }, 300);
-      }, 4000);
+      //   }, 300);
+      // }, 4000);
     }
   }
 }
@@ -448,28 +456,30 @@ else{
       {/* Address Section */}
       <NavLink to='/address' className="navlink">
       <div className="address-section-checkoutbuy">
-      <p>
+      <span>
   {deleveryaddress.length > 0
     ? `${deleveryaddress[0].building}/${deleveryaddress[0].locality}, ${deleveryaddress[0].city}`
     : "No address available"}
     {/* <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward> */}
-</p>
+</span>
 
       </div>
       </NavLink>
 
       {/* Review Item Section */}
       <div className="review-item-section-checkoutbuy">
-        <p onClick={()=>{setShowSheet(true)}}>Review item</p>
+        <span onClick={()=>{setShowSheet(true)}}>Review item</span>
         <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward>
         {/* <p>₹1,899</p> */}
       </div>
 
       {/* Coupons Section */}
       <div className="coupons-section-checkoutbuy" onClick={() => setShowToast(true)}>
-        <p style={{fontWeight:"600"}}>'{firstcpn?.code}' Applied</p>
-       
-        <IoIosArrowForward/>
+        <span style={{fontWeight:"600"}}>'{firstcpn?.code}' Applied</span>
+        
+        <span style={{color:"red",fontWeight:"800"}}>₹{amountafteraddcoupon} <IoIosArrowForward style={{color:"black"}}/></span>
+        
+        
       </div>
 
       {/* Payment Options */}
@@ -657,6 +667,26 @@ else{
     {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);setTimeout(()=>{recordMultipleSales(purchaseproduct)},300) }} >Pay Now</button>):('')}
 
 
+{
+  yppicode?(<div
+      // className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-100 text-black px-6 py-4 rounded-2xl shadow-xl z-[9999] text-center max-w-[300px] font-sans"
+      style={{position:"fixed",top:"250px",left:"70px",margin:"auto",   transition: 'opacity 0.3s ease-in-out',display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"#00c389",zIndex:"1",borderRadius:"10px",fontWeight:"bold" }}
+    >
+      <div className="text-4xl">🎉</div>
+      <div className="font-medium text-xs mb-2">'{firstcpn.code}' Applied</div>
+      <div className="font-bold text-base text-[#1a1a1a]">YAY! You saved ₹{(totalDiscountPrice*firstcpn.discountValue)/100}</div>
+      <div className="text-sm text-gray-600 mt-1">Your coupon is successfully applied</div>
+      <div className="mt-3">
+        <span
+          className="font-medium text-sm underline cursor-pointer"
+          onClick={()=>{setyppicode(false)}}
+        >
+          okay, got it
+        </span>
+      </div>
+    </div>):('')
+
+}
 {/* review buy data */}
 <div className="bottom-sheet" style={{display:showSheet?('block'):('none')}}>
 <p>Review item</p>
@@ -674,7 +704,7 @@ else{
         <div className="item-info">
           
           <img
-            src={img1} // Replace with your product image URL
+            src={e.image} // Replace with your product image URL
             alt="Product"
             className="product-image-sheet"
           />
@@ -683,18 +713,18 @@ else{
             <h4>{e.description}</h4>
             <p>Size: {e.size} &nbsp;&nbsp; Qty: {e.qty}</p>
             <p className="delivery-info">
-              Deliver by <span className="delivery-date">60 minute delivery</span>
+              Deliver by <span className="delivery-date">{timeslotlelo?(timeslotlelo):('60 minute delivery') }</span>
             </p>
           </div>
         </div>
       </div>
-      {showToast && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setShowToast(false)} />}
+      {/* {showToast && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setShowToast(false)} />} */}
       </>
           ))
         }
       
     </div>   
-
+{showToast && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setShowToast(false)} />}
     </div>
   );
 };

@@ -730,7 +730,7 @@ let cate=product.cate
                 mainProductt?(mainProductt?.colors?.map((color) => (
                   <button
                     style={{background:color.color,borderRadius:"100%",width:"20px",height:"20px"}}
-                    className={`colour-btn ${Selectedcolor === color ? "clractive"   : ""}`}
+                    className={`colour-btn ${Selectedcolor === color.color ? "clractive"   : ""}`}
                      onClick={() => setSelectedcolor(color.color)}>
                     
                     {/* {color.color} */}

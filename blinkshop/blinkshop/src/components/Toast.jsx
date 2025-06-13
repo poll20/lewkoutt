@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 // import { CheckCircle } from 'lucide-react'; // or use any check icon
 
-const Toast = ({ message, onClose }) => {
+const Toast = ({ code, savedAmount, message, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();

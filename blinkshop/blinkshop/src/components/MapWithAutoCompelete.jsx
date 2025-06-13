@@ -158,6 +158,7 @@ import { useBio } from "./BioContext";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
+
 import { FaHome, FaBriefcase, FaUsers, FaMapMarkerAlt } from "react-icons/fa";
 import "./mapaddress.css"
 const MapWithAutocomplete = () => {
@@ -459,10 +460,10 @@ autocomplete.setFields([
     (!otpSent || (otpSent && !isFieldEmpty(otp)));
 
   return (
-    <div style={{ padding: "10px", fontFamily: "sans-serif" }}>
-      <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-        📍 Google Map with Autocomplete + Current Location
-      </h3>
+    <div style={{ padding: "10px", fontFamily: "sans-serif" ,marginTop:"60px" }}>
+      <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
+        <FaMapMarkerAlt /> Drag this to select your location
+      </h6>
 
       {/* <input
         id="autocomplete"
