@@ -311,8 +311,8 @@ const icon = {
 };
 
 useEffect(() => {
-  console.log("dekhte h gusse kya inske andar")
-  if(karocode.length==0)
+  console.log("dekhte h gusse kya inske andar",karocode)
+  if(karocode?.length==0)
   {
   if (coupons && Array.isArray(coupons)) {
     const firstOrderCoupon = coupons.find(c => c.couponType === "First Order" );
@@ -336,46 +336,11 @@ useEffect(() => {
         console.log("final amount kya h ",discountAmount)
       }
       setyppicode(true)
-setTimeout(()=>{
-            setyppicode(false)
-          },5000)
+// setTimeout(()=>{
+//             setyppicode(false)
+//           },5000)
       // const toast = document.createElement("div");
-      // toast.innerHTML = `
-      //   <div style="text-align: center;">
-      //     <div style="font-size: 40px;">🎉</div>
-      //     <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
-      //     <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
-      //     <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
-      //     <div style="margin-top: 12px;">
-      //       <span style="font-weight: 500; font-size: 14px;  text-decoration: underline;">okay,. got it</span>
-      //     </div>
-      //   </div>
-      // `;
-
-      // Object.assign(toast.style, {
-      //   position: "fixed",
-      //   top: "50%",
-      //   left: "50%",
-      //   transform: "translate(-50%, -50%)",
-      //   backgroundColor: "#e6f5ec",
-      //   borderRadius: "16px",
-      //   padding: "20px 30px",
-      //   boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-      //   maxWidth: "300px",
-      //   zIndex: 9999,
-      //   fontFamily: "sans-serif",
-      //   transition: "opacity 0.3s ease-in-out",
-      // });
-
-      // document.body.appendChild(toast);
-
-      // // Auto remove toast after 4 seconds
-      // setTimeout(() => {
-      //   toast.style.opacity = "0";
-      //   setTimeout(() => {
-          
-      //   }, 300);
-      // }, 4000);
+      
     }
   }
 }
@@ -402,50 +367,14 @@ else{
         setamountafteraddcoupon(discounted)
       }
 setyppicode(true)
-setTimeout(()=>{
-            setyppicode(false)
-          },5000)
-      // const toast = document.createElement("div");
-      // toast.innerHTML = `
-      //   <div style="text-align: center;">
-      //     <div style="font-size: 40px;">🎉</div>
-      //     <div style="font-weight: 500; font-size: 12px; margin-bottom: 8px;">'${firstOrderCoupon.code}' Applied</div>
-      //     <div style="font-weight: bold; font-size: 16px; color: #1a1a1a;">YAY! You saved ₹${(totalDiscountPrice*firstOrderCoupon.discountValue)/100}</div>
-      //     <div style="color: #666; font-size: 13px; margin-top: 2 px;">your coupon is successfully applied</div>
-      //     <div style="margin-top: 12px;">
-      //       <span style="font-weight: 500; font-size: 14px;  text-decoration: underline;">okay,. got it</span>
-      //     </div>
-      //   </div>
-      // `;
-
-      // Object.assign(toast.style, {
-      //   position: "fixed",
-      //   top: "50%",
-      //   left: "50%",
-      //   transform: "translate(-50%, -50%)",
-      //   backgroundColor: "#e6f5ec",
-      //   borderRadius: "16px",
-      //   padding: "20px 30px",
-      //   boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-      //   maxWidth: "300px",
-      //   zIndex: 9999,
-      //   fontFamily: "sans-serif",
-      //   transition: "opacity 0.3s ease-in-out",
-      // });
-
-      // document.body.appendChild(toast);
-
-      // // Auto remove toast after 4 seconds
-      // setTimeout(() => {
-      //   toast.style.opacity = "0";
-      //   setTimeout(() => {
-          
-      //   }, 300);
-      // }, 4000);
+// setTimeout(()=>{
+//             setyppicode(false)
+//           },5000)
+      
     }
   }
 }
-}, [coupons, totalDiscountPrice,karocode]);
+}, [coupons, totalDiscountPrice,karocode,firstcpn]);
 
 
 
@@ -475,9 +404,13 @@ setTimeout(()=>{
 
       {/* Coupons Section */}
       <div className="coupons-section-checkoutbuy" onClick={() => setShowToast(true)}>
-        <span style={{fontWeight:"600"}}>'{firstcpn?.code}' Applied</span>
+        {/* <span style={{fontWeight:"600"}}>`{firstcpn?.code} Applied`</span> */}
+        <span style={{fontWeight:"600"}}>{firstcpn?.code?(`${firstcpn?.code} Applied`):('Apply Coupon')}</span>
+
         
-        <span style={{color:"red",fontWeight:"800"}}>₹{amountafteraddcoupon} <IoIosArrowForward style={{color:"black"}}/></span>
+        {/* <span style={{color:"red",fontWeight:"800"}}>₹{amountafteraddcoupon} <IoIosArrowForward style={{color:"black"}}/></span> */}
+        <span style={{color:"red",fontWeight:"800"}}>{amountafteraddcoupon?(`₹${amountafteraddcoupon}`):('') }<IoIosArrowForward style={{color:"black"}}/></span>
+
         
         
       </div>
@@ -668,25 +601,56 @@ setTimeout(()=>{
 
 
 {
-  yppicode?(<div
-      // className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-100 text-black px-6 py-4 rounded-2xl shadow-xl z-[9999] text-center max-w-[300px] font-sans"
-      style={{position:"fixed",top:"250px",left:"70px",margin:"auto",   transition: 'opacity 0.3s ease-in-out',display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"#00c389",zIndex:"1",borderRadius:"10px",fontWeight:"bold" }}
+  yppicode ? (
+    <div
+      style={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)", // ensure exact centering
+        background: "#00c389",
+        zIndex: "9999",
+        borderRadius: "12px",
+        padding: "10px",
+        maxWidth: "90%",
+        width: "300px",
+        color: "#1a1a1a",
+        fontWeight: "bold",
+        fontFamily: "sans-serif",
+        textAlign: "center",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+        transition: "opacity 0.3s ease-in-out",
+      }}
     >
-      <div className="text-4xl">🎉</div>
-      <div className="font-medium text-xs mb-2">'{firstcpn.code}' Applied</div>
-      <div className="font-bold text-base text-[#1a1a1a]">YAY! You saved ₹{(totalDiscountPrice*firstcpn.discountValue)/100}</div>
-      <div className="text-sm text-gray-600 mt-1">Your coupon is successfully applied</div>
-      <div className="mt-3">
+      <div style={{ fontSize: "40px" }}>🎉</div>
+      <div style={{ fontSize: "12px", marginBottom: "8px" }}>
+        '{firstcpn.code}' Applied
+      </div>
+      <div style={{ fontSize: "16px", color: "#1a1a1a" }}>
+        YAY! You saved ₹{(totalDiscountPrice * firstcpn.discountValue) / 100}
+      </div>
+      <div style={{ fontSize: "13px", color: "#666", marginTop: "4px" }}>
+        Your coupon is successfully applied
+      </div>
+      <div style={{ marginTop: "12px" }}>
         <span
-          className="font-medium text-sm underline cursor-pointer"
-          onClick={()=>{setyppicode(false)}}
+          style={{
+            fontSize: "14px",
+            textDecoration: "underline",
+            cursor: "pointer",
+            fontWeight: "500",
+          }}
+          onClick={() => setyppicode(false)}
         >
           okay, got it
         </span>
       </div>
-    </div>):('')
-
+    </div>
+  ) : (
+    ""
+  )
 }
+
 {/* review buy data */}
 <div className="bottom-sheet" style={{display:showSheet?('block'):('none')}}>
 <p>Review item</p>

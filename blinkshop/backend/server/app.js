@@ -61,12 +61,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
-app.use(cors({
-  origin: "https://lewkout.netlify.app", // Your frontend URL
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
+app.use(cors());//te localhost m h
+// app.use(cors({
+//   origin: "https://lewkout.netlify.app", // Your frontend URL
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
+// }));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -293,8 +293,8 @@ console.log(id)
 // addtocart
 app.post("/addtocart",async(req,res)=>{
  
-  let {_id,image,title,description,qty,size,price,discountprice,userid,productId,shopname}=req.body
-let cartadding=await new addtocart({productid:_id,title,description,image,qty,size,price,discountprice,userId:userid ,productId,shopname})
+  let {_id,image,title,description,qty,size,sizes,price,discountprice,userid,productId,shopname}=req.body
+let cartadding=await new addtocart({productid:_id,title,description,image:image||(sizes?.[0]?.image?.[0] ?? ""),qty,size,price,discountprice,userId:userid ,productId,shopname})
 console.log("cart itm",cartadding)
 try{
 let savecartdata=await cartadding.save()

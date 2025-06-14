@@ -470,7 +470,7 @@ const {setkarocode}=useBio()
       </div>
 
       {/* Top Applied Input + Remove */}
-      {appliedCode && (
+      {/* {appliedCode && ( */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
           <input
             type="text"
@@ -505,7 +505,7 @@ const {setkarocode}=useBio()
             Apply
           </button>
         </div>
-      )}
+      {/* )} */}
 
       {/* Coupon Applied Message */}
       {appliedCode && (
@@ -552,9 +552,14 @@ const {setkarocode}=useBio()
                 <span
                   onClick={() => {
                     if (isApplied) {
+                      // setkarocode("")
                       setAppliedCode("");
+                      
                     } else if (valid) {
+                    // setkarocode(c.code)
                       setAppliedCode(c.code);
+
+                      
                     }
                   }}
                   style={{
