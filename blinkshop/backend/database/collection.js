@@ -89,7 +89,7 @@ const otpSchema = new mongoose.Schema({
 // Random 5-character alphanumeric code generator function
 const generateRandomCode = () => Math.random().toString(36).substring(2, 7).toUpperCase();
 
-let users=mongoose.Schema({
+let users =mongoose.Schema({
     // name: String,
     // email: String,
     // uid: { type: String, required: true },
