@@ -831,6 +831,8 @@ app.patch('/user/:userId/address', async (req, res) => {
         state: "Rajasthan",
         isDefault: isDefault || false,
       });
+      
+  
 
       // await otpmodel.deleteOne({ phone });
       await user.save();

@@ -99,7 +99,9 @@ let users =mongoose.Schema({
     phonenumber:{type:String},
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     refercode:{type: String},
-    uid: { type: String, required: true, unique: true },
+    // uid: { type: String, required: true, unique: true },
+    uid: { type: String, unique: true },
+
     ordernum:{
       type:Number
     },
