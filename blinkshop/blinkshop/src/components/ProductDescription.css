@@ -148,7 +148,10 @@ margin-top: 3%
   /* font-weight:500; */
   border: 2px solid purple;
 }
-
+.webkitscroll::-webkit-scrollbar{
+  display: none;
+  
+}
 
 /* Product description text */
 .product-description {

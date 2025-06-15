@@ -674,8 +674,8 @@ let cate=product.cate
         </div>
        
           
-         <div style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "start" }}>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+         <div className="webkitscroll" style={{ display: "flex", flexDirection: "row", alignItems: "start", justifyContent: "start",overflowX:"scroll",marginTop:"8px" }}>
+      <div style={{ display: "flex", gap: "8px" }}>
         {visibleCoupons.map(coupon => (
           <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
         ))}

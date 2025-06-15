@@ -473,9 +473,9 @@ const {setkarocode}=useBio()
       {/* {appliedCode && ( */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
           <input
-            type="text"
-            readOnly
+            type="text" 
             value={appliedCode}
+            onChange={(e)=>{setAppliedCode(e.value)}}
             style={{
               flex: 1,
               padding: "10px",
