@@ -44,7 +44,7 @@ const twilio = require("twilio");
 // let wishmodel=require("../database/collection.js")
 let bodyparser=require("body-parser")
 // let addtocart=require("../database/collection.js")
-let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn  }=require("../database/collection.js")
+let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage  }=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const products = [
   
@@ -1841,11 +1841,33 @@ const sendWhatsAppMessage = async (order) => {
     // console.log(`✅ User ${userId} earned ${pointsEarned?(pointsEarned):(purchaseAmount)} points (₹${valueInRupees?(valueInRupees):()})`);
   }
 
+  const applyCouponSuccess = async (userId, couponCode) => {
+  try {
+    // ✅ Update global usage
+    await Coupon.findOneAndUpdate(
+      { code: couponCode },
+      { $inc: { totalUsed: 1 } }
+    );
+
+    // ✅ Update per-user usage
+    const usage = await cpnusage.findOne({ userId, couponCode });
+
+    if (usage) {
+      usage.usageCount += 1;
+      await usage.save();
+    } else {
+      await cpnusage.create({ userId, couponCode, usageCount: 1 });
+    }
+  } catch (err) {
+    console.error("❌ Failed to update coupon usage:", err);
+  }
+};
+
 
 
 app.post('/order', async (req, res) => {
   try {
-      const {order,address,userDetails} = req.body;
+      const {order,address,userDetails,couponcode} = req.body;
 
       // if (!userId || !email || !address || !phone || !products || products.length === 0) {
       //     return res.status(400).json({ error: "All fields are required" });
@@ -1903,6 +1925,7 @@ for (const item of ordersArray) {
       //  sendWhatsAppMessage(newOrder);
 
       res.status(201).json({ message: "Order Placed & Admin Notified!" });
+      applyCouponSuccess(userDetails._id,couponcode)
       let orderprice = ordersArray.reduce((total, e) => total + (Array.isArray(e.discountprice) 
   ? e.discountprice.reduce((sum, price) => sum + price, 0) 
   : e.discountprice), 0);
@@ -2549,6 +2572,9 @@ app.post("/create", async (req, res) => {
   }
 });
 
+
+// const CouponUsage = require("./models/CouponUsage"); // add this line
+
 app.get('/get-coupons', async (req, res) => {
   console.log("📩 /get-coupons called");
 
@@ -2556,52 +2582,102 @@ app.get('/get-coupons', async (req, res) => {
   console.log("📌 Query Params:", { userId, category, productname });
 
   try {
-    // if (!userId || !category || !productname) {
-    //   return res.status(400).json({ error: "Missing required parameters" });
-    // }
     if (!category || !productname) {
       return res.status(400).json({ error: "Missing required parameters" });
     }
 
-    const userOrders = await orderr.find({ userId })
-    console.log("userordersssss",userOrders)
+    const userOrders = await orderr.find({ userId });
     const isFirstOrder = userOrders.length === 0;
+    console.log("🧪 isFirstOrder:", isFirstOrder);
 
-    // Dynamic OR condition building
-    let orConditions = [
-      { couponType: 'All' },
-      { category: category, productname: productname }
-    ];
+    const allCoupons = await cpn.find({});
+    console.log("🧾 Total Coupons Fetched:", allCoupons.length);
 
-    if (isFirstOrder) {
-      orConditions.push({ couponType: 'First Order' });
-    }
+    const filtered = [];
 
-    const coupons = await cpn.find({ $or: orConditions });
-console.log("coupunss",coupons)
-    // Filter strictly by category and productname if needed
-    const filtered = coupons.filter(coupon => {
-      if (coupon.couponType === 'First Order' || coupon.couponType === 'All') return true;
+    for (const coupon of allCoupons) {
+      const now = new Date();
 
-      // if they're arrays, use includes
-      const categoryMatch = Array.isArray(coupon.categories)
+      // ❌ 1. Expired?
+      if (now > coupon.expiryDate || now < coupon.startDate) continue;
+
+      // ❌ 2. Global usageLimit cross?
+      if (coupon.usageLimit && coupon.totalUsed >= coupon.usageLimit) continue;
+
+      // ❌ 3. User’s usageLimit cross?
+      if (coupon.usageLimitPerUser) {
+        const usage = await cpnusage.findOne({ userId, couponCode: coupon.code });
+        if (usage && usage.usageCount >= coupon.usageLimitPerUser) continue;
+      }
+
+      // ✅ COUPON LOGIC FILTERS
+      const type = coupon.couponType;
+
+      // 1. FIRST ORDER
+      if (type === "First Order") {
+        if (isFirstOrder) filtered.push(coupon);
+        continue;
+      }
+
+      // 2. ALL TYPE
+      if (type === "All") {
+        const hasCategory = Array.isArray(coupon.categories)
+          ? coupon.categories.length > 0
+          : !!coupon.categories;
+        const hasProduct = Array.isArray(coupon.productNames)
+          ? coupon.productNames.length > 0
+          : !!coupon.productNames;
+
+        // case: no category and productname (apply to all)
+        if (!hasCategory && !hasProduct) {
+          filtered.push(coupon);
+          continue;
+        }
+
+        // case: only category
+        if (hasCategory && !hasProduct) {
+          const match = Array.isArray(coupon.categories)
+            ? coupon.categories.includes(category)
+            : coupon.categories === category;
+          if (match) filtered.push(coupon);
+          continue;
+        }
+
+        // case: both category and productname
+        if (hasCategory && hasProduct) {
+          const catMatch = Array.isArray(coupon.categories)
+            ? coupon.categories.includes(category)
+            : coupon.categories === category;
+
+          const nameMatch = Array.isArray(coupon.productNames)
+            ? coupon.productNames.includes(productname)
+            : coupon.productNames === productname;
+
+          if (catMatch && nameMatch) filtered.push(coupon);
+          continue;
+        }
+      }
+
+      // 3. SPECIFIC TYPE
+      const catMatch = Array.isArray(coupon.categories)
         ? coupon.categories.includes(category)
-        : coupon.categories === category 
+        : coupon.categories === category;
 
       const nameMatch = Array.isArray(coupon.productNames)
         ? coupon.productNames.includes(productname)
         : coupon.productNames === productname;
 
-      return categoryMatch && nameMatch;
-    });
+      if (catMatch && nameMatch) filtered.push(coupon);
+    }
 
-    console.log("✅ Filtered Coupons:", filtered);
+    console.log("✅ Final Filtered Coupons:", filtered.map(c => c.code));
     res.json(filtered);
   } catch (err) {
     console.error("❌ Server Error while fetching coupons:", err);
     res.status(500).json({ error: 'Failed to fetch coupons' });
   }
 });
+
 
 
 

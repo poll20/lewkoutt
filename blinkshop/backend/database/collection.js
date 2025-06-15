@@ -428,8 +428,27 @@ const couponSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-module.exports = mongoose.model("Coupon", couponSchema);
+// module.exports = mongoose.model("Coupon", couponSchema);
 
+
+const couponUsageSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  couponCode: {
+    type: String,
+    required: true,
+  },
+  usageCount: {
+    type: Number,
+    default: 0,
+  },
+    usageLimit: { type: Number }, // global limit
+  usageLimitPerUser: { type: Number }, // per-user limit
+  totalUsed: { type: Number, default: 0 }, // ✅ global usage count
+}, { timestamps: true });
 
 users.index({ phonenumber: 1 });
 // users.index({ uid: 1 }, { unique: true });
@@ -470,6 +489,7 @@ const SalesModel = mongoose.model("Sales", salesSchema);
 const returnmodel = mongoose.model("return",returnscema);
 let moodmodel=mongoose.model("moodmessage",moodMessageSchema)
 let cpn=mongoose.model("coupon",couponSchema)
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn}
+let cpnusage=mongoose.model("couponusage",couponUsageSchema)
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage}
 
 
