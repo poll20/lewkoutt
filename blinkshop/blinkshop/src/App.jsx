@@ -188,7 +188,7 @@ import OfferBanner from "./components/OfferBanner";
 import Coupon from "./components/dashboardforadmin/CouponForm";
 import CouponForm from "./components/dashboardforadmin/CouponForm";
 import ReviewProduct from "./components/ReviewProduct";
-import Bandle from "./components/dashboardforadmin/bandle";
+// import Bandle from "./components/dashboardforadmin/bandle";
 
 // import BundleProduct from "./components/BundleProduct";
 
@@ -358,7 +358,7 @@ function Layout({ showPopup }) {
               <Route path="/admin/moodmngr" element={<MoodMagManager/>} />
               <Route path="/admin/coupon" element={<CouponForm/>} />
               <Route path="/admin/useractivity/:id" element={<UserActivity/>} />
-              <Route path="/admin/bandle" element={<Bandle} />
+              {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
               {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
 
 
