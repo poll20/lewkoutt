@@ -96,6 +96,7 @@ const DashNavbar = () => {
                 <NavLink to="/admin/moodmngr"><li>moodmagmanager</li></NavLink>
                 
                 <NavLink to="/admin/coupon"><li>Coupon</li></NavLink>
+                <NavLink to="/admin/bandle"><li>Bundel</li></NavLink>
                 
                
               </ul>

@@ -24,6 +24,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import RatingBadge from "./RatingBadge";
 import StickyButton from "./StickyButton";
 import CouponCard from "./CouponCard";
+import BundleProduct from "./BundleProduct";
 
 
 // import { BioContext } from "./CartContext";
@@ -42,6 +43,7 @@ const [cartData, setCartData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State for popup visibility
   const [popupImage, setPopupImage] = useState(""); // State to store the clicked image
   const [Selectedcolor,setSelectedcolor]=useState([])
+  const [colorid,setcolorid]=useState()
    const [isOpen, setIsOpen] = useState(false);
 const[product,setproduct]=useState([])
 
@@ -55,7 +57,7 @@ const targetRef = useRef(null);
   let { id } = useParams();
   console.log("fwff",id)
   let navigate=useNavigate()
-  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail,fetchCoupons,coupons}=useBio()
+  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail,fetchCoupons,coupons,getbundeldata,getBundleColorData}=useBio()
   // const { user,userDetails } = useAuth();
   const { user,userDetails } = useFirebaseAuth()
   const [showModal, setShowModal] = useState(false);
@@ -165,14 +167,14 @@ useEffect(() => {
     }
     else{
       setproduct({
-        ...varientprd[0].colors[0],
-        price: varientprd[0].price,
-        discountprice: varientprd[0].discountprice,
-        shopname: varientprd[0].shopname,
-        shopaddress: varientprd[0].shopaddress,
-        discount: varientprd[0].discount,
-        cate: varientprd[0].cate,
-        image:varientprd[0].image[0]
+        ...varientprd[0]?.colors[0],
+        price: varientprd[0]?.price,
+        discountprice: varientprd[0]?.discountprice,
+        shopname: varientprd[0]?.shopname,
+        shopaddress: varientprd[0]?.shopaddress,
+        discount: varientprd[0]?.discount,
+        cate: varientprd[0]?.cate,
+        image:varientprd[0]?.image[0]
       });
 
     }
@@ -188,10 +190,26 @@ useEffect(() => {
       console.log("📢 Calling fetchCoupons with:", product.cate, product.tag);
       fetchCoupons(product.cate, product.tag);
     }
+
+   
   }, 200);  // Delay by 200ms
 
   return () => clearTimeout(timer);
 }, [product]);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    if (product?.bundel?.length>0) {
+      console.log("📢 Calling getBundleColorData:", product.bundel);
+      getBundleColorData(product.bundel);
+    }
+  
+    
+  }, 1000);
+  return () => clearTimeout(timer);
+}, [product]); // ✅ Correct dependency!
+
+
 
 
 
@@ -494,7 +512,7 @@ console.log("lplp",product)
   
 
   // const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
-  const sizes=product.sizes.map((e)=>(e.size)) 
+  const sizes=product?.sizes?.map((e)=>(e.size)) 
 
   let handleqty=(e)=>{
     // console.log(e.target.value)
@@ -565,6 +583,10 @@ let cate=product.cate
 //     //   }
 //     // };
 //   }, []);
+
+if(getbundeldata){
+  console.log("bundle data in prdd",getbundeldata)
+}
 
   return (
     <>
@@ -706,10 +728,12 @@ let cate=product.cate
     </div>
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}> */}
           {/* <div className="size-options" style={{gap:"10px",padding:'10px 0', borderBottom:"1px solid black"}}> */}
-          <div className="size-options" style={{gap:"10px",padding:'10px 0',border:"1px solid white"}}>
-
+          <div   className="size-options" style={{gap:"10px",padding:'10px 0',border:"1px solid white"}}>
 
           <label>Size:</label>
+          
+
+
             <div className="sizes">
 
               {sizes.map((size) => (
@@ -737,7 +761,7 @@ let cate=product.cate
                   <button
                     style={{background:color.color,borderRadius:"100%",width:"20px",height:"20px"}}
                     className={`colour-btn ${Selectedcolor === color.color ? "clractive"   : ""}`}
-                     onClick={() => setSelectedcolor(color.color)}>
+                     onClick={() =>{ setSelectedcolor(color.color), setcolorid(color._id)}}>
                     
                     {/* {color.color} */}
                   </button>
@@ -845,11 +869,53 @@ let cate=product.cate
       </NavLink>
 
       {/* Customer Reviews */}
-      <div className="prd-ka-dropdown-item">
+      <NavLink to={`/prdreview/${product._id || colorid}/${product.avgRating}`} className="prd-ka-dropdown-item navlink">
         <span>Customer Reviews</span>
         <span className="prd-ka-dropdown-arrow">›</span>
-      </div>
+      </NavLink>
     </div>
+    {/* {
+      getbundeldata?(    <BundleProduct
+  product1={product}
+  product2={getbundeldata}
+  totalPrice={1000}
+  offer="10%"
+/>):('')
+    } */}
+    {
+      getbundeldata && getbundeldata.length>0?( <BundleProduct
+      source="productdescription"
+  originalPrice={product.discountprice + (getbundeldata[0]?.discountprice || 300)}
+  totalPrice={getbundeldata[0]?.bundelprice}
+  products={[
+
+    {  userid:userDetails?._id,
+      productId:product._id,
+      title:product.title,
+      image: product.image,
+      color: product.color,
+      original: product.price,
+      price: product.discountprice,
+      sizes: product.sizes,
+      bundelprice:getbundeldata[0]?.bundelprice
+    },
+    { userid:userDetails?._id,  
+      productId:getbundeldata[0]?._id,
+      title: getbundeldata[0]?.title,
+      image: getbundeldata[0]?.sizes[0]?.image[0],
+      color: getbundeldata[0]?.color,
+      original: getbundeldata[0]?.price || 500,
+      price: getbundeldata[0]?.discountprice || 300,
+      sizes: getbundeldata[0]?.sizes,
+      bundelprice:getbundeldata[0]?.bundelprice
+    },
+    
+  ]}
+/>
+):('')
+    }
+   
+
           {/* <button className="add-to-cart" onClick={()=>{ handleclick(product,quantity,selectedSize)}}>Add to Cart</button>   */}
          
           {/* Quantity Selector */}

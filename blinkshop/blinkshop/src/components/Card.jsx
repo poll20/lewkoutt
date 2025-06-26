@@ -448,7 +448,7 @@ const chlodekhe = (s, i) => {
 
     if (section && section!="newarrivals") { 
       fetchProducts(
-        `${apiUrl}/productmodel?operation=filtered&section=${section}`
+        `${apiUrl}/productmodel?operation=filtered&section=${section?(section):(props.section)}`
       );
 
   }

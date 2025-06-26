@@ -16,6 +16,7 @@ import gpay from "./image/gpay.webp"
 import upi from "./image/upi.jpeg"
 import CouponCard from "./CouponCard";
 import Slideuptoast from "./Slideuptoast";
+import BundleProduct from "./BundleProduct";
 const Checkout = () => {
 
 
@@ -146,8 +147,23 @@ if(buydata){
   console.log("guggu babuu",purchaseproduct)
   
 }
-const totalDiscountPrice = purchaseproduct.reduce((sum, item) => sum + item.discountprice, 0);
-const totalPrice = purchaseproduct.reduce((sum, item) => sum + item.price, 0);
+// const totalDiscountPrice = purchaseproduct.reduce((sum, item) => sum + item.discountprice, 0) ;
+// const totalPrice = purchaseproduct.reduce((sum, item) => sum + item.price, 0);
+
+const totalDiscountPrice = purchaseproduct.reduce((sum, item) => {
+  if (item.bundle && item?.bundle[0]?.bundletotalamount) {
+    return sum +item?.bundle[0]?.bundletotalamount;
+  }
+  return sum + (item.discountprice || 0);
+}, 0);
+
+const totalPrice = purchaseproduct.reduce((sum, item) => {
+  if (item.bundle && item?.bundle[0]?.bundletotalamount) {
+    return sum + item?.bundle[0]?.bundletotalamount;
+  }
+  return sum + (item.price || 0);
+}, 0);
+
 
 const [mywalletSelectedOption, setMywalletSelectedOption] = useState("wallet");
 const [mywalletAmount, setMywalletAmount] = useState(walletkapesa || 0);
@@ -542,11 +558,14 @@ setyppicode(true)
           {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
           <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice):(totalDiscountPrice)}.0</span>
         </div>
-         <div className="order-row-checkoutbuy">
+        {
+          firstcpn?.code || karocode?(<div className="order-row-checkoutbuy">
           <span>Amount After Coupon {firstcpn?.code ||karocode} Applied</span>
           {/* <span>-₹{purchaseproduct[0].price-purchaseproduct[0].discountprice}</span> */}
           <span>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].price-purchaseproduct[0].discountprice):(Math.round((totalDiscountPrice)-amountafteraddcoupon) || totalPrice-totalDiscountPrice)}.0</span>
-        </div>
+        </div>):('')
+        }
+         
         
         {/* <div className="order-row-checkoutbuy">
           <span>Wallet Money</span>
@@ -597,7 +616,7 @@ setyppicode(true)
 
       <TimeSlots/>
 
-    {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);setTimeout(()=>{recordMultipleSales(purchaseproduct)},300) }} >Pay Now</button>):('')}
+    {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);/*setTimeout(()=>{recordMultipleSales(purchaseproduct)},300)*/ }} >Pay Now</button>):('')}
 
 
 {
@@ -658,34 +677,60 @@ setyppicode(true)
           ✖
         </button>
 
-        {
-          purchaseproduct.map((e)=>(
-            <>
-            {/* <div className="sheet-header">
-        <p className="item-price">₹{e.discountprice}</p>
-        </div> */}
-      <div className="sheet-content">
+       {purchaseproduct.map((order, i) => (
+  <>
+    {Array.isArray(order.bundle) && order.bundle.length > 0 ? (
+  
+      <BundleProduct
+        source="checkout"
+        originalPrice={order.bundle[0].price + (order.bundle[1]?.price || 300)}
+        totalPrice={1000}
+        products={[
+          {
+            userid: order.bundle[0]?.userId,
+            productId: order.bundle[0].productId,
+            title: order.bundle[0].title,
+            image: order.bundle[0].image,
+            color: order.bundle[0].color,
+            original: order.bundle[0].original,
+            price: order.bundle[0].price,
+            sizes: order.bundle[0].sizes,
+          },
+          {
+            userid: order.bundle[1]?.userId,
+            productId: order.bundle[1]?.productId,
+            title: order.bundle[1]?.title,
+            image: order.bundle[1]?.image,
+            color: order.bundle[1]?.color,
+            original: order.bundle[1]?.original || 500,
+            price: order.bundle[1]?.price || 300,
+            sizes: order.bundle[1]?.sizes,
+          },
+        ]}
+      />
+      
+    ) : (
+      <div key={i} className="sheet-content">
         <div className="item-info">
-          
           <img
-            src={e.image} // Replace with your product image URL
+            src={order.image}
             alt="Product"
             className="product-image-sheet"
           />
           <div className="item-details">
-            <span className="item-price">₹{e.discountprice}</span>
-            <h4>{e.description}</h4>
-            <p>Size: {e.size} &nbsp;&nbsp; Qty: {e.qty}</p>
+            <span className="item-price">₹{order.discountprice}</span>
+            <h4>{order.description}</h4>
+            <p>Size: {order.size} &nbsp;&nbsp; Qty: {order.qty}</p>
             <p className="delivery-info">
-              Deliver by <span className="delivery-date">{timeslotlelo?(timeslotlelo):('60 minute delivery') }</span>
+              Deliver by <span className="delivery-date">{timeslotlelo || '60 minute delivery'}</span>
             </p>
           </div>
         </div>
       </div>
-      {/* {showToast && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setShowToast(false)} />} */}
-      </>
-          ))
-        }
+    )}
+  </>
+))}
+
       
     </div>   
 {showToast && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setShowToast(false)} />}

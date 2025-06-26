@@ -28,6 +28,10 @@ export const DashboardProvider = ({ children }) => {
     const[wishlistdata,setwishlistdata]=useState([])
     const[wishlist,setWishlist]=useState([])
     const[userorderr,setuserorderr]=useState([])
+    const [productdata,setproductdata]=useState([])
+    const [productdataonlydetail, setproductdataonlydetail]=useState([])
+    const [refetch,setRefetch]=useState(false)
+    const [loading ,setIsLoading]=useState(false)
     let showalert=()=>{
         alert("low stock alert")
     }
@@ -614,13 +618,95 @@ const createCoupon = async (cpn) => {
     console.error(error);
   }
 };
+
+const productfetch = async () => {
+  try {
+    setIsLoading(true)
+    let data = await fetch(`${apiUrl}/productmodel?operation=all`);
+    let res = await data.json();
+    
+    console.log("✅ New data fetched:", res);
+    if (!res || res.length === 0) return; // ✅ Empty response check
+    
+    setproductdata([...res]); // ✅ Spread operator to force state update
+    let pdd = res.map((e) => e.productdetails).flat();
+    setproductdataonlydetail([...pdd]); // ✅ Spread operator again
+    console.log("📢 Updated productdataonlydetail:", pdd);
+
+    setIsFetched(true);
+    setRefetch(false);  
+  } catch (e) {
+    console.log("❌ Fetch Error:", e);
+  }
+  finally{
+    setIsLoading(false)
+  }
+};
+
+
+// ✅ Initial fetch on mount
+useEffect(() => {
+  productfetch();
+}, []);
+
+
+
+// ✅ Re-fetch when manually triggered
+useEffect(() => {
+  if (refetch) {
+    console.log("🔄 Manually re-fetching data...");
+    productfetch();
+  }
+}, [refetch]);
+
+ 
+   
+
+
+// ✅ Jab bhi naye product add ho, ye function call karo
+const handleRefetch = () => {
+  console.log("🔄 Refetch triggered...");
+  setRefetch(true);
+};
+
+const createBundle = async (ids,val) => {
+
+  console.log("bundleprice",val)
+  if (ids.length !== 2) {
+    alert("Please select exactly 2 items to bundle.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/bundle`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ids,val}) // e.g. [colorId1, colorId2]
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Bundle created successfully", data);
+      alert("Bundle created successfully");
+    } else {
+      alert("Error creating bundle");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Server error");
+  }
+};
+
+
   return (
     <DashboardContext.Provider
       value={{adddatatoexistingcategory , addnewcategory ,users,editordeleteinexisitingcategory,deletefromexistingproduct,dis, 
         setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,
         shopkeepersale,updateOrdersWithReturnDetails,
         returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
-        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon}}
+        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle}}
     >
       {children}
     </DashboardContext.Provider>

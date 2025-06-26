@@ -45,6 +45,12 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
  const[alluser,setalluser]=useState([])
  const [coupons, setCoupons] = useState([]);
  const[karocode,setkarocode]=useState("")
+ const[prdreviewdata,setprdreviewdata]=useState([])
+ const [getbundeldata,setbundeldata]=useState([])
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const loaderRef = useRef(null);
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -62,7 +68,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
 console.log("myfil",filters)
 const backendURL = `${apiUrl}:3000`;
 // const notify = () => toast("Plese Login For Add Items In Wishlist");
-
+ const itemsPerPage = 10;
   const cards = [
     {
       id:1,
@@ -117,7 +123,7 @@ useEffect(() => {
     const fetchCartItems = async () => {
       try {
         setIsLoading(true)
-        let response = await fetch(`${apiUrl}/cart/${userDetails._id}`, 
+        let response = await fetch(`${apiUrl}/cart/${userDetails?._id}`, 
         //   {
         //   headers: {
         //     Authorization: `Bearer ${user.accessToken}`,
@@ -472,71 +478,125 @@ finally{
 }
 
 
-  const handleAddToCart = async (prd,quantity,selectedSize) => {
-    try {
-      setIsLoading(true)
-      console.log("iqs",prd,quantity,selectedSize)
-      // const matchItem = productdataonlydetail.find((e) => e._id == id);
-      // const matchItem = productdataonlydetail
-      // .flatMap(product => product.colors)  // Sare products ke colors ko ek array bana diya
-      // .filter(color => color._id == id);
-      // console.log("dekhte h chlo yha kya milta hia",matchItem)
-      prd.userid=userDetails._id
-      prd.productId=prd._id
-      prd.size=selectedSize
-      prd.qty=quantity
-      // Object.assign(matchItem, { size: selectedSize });
-      // Object.assign(matchItem, { qty: quantity });
-      console.log("dekhte h chlo yha kya milta hia",prd)
-      // const itemInCart = addtocartdatas.find((cartItem) => cartItem._id === id);
-      // const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
+  // const handleAddToCart = async (prd,quantity,selectedSize) => {
+
+  //   try {
+      
+  //     setIsLoading(true)
+ 
+  //     console.log("iqs",prd,quantity,selectedSize)
+  //     // const matchItem = productdataonlydetail.find((e) => e._id == id);
+  //     // const matchItem = productdataonlydetail
+  //     // .flatMap(product => product.colors)  // Sare products ke colors ko ek array bana diya
+  //     // .filter(color => color._id == id);
+  //     // console.log("dekhte h chlo yha kya milta hia",matchItem)
+  //     prd.userid=userDetails?._id
+  //     prd.productId=prd._id
+  //     prd.size=selectedSize
+  //     prd.qty=quantity
+      
+  //     // Object.assign(matchItem, { size: selectedSize });
+  //     // Object.assign(matchItem, { qty: quantity });
+  //     console.log("dekhte h chlo yha kya milta hia",prd)
+  //     // const itemInCart = addtocartdatas.find((cartItem) => cartItem._id === id);
+  //     // const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
 
       
-        const response = await fetch(`${apiUrl}/addtocart`, {
-          method: 'POST',
-          headers: { "Content-Type": "application/json",
-            // Authorization: `Bearer ${user.accessToken}`,
-          },
-          body: JSON.stringify(prd),
-        });
+  //       const response = await fetch(`${apiUrl}/addtocart`, {
+  //         method: 'POST',
+  //         headers: { "Content-Type": "application/json",
+  //           // Authorization: `Bearer ${user.accessToken}`,
+  //         },
+  //         body: JSON.stringify(prd),
+  //       });
 
-        if (response.ok) {
-          const addedItem = await response.json();
-          setaddtocartdata((prev) => [...prev, addedItem]);
-          setaddtocartdataonly((prev) => [...prev, prd._id]);
-        //  toast.success("data added successfully")
-    //     const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //     settoastmsg("item added successfully")
-    showPopup("item added")
+  //       if (response.ok) {
+  //         const addedItem = await response.json();
+  //         setaddtocartdata((prev) => [...prev, addedItem]);
+  //         setaddtocartdataonly((prev) => [...prev, prd._id]);
+  //       //  toast.success("data added successfully")
+  //   //     const toast = new window.bootstrap.Toast(toastRef.current);
+  //   // toast.show();
+  //   //     settoastmsg("item added successfully")
+  //   showPopup("item added")
           
+  //       }
+  //       else{
+  //   //       const toast = new window.bootstrap.Toast(toastRef.current);
+  //   // toast.show();
+  //   //       settoastmsg("oopss....")
+  //   showPopup("oopsss")
+  //       }
+
+
+  //   // else {
+  //   //     const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
+  //   //       method: 'DELETE',
+  //   //     });
+
+  //   //     if (response.ok) {
+  //   //       setaddtocartdata((prev) => prev.filter((itemId) => itemId !== id));
+  //   //       setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
+  //   //       toast.success("data removed successfully")
+  //   //     }
+  //   //   }
+  //   } catch (error) {
+  //     console.error('Error in handleClick:', error);
+  //   }
+  //   finally{
+  //     setIsLoading(false)
+  //   }
+  // };
+
+  const handleAddToCart = async (prd, quantity, selectedSize) => {
+    console.log("cartbundle,",prd)
+  try {
+    setIsLoading(true);
+
+    const isBundle = Array.isArray(prd) && prd.length > 0;
+
+    const payload = isBundle
+      ? {
+          userid: userDetails?._id,
+          bundle: prd, // ✅ only send bundle data
         }
-        else{
-    //       const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //       settoastmsg("oopss....")
-    showPopup("oopsss")
-        }
+      : {
+          userid: userDetails?._id,
+          productId: prd._id,
+          productid: prd._id,
+          image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
+          title: prd.title,
+          description: prd.description,
+          qty: quantity,
+          size: selectedSize,
+          price: prd.price,
+          discountprice: prd.discountprice,
+          shopname: prd.shopname,
+        };
 
+    console.log("🧾 Sending payload to cart:", payload);
 
-    // else {
-    //     const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
-    //       method: 'DELETE',
-    //     });
+    const response = await fetch(`${apiUrl}/addtocart`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-    //     if (response.ok) {
-    //       setaddtocartdata((prev) => prev.filter((itemId) => itemId !== id));
-    //       setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
-    //       toast.success("data removed successfully")
-    //     }
-    //   }
-    } catch (error) {
-      console.error('Error in handleClick:', error);
+    if (response.ok) {
+      const addedItem = await response.json();
+      setaddtocartdata((prev) => [...prev, addedItem]);
+      if (!isBundle) setaddtocartdataonly((prev) => [...prev, prd._id]);
+      showPopup("Item added");
+    } else {
+      showPopup("Oops...");
     }
-    finally{
-      setIsLoading(false)
-    }
-  };
+  } catch (error) {
+    console.error("❌ Error in handleAddToCart:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   const removefromaddtocart=async(id)=>{
     console.log("crt ki id",id)
     try{
@@ -775,10 +835,13 @@ const productfetch = async () => {
   }
 };
 
+
 // ✅ Initial fetch on mount
 useEffect(() => {
   productfetch();
 }, []);
+
+
 
 // ✅ Re-fetch when manually triggered
 useEffect(() => {
@@ -787,6 +850,10 @@ useEffect(() => {
     productfetch();
   }
 }, [refetch]);
+
+ 
+   
+
 
 // ✅ Jab bhi naye product add ho, ye function call karo
 const handleRefetch = () => {
@@ -1031,27 +1098,53 @@ useEffect(() => {
 }, [user, userDetails?._id]);
 
 
-const submitRating = async (productId, userId, rating, review) => {
-  console.log("rating",rating)
-  try {
-    setIsLoading(true)
-      const response = await fetch(`${apiUrl}/rate`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json",
-            // Authorization: `Bearer ${user.accessToken}`,
-          },
-          body: JSON.stringify({ userId, productId, rating, review })
-      });
+// const submitRating = async (productId, userId, rating, review,image) => {
+//   console.log("rating",rating)
+//   try {
+//     setIsLoading(true)
+//       const response = await fetch(`${apiUrl}/rate`, {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json",
+//             // Authorization: `Bearer ${user.accessToken}`,
+//           },
+//           body: JSON.stringify({ userId, productId, rating, review,image})
+//       });
 
-      const data = await response.json();
-      console.log("Rating Submitted:", data);
+//       const data = await response.json();
+//       console.log("Rating Submitted:", data);
+//   } catch (error) {
+//       console.error("Error submitting rating:", error);
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
+// };
+const submitRating = async (productId, userId, rating, review, imageUrl) => {
+  try {
+    setIsLoading(true);
+    const response = await fetch(`${apiUrl}/rate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        productId,
+        rating,
+        review,
+        image: imageUrl, // URL from Cloudinary
+      }),
+    });
+
+    const data = await response.json();
+    console.log("Rating Submitted:", data);
   } catch (error) {
-      console.error("Error submitting rating:", error);
-  }
-  finally{
-    setIsLoading(false)
+    console.error("Error submitting rating:", error);
+  } finally {
+    setIsLoading(false);
   }
 };
+
 const fetchRatings = async (productId) => {
   try {
     setIsLoading(true)
@@ -1082,17 +1175,29 @@ const fetchRatings = async (productId) => {
     setIsLoading(false)
   }
 };
+// Function to fetch ratings from backend
+  const  callreivewfunc= async (id) => {
+    
+    console.log("haa mujhe hi call ho rha hau",id)
+    try {
+      setIsLoading(true)
+      const response = await fetch(`${apiUrl}/rate/${id}`);
+      const data = await response.json();
+      console.log("dekh mila kya",data)
+      setprdreviewdata(data);
+    } catch (error) {
+      console.error("Error fetching ratings:", error);
+    } finally {
+       setIsLoading(false);
+    }
+  };
 
-useEffect(() => { 
-  if (userDetails?._id) {
-      fetchRatings(userDetails._id);
-  }
-}, [userDetails?._id, user]);
+  
 
 
 
-let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
-  console.log("slec",selectedOption)
+let orderreturn=async(reason,subreason,selectedOption,orderdata,uploadedUrls)=>{
+  console.log("slec",selectedOption,uploadedUrls)
 
   try{
     setIsLoading(true)
@@ -1102,14 +1207,14 @@ let orderreturn=async(reason,subreason,selectedOption,orderdata)=>{
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
-      body: JSON.stringify({reason,subreason,selectedOption,orderdata}), 
+      body: JSON.stringify({reason,subreason,selectedOption,orderdata,uploadedUrls}), 
 
     })
     if(orderpost.ok){
     //   const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //   settoastmsg("order return process successfull")
-    showPopup("order returning...")
+    showPopup("Return Requested...")
     }
      // ✅ New Order ko State me Add Karo
     
@@ -1161,6 +1266,31 @@ const fetchCoupons = async (cate, title) => {
     setIsLoading(false);
   }
 };
+
+
+const getBundleColorData = async (bundleId) => {
+  console.log("bundle id dekhte h",bundleId)
+  try {
+    setIsLoading(true)
+    const response = await fetch(`${apiUrl}/getbundle/${bundleId}`);
+    const data = await response.json();
+ setbundeldata([data])
+    if (response.ok) {
+      console.log("Bundle color found:", data);
+      // setbundeldata(data)
+      // Use data in UI
+    } else {
+      alert("No matching bundle found.");
+    }
+  } catch (err) {
+    console.error("Error fetching bundle color:", err);
+    alert("Server error");
+  }
+  finally{
+    setIsLoading(false)
+  }
+};
+
 
 
     // if (product) {
@@ -1246,7 +1376,13 @@ if(user && userDetails){
         fetchCoupons,
         coupons,
         setkarocode,
-        karocode
+        karocode,
+        prdreviewdata,
+        callreivewfunc,
+        getBundleColorData,
+        getbundeldata,
+        
+
         
     
   }}

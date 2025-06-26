@@ -24,19 +24,35 @@ console.log("wishlist in coa",wishlistdata)
       <div className="product-card">
       {/* Image Section */}
       <div className="image-container">
-      <NavLink to={`/productdescription/${props.id._id}`}>
+        
+      <NavLink to={props.section!='bundel'?(`/productdescription/${props.id._id}`):(`/productdescription/${props.id}`)}>
         <img
-          src={props.id.image[0]} // Replace with real image
-          alt="Product"
-          className="product-image"
-        />
+  src={
+    props.section != "bundel"
+      ?( props?.id?.image?.[0] || "fallback.jpg")
+      : (props.image || "fallback.jpg")
+  }
+  alt="Product"
+  className="product-image"
+/>
         </NavLink> 
         {/* Heart Icon */}
-        <div className="heart-icon" onClick={(e)=>{ e.stopPropagation();  handleClick(props.id,props.id.colors?.[0]?._id),setShowToast(true)}} style={{height:'20px',width:"20px"}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15} dw={30} dh={30} dmt={-8} dml={-8}/></div>
+        <div className="heart-icon"  onClick={(e)=>{ e.stopPropagation();  handleClick(props.id,props.id.colors?.[0]?._id),setShowToast(true)}} style={{height:'20px',width:"20px",}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15} dw={30} dh={30} dmt={-8} dml={-8}/></div>
         {/* Rating */}
-        <div className="rating">
-          ⭐ 4.7 | 16
-        </div>
+        
+        {/* <div className="rating" style={{display:!props.id.colors[0].ratingCount==0?('flex'):('none')}}>
+          {
+          `⭐ ${props.id.colors[0].avgRating} | ${props.id.colors[0].ratingCount}`
+          }
+          
+        </div> */}
+        {props.section != "bundel" &&
+  props?.id?.colors?.[0]?.ratingCount > 0 && (
+    <div className="rating" style={{ display: "flex" }}>
+      {`⭐ ${props.id.colors[0].avgRating} | ${props.id.colors[0].ratingCount}`}
+    </div>
+)}
+
       </div>
 
       {/* Details Section */}

@@ -26,6 +26,9 @@ const ratingSchema = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
   rating: { type: Number, required: true, min: 1, max: 5 },
   review: { type: String }, // Optional review
+  image: [String], // ✅ Array of Cloudinary URLs
+  userName: { type:String},
+  
 }, { timestamps: true });
 
 
@@ -55,7 +58,19 @@ let cartz=mongoose.Schema({
     size:String,
     price:Number,
     shopname:String,
-    discountprice:Number
+    discountprice:Number,
+    bundle:[{
+       productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
+      title:{type:String},
+      image:{type:String},
+      color:{type:String},
+      original:{type:Number},
+      price:{type:Number},
+      sizes:{type:String},
+      bundletotalamount:{type:Number}
+      
+
+    }]
     
    // price: String,
 })
@@ -119,45 +134,97 @@ let users =mongoose.Schema({
       cashback:{type:Number,default:0},  // 🔥 ₹50 Cashback Available
       points:{type:Number,default:0}      // 🔥 200 Points Available
     },
+    moodcodes:{
+      moodetype:{type:String},
+       moodcode:{type:String},
+       addedon:{type:Date,default: Date.now},
+       renew:{type:Number}
+      
+
+    },
     created_at: Date
 })
 
-let orders=mongoose.Schema({
-  name:String,
+// let orders=mongoose.Schema({
+//   name:String,
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+//   email:String,
+//   address:[String], 
+//   products: [
+//     {
+//       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+//       tag:String,
+//       discription:String,
+//       image:[String],
+//       quantity:Number,
+//       price:Number,
+//       discountprice:Number,
+//       size:String,
+//       shopname:String,
+//       totalAmount:Number,
+      
+//     },
+    
+//   ],
+ 
+//   status: { type: String, default: "Pending" }, // Pending, Shipped, Delivered, Return
+//   orderedAt: { type: Date, default: Date.now },
+//   deliveredAt: { type: Date, default: Date.now },
+//   reason: {
+//     type: String,
+//   },
+//   subreason: {
+//     type: String,
+//   },
+//   selectedOption: {
+//     type: String,
+//   },
+//   returnDate: {
+//     type: Date,
+//   },
+// },{ timestamps: true })
+
+const orders = mongoose.Schema({
+  name: String,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  email:String,
-  address:[String], 
+  email: String,
+  address: [String],
   products: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
-      tag:String,
-      discription:String,
-      image:[String],
-      quantity:Number,
-      price:Number,
-      discountprice:Number,
-      size:String,
-      shopname:String,
-      totalAmount:Number,
-    },
+      tag: String,
+      discription: String,
+      image: [String],
+      quantity: Number,
+      price: Number,
+      discountprice: Number,
+      size: String,
+      shopname: String,
+      totalAmount: Number,
+       bundle:[{
+       productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
+      title:{type:String},
+      image:{type:String},
+      color:{type:String},
+      original:{type:Number},
+      price:{type:Number},
+      sizes:{type:String},
+      bundletotalamount:{type:Number}
+      
+
+    }]
+    
+    }
   ],
- 
-  status: { type: String, default: "Pending" }, // Pending, Shipped, Delivered, Return
+  status: { type: String, default: "Pending" },
   orderedAt: { type: Date, default: Date.now },
   deliveredAt: { type: Date, default: Date.now },
-  reason: {
-    type: String,
-  },
-  subreason: {
-    type: String,
-  },
-  selectedOption: {
-    type: String,
-  },
-  returnDate: {
-    type: Date,
-  },
-},{ timestamps: true })
+  reason: String,
+  subreason: String,
+  selectedOption: String,
+  image:{type:[String]},
+  returnDate: Date,
+}, { timestamps: true });
 
 let rent=mongoose.Schema({
     category:String,
@@ -209,13 +276,40 @@ const colorSchema = new mongoose.Schema({
     color: {
         type: String,
     },
+    bundel:{type:String},
+    bundelprice:{type:Number},
     title:{type:String},
+
     tag:{type:String},
+
     description:{type:String},
+
     cartcount:{type:Number},
+
     wishlistcount:{tye:Number},
+
     ordercount:{tye:Number},
+
 returncount:{tye:Number},
+
+ price: {
+        type: Number,
+       
+      },
+       discount: {
+        type: Number,
+        
+      },
+       discountprice: {
+        type: Number,
+        
+      },
+      avgRating:{
+        type:Number,
+        default:0
+      },
+      ratingCount: { type: Number, default: 0 },
+      
 sizes: [sizeSchema]
 },{_id:true});
 const CategorySchema = new mongoose.Schema({
@@ -252,8 +346,9 @@ const CategorySchema = new mongoose.Schema({
   },
       avgRating:{
         type:Number,
-        default:5
+        default:0
       },
+      ratingCount: { type: Number, default: 0 },
       discountprice: {
         type: Number,
         
@@ -466,6 +561,8 @@ const moodMessageSchema = new mongoose.Schema({
   moodemoji: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
   moodcolor: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
   moodtype: { type: String, required: true }, // e.g., "sleepy", "sad", etc.
+  moodcode:{type:String},
+  timeperioud:{type:Number},
   msgwithoffer: { type: String, required: true },
   msgwithoutoffer: { type: String, required: true },
 });

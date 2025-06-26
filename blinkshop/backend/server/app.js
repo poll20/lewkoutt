@@ -291,22 +291,102 @@ console.log(id)
 // })
 
 // addtocart
-app.post("/addtocart",async(req,res)=>{
+// app.post("/addtocart",async(req,res)=>{
  
-  let {_id,image,title,description,qty,size,sizes,price,discountprice,userid,productId,shopname}=req.body
-let cartadding=await new addtocart({productid:_id,title,description,image:image||(sizes?.[0]?.image?.[0] ?? ""),qty,size,price,discountprice,userId:userid ,productId,shopname})
-console.log("cart itm",cartadding)
-try{
-let savecartdata=await cartadding.save()
-res.status(200).json(savecartdata);
-console.log("lolaa")
-  } 
-  catch (err) {
-    res.status(400).json({ error: err.message });
-    console.log("kolla")
+//   let {_id,image,title,description,qty,size,sizes,price,discountprice,userid,productId,shopname,bundle}=req.body
+// let cartadding=await new addtocart({productid:_id,title,description,image:image||(sizes?.[0]?.image?.[0] ?? ""),qty,size,price,discountprice,userId:userid ,productId,shopname,bundle:bundle})
+// console.log("cart itm",cartadding)
+// try{
+// let savecartdata=await cartadding.save()
+// res.status(200).json(savecartdata);
+// console.log("lolaa")
+//   } 
+//   catch (err) {
+//     res.status(400).json({ error: err.message });
+//     console.log("kolla")
+//   }
+
+// })
+app.post("/addtocart", async (req, res) => {
+  const body = req.body;
+console.log("bodycheck kroo",body)
+  // 1. Check if it's a bundle (array of objects)
+  if (Array.isArray(body.bundle)) {
+    try {
+      console.log("📦 Bundle payload received:", body);
+
+      const userid = body.bundle[0]?.userid;
+
+      const bundleData = body.bundle.map((item) => ({
+        productId: item.productId,
+        title: item.title,
+        image: item.image,
+        color: item.color,
+        original: item.original,
+        price: item.price,
+        sizes: item.sizes?.[0]?.size || "",
+         bundletotalamount:item.bundelprice
+      }));
+
+      const cartItem = new addtocart({
+        userId: userid,
+        bundle: bundleData,
+      });
+
+      console.log("🛒 Final bundle cart to save:", cartItem);
+
+      const saved = await cartItem.save();
+
+      console.log("✅ Saved bundle to DB:", saved);
+      return res.status(200).json(saved);
+    } catch (err) {
+      console.error("❌ Error saving bundle cart:", err);
+      return res.status(400).json({ error: err.message });
+    }
   }
 
-})
+  // 2. Otherwise, treat as single product
+  try {
+    const {
+      _id,
+      image,
+      title,
+      description,
+      qty,
+      size,
+      sizes,
+      price,
+      discountprice,
+      userid,
+      productId,
+      productid,
+      shopname,
+    } = body;
+
+    const cartData = {
+      productid,
+      productId,
+      title,
+      description,
+      image: image || (sizes?.[0]?.image?.[0] ?? ""),
+      qty,
+      size,
+      price,
+      discountprice,
+      userId: userid,
+      shopname,
+    };
+
+    const cartItem = new addtocart(cartData);
+
+    const savedCart = await cartItem.save();
+    console.log("✅ Saved single item to DB:", savedCart);
+    return res.status(200).json(savedCart);
+  } catch (err) {
+    console.error("❌ Error saving single item:", err);
+    return res.status(400).json({ error: err.message });
+  }
+});
 
 app.get("/addtocart/:uid",async(req,res)=>{
 
@@ -1223,6 +1303,37 @@ app.get("/productmodel",async(req,res)=>{
   }
 })
 
+app.get("/productmodell", async (req, res) => {
+  const operation = req.query.operation;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  try {
+    if (operation === "all") {
+      const allData = await productsmodel.find().lean();
+      const allProductDetails = allData.map(e => e.productdetails).flat();
+
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      const slicedData = allProductDetails.slice(start, end);
+
+      const hasMore = end < allProductDetails.length;
+
+      return res.json({
+        data: slicedData,
+        hasMore: hasMore
+      });
+    }
+
+    res.status(400).json({ message: "Invalid operation" });
+  } catch (e) {
+    console.error("❌ Backend error:", e);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
 
 // ✅ Define Socket.io notify function
 // const notifyLowStock = (product) => {
@@ -1865,74 +1976,184 @@ const sendWhatsAppMessage = async (order) => {
 
 
 
+// // app.post('/order', async (req, res) => {
+// //   try {
+// //       const {order,address,userDetails,couponcode} = req.body;
+
+// //       // if (!userId || !email || !address || !phone || !products || products.length === 0) {
+// //       //     return res.status(400).json({ error: "All fields are required" });
+// //       // }
+// //  if (!order || !address || !userDetails ) {
+// //           return res.status(400).json({ error: "All fields are required" });
+// //       }
+      
+// //  // 🟢 Ensure 'order' is always an array
+// //  const ordersArray = Array.isArray(order) ? order : [order];
+// // console.log("orderaaarr",ordersArray)
+// //  // 🟢 Map products correctly inside the Order Schema
+// //  const products = ordersArray.map(item => ({
+// //      productId: item.productid?(item.productid):(item._id),
+// //     // productId:item.productid ?? item._id,  // ✅ safe and future-ready
+// //     // productId:item._id,
+// //      tag:item.tag,
+// //      discription:item.description,
+// //      image:item.image,
+// //      quantity: item.qty,
+// //      price: item.price,
+// //      discountprice: item.discountprice,
+// //      size: item.size,
+// //      shopname:item.shopname,
+// //      totalAmount:item.discountprice
+// //  })); 
+
+
+// // // 🟢 Subtract Ordered Quantity from Product Model
+// // for (const item of ordersArray) {
+// //   const product = await productsmodel.findById(item.productid?(item.productid):(item._id));
+// //   if (product) {
+// //       if (product.qty >= item.qty) {
+// //           product.qty -= item.qty; // 🛑 Subtract ordered quantity
+// //           await product.save();
+// //       } else {
+// //           return res.status(400).json({ error: `Not enough stock for product ID: ${item.productid}` });
+// //       }
+// //   }
+// // }
+
+// //       // Save Order in Database
+// //       const newOrder = new orderr ({
+// //         name:userDetails.name,
+// //           userId:userDetails._id,
+// //           email:userDetails.email,
+// //           address,
+// //           phone:userDetails.address[0].phone[0],
+// //           products
+// //               });
+
+// //       await newOrder.save();
+// //       orderEvent.emit('orderUpdated'); // 🔄🔄🔄🔄🛑🛑🛑🛑 Notify frontend
+// //       // Send WhatsApp Notification
+// //       //  sendWhatsAppMessage(newOrder);
+
+// //       res.status(201).json({ message: "Order Placed & Admin Notified!" });
+// //       if(couponcode.length>0){
+// //       applyCouponSuccess(userDetails._id,couponcode)
+// //       }
+// //       let orderprice = ordersArray.reduce((total, e) => total + (Array.isArray(e.discountprice) 
+// //   ? e.discountprice.reduce((sum, price) => sum + price, 0) 
+// //   : e.discountprice), 0);
+// //     // addPointsOnPurchase(userDetails._id,orderprice)
+// //   } catch (error) {
+// //       console.error("Order Error:", error);
+// //       res.status(500).json({ error: "Order Failed" });
+// //   }
+// });
+
 app.post('/order', async (req, res) => {
   try {
-      const {order,address,userDetails,couponcode} = req.body;
+    const { order, address, userDetails, couponcode } = req.body;
 
-      // if (!userId || !email || !address || !phone || !products || products.length === 0) {
-      //     return res.status(400).json({ error: "All fields are required" });
+    if (!order || !address || !userDetails) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const ordersArray = Array.isArray(order) ? order : [order];
+    console.log("orderaaarr", ordersArray);
+
+    const products = [];
+
+    for (const item of ordersArray) {
+      const singleProduct = {
+        productId: item.productid ? item.productid : item._id,
+        tag: item.tag || "",
+        discription: item.description || "",
+        image: item.image || [],
+        quantity: item.qty || 1,
+        price: item.price || 0,
+        discountprice: item.discountprice || 0,
+        size: item.size || "",
+        shopname: item.shopname || "",
+        totalAmount: item.discountprice || 0,
+        bundle: []
+      };
+
+      // If bundle is present, add it inside this product
+      if (item.bundle && Array.isArray(item.bundle) && item.bundle.length > 0) {
+        for (const bundleItem of item.bundle) {
+          singleProduct.bundle.push({
+            productId: bundleItem.productId ,
+             title: bundleItem.title || "",
+            image: bundleItem.image || '',
+            color: bundleItem.color || '',
+            original: bundleItem.original || 0,
+            price:bundleItem.price||0,
+            sizes:bundleItem.sizes||'',
+            bundletotalamount:bundleItem.bundletotalamount||0
+
+
+          });
+            
+
+          // 🔻 Subtract bundle product quantity from DB
+          // const product = await productsmodel.findById(bundleItem.productid || bundleItem._id);
+          // if (product) {
+          //   if (product.qty >= bundleItem.qty) {
+          //     product.qty -= bundleItem.qty;
+          //     await product.save();
+          //   } else {
+          //     return res.status(400).json({ error: `Not enough stock for bundled product: ${product.title || product.name}` });
+          //   }
+          // }
+        }
+      }
+
+      // 🔻 Subtract main product quantity from DB
+      // if (singleProduct.productId) {
+      //   const product = await productsmodel.findById(singleProduct.productId);
+      //   if (product) {
+      //     if (product.qty >= singleProduct.quantity) {
+      //       product.qty -= singleProduct.quantity;
+      //       await product.save();
+      //     } else {
+      //       return res.status(400).json({ error: `Not enough stock for product: ${product.title || product.name}` });
+      //     }
+      //   }
       // }
- if (!order || !address || !userDetails ) {
-          return res.status(400).json({ error: "All fields are required" });
-      }
-      
- // 🟢 Ensure 'order' is always an array
- const ordersArray = Array.isArray(order) ? order : [order];
-console.log("orderaaarr",ordersArray)
- // 🟢 Map products correctly inside the Order Schema
- const products = ordersArray.map(item => ({
-     productId: item.productid?(item.productid):(item._id),
-    // productId:item.productid ?? item._id,  // ✅ safe and future-ready
-    // productId:item._id,
-     tag:item.tag,
-     discription:item.description,
-     image:item.image,
-     quantity: item.qty,
-     price: item.price,
-     discountprice: item.discountprice,
-     size: item.size,
-     shopname:item.shopname,
-     totalAmount:item.discountprice
- })); 
 
+      // Add processed product to final products list
+      products.push(singleProduct);
+    }
 
-// 🟢 Subtract Ordered Quantity from Product Model
-for (const item of ordersArray) {
-  const product = await productsmodel.findById(item.productid?(item.productid):(item._id));
-  if (product) {
-      if (product.qty >= item.qty) {
-          product.qty -= item.qty; // 🛑 Subtract ordered quantity
-          await product.save();
-      } else {
-          return res.status(400).json({ error: `Not enough stock for product ID: ${item.productid}` });
-      }
-  }
-}
+    const newOrder = new orderr({
+      name: userDetails.name,
+      userId: userDetails._id,
+      email: userDetails.email,
+      address,
+      phone: userDetails.address?.[0]?.phone?.[0] || "",
+      products
+    });
 
-      // Save Order in Database
-      const newOrder = new orderr ({
-        name:userDetails.name,
-          userId:userDetails._id,
-          email:userDetails.email,
-          address,
-          phone:userDetails.address[0].phone[0],
-          products
-              });
+    await newOrder.save();
+    orderEvent.emit('orderUpdated');
 
-      await newOrder.save();
-      orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
-      // Send WhatsApp Notification
-      //  sendWhatsAppMessage(newOrder);
+    res.status(201).json({ message: "Order Placed & Admin Notified!" });
 
-      res.status(201).json({ message: "Order Placed & Admin Notified!" });
-      applyCouponSuccess(userDetails._id,couponcode)
-      let orderprice = ordersArray.reduce((total, e) => total + (Array.isArray(e.discountprice) 
-  ? e.discountprice.reduce((sum, price) => sum + price, 0) 
-  : e.discountprice), 0);
-    // addPointsOnPurchase(userDetails._id,orderprice)
+    if (couponcode?.length > 0) {
+      applyCouponSuccess(userDetails._id, couponcode);
+    }
+
+    const orderprice = ordersArray.reduce((total, e) => {
+      return total + (
+        Array.isArray(e.discountprice)
+          ? e.discountprice.reduce((sum, price) => sum + price, 0)
+          : e.discountprice || 0
+      );
+    }, 0);
+
+    // addPointsOnPurchase(userDetails._id, orderprice);
   } catch (error) {
-      console.error("Order Error:", error);
-      res.status(500).json({ error: "Order Failed" });
+    console.error("Order Error:", error);
+    res.status(500).json({ error: "Order Failed" });
   }
 });
 
@@ -2088,36 +2309,122 @@ setInterval(async () => {
 
 // ✅ User se Rating Accept karna
 // ✅ User se Rating Accept karna
-app.post("/rate", async (req, res) => { 
-  try {
-    const { userId, productId, rating, review } = req.body;
+// app.post("/rate", async (req, res) => { 
+//   try {
+//     const { userId, productId, rating, review,image } = req.body;
+//     console.log("🛩 Received images from frontend:", image);
+//     // 🛑 Ensure `rating` is a number and within 1-5
+//     if (!rating || typeof rating !== "number" || rating < 1 || rating > 5) {
+//       return res.status(400).json({ error: "Invalid rating. It must be a number between 1 and 5." });
+//     }
 
-    // 🛑 Ensure `rating` is a number and within 1-5
+//     // 🟡 Check if user has already rated this product
+//     let existingRating = await Rating.findOne({ userId, productId });
+
+//     if (existingRating) {
+//       existingRating.rating = rating;
+//       existingRating.review = review || existingRating.review;
+//        existingRating.image = image || existingRating.image;
+//       await existingRating.save();
+//     }
+    
+//      else {
+  
+//       await Rating.create({ userId, productId, rating, review,image});
+//     }
+
+//     // 🔄 Update Average Rating in Product Collection
+//     const allRatings = await Rating.find({ productId });
+//     const totalRatings = allRatings.length;
+//     const avgRating = allRatings.reduce((sum, r) => sum + r.rating, 0) / totalRatings;
+
+//     // await productsmodel.findByIdAndUpdate(productId, { avgRating, ratingCount: totalRatings, });
+
+//     await productsmodel.updateOne(
+//   { _id: productId, "productdetails._id": categoryId, "productdetails.colors._id": colorId },
+//   {
+//     $set: {
+//       "productdetails.$[cat].colors.$[col].avgRating": avgRating,
+//       "productdetails.$[cat].colors.$[col].ratingCount": totalRatings
+//     }
+//   },
+//   {
+//     arrayFilters: [
+//       { "cat._id": categoryId },
+//       { "col._id": colorId }
+//     ]
+//   }
+// );
+
+//     res.status(200).json({ message: "Rating submitted successfully", avgRating });
+//   } catch (error) {
+//     console.error("Error submitting rating:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+app.post("/rate", async (req, res) => {
+  try {
+    const { userId, productId, rating, review, image } = req.body;
+    console.log("📩 Received rating for colorId:", productId);
+
     if (!rating || typeof rating !== "number" || rating < 1 || rating > 5) {
       return res.status(400).json({ error: "Invalid rating. It must be a number between 1 and 5." });
     }
 
-    // 🟡 Check if user has already rated this product
-    let existingRating = await Rating.findOne({ userId, productId });
+    // 1️⃣ Check if user already rated this color
+    let existingRating = await Rating.findOne({ userId, productId: productId });
 
     if (existingRating) {
       existingRating.rating = rating;
       existingRating.review = review || existingRating.review;
+      existingRating.image = image || existingRating.image;
       await existingRating.save();
     } else {
-      await Rating.create({ userId, productId, rating, review });
+    let usernme = await userr.findOne({ _id: userId }, { name: 1, _id: 0 });
+    console.log(usernme)
+      await Rating.create({ userId, productId: productId, rating, review, image,userName:usernme.name });
     }
 
-    // 🔄 Update Average Rating in Product Collection
-    const allRatings = await Rating.find({ productId });
+    // 2️⃣ Calculate avgRating and ratingCount
+    const allRatings = await Rating.find({ productId: productId });
     const totalRatings = allRatings.length;
     const avgRating = allRatings.reduce((sum, r) => sum + r.rating, 0) / totalRatings;
 
-    await productsmodel.findByIdAndUpdate(productId, { avgRating });
+    // 3️⃣ Recursively find the color and update its avgRating and ratingCount
+    const allProducts = await productsmodel.find();
 
-    res.status(200).json({ message: "Rating submitted successfully", avgRating });
+    let updated = false;
+
+    for (let product of allProducts) {
+      for (let category of product.productdetails) {
+        for (let color of category.colors) {
+          if (color._id.toString() === productId) {
+            // Update nested fields
+            color.avgRating = avgRating;
+            color.ratingCount = totalRatings;
+
+            await product.save();
+            updated = true;
+            break;
+          }
+        }
+        if (updated) break;
+      }
+      if (updated) break;
+    }
+
+    if (!updated) {
+      return res.status(404).json({ error: "Color not found in products." });
+    }
+
+    res.status(200).json({
+      message: "Rating submitted and color rating updated successfully",
+      avgRating,
+      totalRatings,
+    });
   } catch (error) {
-    console.error("Error submitting rating:", error);
+    console.error("❌ Error submitting rating:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -2347,10 +2654,10 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 
 app.post("/return", async (req, res) => {
   try {
-    let { reason,subreason,selectedOption,orderdata } = req.body;
-    
+    let { reason,subreason,selectedOption,orderdata,uploadedUrls } = req.body;
+    console.log("uploadurlimag",uploadedUrls)
     // ✅ Correct validation
-    if (!reason || !subreason|| !selectedOption||  !orderdata) {
+    if (!reason || !subreason|| !selectedOption||  !orderdata || !uploadedUrls) {
       return res.status(400).json({ error: "All fields are required!" });
     }
 
@@ -2359,7 +2666,8 @@ app.post("/return", async (req, res) => {
       orderid: e._id,  // `_id` ko `orderId` me convert kiya
       reason: reason,
       subreason: subreason,
-      selectedOption:selectedOption
+      selectedOption:selectedOption,
+      image:uploadedUrls
       
     }));
  
@@ -2578,7 +2886,7 @@ app.post("/create", async (req, res) => {
 app.get('/get-coupons', async (req, res) => {
   console.log("📩 /get-coupons called");
 
-  const { userId, category, productname } = req.query;
+  const { userId, category, productname,bundel} = req.query;
   console.log("📌 Query Params:", { userId, category, productname });
 
   try {
@@ -2680,7 +2988,105 @@ app.get('/get-coupons', async (req, res) => {
 
 
 
+// GET /api/ratings/:id
+app.get("/rate/:id", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    console.log("mil ro rhi h",productId)
 
+    // Find all ratings for the given product ID
+    const ratings = await Rating.find({ productId });
+
+    if (!ratings || ratings.length === 0) {
+      return res.status(404).json([]);
+    }
+
+    // Send ratings to frontend
+    res.status(200).json(ratings);
+  } catch (error) {
+    console.error("Error fetching ratings:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+app.patch("/bundle", async (req, res) => {
+  const { ids,val } = req.body;
+console.log("bundleprice",val)
+  if (!Array.isArray(ids) || ids.length !== 2) {
+    return res.status(400).json({ message: "Exactly 2 IDs required" });
+  }
+
+  try {
+    const products = await productsmodel.find({
+      "productdetails.colors._id": { $in: ids }
+    });
+
+    if (!products.length) {
+      return res.status(404).json({ message: "No matching colors found." });
+    }
+
+    for (const product of products) {
+      for (const category of product.productdetails) {
+        for (const color of category.colors) {
+          const colorId = color._id.toString();
+          if (colorId === ids[0]) {
+            color.bundel = ids[1]; // 👈 opposite ID
+            color.bundelprice=val
+          } else if (colorId === ids[1]) {
+            color.bundel = ids[0]; // 👈 opposite ID
+            color.bundelprice=val
+          }
+        }
+      }
+      await product.save();
+    }
+
+    res.status(200).json({ message: "Bundle links set to opposite IDs." });
+  } catch (error) {
+    console.error("Bundle error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+
+
+app.get("/getbundle/:bundle", async (req, res) => {
+  const { bundle } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(bundle)) {
+    return res.status(400).json({ message: "Invalid bundle ID" });
+  }
+
+  const objectId = new mongoose.Types.ObjectId(bundle);
+
+  try {
+    const product = await productsmodel.findOne({
+      "productdetails.colors._id": objectId
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "Bundle color not found" });
+    }
+
+    // Traverse and find matching color
+    for (const category of product.productdetails) {
+      const matchedColor = category.colors.find(
+        (color) => color._id.toString() === bundle
+      );
+      if (matchedColor) {
+        return res.status(200).json(matchedColor); // ✅ Return the matched color
+      }
+    }
+
+    res.status(404).json({ message: "Color found in product but not extracted" });
+  } catch (error) {
+    console.error("Error fetching bundle:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 // app.listen(port, "0.0.0.0", () => {

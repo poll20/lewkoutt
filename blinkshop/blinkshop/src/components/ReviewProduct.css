@@ -1,0 +1,102 @@
+.review-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+.rating-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rating-number {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stars {
+  color: #f39c12;
+  font-size: 18px;
+}
+
+.review-count {
+  font-size: 14px;
+  margin-top: 5px;
+  color: #666;
+}
+
+.rating-bar-section {
+  margin-top: 20px;
+}
+
+.rating-bar {
+  display: flex;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.rating-bar span:first-child {
+  width: 20px;
+}
+
+.bar-track {
+  flex: 1;
+  height: 8px;
+  background: #eee;
+  margin: 0 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #f39c12;
+}
+
+.review-list {
+  margin-top: 40px;
+}
+
+.review-card {
+  display: flex;
+  align-items: flex-start;
+  margin: 20px 0;
+  background: #fafafa;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+  border-radius: 50%;
+}
+
+.review-card h4 {
+  margin: 0;
+  font-weight: bold;
+}
+
+.review-card p {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .review-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatar {
+    margin-bottom: 10px;
+  }
+}
