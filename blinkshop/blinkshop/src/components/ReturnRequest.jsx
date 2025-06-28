@@ -409,8 +409,10 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useBio } from "./BioContext";
+import { useLocation } from "react-router-dom";
 import img from "./image/img3.jpg";
 import { useDashboard } from "./dashboardforadmin/DashboardContext";
+import AddressList from "./AddressList";
 
 const REASONS = [
   {
@@ -467,9 +469,10 @@ const ReturnRequest = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [refundMode, setRefundMode] = useState("");
 const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
+// const[showmeaddress,setshowmeaddress]=useState(false)
 
   let { id } = useParams();
-  let { userorder, orderreturn } = useBio();
+  let { userorder, orderreturn,addresssetkro,showmeaddress,setshowmeaddress} = useBio();
   let { updateOrdersWithReturnDetails } = useDashboard();
 
   useEffect(() => {
@@ -518,6 +521,7 @@ const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
           body: formData,
         });
         const data = await res.json();
+        console.log("images are uploaded",data.secure_url)
         setUploadedUrls(prev => [...prev, data.secure_url]);
       } catch (err) {
         console.error("Upload failed:", err);
@@ -533,10 +537,17 @@ const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
       return;
     }
 
-    await orderreturn(reason, subReason, refundMode, returnprd, uploadedUrls);
+    await orderreturn(reason, subReason, refundMode, returnprd, uploadedUrls,addresssetkro);
     await updateOrdersWithReturnDetails();
     navigate("/");
   };
+
+    
+
+if(addresssetkro){
+  console.log("addresset hua kya",addresssetkro) 
+}
+     
 
   if (!returnprd.length) return <p>Loading...</p>;
 
@@ -660,11 +671,22 @@ const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
     {/* Pickup Address */}
     <div className="mb-5 text-sm">
       <p className="font-semibold mb-1">📍 Pick Up Address</p>
-      <div className="border p-2 rounded-md bg-gray-50">
+      {/* <div className="border p-2 rounded-md bg-gray-50">
         117 Geetanjali colony, Geetanjali colony Salasar enclave Mangyawas<br />
         Jaipur, Rajasthan, 302020<br />
         Tanushree Goyal +91 8955345400
-      </div>
+      </div> */}
+       
+            <div className="address-section-checkoutbuy">
+            <span>
+        {addresssetkro.length > 0
+          ? `${addresssetkro[0].building}/${addresssetkro[0].locality}, ${addresssetkro[0].city}`
+          : "No address available"}
+          {/* <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward> */}
+      </span>
+      <span onClick={()=>{setshowmeaddress(true)}}>{`->`}</span>
+            </div>
+            
     </div>
 
     {/* Check & Confirm */}
@@ -703,6 +725,29 @@ const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
 
   </>
 )}
+{
+  showmeaddress === true ? (
+    <div
+      style={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "white",
+        boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+        zIndex: 9999,
+        overflow: "auto",
+        borderRadius: "12px",
+        padding: "20px"
+      }}
+    >
+      <AddressList loc="return" />
+    </div>
+  ) : null
+}
+
 
     </div>
   );

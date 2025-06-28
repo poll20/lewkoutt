@@ -4,15 +4,15 @@ import "./AddressList.css";
 import { useAuth } from "./AuthContext";
 import { HiH1 } from "react-icons/hi2";
 import { useBio } from "./BioContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { use } from "react";
 import { useFirebaseAuth } from "./FirebaseContext";
 
-const AddressList = () => {
+const AddressList = ({loc}) => {
   
   const [otp, setOtp] = useState(""); // ✅ State for OTP inputefefe
 const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
-  const {handlenewaddress,handlechooseaddress,deleteandeditaddrress}=useBio()
+  const {handlenewaddress,handlechooseaddress,deleteandeditaddrress,setshowmeaddress}=useBio()
   const [pincode, setPincode] = useState("");
   const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
@@ -26,12 +26,13 @@ const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
    const [actionss,setaction]=useState()
     const navigate=useNavigate()
   const [selectedAddress, setSelectedAddress] = useState(null);
+  
 //  const{user,userDetails, fetchUserDetails }=useAuth()
 const{user,userDetails, fetchUserDetails }=useFirebaseAuth()
 const [userprf,setuserprf]=useState({ address: [] })
 const [editingAddressId, setEditingAddressId] = useState(null); // Track which one is being edited
 const [editedAddress, setEditedAddress] = useState({}); // Temp store for editing
-
+const {sec}=useParams()
  useEffect(()=>{
   if(userDetails && user){
     console.log("uer",userDetails)
@@ -156,6 +157,14 @@ let sendtocheckout = () => {
   if (chooseaddress) {
     handlechooseaddress(chooseaddress); // Contex t u p d a t e   k a r o
     navigate("/checkout"); // Data directly navigate ke saath bhejo
+  }
+};
+let sendtoreturncom = () => {
+  if (chooseaddress) {
+    handlechooseaddress(chooseaddress); // Contex t u p d a t e   k a r o
+     sessionStorage.setItem("comingBackFromAddress", "true");
+     setshowmeaddress(false)
+    // navigate(-1); // back to returnreques
   }
 };
 
@@ -401,7 +410,7 @@ useEffect(() => {
     </div> */}
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
-        <button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>
+        {loc!="return"?(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>):(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtoreturncom()}} >Return Address</button>)}
        </div>
       </div>
   );

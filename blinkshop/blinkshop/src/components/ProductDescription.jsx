@@ -546,7 +546,7 @@ console.log("kop",data,siz,qtys)
     console.log("buydata",data)
     let finalData = Array.isArray(data) ? data : [data];
     takebuydata(finalData)
-navigate("/address")
+navigate("/address/prd")
     }
     else{
       prop.showPopup("Please Selete a Size")

@@ -375,6 +375,7 @@ function Layout({ showPopup }) {
             <Route path="/" element={<Home />} />
             <Route path="/card" element={<Card />} />
             <Route path="/productmodel/:section" element={<Card />} />
+            <Route path="/searchresults" element={<Card />} />
             <Route path="/productdescription/:id" element={<ProductDescription showPopup={showPopup}/>} />
             <Route path="/cart" element={<AddToCart />} />
             <Route path="/login" element={<Login />} />
@@ -383,7 +384,7 @@ function Layout({ showPopup }) {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/rentcompo" element={<BottomUpSlidingList />} />
             <Route path="/userorder" element={<UserOrder />} />
-            <Route path="/address" element={<AddressList />} />
+            <Route path="/address/:sec" element={<AddressList />} />
             <Route path="/refferal" element={<Refferal />} />
             <Route path="/sizechart/:cate" element={<SizeChart />} />
             <Route path="/store/:store" element={<Card />} />

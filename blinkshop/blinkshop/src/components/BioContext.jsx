@@ -47,6 +47,7 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
  const[karocode,setkarocode]=useState("")
  const[prdreviewdata,setprdreviewdata]=useState([])
  const [getbundeldata,setbundeldata]=useState([])
+ const [showmeaddress,setshowmeaddress]=useState(false)
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -1196,37 +1197,79 @@ const fetchRatings = async (productId) => {
 
 
 
-let orderreturn=async(reason,subreason,selectedOption,orderdata,uploadedUrls)=>{
-  console.log("slec",selectedOption,uploadedUrls)
+// let orderreturn=async(reason,subreason,selectedOption,orderdata,uploadedUrls,address)=>{
+//   console.log("slec",selectedOption,uploadedUrls,address)
 
-  try{
-    setIsLoading(true)
-    let orderpost=await fetch(`${apiUrl}/return`,{
-      method:"POST",
+//   try{
+//     setIsLoading(true)
+//     let orderpost=await fetch(`${apiUrl}/return`,{
+//       method:"POST",
      
-      headers: { "Content-Type": "application/json",
-        // Authorization: `Bearer ${user.accessToken}`,
-      },
-      body: JSON.stringify({reason,subreason,selectedOption,orderdata,uploadedUrls}), 
+//       headers: { "Content-Type": "application/json",
+//         // Authorization: `Bearer ${user.accessToken}`,
+//       },
+//       body: JSON.stringify({reason,subreason,selectedOption,orderdata,uploadedUrls,address}), 
 
-    })
-    if(orderpost.ok){
-    //   const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //   settoastmsg("order return process successfull")
-    showPopup("Return Requested...")
-    }
-     // ✅ New Order ko State me Add Karo
+//     })
+//     if(orderpost.ok){
+//     //   const toast = new window.bootstrap.Toast(toastRef.current);
+//     // toast.show();
+//     //   settoastmsg("order return process successfull")
+//     showPopup("Return Requested...")
+//     }
+//      // ✅ New Order ko State me Add Karo
     
-  }
-  catch(e){
-    console.log(e)
-  }
-  finally{
-    setIsLoading(false)
-  }
+//   }
+//   catch(e){
+//     console.log(e)
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
 
-}
+// }
+let orderreturn = async (reason, subreason, selectedOption, orderdata, uploadedUrls, address) => {
+  console.log("📤 Preparing return request...");
+  console.log("➡ reason:", reason);
+  console.log("➡ subreason:", subreason);
+  console.log("➡ selectedOption:", selectedOption);
+  console.log("➡ orderdata:", orderdata);
+  console.log("➡ uploadedUrls:", uploadedUrls);
+  console.log("➡ address:", address);
+
+  const bodyToSend = {
+    reason,
+    subreason,
+    selectedOption,
+    orderdata,
+    uploadedUrls,
+    address,
+  };
+
+  try {
+    setIsLoading(true);
+
+    const orderpost = await fetch(`${apiUrl}/return`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bodyToSend),
+    });
+
+    if (orderpost.ok) {
+      showPopup("Return Requested...");
+    } else {
+      const errData = await orderpost.json();
+      console.error("❌ Return failed (400 or 500):", errData);
+      alert("Return Failed: " + (errData.error || "Unknown error"));
+    }
+  } catch (e) {
+    console.error("❌ Fetch Error:", e);
+    alert("Network or Server Error");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
 
 const fetchCoupons = async (cate, title) => {
@@ -1381,6 +1424,8 @@ if(user && userDetails){
         callreivewfunc,
         getBundleColorData,
         getbundeldata,
+        setshowmeaddress,
+        showmeaddress
         
 
         

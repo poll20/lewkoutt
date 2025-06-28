@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+
   import "./Card.css";
-  import { NavLink, useParams } from "react-router-dom";
+  import { NavLink, useParams,useSearchParams  } from "react-router-dom";
   import { FaChevronDown, FaChevronUp } from "react-icons/fa";
   import { useBio } from "./BioContext";
   import img1 from "./image/img1.jpg";
@@ -16,7 +17,7 @@ const Card = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
     const[prdallsizes,setprdallsizes]=useState([])
     const[prdqqty,setprdqqty]=useState([])
-    const [addtocartkeliyeid,setaddtocartkeliyeid]=useState("")
+    const [addtocartkeliyeid,setaddtocartkeliyeid]=useState("") 
     const[sizesshow,setsizesshow]=useState(false)
     const [products, setProducts] = useState([]);
     const [originalproducts, setoriginalProducts] = useState([]);
@@ -27,7 +28,8 @@ const Card = (props) => {
   console.log("wish",wish)
     // console.log("storeee",store)
     const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly} = useBio();
-
+ const [params] = useSearchParams();
+  const query = params.get("q");
     const a = useMemo(() => {
       return productdataonlydetail.filter((e) =>
         bestsellingdata.some(
@@ -247,114 +249,7 @@ const Card = (props) => {
     };
 
 
-  // const applyFilters = (data) => {
-  //   console.log("Filtering data:", data);
-  //   let filteredProducts = [...data];
   
-  //   const { pricerangemin, pricerangemax, sizes, bottomsizes, color, categories } = filters;
-  
-  //   // Filter by price range
-  //   if (pricerangemin || pricerangemax) {
-  //     filteredProducts = filteredProducts.filter(
-  //       (product) =>
-  //         product.price >= (pricerangemin || 0) &&
-  //         product.price <= (pricerangemax || Infinity)
-  //     );
-  //   }
-  
-  //   // Filter by sizes
-  //   if (sizes.length > 0 || bottomsizes.length > 0) {
-  //     filteredProducts = filteredProducts.filter((product) =>
-  //       sizes.some((size) => product.sizes.includes(size)) ||
-  //       bottomsizes.some((size) => product.sizes.includes(size))
-  //     );
-  //   }
-  
-  //   // Filter by color
-  //   if (color.length > 0) {
-  //     filteredProducts = filteredProducts.filter((product) =>
-  //       color.includes(product.color)
-  //     );
-  //   }
-  
-  //   // Filter by categories
-  //   if (categories.length > 0) {
-  //     filteredProducts = filteredProducts.filter((product) =>
-  //       categories.includes(product.category)
-  //     );
-  //   }
-  
-  //   // Filter by selected sizes
-  //   if (Object.values(selectedSizes).flat().length > 0) {
-  //     filteredProducts = filteredProducts.filter((product) =>
-  //       Object.keys(selectedSizes).some((category) =>
-  //         selectedSizes[category].some((size) =>
-  //           product.colors.some((color) =>
-  //             color.sizes.some((e) => e.size === size)
-  //           )
-  //         )
-  //       )
-  //     );
-  //   }
-  
-  //   // Apply sorting
-  //   switch (selectedSortOption) {
-  //     case "Price: Low to High":
-  //       filteredProducts.sort((a, b) => a.price - b.price);
-  //       break;
-  //     case "Price: High to Low":
-  //       filteredProducts.sort((a, b) => b.price - a.price);
-  //       break;
-  //     case "New Arrival":
-  //       // Sort logic for New Arrival (implement as needed)
-  //       break;
-  //     case "Discount":
-  //       filteredProducts.sort((a, b) => b.discount - a.discount);
-  //       break;
-  //     case "Best Seller":
-  //       // Sorting logic for Best Seller (implement as needed)
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  
-  //   return filteredProducts;
-  // };
-  
-    
-    
-
-  //     const setShowSize=(id)=>{
-  //       console.log("iid",id)
-  //       // let prd=productdataonlydetail.filter((e)=>(e._id==id))
-  // //       let prd = productdataonlydetail
-  // // .flatMap(e => e.colors) // Sare products ke colors ko ek array bana diya
-  // // .filter(color => color._id == id); // Colors ke andar se specific _id match kiya
-  // let prd=productdataonlydetail
-  // .map(product => {
-  //   const matchingColor = product.colors.find(color => color._id === id);
-  //   if (matchingColor) {
-  //     return {
-  //       ...product,  // Saara product data
-  //       colors: [matchingColor] // Sirf matching color object ek array me
-  //     };
-  //   }
-  //   return null; // Agar matching color na mile toh null return karo
-  // }).filter(product => product !== null); // Sirf valid products rakho
-  // console.log("prddd",prd)
-  // let siz=prd[0].colors[0].sizes.map((e)=>e.size)
-  
-  // if (Array.isArray(prd)) {
-  //   prd = prd[0]; // Take the first object if it's an array
-  // }
-  //     setprdallsizes(siz)  
-  //     setaddtocartkeliyeid(prd)
-  //     setsizesshow(true)
-  //     }
-
-  // let chlodekhe=(s,i)=>{
-  //   console.log("dekhte h",s,i)
-  // }
 
   const setShowSize = (id) => {
     console.log("iid", id);
@@ -399,11 +294,12 @@ const chlodekhe = (s, i) => {
       
       setIsLoading(true);
       try {
+        setIsLoading(true)
         const response = await fetch(url);
         const data = await response.json();
         console.log("jpbr",data)
         
-        const productdetails=data
+        const productdetails=query?.length==0?(data):(data.products[0].productdetails)
         console.log("my ka gdata",productdetails)
         const filteredData = applyFilters(productdetails);
         setProducts(filteredData);
@@ -414,7 +310,9 @@ const chlodekhe = (s, i) => {
       } catch (error) {
         console.error("Error fetching products:", error);
       }
+      finally{
       setIsLoading(false);
+      }
     };
 
   useEffect(() => {
@@ -458,6 +356,12 @@ const chlodekhe = (s, i) => {
     );
 
 }
+if(query){
+  console.log("quesry mili",query)
+  fetchProducts(
+      `${apiUrl}/search?q=${query}`
+    );
+}
   else if (category) {
       fetchProducts(
         `${apiUrl}/rent?operation=filtered&category=${category}`,
@@ -481,7 +385,7 @@ const chlodekhe = (s, i) => {
       setProducts(a);
     }
     setIsLoading(false);
-  }, [section, category, store, rent, wish, productdataonlydetail,filters, rentdata, wishlistdata,bestsale,productdata,a]);
+  }, [section, category, store, rent, wish, productdataonlydetail,filters, rentdata, wishlistdata,bestsale,productdata,a,query]);
 
 
   // console.log("kdod",prdallsizes)

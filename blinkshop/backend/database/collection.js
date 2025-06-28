@@ -188,7 +188,7 @@ const orders = mongoose.Schema({
   name: String,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   email: String,
-  address: [String],
+  address: [addressSchema],
   products: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
@@ -222,7 +222,7 @@ const orders = mongoose.Schema({
   reason: String,
   subreason: String,
   selectedOption: String,
-  image:{type:[String]},
+  imageofreturn:{type:[String]},
   returnDate: Date,
 }, { timestamps: true });
 
@@ -399,6 +399,13 @@ const ProductSchema = new mongoose.Schema({
     productdetails:[CategorySchema]
   },{_id:true});  // Ensures timestamps are added to the main document
 
+  // models/Product.js
+ProductSchema.index({
+  "productdetails.tag": "text",
+  "productdetails.title": "text",
+  "productdetails.description": "text",
+  "productdetails.cate": "text"
+});
 
 // 2dsphere Index for Location-Based Querying
 // CategorySchema.index({ location: "2dsphere" });
@@ -454,6 +461,8 @@ let returnscema=mongoose.Schema({
   reason:String,
   subreason:String,
   selectedOption:String,  
+  imageofreturn:{type:[String]},
+  addressofreturn:[addressSchema],
   returnDate:{ type: Date, default: Date.now }
 })
 // const mongoose = require("mongoose");

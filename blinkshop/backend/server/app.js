@@ -2058,7 +2058,7 @@ app.post('/order', async (req, res) => {
     }
 
     const ordersArray = Array.isArray(order) ? order : [order];
-    console.log("orderaaarr", ordersArray);
+    console.log("orderaaarr", ordersArray,address);
 
     const products = [];
 
@@ -2124,15 +2124,26 @@ app.post('/order', async (req, res) => {
       products.push(singleProduct);
     }
 
+    const addressd = {
+  pincode: userDetails.address?.[0]?.pincode || "",
+  building: userDetails.address?.[0]?.building || "",
+  locality: userDetails.address?.[0]?.locality || "",
+  address: userDetails.address?.[0]?.address || "",
+  phone: userDetails.address?.[0]?.phone || [],
+  city: userDetails.address?.[0]?.city || "Jaipur",
+  state: userDetails.address?.[0]?.state || "Rajasthan",
+  isDefault: userDetails.address?.[0]?.isDefault || false,
+};
+
     const newOrder = new orderr({
       name: userDetails.name,
       userId: userDetails._id,
       email: userDetails.email,
-      address,
+      address:addressd,
       phone: userDetails.address?.[0]?.phone?.[0] || "",
       products
     });
-
+console.log("neworder",newOrder)
     await newOrder.save();
     orderEvent.emit('orderUpdated');
 
@@ -2652,37 +2663,101 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 // ✅ Start Server
 
 
+// app.post("/return", async (req, res) => {
+//   try {
+//     let { reason,subreason,selectedOption,orderdata,uploadedUrls,address} = req.body;
+//     console.log("uploadurlimag",uploadedUrls,address)
+//     // ✅ Correct validation
+//     if (!reason || !subreason|| !selectedOption||  !orderdata || !uploadedUrls ||address) {
+//       return res.status(400).json({ error: "All fields are required!" });
+//     }
+
+//         const addressd = {
+//   pincode: address?.[0]?.pincode || "",
+//   building: address?.[0]?.building || "",
+//   locality: address?.[0]?.locality || "",
+//   address: address?.[0]?.address || "",
+//   phone: address?.[0]?.phone || [],
+//   city: address?.[0]?.city || "Jaipur",
+//   state: address?.[0]?.state || "Rajasthan",
+//   isDefault: address?.[0]?.isDefault || false,
+// };
+//     // ✅ Converting frontend data into proper format
+//     const returnData = orderdata.map(e => ({
+//       orderid: e._id,  // `_id` ko `orderId` me convert kiya
+//       reason: reason,
+//       subreason: subreason,
+//       selectedOption:selectedOption,
+//        imageofreturn:uploadedUrls,
+//        addressofreturn:addressd
+      
+//     }));
+//     console.log("return data",returnData)
+ 
+//     // ✅ Saving data in database
+//     let savedReturns = await returnmodel.create(returnData);
+//  console.log("savreretun",savedReturns)
+
+// //  await orderr.findByIdAndDelete({_id:orderdata[0]._id})
+//     return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
+//   } catch (error) {
+//     console.error("Error in return request:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
 app.post("/return", async (req, res) => {
   try {
-    let { reason,subreason,selectedOption,orderdata,uploadedUrls } = req.body;
-    console.log("uploadurlimag",uploadedUrls)
-    // ✅ Correct validation
-    if (!reason || !subreason|| !selectedOption||  !orderdata || !uploadedUrls) {
-      return res.status(400).json({ error: "All fields are required!" });
-    }
+    let { reason, subreason, selectedOption, orderdata, uploadedUrls, address } = req.body;
 
-    // ✅ Converting frontend data into proper format
+    console.log("✅ Incoming Data:");
+    console.log("➡ reason:", reason);
+    console.log("➡ subreason:", subreason);
+    console.log("➡ selectedOption:", selectedOption);
+    console.log("➡ orderdata:", Array.isArray(orderdata) ? `✅ Array (${orderdata.length})` : "❌ Not array", orderdata);
+    console.log("➡ uploadedUrls:", Array.isArray(uploadedUrls) ? `✅ Array (${uploadedUrls.length})` : "❌ Not array", uploadedUrls);
+    console.log("➡ address:", Array.isArray(address) ? `✅ Array (${address.length})` : "❌ Not array", address);
+
+    // 🔒 Safe Validation
+    if (!reason) return res.status(400).json({ error: "Missing reason" });
+    if (!subreason) return res.status(400).json({ error: "Missing subreason" });
+    if (!selectedOption) return res.status(400).json({ error: "Missing selectedOption" });
+    if (!Array.isArray(orderdata) || orderdata.length === 0) return res.status(400).json({ error: "Invalid or empty orderdata" });
+    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 6) return res.status(400).json({ error: "Need at least 6 images" });
+    if (!Array.isArray(address) || address.length === 0) return res.status(400).json({ error: "Address is required" });
+
+    const addressd = {
+      pincode: address?.[0]?.pincode || "",
+      building: address?.[0]?.building || "",
+      locality: address?.[0]?.locality || "",
+      address: address?.[0]?.address || "",
+      phone: address?.[0]?.phone || [],
+      city: address?.[0]?.city || "Jaipur",
+      state: address?.[0]?.state || "Rajasthan",
+      isDefault: address?.[0]?.isDefault || false,
+    };
+
     const returnData = orderdata.map(e => ({
-      orderid: e._id,  // `_id` ko `orderId` me convert kiya
-      reason: reason,
-      subreason: subreason,
-      selectedOption:selectedOption,
-      image:uploadedUrls
-      
+      orderid: e._id,
+      reason,
+      subreason,
+      selectedOption,
+      imageofreturn: uploadedUrls,
+      addressofreturn: addressd,
     }));
- 
-    // ✅ Saving data in database
-    let savedReturns = await returnmodel.create(returnData);
- console.log("savreretun",savedReturns)
 
-//  await orderr.findByIdAndDelete({_id:orderdata[0]._id})
+    console.log("✅ Final returnData to save:", returnData);
+
+    let savedReturns = await returnmodel.create(returnData);
+    console.log("✅ Return Saved:", savedReturns);
+
     return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
+
   } catch (error) {
-    console.error("Error in return request:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("❌ Error in return request:", error);
+    return res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 });
-
 
 
 cron.schedule("*/5 * * * *", async () => {
@@ -3048,6 +3123,95 @@ console.log("bundleprice",val)
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+
+app.get("/search", async (req, res) => {
+  const { q } = req.query;
+
+  if (!q || q.trim() === "") {
+    return res.json({ products: [] });
+  }
+
+  try {
+    const results = await productsmodel.aggregate([
+      {
+        $search: {
+          index: "lewkoutsearch",
+          compound: {
+            should: [
+              {
+                text: {
+                  query: q,
+                  path: [
+                    "productdetails.tag",
+                    "productdetails.title",
+                    "productdetails.description",
+                    "productdetails.colors.title",
+                    "productdetails.colors.tag",
+                    "productdetails.colors.description"
+                  ],
+                  fuzzy: {
+                    maxEdits: 2
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        $project: {
+          category: 1,
+          image: 1,
+          productdetails: {
+            $filter: {
+              input: "$productdetails",
+              as: "detail",
+              cond: {
+                $or: [
+                  { $regexMatch: { input: "$$detail.title", regex: q, options: "i" } },
+                  { $regexMatch: { input: "$$detail.tag", regex: q, options: "i" } },
+                  { $regexMatch: { input: "$$detail.description", regex: q, options: "i" } },
+                  {
+                    $gt: [
+                      {
+                        $size: {
+                          $filter: {
+                            input: "$$detail.colors",
+                            as: "color",
+                            cond: {
+                              $or: [
+                                { $regexMatch: { input: "$$color.title", regex: q, options: "i" } },
+                                { $regexMatch: { input: "$$color.tag", regex: q, options: "i" } },
+                                { $regexMatch: { input: "$$color.description", regex: q, options: "i" } }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      0
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      { $limit: 10 }
+    ]);
+
+    res.json({ products: results });
+  } catch (err) {
+    console.error("Search Error:", err);
+    res.status(500).json({ error: "Search failed" });
+  }
+});
+
+
+
+
 
 
 
