@@ -299,7 +299,7 @@
     const location = useLocation();
     
   if( isRegistered){
-    navigate("/profile")
+    navigate(-1)
   }
     useEffect(() => {
       const params = new URLSearchParams(location.search);

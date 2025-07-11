@@ -1,15 +1,18 @@
 require('dotenv').config();
 let express=require("express")
 let app= express()
+const axios = require("axios");
 const cron = require("node-cron")
 const jwt = require("jsonwebtoken");
 // const http = require("http"); // ✅ Required for Socket.io abhi nhiii
 // const socketIo = require("socket.io"); // ✅ Import Socket.io
 const EventEmitter = require('events');
 const orderEvent = new EventEmitter();
+const slotevent = new EventEmitter();
 
-// const verifyFirebaseToken = require("../authMiddleware");
-// const isAdmin = require("./adminCheck");
+// const verifyFirebaseToken = require("./authMiddleware");
+// const verifyFirebaseToken =require("authMiddleware.js")
+// const isAdmin = require("adminCheck.js");
 const { upload, uploadToCloudinary } = require('./uploadToCloudinary');
 
 
@@ -44,7 +47,7 @@ const twilio = require("twilio");
 // let wishmodel=require("../database/collection.js")
 let bodyparser=require("body-parser")
 // let addtocart=require("../database/collection.js")
-let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage  }=require("../database/collection.js")
+let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel  }=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const products = [
   
@@ -61,12 +64,12 @@ const products = [
 
 
 const cors = require('cors');
-app.use(cors());//te localhost m h
-// app.use(cors({
-//   origin: "https://lewkout.netlify.app", // Your frontend URL
-//   methods: "GET,POST,PUT,PATCH,DELETE",
-//   credentials: true
-// }));//ye deploy ke baad 
+// app.use(cors());//te localhost m h
+app.use(cors({
+  origin: "https://lewkout.netlify.app", // Your frontend URL
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -77,6 +80,8 @@ app.use(bodyparser.json())
 //   }) 
 // require("../database/dbconn.js")
 const connectDB = require('../database/dbconn.js');
+const isAdmin = require('./adminCheck.js');
+const verifyFirebaseToken = require('./authMiddleWare.js');
 app.get("/",(req,res)=>{
     res.send("hello")
 })
@@ -131,9 +136,12 @@ app.get("/events", (req, res) => {
   };
 
   orderEvent.on("orderUpdated", sendEvent);
+  // slotevent.on("slotUpdated",sendEvent)
 
   req.on("close", () => {
       orderEvent.removeListener("orderUpdated", sendEvent);
+  // slotevent.removeListener("slotUpdated", sendEvent);
+
   });
 });
 
@@ -650,7 +658,7 @@ app.post("/user/logout", async (req, res) => {
 //   }
 // });
 
-app.put("/user/update-role/:userId", async (req, res) => {
+app.put("/user/update-role/:userId",isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
       const { role, shopname, shopaddress } = req.body;
 
@@ -868,8 +876,8 @@ app.patch('/user/:userId/address', async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { pincode, phone,  building, locality, isDefault } = req.body;
-    console.log("sab kuch",pincode, phone, building, locality, isDefault)
+    const { pincode,uname, phone,  building, locality,city,state,saveas, isDefault } = req.body;
+    console.log("sab kuch",pincode, phone, building, locality,saveas, isDefault)
 
     if (phone) {
       console.log("phone received:", phone);
@@ -904,11 +912,13 @@ app.patch('/user/:userId/address', async (req, res) => {
       user.phone.push(phone);
       user.address.push({
         pincode,
+        uname,
         building,
         locality,
         phone,
-        city: "Jaipur",
-        state: "Rajasthan",
+        city,
+        state,
+        saveas,
         isDefault: isDefault || false,
       });
       
@@ -1170,7 +1180,7 @@ catch(e){
 //   }
 // });
 
-app.post("/productmodel", async (req, res) => {
+app.post("/productmodel",isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
     const productData = req.body;
     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
@@ -1332,6 +1342,59 @@ app.get("/productmodell", async (req, res) => {
   }
 });
 
+// GET /api/product/:id
+app.get("/product/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Try direct match by _id of main product
+    let product = await productsmodel.findById(id);
+    if (product) return res.json(product);
+
+    // If not found, try match by productdetails._id
+    product = await productsmodel.findOne({ "productdetails._id": id });
+    if (product) {
+      // Filter only the matching productdetail
+      const matchedDetail = product.productdetails.find(
+        (detail) => detail._id.toString() === id
+      );
+      return res.json({
+        ...product.toObject(),
+        productdetails: [matchedDetail], // return only matched detail
+      });
+    }
+
+    // If still not found, try match by productdetails.colors._id
+    product = await productsmodel.findOne({ "productdetails.colors._id": id });
+    if (product) {
+      // Find the matching productdetail and color
+      const matchedDetail = product.productdetails.find((detail) =>
+        detail.colors.some((color) => color._id.toString() === id)
+      );
+
+      const matchedColor = matchedDetail.colors.find(
+        (color) => color._id.toString() === id
+      );
+
+      return res.json({
+        ...product.toObject(),
+        productdetails: [
+          {
+            ...matchedDetail,
+            colors: [matchedColor], // return only the matched color
+          },
+        ],
+      });
+    }
+
+    // If nothing found
+    return res.status(404).json({ message: "Product not found" });
+
+  } catch (err) {
+    console.error("Product fetch error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 
@@ -1656,7 +1719,7 @@ app.patch('/productmodel/:id', async (req, res) => {
 
 
 
-app.patch('/editordeleteproduct/:id', async (req, res) => {
+app.patch('/editordeleteproduct/:id',isAdmin,verifyFirebaseToken, async (req, res) => {
   const { id } = req.params;
   let updateData = req.body;
   console.log("ye h mili",id)
@@ -1720,7 +1783,7 @@ console.log("updated my data",updatedProduct)
 });
 
 
-app.patch("/deleteproductfromcate/:id", async (req, res) => {
+app.patch("/deleteproductfromcate/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
   let { id } = req.params;
 
   try {
@@ -2051,7 +2114,7 @@ const sendWhatsAppMessage = async (order) => {
 
 app.post('/order', async (req, res) => {
   try {
-    const { order, address, userDetails, couponcode } = req.body;
+    const { order, address, userDetails,distance, couponcode } = req.body;
 
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
@@ -2125,15 +2188,16 @@ app.post('/order', async (req, res) => {
     }
 
     const addressd = {
-  pincode: userDetails.address?.[0]?.pincode || "",
-  building: userDetails.address?.[0]?.building || "",
-  locality: userDetails.address?.[0]?.locality || "",
+  pincode: address?.[0]?.pincode || "",
+  building: address?.[0]?.building || "",
+  locality:address?.[0]?.locality || "",
   address: userDetails.address?.[0]?.address || "",
-  phone: userDetails.address?.[0]?.phone || [],
-  city: userDetails.address?.[0]?.city || "Jaipur",
-  state: userDetails.address?.[0]?.state || "Rajasthan",
-  isDefault: userDetails.address?.[0]?.isDefault || false,
+  phone: address?.[0]?.phone || [],
+  city: address?.[0]?.city || "Jaipur",
+  state: address?.[0]?.state || "Rajasthan",
+  isDefault: address?.[0]?.isDefault || false,
 };
+console.log("ordr process hua",addressd)
 
     const newOrder = new orderr({
       name: userDetails.name,
@@ -2141,7 +2205,8 @@ app.post('/order', async (req, res) => {
       email: userDetails.email,
       address:addressd,
       phone: userDetails.address?.[0]?.phone?.[0] || "",
-      products
+      products,
+      deliverydistance:distance
     });
 console.log("neworder",newOrder)
     await newOrder.save();
@@ -2170,7 +2235,7 @@ console.log("neworder",newOrder)
 
 
 // 🔵 GET: Fetch all orders (For Admin)
-app.get('/orders', async (req, res) => {
+app.get('/orders',isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
       const orders = await orderr.find().populate('products.productId').lean(); // Populate product details
       res.status(200).json(orders);
@@ -2219,7 +2284,7 @@ console.log("Order Products:", userOrders[0].products);
   }
 });
 
-app.put('/order/deliver/:id', async (req, res) => {
+app.put('/order/deliver/:id',isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
       const order = await orderr.findById(req.params.id);
       const {userDetails}=req.body 
@@ -2876,7 +2941,7 @@ app.get("/return", async (req, res) => {
   }
 });
 
-app.post("/moodmsg", async (req, res) => {
+app.post("/moodmsg",isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
     const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
 
@@ -2920,7 +2985,7 @@ app.get("/moodmessage", async (req, res) => {
 });
 
 // DELETE
-app.delete("/moodmsg/:id", async (req, res) => {
+app.delete("/moodmsg/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
     await moodmodel.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Deleted successfully" });
@@ -2930,7 +2995,7 @@ app.delete("/moodmsg/:id", async (req, res) => {
 });
 
 // UPDATE
-app.put("/moodmsg/:id", async (req, res) => {
+app.put("/moodmsg/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
     const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
     const updated = await moodmodel.findByIdAndUpdate(
@@ -2944,7 +3009,7 @@ app.put("/moodmsg/:id", async (req, res) => {
   }
 });
 
-app.post("/create", async (req, res) => {
+app.post("/create",isAdmin,verifyFirebaseToken, async (req, res) => {
   try {
     const newCoupon = new cpn(req.body);
     await newCoupon.save();
@@ -3085,7 +3150,7 @@ app.get("/rate/:id", async (req, res) => {
 });
 
 
-app.patch("/bundle", async (req, res) => {
+app.patch("/bundle",isAdmin,verifyFirebaseToken, async (req, res) => {
   const { ids,val } = req.body;
 console.log("bundleprice",val)
   if (!Array.isArray(ids) || ids.length !== 2) {
@@ -3252,10 +3317,170 @@ app.get("/getbundle/:bundle", async (req, res) => {
   }
 });
 
+// ✅ Google Maps API key
+const apiKey = process.env.DISTANCE_MATRIX_APIKEY; // replace this safely
+const geocoding=process.env.GEOCODING_APIKEY
+// ✅ Admin ka fixed address
+const adminAddress = "117 geetanjali colony Salasar enclave mangyawas jaipur rajasthan";
 
-// app.listen(port, "0.0.0.0", () => {
-//   console.log(`🚀 Server running on port: ${port}`);
+// // ✅ Distance Route
+// app.get("/getdistance", async (req, res) => {
+//   const userAddress = req.query.userAddress;
+// console.log("user ka addres",userAddress)
+//   if (!userAddress) return res.status(400).json({ error: "User address required" });
+
+//   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(adminAddress)}&destinations=${encodeURIComponent(userAddress)}&key=${apiKey}`;
+
+//   try {
+//     const response = await axios.get(url);
+//     const data = response.data;
+//     console.log("disatace",data)
+
+//     if (data.rows[0].elements[0].status === "OK") {
+//          console.log("disatace",data.rows[0].elements[0].distance.text)
+//       const distance = data.rows[0].elements[0].distance.text;
+//       const duration = data.rows[0].elements[0].duration.text;
+//       return res.json({ distance, duration });
+//     } else {
+//       return res.status(400).json({ error: "Could not calculate distance" });
+//     }
+//   } catch (err) {
+//     console.error("Erroring..:", err.message);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
 // });
+
+// ✅ Route: Calculate Distance + Validate Address
+// app.get("/getdistance", async (req, res) => {
+//   const userAddress = req.query.userAddress;
+// console.log("userka address",userAddress)
+//   if (!userAddress) return res.status(400).json({ error: "User address required" });
+
+//   try {
+//     // ✅ Step 1: Validate Address using Geocoding API
+//     const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(userAddress)}&key=${geocoding}`;
+//     const geoRes = await axios.get(geoURL);
+//     const geoData = geoRes.data;
+
+//    const result = geoData.results[0];
+// console.log("resulttt",result)
+// if (
+//   geoData.status !== "OK" ||
+//   !result ||
+//   result.partial_match || // <-- 🚨 Google's own flag: true if match is incomplete
+//   !result.address_components.some(c => c.types.includes("street_address") || c.types.includes("premise") || c.types.includes("route")) // <-- check for real address components
+// ) {
+//   return res.status(400).json({ error: "Invalid or incomplete address provided" });
+// }
+//     // ✅ Step 2: If valid, proceed to calculate distance
+//     const distURL = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(adminAddress)}&destinations=${encodeURIComponent(userAddress)}&key=${apiKey}`;
+//     const distRes = await axios.get(distURL);
+//     const distData = distRes.data;
+
+//     if (
+//       distData.rows &&
+//       distData.rows[0] &&
+//       distData.rows[0].elements[0] &&
+//       distData.rows[0].elements[0].status === "OK"
+//     ) {
+//       const distance = distData.rows[0].elements[0].distance.text;
+//       const duration = distData.rows[0].elements[0].duration.text;
+//       console.log("distance and duration",distance,duration)
+//       return res.json({ distance, duration });
+//     } else {
+//       return res.status(400).json({ error: "Could not calculate distance" });
+//     }
+//   } catch (err) {
+//     console.error("Error:", err.message);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+// ✅ Route: Calculate Distance + Validate Address
+app.get("/getdistance", async (req, res) => {
+  const userAddress = req.query.userAddress;
+  console.log("📍 User Address:", userAddress);
+
+  if (!userAddress) return res.status(400).json({ error: "User address required" });
+
+  try {
+    // 🔹 Step 1: Validate the user address using Geocoding API
+    const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(userAddress)}&key=${geocoding}`;
+    const geoRes = await axios.get(geoURL);
+    const geoData = geoRes.data;
+
+    const result = geoData.results[0];
+console.log("Geocoding result:", JSON.stringify(result, null, 2));
+
+    // ❌ Reject if partial, vague, or no real address structure
+    if (
+  geoData.status !== "OK" ||
+  !result ||
+  !result.address_components.some(c =>
+    c.types.includes("street_address") ||
+    c.types.includes("premise") ||
+    c.types.includes("route") ||
+    c.types.includes("sublocality") ||
+    c.types.includes("locality")
+  )
+)
+ {
+      console.log("❌ Invalid or partial address:", geoData);
+      return res.status(400).json({ error: "Invalid or incomplete address provided" });
+    }
+
+    // 🔹 Step 2: Get Distance using Distance Matrix API
+    const distURL = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(adminAddress)}&destinations=${encodeURIComponent(userAddress)}&key=${apiKey}`;
+    const distRes = await axios.get(distURL);
+    const distData = distRes.data;
+
+    const element = distData.rows?.[0]?.elements?.[0];
+    if (element && element.status === "OK") {
+      const distance = element.distance.text;
+      const duration = element.duration.text;
+      console.log("✅ Distance:", distance, "| Duration:", duration);
+      return res.json({ distance, duration });
+    } else {
+      return res.status(400).json({ error: "Could not calculate distance" });
+    }
+
+  } catch (err) {
+    console.error("❗ Server error:", err.message);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
+// 🔄 TOGGLE status
+// ✅ GET all slots
+app.get("/slots", async (req, res) => {
+  try {
+    const slots = await slotmodel.find();
+    res.json(slots);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch slots" });
+  }
+});
+
+// ✅ TOGGLE slot disable/enable
+app.post("/slot-status/toggle",isAdmin,verifyFirebaseToken, async (req, res) => {
+  const { label } = req.body;
+  try {
+    const slot = await slotmodel.findOne({ label });
+    if (!slot) return res.status(404).json({ error: "Slot not found" });
+
+    slot.disabled = !slot.disabled;
+    await slot.save();
+
+    res.json({ success: true, slot });
+    // slotevent.emit("slotUpdated")
+  } catch (err) {
+    res.status(500).json({ error: "Toggle failed" });
+  }
+});
+app.listen(port, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port: ${port}`);
+});
 (async () => {
   await connectDB();  // ✅ पहले DB कनेक्ट करो, फिर सर्वर स्टार्ट करो
   app.listen(port, () => console.log(`🚀 Server running on port: ${port}`));

@@ -97,6 +97,7 @@ const DashNavbar = () => {
                 
                 <NavLink to="/admin/coupon"><li>Coupon</li></NavLink>
                 <NavLink to="/admin/bandle"><li>Bundel</li></NavLink>
+                 <NavLink to="/admin/slots"><li>Slot Control</li></NavLink>
                 
                
               </ul>

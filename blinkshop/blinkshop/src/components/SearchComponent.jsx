@@ -258,7 +258,7 @@ setFilteredProducts(data.products || []);
               <>
                 {filteredProducts[0].productdetails.slice(0, 4).map((product, index) => (
                   <div key={index} className="search-item" style={{ borderBottom: '1px solid gray' }}>
-                    <img src={img1} alt={product.name} />
+                    <img src={product.image[0]} alt={product.name} />
                     <div style={{ width: "79%", height: "50px", display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                       <NavLink className='navlink' to={`/productdescription/${product._id}`}>
                         <span className="product-name" style={{ fontWeight: "lighter" }}>{product.tag}</span>

@@ -22,7 +22,7 @@ const Checkout = () => {
 
  
 
-const { buydata, addresssetkro,orderplaced,walletkapesa,timeslotlelo,fetchCoupons,coupons,karocode} = useBio();
+const { buydata, addresssetkro,orderplaced,walletkapesa,timeslotlelo,fetchCoupons,coupons,karocode,fetchDistance,distance} = useBio();
 // const{userDetails}=useAuth()
 const{userDetails}=useFirebaseAuth()
 const{recordMultipleSales}=useDashboard()
@@ -58,6 +58,8 @@ const[yppicode,setyppicode]=useState(false)
   );
 
   
+
+
 
   // ✅ Step 1: Update Local Storage Whenever Data Changes
   useEffect(() => {
@@ -326,6 +328,10 @@ const icon = {
   marginRight: '8px',
 };
 
+useEffect(()=>{
+  fetchDistance(deleveryaddress)
+},[])
+
 useEffect(() => {
   console.log("dekhte h gusse kya inske andar",karocode)
   if(karocode?.length==0)
@@ -399,7 +405,7 @@ setyppicode(true)
       <h2 className="checkout-title-checkoutbuy">Checkout</h2>
 
       {/* Address Section */}
-      <NavLink to='/address' className="navlink">
+      <NavLink to='/address/chek' className="navlink">
       <div className="address-section-checkoutbuy">
       <span>
   {deleveryaddress.length > 0
@@ -532,13 +538,13 @@ setyppicode(true)
         </div>
       </div>
 
-      <div style={{ position: 'relative' }}>
+      {/* <div style={{ position: 'relative' }}>
         <div style={codBadge}>₹59 COD fee added</div>
         <div style={method}>
           <span>💵 Cash on Delivery</span>
           <span><p>₹{purchaseproduct.length==1?(purchaseproduct[0].discountprice-amountafteraddcoupon || purchaseproduct[0].discountprice):(totalDiscountPrice-amountafteraddcoupon || totalDiscountPrice)}.0 ›</p></span>
         </div>
-      </div>
+      </div> */}
     </div>
       {/* Order Details */}
       <div className="order-details-checkoutbuy">
@@ -614,7 +620,7 @@ setyppicode(true)
         <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(Math.abs(amountafteraddcoupon+mywalletAmount) || purchaseproduct[0].price-purchaseproduct[0].discountprice+mywalletAmount):(Math.abs(amountafteraddcoupon+mywalletAmount) || totalPrice-totalDiscountPrice+mywalletAmount)}.0 on the final amount</p>
       </div>
 
-      <TimeSlots/>
+     {deleveryaddress[0].city=="Jaipur"?(<TimeSlots/>):('') }
 
     {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);/*setTimeout(()=>{recordMultipleSales(purchaseproduct)},300)*/ }} >Pay Now</button>):('')}
 

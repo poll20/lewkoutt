@@ -5,19 +5,23 @@ import { useAuth } from './AuthContext'; // Import AuthContext for Authenticatio
 import img1 from "./image/img1.jpg"
 import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
-import { useFetcher } from 'react-router-dom';
+import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
+import { useDashboard } from './dashboardforadmin/DashboardContext';
+
 // import { ToastContainer, toast } from 'react-toastify';
 // import Toast from './Toast';
 
 export const BioContext = createContext();
 
 
-export const BioProvider = ({children,addtocartitem,showPopup }) => {
+export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   console.log("urll",apiUrl)
   // const { user,userDetails } = useAuth();
     const {user, userDetails, } = useFirebaseAuth();
+    // const {slots,toggleSlot,fetchSlots,slotVersion }=useDashboard()
   const { setIsLoading } = useLoading();
+  // const navigate=useNavigate()
   const [cart, setCart] = useState([]);
   const[searchvalue,setsearchvalue]=useState("")
   const [wishlist, setWishlist] = useState([]);
@@ -48,6 +52,9 @@ export const BioProvider = ({children,addtocartitem,showPopup }) => {
  const[prdreviewdata,setprdreviewdata]=useState([])
  const [getbundeldata,setbundeldata]=useState([])
  const [showmeaddress,setshowmeaddress]=useState(false)
+ const [showloginpage,setshowloginpage]=useState(false)
+ const [distance,setdistance]=useState('')
+ 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -272,9 +279,15 @@ useEffect(() => {
   //   }
   // };
   const handleClick = async (prd, id) => {
+    
     console.log("iredandid",prd,id)
+    
+    
     try {
       setIsLoading(true)
+      if(!user){
+        setshowloginpage(true)
+      }
       // Correcting the way matchItem is created
       const matchedColors = productdataonlydetail
         .flatMap(product => product.colors)
@@ -320,7 +333,7 @@ useEffect(() => {
     //       const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //       settoastmsg("item added successfully")
-    showPopup("item added")
+    showPopup("Added to Wishlist")
         }
       } else {
         const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
@@ -337,7 +350,7 @@ useEffect(() => {
     //       const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //       settoastmsg("item removed successfully")
-    showPopup("item removed")
+    showPopup("removed to Wishlist")
         }
       }
     } catch (error) {
@@ -346,6 +359,7 @@ useEffect(() => {
     finally{
       setIsLoading(false)
     }
+  
   };
 
   const removewishlistonly=async(id)=>{
@@ -368,7 +382,7 @@ useEffect(() => {
     //    const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //    settoastmsg("item removed successfully")
-    showPopup("item removed")
+    showPopup("Removed to Wishlist")
       }
       else {
     //     const toast = new window.bootstrap.Toast(toastRef.current);
@@ -551,6 +565,10 @@ finally{
 
   const handleAddToCart = async (prd, quantity, selectedSize) => {
     console.log("cartbundle,",prd)
+    if(!user){
+      setshowloginpage(true)
+    }
+    else{
   try {
     setIsLoading(true);
 
@@ -587,7 +605,7 @@ finally{
       const addedItem = await response.json();
       setaddtocartdata((prev) => [...prev, addedItem]);
       if (!isBundle) setaddtocartdataonly((prev) => [...prev, prd._id]);
-      showPopup("Item added");
+      showPopup("Added to Bag");
     } else {
       showPopup("Oops...");
     }
@@ -596,6 +614,7 @@ finally{
   } finally {
     setIsLoading(false);
   }
+}
 };
 
   const removefromaddtocart=async(id)=>{
@@ -625,13 +644,13 @@ finally{
     //            const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //            settoastmsg("item removed successfully")
-    showPopup("Item Removed")
+    showPopup("Removed to Bag")
              }
              else{
     //           const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //            settoastmsg("data not removed")
-    showPopup("item not removed")
+    showPopup("Not removed")
              }
    }
     // const response = await fetch(`${apiUrl}/addtocart/${id}`, {
@@ -735,7 +754,9 @@ try{
 catch(e){
   console.log(e)
 }
-finally{(false)}
+finally{
+  setIsLoading(false)
+}
       }
       newarrival()
     },[])
@@ -1040,7 +1061,7 @@ if(user && userDetails){
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
-      body: JSON.stringify({order,address,userDetails}), 
+      body: JSON.stringify({order,address,userDetails,distance}), 
 
     })
     if(orderpost.ok){
@@ -1064,6 +1085,7 @@ if(productdataonlydetail){
 
 
 const fetchUserOrders = async (userId) => {
+  console.log("maaro mujhe maaro")
   try {
     setIsLoading(true)
       if (!userDetails._id) {
@@ -1095,10 +1117,22 @@ const fetchUserOrders = async (userId) => {
 useEffect(() => { 
   if (userDetails?._id) {
       fetchUserOrders(userDetails._id);
+       const eventSource = new EventSource(`${apiUrl}/events`);
+
+    eventSource.onmessage = () => {
+   fetchUserOrders(userDetails._id);; // 🟢 Jab bhi event aaye, orders fetch karo
+    };
+
+    return () => {
+        eventSource.close();
+    };
   }
 }, [user, userDetails?._id]);
 
 
+// useEffect(()=>{
+//   fetchSlots()
+// },[slotVersion])
 // const submitRating = async (productId, userId, rating, review,image) => {
 //   console.log("rating",rating)
 //   try {
@@ -1348,6 +1382,22 @@ if(user && userDetails){
   console.log("plz dono bche ajao",user,userDetails)
 }
 
+// const userAddress = "shree gururkripa pg padam vihar colony rajatpath mansarovar, jaipur";
+
+const fetchDistance = async (deleveryaddress) => {
+  let userAddress=`${deleveryaddress[0].building} ${deleveryaddress[0].locality} ${deleveryaddress[0].city} ${deleveryaddress[0].pincode} `
+  // let userAddress='shree gururkripa pg padam vihar colony rajatpath mansarovar, jaipur'
+  console.log("userkaaddress",userAddress)
+  try {
+    const res = await fetch(`${apiUrl}/getdistance?userAddress=${encodeURIComponent(userAddress)}`);
+    const data = await res.json();
+    console.log("Distance:", data.distance);
+    setdistance(data.distance)
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 
 
   return (
@@ -1425,7 +1475,12 @@ if(user && userDetails){
         getBundleColorData,
         getbundeldata,
         setshowmeaddress,
-        showmeaddress
+        showmeaddress,
+        fetchDistance,
+        distance,
+        showloginpage,
+        setshowloginpage
+        
         
 
         

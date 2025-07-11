@@ -471,9 +471,10 @@ const {setkarocode}=useBio()
 
       {/* Top Applied Input + Remove */}
       {/* {appliedCode && ( */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent:"center", gap: "10px", marginBottom: "16px" }}>
           <input
             type="text" 
+            placeholder="Enter Coupon Code"
             value={appliedCode}
             onChange={(e)=>{setAppliedCode(e.value)}}
             style={{
@@ -481,7 +482,8 @@ const {setkarocode}=useBio()
               padding: "10px",
               border: "1px solid #ccc",
               borderRadius: "8px",
-              fontWeight: "bold",
+              fontWeight: "lighter",
+              
             }}
           />
           <button
@@ -493,9 +495,9 @@ const {setkarocode}=useBio()
     
             },100)}}
             style={{
-              padding: "10px 10px",
+              padding: "5px 5px",
               backgroundColor: "#fff",
-              border: "1px solid black",
+              border: "none",
               color: "green",
               borderRadius: "8px",
               fontWeight: "bold",

@@ -25,6 +25,11 @@ import RatingBadge from "./RatingBadge";
 import StickyButton from "./StickyButton";
 import CouponCard from "./CouponCard";
 import BundleProduct from "./BundleProduct";
+import { useLoading } from "./LoadingContext";
+import SlideUpModal from "./SlideupModel";
+import OtpLogin from "./OtpLogin";
+
+// import { api } from "../../../backend/server/cloudinary";
 
 
 // import { BioContext } from "./CartContext";
@@ -32,6 +37,7 @@ import BundleProduct from "./BundleProduct";
 // const {addtocartitem,cartitem} = useContext(BioContext);
 const ProductDescription = (prop) => {
    
+ const apiUrl = import.meta.env.VITE_API_URL;
   const [loading, setLoading] = useState(true);
 const [cartData, setCartData] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
@@ -57,7 +63,8 @@ const targetRef = useRef(null);
   let { id } = useParams();
   console.log("fwff",id)
   let navigate=useNavigate()
-  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail,fetchCoupons,coupons,getbundeldata,getBundleColorData}=useBio()
+  let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail,fetchCoupons,coupons,getbundeldata,getBundleColorData,showloginpage,setshowloginpage}=useBio()
+  let {setIsLoading}=useLoading()
   // const { user,userDetails } = useAuth();
   const { user,userDetails } = useFirebaseAuth()
   const [showModal, setShowModal] = useState(false);
@@ -118,69 +125,144 @@ const targetRef = useRef(null);
 
 
 
-useEffect(() => {
-  console.log("🔥 useEffect Triggered! Checking for Data Update");
-  if (!productdataonlydetail || productdataonlydetail.length === 0) {
-    // return <p>Loading...</p>;
-    console.log("no ddata")
-  }
+
+
+// useEffect(() => {
+//   console.log("🔥 useEffect Triggered! Checking for Data Update");
+//   if (!productdataonlydetail || productdataonlydetail.length === 0) {
+//     // return <p>Loading...</p>;
+//     console.log("no ddata")
+//   }
   
-  const mainProductt = productdataonlydetail.find((e) => e._id === id);
-  console.log("mainprdd",mainProductt)
-  setmainprodutt(mainProductt)
-  if (productdataonlydetail.length > 0) {
-    console.log("✅ Product Data Loaded, Running useEffect");
-    const mainProduct = productdataonlydetail.find((e) => e._id === id);
-    const varientprd = productdataonlydetail
-    .map(product => {
-      const matchingColor = product.colors.find(color => color._id === id);
-      if (matchingColor) {
-        return {
-          ...product,  // Saara product data
-          colors: [matchingColor] // Sirf matching color object ek array me
-        };
-      }
-      return null; // Agar matching color na mile toh null return karo
-    }).filter(product => product !== null); // Sirf valid products rakho
-    console.log("mainProduct inside useEffect:", mainProduct);
-    console.log("vareintProduct inside useEffect:", varientprd);
-    console.log("selected color",Selectedcolor)
-    if (mainProduct) {
+//   const mainProductt = productdataonlydetail.find((e) => e._id === id);
+//   console.log("mainprdd",mainProductt)
+//   setmainprodutt(mainProductt)
+//   if (productdataonlydetail.length > 0) {
+//     console.log("✅ Product Data Loaded, Running useEffect");
+//     const mainProduct = productdataonlydetail.find((e) => e._id === id);
+//     const varientprd = productdataonlydetail
+//     .map(product => {
+//       const matchingColor = product.colors.find(color => color._id === id);
+//       if (matchingColor) {
+//         return {
+//           ...product,  // Saara product data
+//           colors: [matchingColor] // Sirf matching color object ek array me
+//         };
+//       }
+//       return null; // Agar matching color na mile toh null return karo
+//     }).filter(product => product !== null); // Sirf valid products rakho
+//     console.log("mainProduct inside useEffect:", mainProduct);
+//     console.log("vareintProduct inside useEffect:", varientprd);
+//     console.log("selected color",Selectedcolor)
+//     if (mainProduct) {
       
-      const defaultVariant =mainProduct.colors.find(
-        (e) => e.color === Selectedcolor
-      ) || mainProduct.colors.find((e) => e.color === mainProduct.defaultColor) || mainProduct.colors[0];
+//       const defaultVariant =mainProduct.colors.find(
+//         (e) => e.color === Selectedcolor
+//       ) || mainProduct.colors.find((e) => e.color === mainProduct.defaultColor) || mainProduct.colors[0];
 
-      if (defaultVariant) {
-        console.log("defaultVariant:", defaultVariant);
-        setproduct({
-          ...defaultVariant,
-          price: mainProduct.price,
-          discountprice: mainProduct.discountprice,
-          shopname: mainProduct.shopname,
-          shopaddress: mainProduct.shopaddress,
-          discount: mainProduct.discount,
-          cate: mainProduct.cate,
-          image:mainProduct.image[0]
-        });
-      }
-    }
-    else{
-      setproduct({
-        ...varientprd[0]?.colors[0],
-        price: varientprd[0]?.price,
-        discountprice: varientprd[0]?.discountprice,
-        shopname: varientprd[0]?.shopname,
-        shopaddress: varientprd[0]?.shopaddress,
-        discount: varientprd[0]?.discount,
-        cate: varientprd[0]?.cate,
-        image:varientprd[0]?.image[0]
-      });
+//       if (defaultVariant) {
+//         console.log("defaultVariant:", defaultVariant);
+//         setproduct({
+//           ...defaultVariant,
+//           price: mainProduct.price,
+//           discountprice: mainProduct.discountprice,
+//           shopname: mainProduct.shopname,
+//           shopaddress: mainProduct.shopaddress,
+//           discount: mainProduct.discount,
+//           cate: mainProduct.cate,
+//           image:mainProduct.image[0]
+//         });
+//       }
+//     }
+//     else{
+//       setproduct({
+//         ...varientprd[0]?.colors[0],
+//         price: varientprd[0]?.price,
+//         discountprice: varientprd[0]?.discountprice,
+//         shopname: varientprd[0]?.shopname,
+//         shopaddress: varientprd[0]?.shopaddress,
+//         discount: varientprd[0]?.discount,
+//         cate: varientprd[0]?.cate,
+//         image:varientprd[0]?.image[0]
+//       });
 
-    }
+//     }
     
-  }
-}, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
+//   }
+// }, [id,productdataonlydetail,Selectedcolor]);  // ✅ Ensuring it runs only when data is available
+
+
+
+useEffect(() => {
+  const fetchProductFromBackend = async () => {
+    try {
+      setIsLoading(true)
+      const res = await fetch(`${apiUrl}/product/${id}`);
+      const data = await res.json();
+
+      console.log("🔥 Product data from backend:", data);
+
+      // Set the full product object (including all productdetails/colors)
+      setmainprodutt(data);
+
+      let mainProduct;
+      let variantProduct;
+
+      // CASE 1: Direct match (e.g., _id === productdetails._id)
+      if (data.productdetails && data.productdetails.length > 0) {
+        mainProduct = data.productdetails[0];
+
+        // Try finding matching color
+        const defaultVariant =
+          mainProduct.colors.find((e) => e.color === Selectedcolor) ||
+          mainProduct.colors.find((e) => e.color === data.defaultColor) ||
+          mainProduct.colors[0];
+
+        if (defaultVariant) {
+          setproduct({
+            ...defaultVariant,
+            price: mainProduct.price,
+            discountprice: mainProduct.discountprice,
+            shopname: data.shopname,
+            shopaddress: data.shopaddress,
+            discount: mainProduct.discount,
+            cate: mainProduct.cate,
+            image: mainProduct?.image?.length>0?(mainProduct?.image[0]):(mainProduct?.image)
+          });
+        }
+      } 
+      
+      // CASE 2: Match via colors._id (subvariant match)
+      else if (data.productdetails && data.productdetails.length === 0 && data.colors) {
+        variantProduct = {
+          ...data,
+          colors: [data.colors[0]], // assuming server returned only matched color
+        };
+
+        setproduct({
+          ...variantProduct.colors[0],
+          price: variantProduct.price,
+          discountprice: variantProduct.discountprice,
+          shopname: variantProduct.shopname,
+          shopaddress: variantProduct.shopaddress,
+          discount: variantProduct.discount,
+          cate: variantProduct.cate,
+          image: variantProduct?.image?.length>0?(variantProduct?.image[0]):(variantProduct?.image) ,
+        });
+      } else {
+        console.warn("⚠️ Unexpected data shape from server");
+      }
+    } catch (err) {
+      console.error("❌ Error fetching product:", err);
+    }
+    finally{
+      setIsLoading(false)
+    }
+  };
+console.log("Effect triggered:", { id, Selectedcolor });
+  fetchProductFromBackend();
+}, [id, Selectedcolor]);
+
 
 
 useEffect(() => {
@@ -321,8 +403,8 @@ useEffect(() => {
   //    clone.remove();
   //  }, 800);
 
-  if(user)
-  {
+  // if(user)
+  // {
  if (selectedSize.length==0) {
   prop.showPopup("Please Selete a Size")
       return;
@@ -336,10 +418,10 @@ useEffect(() => {
     } catch (e) {
       console.log(e);
     }
-  }
-  else{
-    notify()
-  }
+  // }
+  // else{
+  //   notify()
+  // }
   };
 
 
@@ -677,10 +759,10 @@ if(getbundeldata){
       textAlign:"center"
      }}
     >
-      <span>{'★'.repeat(product.avgRate?(product.avgRate):(5))}</span>
-      <span style={{color:"gray",fontWeight:"lighter"}}>{product.avgRate?(product.avgRate):("5.0")}</span>
-      <span style={{color:"gray",fontWeight:"lighter"}}>-</span>
-       <span style={{color:"gray",fontWeight:"lighter"}}>{product.reviewCount?(product.reviewCount):(100)} Reviews</span>
+      <span>{'★'.repeat(product?.avgRate!=0?(product?.avgRating):(5))}</span>
+      <span style={{color:"gray",fontWeight:"lighter"}}>{product?.avgRate!=null?(product?.avgRating):("")}</span>
+     {product.ratingCount!=null?(<span style={{color:"gray",fontWeight:"lighter"}}>-</span>):('')} 
+       <span style={{color:"gray",fontWeight:"lighter"}}>{product?.ratingCount!=null?(product?.ratingCount):("No")} Reviews</span>
       <span></span>
     </span>
           </div>
@@ -754,7 +836,7 @@ if(getbundeldata){
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}> */}
           <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0',marginTop:"4px"}}>
 
-          <label>Colors:</label>
+          {/* <label>Colors:</label>
             <div className="sizes">
               {
                 mainProductt?(mainProductt?.colors?.map((color) => (
@@ -763,12 +845,42 @@ if(getbundeldata){
                     className={`colour-btn ${Selectedcolor === color.color ? "clractive"   : ""}`}
                      onClick={() =>{ setSelectedcolor(color.color), setcolorid(color._id)}}>
                     
-                    {/* {color.color} */}
+                    
                   </button>
                 ))):(<button className={`size-btn`}>{product.color}</button>)
               }
               
-            </div>
+            </div> */}
+            <label>Colors:</label>
+<div className="sizes" >
+  {mainProductt && mainProductt.productdetails?.length > 0 ? (
+    mainProductt.productdetails[0].colors?.map((color) => (
+    <div style={{border: Selectedcolor === color.color? "1px solid black" : "1px solid #ccc" ,borderRadius: "100%",}}>
+      <button
+        key={color._id}
+        style={{
+          background: color.color,
+          borderRadius: "100%",
+          width: "20px",
+          height: "20px",
+          margin: "5px",
+          border: Selectedcolor === color.color ? "2px solid black" : "1px solid #ccc",
+        }}
+        className={`colour-btn ${Selectedcolor === color.color ? "clractive" : ""}`}
+        onClick={() => {
+          setSelectedcolor(color.color);
+          setcolorid(color._id);
+        }}
+      >
+        {/* No text, just a color dot */}
+      </button>
+      </div>
+    ))
+  ) : (
+    <p>No colors available</p>
+  )}
+</div>
+
             
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>
@@ -961,7 +1073,18 @@ if(getbundeldata){
       <p style={{color:"green",marginTop:"3px"}}>{product.title}</p>
       </div>
     <Card  category={cate}/>
+
+    
     </div>
+    {showloginpage==true?(
+      <div>
+        {/* <button onClick={() => setShowModal(true)}>Open SlideUp</button> */}
+    
+        <SlideUpModal show={showloginpage} onClose={() => setshowloginpage(false)}>
+          <OtpLogin/>
+        </SlideUpModal>
+      </div>
+    ):('')}
     
     </>
   );

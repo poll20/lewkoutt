@@ -24,7 +24,7 @@ let Scema=new mongoose.Schema({
 const ratingSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
   productId: { type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
-  rating: { type: Number, required: true, min: 1, max: 5 },
+  rating: { type: Number, required: true, min: 1, max: 5},
   review: { type: String }, // Optional review
   image: [String], // ✅ Array of Cloudinary URLs
   userName: { type:String},
@@ -86,12 +86,15 @@ let categories=mongoose.Schema({
 
 const addressSchema = new mongoose.Schema({
   pincode: { type: String, required: true },
+  uname: { type: String, required: true },
+
   building: { type: String, required: true },
   locality: { type: String, required: true },
   address:{type:String},
   phone:[String],
-  city: { type: String, default: "Jaipur" },
-  state: { type: String, default: "Rajasthan" },
+  city: { type: String, required:true},
+  state: { type: String, required:true},
+  saveas:{type:String},
   isDefault: { type: Boolean, default: false },
 });
 
@@ -216,6 +219,7 @@ const orders = mongoose.Schema({
     
     }
   ],
+  deliverydistance:{type:String},
   status: { type: String, default: "Pending" },
   orderedAt: { type: Date, default: Date.now },
   deliveredAt: { type: Date, default: Date.now },
@@ -554,6 +558,12 @@ const couponUsageSchema = new mongoose.Schema({
   totalUsed: { type: Number, default: 0 }, // ✅ global usage count
 }, { timestamps: true });
 
+
+const slotStatusSchema = new mongoose.Schema({
+  label: { type: String, required: true, unique: true },
+  disabled: { type: Boolean, default: false }
+});
+
 users.index({ phonenumber: 1 });
 // users.index({ uid: 1 }, { unique: true });
 users.index({ code: 1 });
@@ -596,6 +606,7 @@ const returnmodel = mongoose.model("return",returnscema);
 let moodmodel=mongoose.model("moodmessage",moodMessageSchema)
 let cpn=mongoose.model("coupon",couponSchema)
 let cpnusage=mongoose.model("couponusage",couponUsageSchema)
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage}
+let slotmodel= mongoose.model('SlotStatus', slotStatusSchema);
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel}
 
 

@@ -12,6 +12,10 @@ import React, { useState, useEffect } from "react";
   import HeartButton from "./HeartButton";
   import { AiOutlineDelete } from "react-icons/ai";
   import EmptyCart from './EmptyCart';
+import { useLoading } from "./LoadingContext";
+import OtpLogin from "./OtpLogin";
+import SlideUpModal from "./SlideupModel";
+  
   // import FaChevronDown from "react-icons/fa";
 const Card = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -21,13 +25,14 @@ const Card = (props) => {
     const[sizesshow,setsizesshow]=useState(false)
     const [products, setProducts] = useState([]);
     const [originalproducts, setoriginalProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
+    const {setIsLoading}=useLoading()
     const { section, category ,bestsale,store,rent,wish} = useParams();
     console.log("bsee",bestsale)
     console.log("rentpoint",rent)
   console.log("wish",wish)
     // console.log("storeee",store)
-    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly} = useBio();
+    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly,showloginpage,setshowloginpage} = useBio();
  const [params] = useSearchParams();
   const query = params.get("q");
     const a = useMemo(() => {
@@ -292,14 +297,16 @@ const chlodekhe = (s, i) => {
 
     const fetchProducts = async (url) => {  
       
-      setIsLoading(true);
+      // setIsLoading(true);
       try {
         setIsLoading(true)
         const response = await fetch(url);
         const data = await response.json();
         console.log("jpbr",data)
-        
-        const productdetails=query?.length==0?(data):(data.products[0].productdetails)
+        console.log("querykilen",query)
+    const productdetails = query?.length == null
+  ? data 
+  : (data.products?.[0]?.productdetails || []);
         console.log("my ka gdata",productdetails)
         const filteredData = applyFilters(productdetails);
         setProducts(filteredData);
@@ -384,7 +391,7 @@ if(query){
       // const filteredData = applyFilters(a);
       setProducts(a);
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [section, category, store, rent, wish, productdataonlydetail,filters, rentdata, wishlistdata,bestsale,productdata,a,query]);
 
 
@@ -516,9 +523,7 @@ if(searchvalue){
         
 
         <div className="unique-product-container" style={{marginTop:!props.category?(''):('0px')}}>
-          {isLoading ? (
-            <p>Loading products...</p>
-          ) : products.length > 0 ? (
+        {products.length > 0 ? (
             products.map((product) => (
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
         {/* Image Section */}
@@ -599,6 +604,17 @@ if(searchvalue){
     ))}
        
   </div>
+  {/* {showloginpage?(<OtpLogin/>):('')} */}
+  {showloginpage==true?(
+  <div>
+    {/* <button onClick={() => setShowModal(true)}>Open SlideUp</button> */}
+
+    <SlideUpModal show={showloginpage} onClose={() => setshowloginpage(false)}>
+      <OtpLogin/>
+    </SlideUpModal>
+  </div>
+):('')}
+
 </div>
 
       </>

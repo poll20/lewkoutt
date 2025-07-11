@@ -1,11 +1,12 @@
 // adminCheck.js
-const User = require("./models/User"); // MongoDB User model
+const {userr} = require("../database/collection.js"); // MongoDB User model
 
 const isAdmin = async (req, res, next) => {
-  const { uid } = req.user;
-  const user = await User.findOne({ firebaseUID: uid });
+  // const { uid } = req.user;
+  // const user = await userr.findOne({ uid: uid });
 
-  if (!user || user.role !== "admin") {
+  if (userr.role !== "admin") {
+    console.log("admins onlyy ")
     return res.status(403).json({ message: "Access Denied: Admins only" });
   }
 

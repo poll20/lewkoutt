@@ -261,7 +261,7 @@ let navigate=useNavigate()
           <IoIosArrowForward />
         </NavLink>
         
-        <NavLink to={`/address`} className="menu-item navlink">
+        <NavLink to={`/address/upp`} className="menu-item navlink">
           <IoHome/>
           <p>Address</p>
           <IoIosArrowForward />

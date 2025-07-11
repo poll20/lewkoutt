@@ -5,6 +5,8 @@ const AddAddress = () => {
   const [pincode, setPincode] = useState("");
   const [building, setBuilding] = useState("");
   const [locality, setLocality] = useState("");
+    const [city, setCity] = useState("");
+      const [state, setState] = useState("");
   const [isDefault, setIsDefault] = useState(false);
 
 
@@ -37,11 +39,23 @@ const AddAddress = () => {
           value={locality}
           onChange={(e) => setLocality(e.target.value)}
         />
+         <input
+          type="text"
+          placeholder="Locality / Area / Street*"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+         <input
+          type="text"
+          placeholder="Locality / Area / Street*"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+        />
 
-        <div className="city-state">
+        {/* <div className="city-state">
           <input type="text" value="Jaipur" readOnly />
           <input type="text" value="Rajasthan" readOnly />
-        </div>
+        </div> */}
 
         
 

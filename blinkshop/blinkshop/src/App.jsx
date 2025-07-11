@@ -126,7 +126,7 @@
 // }
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import ResponsiveNavbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScollToTop";
@@ -188,7 +188,9 @@ import OfferBanner from "./components/OfferBanner";
 import Coupon from "./components/dashboardforadmin/CouponForm";
 import CouponForm from "./components/dashboardforadmin/CouponForm";
 import ReviewProduct from "./components/ReviewProduct";
-// import Bandle from "./components/dashboardforadmin/bandle";
+import SlotControl from "./components/dashboardforadmin/SlotControl";
+import Bandle from "./components/dashboardforadmin/bandle";
+import OtpLogin from "./components/OtpLogin";
 
 // import BundleProduct from "./components/BundleProduct";
 
@@ -196,10 +198,11 @@ export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
   const [popupMessage, setPopupMessage] = useState("");
+  
   const { setIsLoading } = useLoading(); // ✅ add this inside the App component
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
-
+// const navigate=useNavigate()
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -294,7 +297,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     <AuthProvider>
     <DashboardProvider>
     
-      <BioProvider showPopup={showPopup}>
+      <BioProvider  showPopup={showPopup} >
         <Router>
           <ScrollToTop />
           {/* {popupMessage && (
@@ -326,6 +329,8 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
 // ✅ Separate Layout Component to Hide Navbar & Footer on Admin Routes
 function Layout({ showPopup }) {
   const location = useLocation();
+ 
+
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
   const isref = location.pathname.startsWith("/refferal");
@@ -358,8 +363,10 @@ function Layout({ showPopup }) {
               <Route path="/admin/moodmngr" element={<MoodMagManager/>} />
               <Route path="/admin/coupon" element={<CouponForm/>} />
               <Route path="/admin/useractivity/:id" element={<UserActivity/>} />
+
+              <Route path="/admin/slots" element={<SlotControl/>} />
               {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
-              {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
+              <Route path="/admin/bandle" element={<Bandle/>} />
 
 
 
@@ -414,7 +421,8 @@ function Layout({ showPopup }) {
           
   
           </Routes>
-          </div>        
+          </div>   
+           
         </div>)}
       
 
@@ -427,3 +435,4 @@ function Layout({ showPopup }) {
     </>
   );
 }
+

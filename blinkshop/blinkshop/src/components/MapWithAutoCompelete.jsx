@@ -1,156 +1,4 @@
-// import React, { useEffect, useRef, useState } from "react";
 
-// const MapWithAutocomplete = () => {
-//   const [selectedAddress, setSelectedAddress] = useState("");
-//   const mapRef = useRef(null);
-//   const markerRef = useRef(null);
-//   const mapInstance = useRef(null);
-
-//   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
-//   useEffect(() => {
-//     const loadScript = (url) =>
-//       new Promise((resolve) => {
-//         const script = document.createElement("script");
-//         script.src = url;
-//         script.async = true;
-//         script.defer = true;
-//         script.onload = resolve;
-//         document.body.appendChild(script);
-//       });
-
-//     const initMap = (location) => {
-//       mapInstance.current = new window.google.maps.Map(mapRef.current, {
-//         center: location,
-//         zoom: 15,
-//       });
-
-//       markerRef.current = new window.google.maps.Marker({
-//         position: location,
-//         map: mapInstance.current,
-//         draggable: true,
-//       });
-
-//       const input = document.getElementById("autocomplete");
-
-//       const autocomplete = new window.google.maps.places.Autocomplete(input, {
-//         types: ["geocode"],
-//         componentRestrictions: { country: "in" },
-//       });
-
-//       autocomplete.addListener("place_changed", () => {
-//         const place = autocomplete.getPlace();
-//         if (place.geometry && place.geometry.location) {
-//           const loc = place.geometry.location;
-//           mapInstance.current.setCenter(loc);
-//           mapInstance.current.setZoom(16);
-//           markerRef.current.setPosition(loc);
-//           setSelectedAddress(place.formatted_address);
-//         }
-//       });
-
-//     markerRef.current.addListener("dragend", () => {
-//         const pos = markerRef.current.getPosition();
-//         const geocoder = new window.google.maps.Geocoder();
-      
-//         geocoder.geocode({ location: pos }, (results, status) => {
-//           if (status === "OK" && results[0]) {
-//             setSelectedAddress(results[0].formatted_address);
-//           } else {
-//             console.error("Reverse geocoding failed:", status);
-//           }
-//         });
-      
-//         console.log("Dragged to:", pos.lat(), pos.lng());
-//       });
-      
-//     };
-
-//     const loadGoogleMaps = async () => {
-//         if (!window.google) {
-//           await loadScript(
-//             `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
-//           );
-      
-//           const waitForGoogle = () =>
-//             new Promise((resolve) => {
-//               const interval = setInterval(() => {
-//                 if (window.google && window.google.maps) {
-//                   clearInterval(interval);
-//                   resolve();
-//                 }
-//               }, 100);
-//             });
-      
-//           await waitForGoogle();
-//         }
-      
-//         // Now safe to use google.maps
-//         navigator.geolocation.getCurrentPosition(
-//           (pos) => {
-//             const location = {
-//               lat: pos.coords.latitude,
-//               lng: pos.coords.longitude,
-//             };
-//             initMap(location);
-//           },
-//           (err) => {
-//             console.warn("Geolocation failed, defaulting to Jaipur:", err.message);
-//             initMap({ lat: 26.9124, lng: 75.7873 }); // Jaipur fallback
-//           }
-//         );
-//       };
-      
-
-//     loadGoogleMaps();
-//   }, []);
-
-//   return (
-//     <div style={{ padding: "10px", fontFamily: "sans-serif" }}>
-//       <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-//         📍 Google Map with Autocomplete + Current Location
-//       </h3>
-
-//       <input
-//         id="autocomplete"
-//         placeholder="Enter your address"
-//         style={{
-//           width: "100%",
-//           padding: "10px",
-//           fontSize: "16px",
-//           borderRadius: "8px",
-//           border: "1px solid #ccc",
-//           marginBottom: "10px",
-//         }}
-//       />
-
-//       <div
-//         ref={mapRef}
-//         style={{
-//           width: "100%",
-//           height: "400px",
-//           borderRadius: "12px",
-//           border: "2px solid #ccc",
-//         }}
-//       ></div>
-
-//       {selectedAddress && (
-//         <p
-//           style={{
-//             marginTop: "10px",
-//             padding: "10px",
-//             background: "#f4f4f4",
-//             borderRadius: "8px",
-//           }}
-//         >
-//           Selected: <strong>{selectedAddress}</strong>
-//         </p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default MapWithAutocomplete;
 
 
 import React, { useEffect, useRef, useState } from "react";
@@ -176,9 +24,15 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
  const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
  
   const [pincode, setPincode] = useState("");
+  const [uname, setUname] = useState("");
+
   const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
     const [locality, setLocality] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    
+
     const [location, setLocation] = useState("Click to get location");
     const [isDefault, setIsDefault] = useState(false);
       const [selectedTag, setSelectedTag] = useState(""); // New state for Save As tag
@@ -226,11 +80,13 @@ const saveAddress =async  (panel) => {
   console.log("panel",pincode,building,locality)
   const newAddress = {
     pincode,
+    uname,
     phone,
     building,
     locality,
-    city: "Jaipur",
-    state: "Rajasthan",
+    city,
+    state,
+    saveas:selectedTag,
     isDefault,
   }
   if(panel=="addaddress")
@@ -241,7 +97,7 @@ const saveAddress =async  (panel) => {
    await fetchUserDetails(fireuser); // ✅ Fetch latest user details
    
     setTimeout(() => {
-        navigate("/address")
+        navigate("/address/map")
     }, 400);
   }
 
@@ -272,6 +128,8 @@ const getUserLocation = () => {
         setBuilding(data.address.city)
         setLocality(data.address.county)
         setPincode(data.address.postcode)
+         setPincode(data.address.city)
+          setPincode(data.address.state)
         setTimeout(()=>{saveAddress("addaddress")},600)
        console.log("loda",data.address.city)
         setLocation(data.display_name);
@@ -631,6 +489,16 @@ autocomplete.setFields([
         {touched.pincode && isFieldEmpty(pincode) && (
           <p className="text-red-600 text-sm mt-1">This field is required</p>
         )}
+        <input
+          type="text"
+          placeholder="uname*"
+          value={uname}
+          onChange={(e) => setUname(e.target.value)}
+          onBlur={() => handleBlur('pincode')}
+        />
+        {touched.pincode && isFieldEmpty(uname) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
 
         <input
           type="text"
@@ -680,10 +548,31 @@ autocomplete.setFields([
           </>
         )}
 
-        <div className="city-state">
+        <input
+          type="text"
+          placeholder="City"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          onBlur={() => handleBlur('city')}
+        />
+        {touched.city && isFieldEmpty(city) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
+        
+        <input
+          type="text"
+          placeholder="State"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          onBlur={() => handleBlur('state')}
+        />
+        {touched.locality && isFieldEmpty(state) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
+        {/* <div className="city-state">
           <input type="text" value="Jaipur" readOnly />
           <input type="text" value="Rajasthan" readOnly />
-        </div>
+        </div> */}
 
 
  {/* Save As Section */}

@@ -17,6 +17,7 @@ const AddToCart = () => {
   const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata } = useBio();
   const [choosebuy,setchoosebuy]=useState([])
   const [popup, setPopup] = useState(false);
+  const [popupbreakup,setpopupbreakup]=useState(false)
   const [popupProductId, setPopupProductId] = useState(null);
   const [wowalaprd, setwowalaprd] = useState(null);
  const[totalprice,settotalprice]=useState(0)
@@ -29,6 +30,8 @@ const AddToCart = () => {
     setPopupProductId(id); // Save the specific product ID for the popup
     setwowalaprd(prd)
   };
+
+
 
   const closePopup = () => {
     setPopup(false);
@@ -75,7 +78,7 @@ let sendtocheckout = () => {
     localStorage.setItem("buydata", JSON.stringify(choosebuy)); // ✅ Save to Local Storage
     // ✅ Delay navigation to ensure `buydata` updates before changing page
     setTimeout(() => {
-      navigate("/address");
+      navigate("/address/atc");
     }, 1000 ); // Small delay to allow React to update state
   }
 };
@@ -299,16 +302,67 @@ if(!addtocartdatas){
 )}
 
         <div className="bottom-sheet"  style={{ display:choosebuy.length>0 && addtocartdatas.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
-          <div style={{display:"flex",alignItems:"center",gap:"5px"}}>
+          <div style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
+            <div>
          <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
          <span className="original-price">₹{cprice}</span>
          </div>
+         <div>
+         <span onClick={(()=>(setpopupbreakup(!popupbreakup)))}>View breakup</span>
+          
+         </div>
+         {/* <span>break up</span> */}
+         </div>
+       
         <button className="buy-buttonss" style={{width:"140px",backgroundColor:"#F15A29"}} onClick={()=>{sendtocheckout()}} >Buy Now</button>
        </div>
+       
        <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
          <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Wishlist</button>
+       </div>
+
+         <div className="bottom-sheet" style={{ display:popupbreakup?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
+       <button onClick={()=>{setpopupbreakup(!popupbreakup)}} className="closed-button">✖</button>
+         {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
+        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Wishlist</button> */}
+        <div style={styles.container}>
+      <h3 style={styles.heading}>Price Breakup</h3>
+      <p style={styles.orderDetails}>Order Details {choosebuy?.length==1?(<span>{choosebuy?.length} Item</span>):(<span>{choosebuy?.length} Items</span>)}</p>
+
+      <div style={styles.row}>
+        <span>MRP</span>
+        <span>{totalprice}</span>
+      </div>
+
+      <div style={styles.row}>
+        <div>
+          <span>Coupon Discount</span>
+          <div style={styles.couponCode}>(EXTRA250)</div>
+        </div>
+        <span style={styles.greenText}>-₹250.0</span>
+      </div>
+
+      <div style={styles.row}>
+        <span>Shipping Fee</span>
+        <div>
+          <span style={styles.greenText}>Free</span>
+          <span style={styles.strike}> ₹99.0</span>
+        </div>
+      </div>
+
+      <hr />
+
+      <div style={{ ...styles.row, fontWeight: 'bold' }}>
+        <span>Payable amount</span>
+        <span>{totalprice}</span>
+      </div>
+
+      <div style={styles.successBox}>
+        <span role="img" aria-label="celebrate">🎉</span> Yay! you saved ₹250.0 on final amount
+      </div>
+    </div>
        </div>
 
        
@@ -316,5 +370,56 @@ if(!addtocartdatas){
     </>
   );
 };
+const styles = {
+  container: {
+    width: '350px',
+    border: '1px solid #ccc',
+    borderRadius: '12px',
+    padding: '20px',
+    fontFamily: 'sans-serif',
+    backgroundColor: '#fff',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+  },
+  heading: {
+    marginBottom: '10px',
+  },
+  orderDetails: {
+    marginBottom: '20px',
+    color: '#555',
+    fontSize: '14px',
+  },
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '15px',
+    fontSize: '15px',
+  },
+  greenText: {
+    color: 'green',
+    fontWeight: '500',
+  },
+  strike: {
+    textDecoration: 'line-through',
+    color: '#888',
+    fontSize: '13px',
+    marginLeft: '5px',
+  },
+  couponCode: {
+    fontSize: '12px',
+    color: '#888',
+  },
+  successBox: {
+    marginTop: '20px',
+    backgroundColor: '#e6f4ea',
+    padding: '10px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    color: 'green',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+  }
+};
+
 
 export default AddToCart;

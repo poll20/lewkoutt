@@ -14,9 +14,12 @@ const AddressList = ({loc}) => {
 const [otpSent, setOtpSent] = useState(false); // ✅ Track if OTP was sent
   const {handlenewaddress,handlechooseaddress,deleteandeditaddrress,setshowmeaddress}=useBio()
   const [pincode, setPincode] = useState("");
+  const[uname,setUname]=useState("")
   const [phone, setPhone] = useState("");
     const [building, setBuilding] = useState("");
     const [locality, setLocality] = useState("");
+    const[city,setCity]=useState("")
+    const[state,setState]=useState("")
     const [location, setLocation] = useState("Click to get location");
     const [isDefault, setIsDefault] = useState(false);
    const [chooseaddress,setchooseaddress]=useState([])
@@ -56,14 +59,14 @@ const {sec}=useParams()
 // Function to handle saving the address
 const saveAddress =async (panel) => {
   console.log("panel",panel)
-  console.log("panel",pincode,building,locality)
+  console.log("panel",pincode,building,locality,city,state)
   const newAddress = {
     pincode,
     phone,
     building,
     locality,
-    city: "Jaipur",
-    state: "Rajasthan",
+    city,
+    state,
     isDefault,
   }
   if(panel=="addaddress")
@@ -98,9 +101,12 @@ const getUserLocation = () => {
 
         let response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
         let data = await response.json();
+        setUname(data.address.uname)
         setBuilding(data.address.city)
         setLocality(data.address.county)
         setPincode(data.address.postcode)
+        setCity(data.address.city)
+        setState(data.address.city)
         setTimeout(()=>{saveAddress("addaddress")},600)
        console.log("loda",data.address.city)
         setLocation(data.display_name);
@@ -179,15 +185,15 @@ useEffect(() => {
           <div style={{display:'flex',alignItems:'center',justifyContent:"space-between",backgroundColor:"white"}}>
           <h2>Address</h2>
           <NavLink to='/maps' className="navlink">
-          <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Addddress</button>
+          <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Address</button>
           </NavLink>
           </div>
         ) : (
           <>
-            <div className="address-header">
-              <h2>Select Address</h2>
+            <div className="address-header" style={{borderBottom:"1px solid gray"}}>
+              <h2 style={{fontWeight:"bold",fontSize:"18px"}}>Select Address</h2>
               <NavLink to='/maps' className="navlink">
-              <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Addressdd</button>
+              <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29",marginBottom:"10px"}}>+ Add Address</button>
               </NavLink>
             </div>
     
@@ -221,6 +227,8 @@ useEffect(() => {
                 </div>
               ))
             } */}
+              <h2 style={{fontWeight:"bold",fontSize:"16px"}}>Saved Address</h2>
+
             { userprf?.address?.map((addr) => (
   <div className="address-card" key={addr._id}>
     <div className="custom-checkbox">
@@ -233,17 +241,25 @@ useEffect(() => {
     </div>
 
     <div className="address-info">
-      <p className="address-name">{userprf.name}</p>
+      <p className="address-name">{addr?.uname}</p>
 
       {editingAddressId === addr._id ? (
         <>
+           <input
+            type="text"
+            value={editedAddress.uname}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, uname: e.target.value })
+            }
+            placeholder="Name"
+          />
           <input
             type="text"
             value={editedAddress.building}
             onChange={(e) =>
               setEditedAddress({ ...editedAddress, building: e.target.value })
             }
-            placeholder="Building"
+            placeholder="House/Flat/Block no."
           />
           <input
             type="text"
@@ -281,13 +297,15 @@ useEffect(() => {
         </>
       )}
 
-      <p className="address-tip">
+      {/* <p className="address-tip">
         <span>ℹ️</span> For better reach, include an alternate number
-      </p>
+      </p> */}
     </div>
 
     <div className="address-actions">
       <button
+        style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}
+
         className="delete-button"
         onClick={() => deleteoreditaddress(addr._id, "delete", addr)}
       >
@@ -296,9 +314,12 @@ useEffect(() => {
 
       {editingAddressId === addr._id ? (
         <button
+        style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}
+
           className="save-button edit-button" 
           onClick={() => {
             deleteoreditaddress(addr._id, "edit", {
+              uname:editedAddress.uname,
               building: editedAddress.building,
               locality: editedAddress.locality,
               pincode: editedAddress.pincode,
@@ -314,14 +335,18 @@ useEffect(() => {
         </button>
       ) : (
         <button
+        style={{border:"1px solid black",borderRadius:"5px",padding:"5px 10px",color:"black",textDecoration:'none'}}
           className="edit-button"
           onClick={() => {
             setEditingAddressId(addr._id);
             setEditedAddress({
+              uname:addr.uname,
               building: addr.building,
               locality: addr.locality,
               pincode: addr.pincode,
               phone: addr.phone,
+              city:addr.city,
+              state:addr.state
             });
           }}
         >
@@ -410,7 +435,7 @@ useEffect(() => {
     </div> */}
     
     <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
-        {loc!="return"?(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>):(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtoreturncom()}} >Return Address</button>)}
+        {loc!="return"?(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"black",color:"white",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>):(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtoreturncom()}} >Return Address</button>)}
        </div>
       </div>
   );

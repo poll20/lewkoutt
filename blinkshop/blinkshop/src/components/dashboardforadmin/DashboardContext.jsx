@@ -2,6 +2,9 @@ import React, { createContext, useContext, useState,useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { User } from "@auth0/auth0-react";
 import { useFirebaseAuth } from "../FirebaseContext";
+import axios from "axios";
+import { useLoading } from "../LoadingContext";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 // ✅ 1️⃣ Create the context
 const DashboardContext = createContext();
@@ -11,7 +14,9 @@ export const DashboardProvider = ({ children }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
     // const{user,userDetails}=useAuth()
     const{user,userDetails}=useFirebaseAuth()
+    
     const [users, setUsers] = useState([]);
+    
     const [userorder,setuserorder]=useState([])
     const[shopkeeperprd,setshopkeeperprd]=useState([])
     const[productonlydetails,setproductonlydetails]=useState([])
@@ -31,7 +36,10 @@ export const DashboardProvider = ({ children }) => {
     const [productdata,setproductdata]=useState([])
     const [productdataonlydetail, setproductdataonlydetail]=useState([])
     const [refetch,setRefetch]=useState(false)
-    const [loading ,setIsLoading]=useState(false)
+     const [slots, setSlots] = useState([]);
+     const [slotVersion, setSlotVersion] = useState(0);
+    // const [loading ,setIsLoading]=useState(false)
+    const{setIsLoading}=useLoading()
     let showalert=()=>{
         alert("low stock alert")
     }
@@ -42,7 +50,10 @@ export const DashboardProvider = ({ children }) => {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
+                Authorization: `Bearer ${user.accessToken}`,
             },
+            //  Authorization: `Bearer ${user.accessToken}`,
+            
             body: JSON.stringify(data), // Convert object to JSON string
           });
       
@@ -70,7 +81,10 @@ export const DashboardProvider = ({ children }) => {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
+                Authorization: `Bearer ${user.accessToken}`,
             },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
             body: JSON.stringify(data), // Convert object to JSON string
           });
       
@@ -120,7 +134,10 @@ let deletefromexistingproduct=async(id)=>{
                 method: "PATCH",
                 headers: {
                   "Content-Type": "application/json",
-                } // Convert object to JSON string
+                    Authorization: `Bearer ${user.accessToken}`,
+                },
+           
+                 // Convert object to JSON string
               });
           
               if (!response.ok) {
@@ -146,7 +163,10 @@ let deletefromexistingproduct=async(id)=>{
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+                Authorization: `Bearer ${user.accessToken}`,
             },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
             body: JSON.stringify(data), // Convert object to JSON string
           });
       
@@ -185,7 +205,12 @@ let deletefromexistingproduct=async(id)=>{
       
 const fetchuserorder= async()=>{    
 try{
-    let res=await fetch(`${apiUrl}/orders`)
+    let res=await fetch(`${apiUrl}/orders`, {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        // "Content-Type": "application/json", // optional, if needed
+      },
+    })
     if(!res.ok){
         throw new Error("Failed to fetch order");
     }
@@ -252,7 +277,10 @@ useEffect(()=>{
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json", // Sending JSON data
+                    Authorization: `Bearer ${user.accessToken}`,
                 },
+            //  Authorization: `Bearer ${user.accessToken}`,
+                
                 body: JSON.stringify({userDetails}), // Convert object to JSON string
                 
             });
@@ -303,7 +331,11 @@ useEffect(()=>{
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
+                      Authorization: `Bearer ${user.accessToken}`,
                 },
+
+            //  Authorization: `Bearer ${user.accessToken}`,
+                
                 body: JSON.stringify({role,shopname,shopaddress}),
             });
     
@@ -357,6 +389,7 @@ useEffect(()=>{
                 headers: {
                     "Content-Type": "application/json",
                 },
+                
                 body: JSON.stringify({ sales }), // Send an array
             });
     
@@ -449,7 +482,10 @@ useEffect(()=>{
         method:'POST',
         headers: {
           "Content-Type": "application/json",
+            Authorization: `Bearer ${user.accessToken}`,
       },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
       body: JSON.stringify({moodemoji:data.moodemoji,moodcolor:data.moodcolor,moodtype:data.moodtype,msgwithoffer:data.msgwithoffer,msgwithoutoffer:data.msgwithoutoffer }), // Send an array
       })
       if (!response.ok) {
@@ -469,7 +505,11 @@ useEffect(()=>{
 const deleteMoodMsg = async (id) => {
   try {
     let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers:{
+             Authorization: `Bearer ${user.accessToken}`,
+      }
+
     });
     if (!res.ok) throw new Error("Delete failed");
   await  getMoodMessages() // refresh
@@ -483,7 +523,11 @@ const updateMoodMsg = async (id, updatedData) => {
   try {
     let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
       method: 'PUT',
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+       },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
       body: JSON.stringify(updatedData)
     });
     if (!res.ok) throw new Error("Update failed");
@@ -601,7 +645,10 @@ const createCoupon = async (cpn) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
       },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
       body: JSON.stringify(cpn),
     });
 
@@ -678,11 +725,15 @@ const createBundle = async (ids,val) => {
   }
 
   try {
+    setIsLoading(true)
     const response = await fetch(`${apiUrl}/bundle`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
       },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
       body: JSON.stringify({ ids,val}) // e.g. [colorId1, colorId2]
     });
 
@@ -697,6 +748,56 @@ const createBundle = async (ids,val) => {
     console.error("Error:", error);
     alert("Server error");
   }
+  finally{
+    setIsLoading(false)
+  }
+};
+
+
+  const fetchSlots = async () => {
+  console.log("call ho rha hu maiii babyyy");
+  try {
+    setIsLoading(true);
+    
+    const res = await fetch(`${apiUrl}/slots`);
+    if (!res.ok) throw new Error("Failed to fetch slots");
+    
+    const data = await res.json();
+    setSlots(data);
+
+  } catch (err) {
+    console.error("❌ Error fetching slots:", err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const toggleSlot = async (label) => {
+  try {
+    setIsLoading(true);
+
+    const res = await fetch(`${apiUrl}/slot-status/toggle`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+      },
+            //  Authorization: `Bearer ${user.accessToken}`,
+
+      body: JSON.stringify({ label })
+    });
+
+    if (!res.ok) throw new Error("Failed to toggle slot");
+
+     
+    await fetchSlots(); // Refresh list
+setSlotVersion((prev) => prev + 1);
+   
+  } catch (err) {
+    console.error("❌ Error toggling slot:", err);
+  } finally {
+    setIsLoading(false);
+  }
 };
 
 
@@ -706,7 +807,7 @@ const createBundle = async (ids,val) => {
         setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,
         shopkeepersale,updateOrdersWithReturnDetails,
         returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
-        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle}}
+        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle,slots,fetchSlots,toggleSlot}}
     >
       {children}
     </DashboardContext.Provider>
