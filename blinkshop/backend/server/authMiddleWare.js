@@ -2,10 +2,14 @@
 const admin = require("firebase-admin");
 
 // Firebase Admin SDK initialize
-const serviceAccount = require("./lewkout-bcf84-firebase-adminsdk-fbsvc-e8b98209b3.json"); // download this from Firebase > Settings > Service Accounts
+
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    projectId: process.env.FB_PROJECT_ID,
+    clientEmail: process.env.FB_CLIENT_EMAIL,
+    privateKey: process.env.FB_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  }),
 });
 
 const verifyFirebaseToken = async (req, res, next) => {
