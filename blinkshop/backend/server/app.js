@@ -64,12 +64,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
-app.use(cors({
-  origin: "https://lewkout.netlify.app", // Your frontend URL
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
+app.use(cors());//te localhost m h
+// app.use(cors({
+//   origin: "https://lewkout.netlify.app"||"http://localhost:3000", // Your frontend URL
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
+// }));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -81,7 +81,7 @@ app.use(bodyparser.json())
 // require("../database/dbconn.js")
 const connectDB = require('../database/dbconn.js');
 const isAdmin = require('./adminCheck.js');
-const verifyFirebaseToken = require('./authMiddleware.js');
+const verifyFirebaseToken = require('./authMiddleWare.js');
 app.get("/",(req,res)=>{
     res.send("hello")
 })
