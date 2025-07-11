@@ -81,7 +81,7 @@ app.use(bodyparser.json())
 // require("../database/dbconn.js")
 const connectDB = require('../database/dbconn.js');
 const isAdmin = require('./adminCheck.js');
-const verifyFirebaseToken = require('./authMiddleWare.js');
+const verifyFirebaseToken = require('./authMiddleware.js');
 app.get("/",(req,res)=>{
     res.send("hello")
 })
