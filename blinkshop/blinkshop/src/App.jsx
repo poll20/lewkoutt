@@ -189,7 +189,8 @@ import Coupon from "./components/dashboardforadmin/CouponForm";
 import CouponForm from "./components/dashboardforadmin/CouponForm";
 import ReviewProduct from "./components/ReviewProduct";
 import SlotControl from "./components/dashboardforadmin/SlotControl";
-import Bandle from "./components/dashboardforadmin/bandle";
+import Bandle from "./components/dashboardforadmin/Bandle";
+
 import OtpLogin from "./components/OtpLogin";
 
 // import BundleProduct from "./components/BundleProduct";
