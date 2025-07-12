@@ -64,12 +64,12 @@ const products = [
 
 
 const cors = require('cors');
-app.use(cors());//te localhost m h
-// app.use(cors({
-//   origin: "https://lewkout.netlify.app"||"http://localhost:3000", // Your frontend URL
-//   methods: "GET,POST,PUT,PATCH,DELETE",
-//   credentials: true
-// }));//ye deploy ke baad 
+// app.use(cors());//te localhost m h
+app.use(cors({
+  origin: "https://lewkout.netlify.app"||"http://localhost:3000", // Your frontend URL
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -3478,9 +3478,9 @@ app.post("/slot-status/toggle",isAdmin,verifyFirebaseToken, async (req, res) => 
     res.status(500).json({ error: "Toggle failed" });
   }
 });
-app.listen(port, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port: ${port}`);
-});
+// app.listen(port, "0.0.0.0", () => {
+//   console.log(`🚀 Server running on port: ${port}`);
+// });
 (async () => {
   await connectDB();  // ✅ पहले DB कनेक्ट करो, फिर सर्वर स्टार्ट करो
   app.listen(port, () => console.log(`🚀 Server running on port: ${port}`));
