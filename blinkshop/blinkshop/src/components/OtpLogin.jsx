@@ -267,7 +267,8 @@
 
 
     import { useState, useRef, useEffect } from "react";
-    import { FaLock, FaPhone } from "react-icons/fa";
+    import { FaLock } from "react-icons/fa";
+   import { FaPhone } from "react-icons/fa6";
     import { useLocation } from "react-router-dom";
     import { BiTime } from "react-icons/bi";
     import { MdSecurity } from "react-icons/md";
@@ -365,7 +366,7 @@
         setUser(user); // Store user data in context
         //   alert("OTP Verified Successfully");
         setTimeout(() => {
-            navigate("/profile")
+            navigate(-1)
         }, 200);
         } else {
         setError(error || "Invalid OTP. Please try again.");
@@ -396,7 +397,7 @@
         <div className="max-w-md w-full bg-black rounded-2xl shadow-xl p-8 space-y-8" style={{backgroundColor:"white"}}>
             <div className="text-center"style={{backgroundColor:"white"}}>
             <div className="mb-4 inline-block p-3 rounded-full bg-indigo-100">
-                {showOTP ? <FaLock className="text-indigo-600 text-2xl" /> : <FaPhone className="text-indigo-600 text-2xl" />}
+                {showOTP ? <FaLock className="text-indigo-600 text-2xl" /> : <FaPhone />}
             </div>
             <h1 className="text-2xl font-bold text-gray-800">{showOTP ? "OTP Verification" : "Phone Verification"}</h1>
             <p className="mt-2 text-gray-600">

@@ -29,7 +29,7 @@ const [newCoupon, setNewCoupon] = useState("");
       image: [],
       price: "",
       discount: "",
-      discountprice:'',
+      discountprice:"",
       coupons:[],
       defaultColor: "",
       colors: [],
@@ -39,7 +39,10 @@ const [newCoupon, setNewCoupon] = useState("");
       printtype: "",
       styletype: "",
       shopname:"",
-      shopaddress:""
+      shopaddress:"",
+      rentalcloth:"",
+      rentalprice:"",
+    
       
     },
   });
@@ -56,7 +59,7 @@ const [newCoupon, setNewCoupon] = useState("");
       image: [],
       price: "",
       discount: "",
-      discountprice:'',
+      discountprice:"",
       coupons:[],
       defaultColor: "",  // ✅ New field added here
       colors: [],
@@ -67,6 +70,9 @@ const [newCoupon, setNewCoupon] = useState("");
       styletype: "",
       shopname:"",
       shopaddress:"",
+      rentalcloth:"",
+      rentalprice:"",
+      
       
     },
   });
@@ -75,7 +81,11 @@ const [newCoupon, setNewCoupon] = useState("");
     image: "",
     title: "",
     tag: "",
-    description: "", });
+    description: "",
+    rentalcloth:"",
+      rentalprice:"",
+    
+   });
   const [newSize, setNewSize] = useState({ size: "", quantity: "", image: [] });
 
   // ✅ Handle input change dynamically for both cases

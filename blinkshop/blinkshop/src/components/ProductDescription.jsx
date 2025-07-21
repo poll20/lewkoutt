@@ -981,10 +981,10 @@ if(getbundeldata){
       </NavLink>
 
       {/* Customer Reviews */}
-      <NavLink to={`/prdreview/${product._id || colorid}/${product.avgRating}`} className="prd-ka-dropdown-item navlink">
+      {/* <NavLink to={`/prdreview/${product._id || colorid}/${product.avgRating}`} className="prd-ka-dropdown-item navlink">
         <span>Customer Reviews</span>
         <span className="prd-ka-dropdown-arrow">›</span>
-      </NavLink>
+      </NavLink> */}
     </div>
     {/* {
       getbundeldata?(    <BundleProduct

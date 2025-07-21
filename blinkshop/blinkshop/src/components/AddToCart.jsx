@@ -14,7 +14,7 @@ import BundleProduct from './BundleProduct';
 
 const AddToCart = () => {
   const navigate = useNavigate();
-  const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata } = useBio();
+  const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart } = useBio();
   const [choosebuy,setchoosebuy]=useState([])
   const [popup, setPopup] = useState(false);
   const [popupbreakup,setpopupbreakup]=useState(false)
@@ -25,6 +25,11 @@ const AddToCart = () => {
  const[cprice,setcprice]=useState(0)
   
   
+
+   useEffect(() => {
+    getRecommendationsFromCart(); // Jab cart open ho ya mount ho
+  }, [])
+
   const openPopup = (id,prd) => {
     setPopup(true);
     setPopupProductId(id); // Save the specific product ID for the popup
@@ -301,26 +306,30 @@ if(!addtocartdatas){
   <EmptyCart endpoint={window.location.pathname.substring(1)} />
 )}
 
-        <div className="bottom-sheet"  style={{ display:choosebuy.length>0 && addtocartdatas.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
+        <div className="bottom-sheet"  style={{borderTop:"1px solid gray", display:choosebuy.length>0 && addtocartdatas.length>0?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
           <div style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
             <div>
          <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
          <span className="original-price">₹{cprice}</span>
          </div>
-         <div>
-         <span onClick={(()=>(setpopupbreakup(!popupbreakup)))}>View breakup</span>
+         <span style={{fontSize:"14px"}} onClick={(()=>(setpopupbreakup(!popupbreakup)))}>View breakup</span>
           
-         </div>
+        
          {/* <span>break up</span> */}
          </div>
        
-        <button className="buy-buttonss" style={{width:"140px",backgroundColor:"#F15A29"}} onClick={()=>{sendtocheckout()}} >Buy Now</button>
+        <button className="buy-buttonss" style={{width:"140px",backgroundColor:"#F15A29"}} onClick={()=>{sendtocheckout()}} >Select Address</button>
        </div>
        
-       <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
+       <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),flexDirection:"column", alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
-         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
-        <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Wishlist</button>
+       <span>Would you like ti move this item to Wishlist?</span>
+       <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-around"}}>
+        <button className="buy-buttonss" style={{width:"140px" ,background:"black",color:"white"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Yes move this item</button>
+
+         <button className="buy-buttonss" style={{width:"140px",background:"white",color:"black"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
+         </div>
+        {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Wishlist</button> */}
        </div>
 
          <div className="bottom-sheet" style={{ display:popupbreakup?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
@@ -328,7 +337,7 @@ if(!addtocartdatas){
          {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
         <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Wishlist</button> */}
         <div style={styles.container}>
-      <h3 style={styles.heading}>Price Breakup</h3>
+      <span>Price Breakup</span>
       <p style={styles.orderDetails}>Order Details {choosebuy?.length==1?(<span>{choosebuy?.length} Item</span>):(<span>{choosebuy?.length} Items</span>)}</p>
 
       <div style={styles.row}>
@@ -365,7 +374,55 @@ if(!addtocartdatas){
     </div>
        </div>
 
-       
+       <div>
+      {/* Your cart items here */}
+
+      {recommendations?.length > 0 && (
+  <div className="you-might-like" style={{ padding: "10px" }}>
+    <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
+    <div style={{
+      display: "flex",
+      overflowX: "auto",
+      gap: "12px",
+      paddingBottom: "10px",
+      scrollbarWidth: "none",
+      msOverflowStyle: "none"
+    }}>
+      {recommendations.map((product, index) => {
+        const detail = product.productdetails?.[0];
+        const images = Array.isArray(detail?.image) ? detail.image : [];
+        const fallbackImage = product.image;
+
+        return (
+          <div key={index} style={{
+            minWidth: "140px",
+            borderRadius: "0",
+            overflow: "hidden",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            flex: "0 0 auto",
+            background: "#fff"
+          }}>
+            <img
+              src={images[0] || fallbackImage}
+              alt="product"
+              style={{
+                width: "100%",
+                height: "140px",
+                objectFit: "cover",
+                display: "block"
+              }}
+            />
+            {/* <p style={{ textAlign: "center", fontSize: "14px", padding: "5px 0", margin: 0 }}>
+              {product.category}
+            </p> */}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+    </div>
       </div>
     </>
   );
@@ -373,6 +430,7 @@ if(!addtocartdatas){
 const styles = {
   container: {
     width: '350px',
+    height: '330px',
     border: '1px solid #ccc',
     borderRadius: '12px',
     padding: '20px',
@@ -381,7 +439,7 @@ const styles = {
     boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
   },
   heading: {
-    marginBottom: '10px',
+    marginBottom: '5px',
   },
   orderDetails: {
     marginBottom: '20px',

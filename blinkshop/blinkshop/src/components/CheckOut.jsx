@@ -620,7 +620,9 @@ setyppicode(true)
         <p className="discount-text-checkoutbuy">🎉 Yay! You saved ₹{purchaseproduct.length==1?(Math.abs(amountafteraddcoupon+mywalletAmount) || purchaseproduct[0].price-purchaseproduct[0].discountprice+mywalletAmount):(Math.abs(amountafteraddcoupon+mywalletAmount) || totalPrice-totalDiscountPrice+mywalletAmount)}.0 on the final amount</p>
       </div>
 
-     {deleveryaddress[0].city=="Jaipur"?(<TimeSlots/>):('') }
+     {/* {deleveryaddress[0]?.city=="Jaipur"?(<TimeSlots/>):('') } */}
+     {deleveryaddress[0]?.city=="jaipur"?(<TimeSlots/>):('') }
+
 
     {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);/*setTimeout(()=>{recordMultipleSales(purchaseproduct)},300)*/ }} >Pay Now</button>):('')}
 

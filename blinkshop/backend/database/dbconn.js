@@ -1,8 +1,9 @@
 let mongoose=require("mongoose")
 // const {slotmodel} = require('./collection.js');
+let {productsmodel}=require("./collection.js")
 const connectDB = async () => {
    try {
-     mongoose.set('bufferCommands', false); // ✅ पहले ही सेट कर दो
+    //  mongoose.set('bufferCommands', false); // ✅ पहले ही सेट कर दो
  
      await mongoose.connect(process.env.MONGO_URI
       , {
@@ -12,6 +13,20 @@ const connectDB = async () => {
     );
  
      console.log("✅ MongoDB connected successfully");
+     // productdetails.searchcount == null
+// await productsmodel.updateMany(
+//   { "productdetails.searchcount": null },
+//   { $set: { "productdetails.$[pd].searchcount": 0 } },
+//   { arrayFilters: [{ "pd.searchcount": null }] }
+// );
+
+// // colors[].searchcount == null
+// await productsmodel.updateMany(
+//   { "productdetails.colors.searchcount": null },
+//   { $set: { "productdetails.$[].colors.$[c].searchcount": 0 } },
+//   { arrayFilters: [{ "c.searchcount": null }] }
+// );
+
     //  const existing = await slotmodel.find();
   // if (existing.length === 0) {
   //   await slotmodel.insertMany([

@@ -54,7 +54,8 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
  const [showmeaddress,setshowmeaddress]=useState(false)
  const [showloginpage,setshowloginpage]=useState(false)
  const [distance,setdistance]=useState('')
- 
+    const [recommendations, setRecommendations] = useState([]);
+    const[topproducts,setTopProducts]=useState([])
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -350,7 +351,7 @@ useEffect(() => {
     //       const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //       settoastmsg("item removed successfully")
-    showPopup("removed to Wishlist")
+    showPopup("Removed from Wishlist")
         }
       }
     } catch (error) {
@@ -382,7 +383,7 @@ useEffect(() => {
     //    const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //    settoastmsg("item removed successfully")
-    showPopup("Removed to Wishlist")
+    showPopup("Removed From Wishlist")
       }
       else {
     //     const toast = new window.bootstrap.Toast(toastRef.current);
@@ -480,7 +481,7 @@ console.log("iredandid",prd,id)
     //     const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //     settoastmsg("item moved successfully")
-    showPopup("item moved")
+    showPopup("Item Moved")
          removefromaddtocart(id)
         }
     }
@@ -644,7 +645,7 @@ finally{
     //            const toast = new window.bootstrap.Toast(toastRef.current);
     // toast.show();
     //            settoastmsg("item removed successfully")
-    showPopup("Removed to Bag")
+    showPopup("Removed From Bag")
              }
              else{
     //           const toast = new window.bootstrap.Toast(toastRef.current);
@@ -1398,6 +1399,42 @@ const fetchDistance = async (deleveryaddress) => {
   }
 };
 
+const getRecommendationsFromCart = async () => {
+  console.log("call ho rha hai na loduu")
+
+  try {
+   setIsLoading(true)
+console.log("user tokening",user?.accessToken)
+    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails?._id}`);
+
+    const data = await res.json();
+    console.log("mixx cart",data)
+    setRecommendations(data.products || []);
+  } catch (error) {
+    console.error("Recommendation fetch error", error);
+    setRecommendations([]);
+  }
+  finally{
+    setIsLoading(false)
+  }
+};
+
+// somewhere in BioContext or useEffect in component
+const fetchTopSearched = async () => {
+  try {
+    setIsLoading(true)
+    const res = await fetch(`${apiUrl}/products/topsearched`);
+    const data = await res.json();
+    console.log("topsearch",data)
+    setTopProducts(data.products || []);
+  } catch (err) {
+    console.error("Top searched fetch failed", err);
+  }
+  finally{
+    setIsLoading(false)
+  }
+};
+
 
 
   return (
@@ -1479,7 +1516,11 @@ const fetchDistance = async (deleveryaddress) => {
         fetchDistance,
         distance,
         showloginpage,
-        setshowloginpage
+        setshowloginpage,
+        getRecommendationsFromCart,
+        recommendations,
+        fetchTopSearched,
+        topproducts
         
         
 

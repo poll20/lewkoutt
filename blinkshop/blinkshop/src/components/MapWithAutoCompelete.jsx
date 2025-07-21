@@ -478,6 +478,19 @@ autocomplete.setFields([
     <div className="address-containerrr">
       <div className="address-form">
         <h3 className="section-title">Address Information</h3>
+   
+
+
+ <input
+          type="text"
+          placeholder="Full Name*"
+          value={uname}
+          onChange={(e) => setUname(e.target.value)}
+          onBlur={() => handleBlur('uname')}
+        />
+        {touched.pincode && isFieldEmpty(uname) && (
+          <p className="text-red-600 text-sm mt-1">This field is required</p>
+        )}
 
         <input
           type="text"
@@ -489,7 +502,7 @@ autocomplete.setFields([
         {touched.pincode && isFieldEmpty(pincode) && (
           <p className="text-red-600 text-sm mt-1">This field is required</p>
         )}
-        <input
+        {/* <input
           type="text"
           placeholder="uname*"
           value={uname}
@@ -498,7 +511,7 @@ autocomplete.setFields([
         />
         {touched.pincode && isFieldEmpty(uname) && (
           <p className="text-red-600 text-sm mt-1">This field is required</p>
-        )}
+        )} */}
 
         <input
           type="text"
@@ -550,7 +563,7 @@ autocomplete.setFields([
 
         <input
           type="text"
-          placeholder="City"
+          placeholder="City*"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           onBlur={() => handleBlur('city')}
@@ -561,7 +574,7 @@ autocomplete.setFields([
         
         <input
           type="text"
-          placeholder="State"
+          placeholder="State*"
           value={state}
           onChange={(e) => setState(e.target.value)}
           onBlur={() => handleBlur('state')}

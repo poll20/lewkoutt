@@ -204,6 +204,7 @@ const orders = mongoose.Schema({
       size: String,
       shopname: String,
       totalAmount: Number,
+
        bundle:[{
        productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
       title:{type:String},
@@ -280,6 +281,40 @@ const colorSchema = new mongoose.Schema({
     color: {
         type: String,
     },
+    rentalcloth:{type:String},
+      rentalprice:{type:Number},
+      availability: {
+    type: [Date],
+    default: function () {
+      const today = new Date();
+      const dates = [];
+
+      const currentMonth = today.getMonth();
+      const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+      const currentYear = today.getFullYear();
+      const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+
+      const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      for (let d = 1; d <= daysInCurrentMonth; d++) {
+        dates.push(new Date(currentYear, currentMonth, d));
+      }
+
+      const daysInNextMonth = new Date(nextMonthYear, nextMonth + 1, 0).getDate();
+      for (let d = 1; d <= daysInNextMonth; d++) {
+        dates.push(new Date(nextMonthYear, nextMonth, d));
+      }
+
+      return dates;
+    }
+  },
+
+  bookings: [
+    {
+      from: { type: Date, required: true },
+      to: { type: Date, required: true },
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
+    }
+  ],
     bundel:{type:String},
     bundelprice:{type:Number},
     title:{type:String},
@@ -312,6 +347,7 @@ returncount:{tye:Number},
         type:Number,
         default:0
       },
+      searchcount:{type:Number,default: 0 },
       ratingCount: { type: Number, default: 0 },
       
 sizes: [sizeSchema]
@@ -336,6 +372,7 @@ const CategorySchema = new mongoose.Schema({
       image:{
        type:[String]
       },
+  
       price: {
         type: Number,
        
@@ -360,8 +397,43 @@ const CategorySchema = new mongoose.Schema({
       defaultColor:{
         type:String
       },
+       searchcount:{type:Number,default: 0 },
       colors: [colorSchema],
-     
+      
+     rentalcloth:{type:String},
+      rentalprice:{type:Number},
+    availability: {
+    type: [Date],
+    default: function () {
+      const today = new Date();
+      const dates = [];
+
+      const currentMonth = today.getMonth();
+      const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+      const currentYear = today.getFullYear();
+      const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+
+      const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      for (let d = 1; d <= daysInCurrentMonth; d++) {
+        dates.push(new Date(currentYear, currentMonth, d));
+      }
+
+      const daysInNextMonth = new Date(nextMonthYear, nextMonth + 1, 0).getDate();
+      for (let d = 1; d <= daysInNextMonth; d++) {
+        dates.push(new Date(nextMonthYear, nextMonth, d));
+      }
+
+      return dates;
+    }
+  },
+
+  bookings: [
+    {
+      from: { type: Date, required: true },
+      to: { type: Date, required: true },
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
+    }
+  ],
       occasion: {
         type: String,
         
@@ -429,7 +501,7 @@ ProductSchema.index({
 const WalletTransactionSchema = new mongoose.Schema({
   userId: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: "User", 
+    ref: "user", 
     required: true 
   }, // 🔥 User reference
 
@@ -542,7 +614,7 @@ const couponSchema = new mongoose.Schema({
 const couponUsageSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
     required: true,
   },
   couponCode: {

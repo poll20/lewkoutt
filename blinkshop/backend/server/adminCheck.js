@@ -6,7 +6,7 @@ const isAdmin = async (req, res, next) => {
   // const user = await userr.findOne({ uid: uid });
 
   if (userr.role !== "admin") {
-    console.log("admins onlyy ")
+    console.log("a")
     return res.status(403).json({ message: "Access Denied: Admins only" });
   }
 

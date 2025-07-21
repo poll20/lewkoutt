@@ -176,15 +176,49 @@ import img1 from "./image/img3.jpg";
 import { useBio } from "./BioContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Typewriter } from 'react-simple-typewriter';
+import { LoadingProvider, useLoading } from "./LoadingContext";
+import useDebounce from "./useDeboune";
+import AutoScrollCarasoul from "./AutoscrollCarasoul";
 
 const SearchComponent = () => {
-  const { bestsellingdata, productdataonlydetail, getsearchinput, catecate } = useBio();
+  const { bestsellingdata, productdataonlydetail, getsearchinput, catecate,fetchTopSearched,topproducts } = useBio();
+  const {setIsLoading}=useLoading()
   const [bestsale, setbestsale] = useState([]);
   const [search, setSearch] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate=useNavigate()
+   const debouncedSearch = useDebounce(search, 400); // 🟡 DEBOUNCE VALUE
+
+
+
+  useEffect(()=>{
+    fetchTopSearched()
+  },[])
+   // 🟡 Fetch on debouncedSearch, not on each keypress
+  useEffect(() => {
+    const fetchSearch = async () => {
+      if (debouncedSearch.trim() === "") {
+        setFilteredProducts([]);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const res = await fetch(`${apiUrl}/search?q=${debouncedSearch}`);
+        const data = await res.json();
+        setFilteredProducts(data.products || []);
+      } catch (err) {
+        console.error("Error fetching search:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSearch();
+  }, [debouncedSearch]);
+
   const handleChange = async (e) => {
     const input = e.target.value;
     setSearch(input);
@@ -195,18 +229,19 @@ const SearchComponent = () => {
       return;
     }
 
-    try {
-      setLoading(true);
-      const res = await fetch(`${apiUrl}/search?q=${input}`);
+//     try {
+//       console.log("searchinggggg....",input)
+//       setIsLoading(true);
+//       const res = await fetch(`${apiUrl}/search?q=${input}`);
 
-   const data = await res.json();
-   console.log("searche",data)
-setFilteredProducts(data.products || []);
-    } catch (err) {
-      console.error("Error fetching search:", err);
-    } finally {
-      setLoading(false);
-    }
+//    const data = await res.json();
+//    console.log("searche",data)
+// setFilteredProducts(data.products || []);
+//     } catch (err) {
+//       console.error("Error fetching search:", err);
+//     } finally {
+//       setIsLoading(false);
+//     }
   };
 
   useEffect(() => {
@@ -280,7 +315,7 @@ setFilteredProducts(data.products || []);
       )}
 
       {/* Trending Products */}
-      <div className="section" style={{ marginTop: "30px" }}>
+      {/* <div className="section" style={{ marginTop: "30px" }}>
         <h2>Trending Products 🔥</h2>
         <div className="trending-products">
           {bestsale.map((product, index) => (
@@ -292,10 +327,25 @@ setFilteredProducts(data.products || []);
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
+      {/* // UI Display */}
+{/* {topproducts?.length > 0 && (
+  <AutoScrollCarasoul
+    images={topproducts.map((p) => p.image)}  // ✅ correct prop name
+  />
+)} */}
+{topproducts?.length > 0 && (
+  <AutoScrollCarasoul
+    data={topproducts.map((p) => ({
+      _id: p._id,
+      image: p.image,
+    }))}
+  />
+)}
+
 
       {/* Categories */}
-      <div className="section">
+      {/* <div className="section">
         <h2>Popular Categories</h2>
         <div className="categories-sme">
           {catecate.map((category, index) => (
@@ -307,7 +357,7 @@ setFilteredProducts(data.products || []);
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

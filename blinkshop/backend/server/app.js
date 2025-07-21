@@ -1,6 +1,7 @@
 require('dotenv').config();
 let express=require("express")
 let app= express()
+// const mongoose = require("mongoose");
 const axios = require("axios");
 const cron = require("node-cron")
 const jwt = require("jsonwebtoken");
@@ -64,12 +65,12 @@ const products = [
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
-app.use(cors({
-  origin: "https://lewkout.netlify.app"||"http://localhost:3000", // Your frontend URL
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
+app.use(cors());//te localhost m h
+// app.use(cors({
+//   origin: "https://lewkout.netlify.app"||"http://localhost:3000", // Your frontend URL
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
+// }));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -2189,6 +2190,7 @@ app.post('/order', async (req, res) => {
 
     const addressd = {
   pincode: address?.[0]?.pincode || "",
+  uname: address?.[0]?.uname || "",
   building: address?.[0]?.building || "",
   locality:address?.[0]?.locality || "",
   address: userDetails.address?.[0]?.address || "",
@@ -2235,7 +2237,7 @@ console.log("neworder",newOrder)
 
 
 // 🔵 GET: Fetch all orders (For Admin)
-app.get('/orders',isAdmin,verifyFirebaseToken, async (req, res) => {
+app.get('/orders', async (req, res) => {
   try {
       const orders = await orderr.find().populate('products.productId').lean(); // Populate product details
       res.status(200).json(orders);
@@ -2284,7 +2286,7 @@ console.log("Order Products:", userOrders[0].products);
   }
 });
 
-app.put('/order/deliver/:id',isAdmin,verifyFirebaseToken, async (req, res) => {
+app.put('/order/deliver/:id',verifyFirebaseToken, async (req, res) => {
   try {
       const order = await orderr.findById(req.params.id);
       const {userDetails}=req.body 
@@ -3191,83 +3193,243 @@ console.log("bundleprice",val)
 
 
 
+// app.get("/search", async (req, res) => {
+//   const { q } = req.query;
+
+//   if (!q || q.trim() === "") {
+//     return res.json({ products: [] });
+//   }
+
+//   try {
+//     const results = await productsmodel.aggregate([
+//       {
+//         $search: {
+//           index: "lewkoutsearch",
+//           compound: {
+//             should: [
+//               {
+//                 text: {
+//                   query: q,
+//                   path: [
+//                     "productdetails.tag",
+//                     "productdetails.title",
+//                     "productdetails.description",
+//                     "productdetails.colors.title",
+//                     "productdetails.colors.tag",
+//                     "productdetails.colors.description"
+//                   ],
+//                   fuzzy: {
+//                     maxEdits: 2
+//                   }
+//                 }
+//               }
+//             ]
+//           }
+//         }
+//       },
+//       {
+//         $project: {
+//           category: 1,
+//           image: 1,
+//           productdetails: {
+//             $filter: {
+//               input: "$productdetails",
+//               as: "detail",
+//               cond: {
+//                 $or: [
+//                   { $regexMatch: { input: "$$detail.title", regex: q, options: "i" } },
+//                   { $regexMatch: { input: "$$detail.tag", regex: q, options: "i" } },
+//                   { $regexMatch: { input: "$$detail.description", regex: q, options: "i" } },
+//                   {
+//                     $gt: [
+//                       {
+//                         $size: {
+//                           $filter: {
+//                             input: "$$detail.colors",
+//                             as: "color",
+//                             cond: {
+//                               $or: [
+//                                 { $regexMatch: { input: "$$color.title", regex: q, options: "i" } },
+//                                 { $regexMatch: { input: "$$color.tag", regex: q, options: "i" } },
+//                                 { $regexMatch: { input: "$$color.description", regex: q, options: "i" } }
+//                               ]
+//                             }
+//                           }
+//                         }
+//                       },
+//                       0
+//                     ]
+//                   }
+//                 ]
+//               }
+//             }
+//           }
+//         }
+//       },
+//       { $limit: 10 }
+//     ]);
+
+//     res.json({ products: results });
+//   } catch (err) {
+//     console.error("Search Error:", err);
+//     res.status(500).json({ error: "Search failed" });
+//   }
+// });
+
 app.get("/search", async (req, res) => {
   const { q } = req.query;
 
-  if (!q || q.trim() === "") {
-    return res.json({ products: [] });
-  }
+  // 1) खाली query तो खाली रिज़ल्ट
+  if (!q || q.trim() === "") return res.json({ products: [] });
 
-  try {
-    const results = await productsmodel.aggregate([
-      {
-        $search: {
-          index: "lewkoutsearch",
-          compound: {
-            should: [
-              {
-                text: {
-                  query: q,
-                  path: [
-                    "productdetails.tag",
-                    "productdetails.title",
-                    "productdetails.description",
-                    "productdetails.colors.title",
-                    "productdetails.colors.tag",
-                    "productdetails.colors.description"
-                  ],
-                  fuzzy: {
-                    maxEdits: 2
-                  }
-                }
+  // 2) regex बना लें (case‑insensitive + special‑char escape)
+  const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const r = new RegExp(escapeRegex(q.trim()), "i");
+
+  // 3) MongoDB Atlas Search + projection
+  const pipeline = [
+    {
+      $search: {
+        index: "lewkoutsearch",      // ⬅️ अपना सर्च इंडेक्स
+        compound: {
+          should: [
+            {
+              text: {
+                query: q,
+                path: [
+                  "productdetails.tag",
+                  "productdetails.title",
+                  "productdetails.description",
+                  "productdetails.colors.title",
+                  "productdetails.colors.tag",
+                  "productdetails.colors.description"
+                ],
+                fuzzy: { maxEdits: 2 }
               }
-            ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      $project: {
+        category: 1,
+        image: 1,
+        productdetails: {
+          $filter: {
+            input: "$productdetails",
+            as: "pd",
+            cond: {
+              $or: [
+                { $regexMatch: { input: "$$pd.title", regex: r } },
+                { $regexMatch: { input: "$$pd.tag", regex: r } },
+                { $regexMatch: { input: "$$pd.description", regex: r } },
+                {
+                  $gt: [
+                    {
+                      $size: {
+                        $filter: {
+                          input: "$$pd.colors",
+                          as: "c",
+                          cond: {
+                            $or: [
+                              { $regexMatch: { input: "$$c.title", regex: r } },
+                              { $regexMatch: { input: "$$c.tag", regex: r } },
+                              { $regexMatch: { input: "$$c.description", regex: r } }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    0
+                  ]
+                }
+              ]
+            }
           }
         }
-      },
-      {
-        $project: {
-          category: 1,
-          image: 1,
-          productdetails: {
-            $filter: {
-              input: "$productdetails",
-              as: "detail",
-              cond: {
-                $or: [
-                  { $regexMatch: { input: "$$detail.title", regex: q, options: "i" } },
-                  { $regexMatch: { input: "$$detail.tag", regex: q, options: "i" } },
-                  { $regexMatch: { input: "$$detail.description", regex: q, options: "i" } },
-                  {
-                    $gt: [
+      }
+    },
+    { $limit: 10 }
+  ];
+
+  try {
+    // 4) सर्च चलाइए
+    const products = await productsmodel.aggregate(pipeline);
+
+    // 5) bulk‑update ops तैयार कीजिए
+    const bulkOps = products.map((doc) => ({
+      updateOne: {
+        filter: { _id: doc._id },
+        /** MongoDB 4.2+ pipeline‑update */
+        update: [
+          {
+            $set: {
+              productdetails: {
+                $map: {
+                  input: "$productdetails",
+                  as: "pd",
+                  in: {
+                    $mergeObjects: [
+                      "$$pd",
                       {
-                        $size: {
-                          $filter: {
-                            input: "$$detail.colors",
-                            as: "color",
-                            cond: {
+                        /** ---------- productdetails.searchcount ---------- */
+                        searchcount: {
+                          $cond: [
+                            {
                               $or: [
-                                { $regexMatch: { input: "$$color.title", regex: q, options: "i" } },
-                                { $regexMatch: { input: "$$color.tag", regex: q, options: "i" } },
-                                { $regexMatch: { input: "$$color.description", regex: q, options: "i" } }
+                                { $regexMatch: { input: "$$pd.title", regex: r } },
+                                { $regexMatch: { input: "$$pd.tag", regex: r } },
+                                { $regexMatch: { input: "$$pd.description", regex: r } }
+                              ]
+                            },
+                            { $add: ["$$pd.searchcount", 1] },
+                            "$$pd.searchcount"
+                          ]
+                        },
+                        /** ---------- colors[].searchcount ---------- */
+                        colors: {
+                          $map: {
+                            input: "$$pd.colors",
+                            as: "c",
+                            in: {
+                              $mergeObjects: [
+                                "$$c",
+                                {
+                                  searchcount: {
+                                    $cond: [
+                                      {
+                                        $or: [
+                                          { $regexMatch: { input: "$$c.title", regex: r } },
+                                          { $regexMatch: { input: "$$c.tag", regex: r } },
+                                          { $regexMatch: { input: "$$c.description", regex: r } }
+                                        ]
+                                      },
+                                      { $add: ["$$c.searchcount", 1] },
+                                      "$$c.searchcount"
+                                    ]
+                                  }
+                                }
                               ]
                             }
                           }
                         }
-                      },
-                      0
+                      }
                     ]
                   }
-                ]
+                }
               }
             }
           }
-        }
-      },
-      { $limit: 10 }
-    ]);
+        ]
+      }
+    }));
 
-    res.json({ products: results });
+    // 6) bulkWrite फ़ायर कीजिए (अगर कुछ मिला)
+    if (bulkOps.length) await productsmodel.bulkWrite(bulkOps);
+
+    // 7) response
+    res.json({ products });
   } catch (err) {
     console.error("Search Error:", err);
     res.status(500).json({ error: "Search failed" });
@@ -3277,6 +3439,229 @@ app.get("/search", async (req, res) => {
 
 
 
+
+
+/*  GET /cart/recommendations
+ *  → 15‑20 products that match cart category/tag but aren’t in cart
+ */
+
+// app.get("/cart/recommendations/:userId", async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+// console.log("uerId",userId)
+//     const cart = await addtocart.find({ userId }).lean();
+// console.log("cart",cart)
+//     if (!cart || cart.length === 0) {
+//       return res.json({ products: [] });
+//     }
+
+//     // ✅ Convert to ObjectId array safely
+//     const cartIds = cart.map(item =>(item.productId));
+// console.log("cartIds",typeof(cartIds),cartIds)
+//     // ✅ Get product meta info
+//     const cartMeta = await productsmodel.find(
+//       { _id: { $in: cartIds } },
+//       { category: 1, "productdetails.tag": 1, "productdetails.colors.tag": 1 }
+//     ).lean();
+// console.log("cartmeta",cartMeta)
+//     if (!cartMeta.length) {
+//       return res.json({ products: [] });
+//     }
+
+//     // ✅ Collect category
+//     const cartCategories = [...new Set(cartMeta.map(p => p.category).filter(Boolean))];
+
+//     // ✅ Collect all tags including color tags
+//     const cartTags = [
+//       ...new Set(
+//         cartMeta.flatMap(p =>
+//           (p.productdetails || []).flatMap(detail => [
+//             ...(detail.tag ? [detail.tag] : []),
+//             ...(detail.colors || []).map(c => c.tag).filter(Boolean)
+//           ])
+//         )
+//       )
+//     ];
+
+//     if (!cartCategories.length && !cartTags.length) {
+//       return res.json({ products: [] });
+//     }
+
+//     // ✅ Build match query with case-insensitive regex
+//     const matchConditions = [];
+
+//     if (cartCategories.length) {
+//       matchConditions.push({ category: { $in: cartCategories } });
+//     }
+
+//     if (cartTags.length) {
+//       const regexTags = cartTags.map(tag => new RegExp(tag, "i")); // case-insensitive
+//       matchConditions.push({
+//         $or: [
+//           { "productdetails.tag": { $in: regexTags } },
+//           { "productdetails.colors.tag": { $in: regexTags } }
+//         ]
+//       });
+//     }
+
+//     // ✅ Final aggregate
+//     const suggestions = await productsmodel.aggregate([
+//       {
+//         $match: {
+//           _id: { $nin: cartIds },
+//           $or: matchConditions
+//         }
+//       },
+//       { $sample: { size: 20 } },
+//       {
+//         $project: {
+//           category: 1,
+//           image: { $arrayElemAt: ["$image", 0] },
+//           productdetails: { $slice: ["$productdetails", 1] }
+//         }
+//       }
+//     ]);
+
+//     res.json({ products: suggestions });
+//   } catch (err) {
+//     console.error("🔥 Recommendation Error:", err);
+//     res.status(500).json({ error: "Recommendation failed" });
+//   }
+// });
+
+app.get("/cart/recommendations/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const cart = await addtocart.find({ userId }).lean();
+
+    if (!cart || cart.length === 0) {
+      return res.json({ products: [] });
+    }
+
+    // ✅ Step 1: Get all productIds from cart
+    const cartIds = cart.map((item) => (item.productId));
+    console.log("🛒 Cart IDs:", cartIds);
+
+    // ✅ Step 2: Match via productdetails._id and productdetails.colors._id
+    const cartMeta = await productsmodel.aggregate([
+      { $unwind: "$productdetails" },
+      {
+        $match: {
+          $or: [
+            { "productdetails._id": { $in: cartIds } },
+            { "productdetails.colors._id": { $in: cartIds } }
+          ]
+        }
+      }
+    ]);
+
+    console.log("📦 cartMeta:", cartMeta);
+
+    // ✅ Step 3: Extract tags and categories (case-insensitive support)
+    const cartCategories = [
+      ...new Set(cartMeta.map((p) => p.category?.toLowerCase()).filter(Boolean))
+    ];
+
+    const cartTags = [
+      ...new Set(
+        cartMeta.flatMap((p) =>
+          p.productdetails?.colors?.map((c) => c.tag?.toLowerCase()).filter(Boolean)
+        )
+      )
+    ];
+
+    console.log("🏷️ Tags:", cartTags);
+    console.log("📂 Categories:", cartCategories);
+
+    // ✅ Step 4: Find recommendations
+    const suggestions = await productsmodel.aggregate([
+      {
+        $match: {
+          $or: [
+            { category: { $in: cartCategories } },
+            { "productdetails.colors.tag": { $in: cartTags } }
+          ]
+        }
+      },
+      { $sample: { size: 20 } },
+      {
+  $project: {
+    category: 1,
+    image: {
+      $cond: {
+        if: { $isArray: "$image" },
+        then: { $arrayElemAt: ["$image", 0] },
+        else: "$image"
+      }
+    },
+    productdetails: { $slice: ["$productdetails", 1] }
+  }
+}
+
+    ]);
+
+    res.json({ products: suggestions });
+  } catch (err) {
+    console.error("🔥 Rec Error:", err);
+    res.status(500).json({ error: "Failed to fetch recommendations" });
+  }
+});
+
+
+
+app.get("/products/topsearched", async (req, res) => {
+  try {
+    // Step 1: From productdetails
+    const detailResults = await productsmodel.aggregate([
+      { $unwind: "$productdetails" },
+      {
+        $project: {
+          _id: "$productdetails._id", // unique
+          tag: "$productdetails.tag",
+          image: { $arrayElemAt: ["$productdetails.image", 0] },
+          searchcount: "$productdetails.searchcount"
+        }
+      },
+      { $match: { searchcount: { $gt: 0 } } }
+    ]);
+
+    // Step 2: From productdetails.colors
+    const colorResults = await productsmodel.aggregate([
+      { $unwind: "$productdetails" },
+      { $unwind: "$productdetails.colors" },
+      {
+        $project: {
+          _id: "$productdetails.colors._id", // unique
+          tag: "$productdetails.colors.tag",
+          image: { $arrayElemAt: ["$productdetails.image", 0] },
+          searchcount: "$productdetails.colors.searchcount"
+        }
+      },
+      { $match: { searchcount: { $gt: 0 } } }
+    ]);
+
+    // Step 3: Merge + deduplicate by _id
+    const merged = [...detailResults, ...colorResults];
+
+    const uniqueMap = new Map();
+    merged.forEach((item) => {
+      if (!uniqueMap.has(item._id.toString())) {
+        uniqueMap.set(item._id.toString(), item);
+      }
+    });
+
+    // Step 4: Convert back to array & sort by searchcount
+    const finalList = Array.from(uniqueMap.values())
+      .sort((a, b) => b.searchcount - a.searchcount)
+      .slice(0, 20); // max 20
+
+    res.json({ products: finalList });
+  } catch (err) {
+    console.error("🔥 Error in topsearched:", err);
+    res.status(500).json({ error: "Failed to fetch top searched products" });
+  }
+});
 
 
 

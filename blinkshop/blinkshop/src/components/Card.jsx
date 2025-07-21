@@ -411,7 +411,7 @@ if(searchvalue){
       <>
       {
         !wish?(<div className={!props.category?("filter-containerrr"):("hidefiltersec")} style={{borderBottom:"1px solid gray",backgroundColor:' white'}}>
-          <div className="filter-row">
+          <div className="filter-row" style={{display:"flex",alignItems:"center",justifyContent:"space-evenly"}}>
           
             <div className="filter-btn" onClick={() => togglePanel("sort")}>
             
@@ -434,7 +434,7 @@ if(searchvalue){
               )}
             </div>
 
-            <div className="filter-btn" onClick={() => togglePanel("size")}>
+            {/* <div className="filter-btn" onClick={() => togglePanel("size")}>
               {Object.entries(selectedSizes)
                 .flatMap(([category, sizes]) =>
                   sizes.map((size) => (
@@ -458,7 +458,11 @@ if(searchvalue){
                   []
                 )}
               {!Object.values(selectedSizes).flat().length &&   <span>Size <IoIosArrowDown/></span>}
-            </div>
+            </div> */}
+
+
+
+
             <div className="filter-btn">
             <NavLink className='navlink' to={`/filter`}><span>{filters.pricerangemax!=3000 || filters.pricerangemin!=300 || filters.sizes.length!=0 || filters.color.length!=0 || filters.categories.length!=0  ?( <span style={{color:"red",fontWeight:"bolder"}}><span style={{color:"black",fontWeight:"normal"}}>Filter</span> *</span>):(<span>Filter</span>)}</span> <IoIosArrowDown /></NavLink> 
             </div>
@@ -528,7 +532,7 @@ if(searchvalue){
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
         {/* Image Section */}
         <div className="image-container">
-          <NavLink to={`/productdescription/${!wish?(product._id):(product.itemid)}`}>
+          <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}`}>
           <img
             src={product.image[0]} // Replace with real image
             alt="Product"
@@ -556,8 +560,8 @@ if(searchvalue){
           {/* fontFamily: "'Inter', sans-serif */}
           <p className="product-title" style={{fontFamily: "'Oswald', sans-serif",fontWeight:"400",fontSize:"15px"}}>{product.description?.length>19?(product.description?.slice(0,18)+`...`):(product.description)}</p>
           <div className="product-pricing">
-            <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product.discountprice}</span>
-            <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product.price}</span>
+            <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.discountprice}</span>
+            <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.price}</span>
             <span className="discount">{product.discount}off</span>
             
           </div>

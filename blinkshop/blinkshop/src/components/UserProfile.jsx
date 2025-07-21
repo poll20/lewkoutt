@@ -291,6 +291,11 @@ let navigate=useNavigate()
           <p>About Us</p>
           <IoIosArrowForward />
         </NavLink>
+         <button onClick={() => {logouttheuser()}} style={{border:"1px solid gray",background:"white",fontWeight:"bold",display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"50px"}} >
+           
+          Logout
+          
+        </button>
         {/* <NavLink className="menu-item navlink" to={'/faq'}>
            LO
           <p>F&Q</p>
@@ -298,11 +303,12 @@ let navigate=useNavigate()
         </NavLink> */}
       </div>
       </div>
-      <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
+      {/* <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-between", borderRadius:'0',border:"1px solid white"}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
          <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {logouttheuser()}}>Logout</button> 
-        {/* <button className="buy-buttonss" style={{width:"140px"}} onClick={() => {addtowishlistonly(popupProductId);closePopup();}}></button> */}
-       </div>
+        
+       </div> */}
+     
        {showOverlayForm && (
   <div className="overlay-form">
     <div className="form-container">

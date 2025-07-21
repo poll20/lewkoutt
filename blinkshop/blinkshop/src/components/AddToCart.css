@@ -76,8 +76,8 @@ body {
 
 /* Add styles for the checked state */
 .custom-checkbox input[type="checkbox"]:checked {
-  background-color: #000000;
-  border-color: #3cb371;
+  background-color: #ffffff;
+  border-color: #000000;
   position: relative;
 }
 
@@ -166,13 +166,14 @@ body {
 }
 
 .buy-buttonss {
+ 
   width: 100%;
  padding: 10px 0;
   background-color: #28a745;
   color: white;
-  border: none;
+ border: 1px solid black;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: 13px;
   cursor: pointer;
 }
 input[type="radio"] {
