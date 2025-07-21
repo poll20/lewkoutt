@@ -178,7 +178,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Typewriter } from 'react-simple-typewriter';
 import { LoadingProvider, useLoading } from "./LoadingContext";
 import useDebounce from "./useDeboune";
-import AutoScrollCarasoul from "./AutoscrollCarasoul";
+import AutoScrollCarasoul from "./AutoScrollCarasoul";
 
 const SearchComponent = () => {
   const { bestsellingdata, productdataonlydetail, getsearchinput, catecate,fetchTopSearched,topproducts } = useBio();
