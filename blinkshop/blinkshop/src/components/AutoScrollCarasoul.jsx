@@ -3,7 +3,7 @@
 // import React, { useEffect, useRef } from "react";
 // import { NavLink } from "react-router-dom";
 
-// const AutoScrollCarousel = ({ images = [], height = "180px" }) => {
+// const AutoScrollCarasoul = ({ images = [], height = "180px" }) => {
 //   const scrollRef = useRef(null);
 
 //   useEffect(() => {
@@ -83,12 +83,12 @@
 //   },
 // };
 
-// export default AutoScrollCarousel;
+// export default AutoScrollCarasoul;
 
 import React, { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 
-const AutoScrollCarousel = ({ data = [], height = "180px" }) => {
+const AutoScrollCarasoul = ({ data = [], height = "180px" }) => {
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -169,4 +169,4 @@ const styles = {
 };
 
 
-export default AutoScrollCarousel;
+export default AutoScrollCarasoul;
