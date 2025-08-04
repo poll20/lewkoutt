@@ -50,6 +50,7 @@ let bodyparser=require("body-parser")
 // let addtocart=require("../database/collection.js")
 let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel  }=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
+const viewdIncrementor = require("../helperfunc/viewdincrement.js"); // ✅ import helper
 const products = [
   
   { id: 8, name: "Shirt 1", section: "shirts", description: "A cool shirt", price: 19.99, image:"../../blinkshop/src/components/image/img1.jpg" },
@@ -199,6 +200,7 @@ app.post("/cart", async (req, res) => {
   try {
     const {
       _id,
+      color,
       title,
       description,
       image,
@@ -218,6 +220,7 @@ app.post("/cart", async (req, res) => {
 
     const newItem = new wishmodel({
       itemid: _id,
+      color,
       title,
       description,
       image,
@@ -1346,8 +1349,10 @@ app.get("/productmodell", async (req, res) => {
 // GET /api/product/:id
 app.get("/product/:id", async (req, res) => {
   const { id } = req.params;
-
+console.log("colorid",id)
   try {
+
+    viewdIncrementor(id)
     // Try direct match by _id of main product
     let product = await productsmodel.findById(id);
     if (product) return res.json(product);
@@ -1366,27 +1371,40 @@ app.get("/product/:id", async (req, res) => {
     }
 
     // If still not found, try match by productdetails.colors._id
-    product = await productsmodel.findOne({ "productdetails.colors._id": id });
-    if (product) {
-      // Find the matching productdetail and color
-      const matchedDetail = product.productdetails.find((detail) =>
-        detail.colors.some((color) => color._id.toString() === id)
-      );
+    // product = await productsmodel.findOne({ "productdetails.colors._id": id });
+    // if (product) {
+    //   // Find the matching productdetail and color
+    //   const matchedDetail = product.productdetails.find((detail) =>
+    //     detail.colors.some((color) => color._id.toString() === id)
+    //   );
 
-      const matchedColor = matchedDetail.colors.find(
-        (color) => color._id.toString() === id
-      );
+    //   const matchedColor = matchedDetail.colors.find(
+    //     (color) => color._id.toString() === id
+    //   );
 
-      return res.json({
-        ...product.toObject(),
-        productdetails: [
-          {
-            ...matchedDetail,
-            colors: [matchedColor], // return only the matched color
-          },
-        ],
-      });
-    }
+    //   return res.json({
+    //     ...product.toObject(),
+    //     productdetails: [
+    //       {
+    //         ...matchedDetail,
+    //         colors: [matchedColor], // return only the matched color
+    //       },
+    //     ],
+    //   });
+    // }
+    // If still not found, try match by productdetails.colors._id
+product = await productsmodel.findOne({ "productdetails.colors._id": id });
+if (product) {
+  const matchedDetail = product.productdetails.find((detail) =>
+    detail.colors.some((color) => color._id.toString() === id)
+  );
+
+  // 👇 Here: Don't filter colors[], send complete detail
+  return res.json({
+    ...product.toObject(),
+    productdetails: [matchedDetail], // keep all colors in this detail
+  });
+}
 
     // If nothing found
     return res.status(404).json({ message: "Product not found" });

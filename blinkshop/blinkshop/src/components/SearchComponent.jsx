@@ -296,7 +296,7 @@ const SearchComponent = () => {
                     <img src={product.image[0]} alt={product.name} />
                     <div style={{ width: "79%", height: "50px", display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                       <NavLink className='navlink' to={`/productdescription/${product._id}`}>
-                        <span className="product-name" style={{ fontWeight: "lighter" }}>{product.tag}</span>
+                        <span className="product-name" style={{ fontWeight: "lighter" }}>{product.title}</span>
                         <span className="product-price" style={{ fontWeight: "lighter", fontSize: 'small' }}>₹{product.discountprice}</span>
                       </NavLink>
                     </div>
@@ -313,6 +313,40 @@ const SearchComponent = () => {
           )}
         </div>
       )}
+
+{/* {search && (
+  <div className="search-results" style={{ marginTop: '20px' }}>
+    {loading ? (
+      <p>Searching...</p>
+    ) : (
+      filteredProducts.length > 0 ? (
+        <>
+          {filteredProducts[0].productdetails.slice(0, 4).flatMap((product, index) => (
+            product.colors?.map((color, colorIndex) => (
+              <div key={`${index}-${colorIndex}`} className="search-item" style={{ borderBottom: '1px solid gray' }}>
+                <img src={product.image?.[0]} alt={color.title || product.title} />
+                <div style={{ width: "79%", height: "50px", display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                  <NavLink className='navlink' to={`/productdescription/${color._id}`}>
+                    <span className="product-name" style={{ fontWeight: "lighter" }}>{color.title || product.title}</span>
+                    <span className="product-price" style={{ fontWeight: "lighter", fontSize: 'small' }}>₹{product.discountprice}</span>
+                  </NavLink>
+                </div>
+                <p className="view-more">↗</p>
+              </div>
+            ))
+          ))}
+          <div className="view-all">
+            <span onClick={handleViewAllClick}>
+              View All({filteredProducts[0].productdetails.length})
+            </span>
+          </div>
+        </>
+      ) : (
+        <p style={{ padding: "10px", color: "gray" }}>No results found.</p>
+      )
+    )}
+  </div>
+)} */}
 
       {/* Trending Products */}
       {/* <div className="section" style={{ marginTop: "30px" }}>

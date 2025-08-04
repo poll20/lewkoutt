@@ -137,6 +137,7 @@ let Clickcard=(id)=>{
 }
   return (
     <>
+    
     <h2 className='om-newarrival ' style={{display:"flex",alignItems:"end",justifyContent:"start",marginTop:"15px",fontFamily: "'Poppins', sans-serif",fontSize:"25px",height:"50px",marginLeft:"12px"}}  >NEW ARRIVAL</h2>
     
     <div className="om-card-container">
@@ -171,7 +172,7 @@ let Clickcard=(id)=>{
           
         // </div>
         <div key={card._id} className='om-card'  style={{borderRadius:"0px"}}>
-        <Cardforall id={card} discription={card.description} price={card.price} discountprice={card.discountprice} image={card.image[0]} discount={card.discount}/>
+        <Cardforall id={card} discription={card.description} price={card.price} discountprice={card.discountprice} image={card.image[0]} discount={card.discount} defaultcolor={card.defaultColor}/>
         {/* <h3>{card._id}</h3> */}
         </div>
       ))}

@@ -188,7 +188,7 @@ const Card = (props) => {
 
       filteredProducts.forEach((product, index) => {
         console.log(`Product ${index + 1}:`, product);
-        product.colors.forEach((color, colorIndex) => {
+        product?.colors?.forEach((color, colorIndex) => {
           console.log(`  Color ${colorIndex + 1}:`, color);
           console.log(`    Sizes:`, color.sizes.map(s => s.size));
         });
@@ -529,10 +529,11 @@ if(searchvalue){
         <div className="unique-product-container" style={{marginTop:!props.category?(''):('0px')}}>
         {products.length > 0 ? (
             products.map((product) => (
+              
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
         {/* Image Section */}
         <div className="image-container">
-          <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}`}>
+          <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}/${product.color}`}>
           <img
             src={product.image[0]} // Replace with real image
             alt="Product"
@@ -550,9 +551,9 @@ if(searchvalue){
     <AiOutlineDelete onClick={() => removewishlistonly(product.itemid)} style={{ color: "black", position: 'relative', left: "-3px", bottom: "2px" }} size={15} />
   )}</div>
           {/* Rating */}
-          <div className="rating">
+          {/* <div className="rating">
             ⭐ 4.7 | 16
-          </div>
+          </div> */}
         </div>
 
         {/* Details Section */}
@@ -567,7 +568,7 @@ if(searchvalue){
           </div>
           
         {/* {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)}  */}
-        {!wish?(''):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)} 
+        {!wish?(''):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Bag</button>)} 
 
         </div>
       </div>
@@ -585,7 +586,7 @@ if(searchvalue){
   className={`abhayraj-bottom-sheet ${sizesshow ? 'abhayraj-show' : ''}`}
 >
   <div className="abhayraj-sheet-header">
-    <p>Select Size</p>
+    <span>Select Size</span>
     <button onClick={() => setsizesshow(false)} className="abhayraj-close-button">
       ✖
     </button>
@@ -600,10 +601,10 @@ if(searchvalue){
         onClick={() => handleAddToCart(addtocartkeliyeid, 1, size.size)}
         
       >
-      <span style={{marginLeft:"-10px"}}>⚡{size.size}</span>
+      <span style={{textAlign:"center"}}>{size.size}</span>
      
       </button>
-      <span>{size.quantity} Left</span>
+      {/* <span>{size.quantity} Left</span> */}
     </div>
     ))}
        

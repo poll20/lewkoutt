@@ -44,7 +44,7 @@ export default function Home() {
        <OfferBanner/>
       <Carousel images={productdata}/>
       
-      <CardLayout />
+      {/* <CardLayout /> */}
        <CategoriesLayout/>
 
      {/* <HorizontalScrollContainer/>  */}

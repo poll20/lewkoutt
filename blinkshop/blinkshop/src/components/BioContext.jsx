@@ -60,6 +60,7 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef(null);
+    const [navigateFn, setNavigateFn] = useState(null);
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -309,6 +310,7 @@ useEffect(() => {
       matchItem.discountprice = prd.discountprice;
       matchItem.image = prd.image;
       matchItem.shopname = prd.shopname;
+      matchItem.color=prd.colors[0]?.color || prd.color
       matchItem.title = prd.title;
       matchItem.description = prd.description;
       matchItem.size = prd.sizes;
@@ -1067,6 +1069,7 @@ if(user && userDetails){
     })
     if(orderpost.ok){
       console.log("address edit")
+      // navigate("/orderconfirm")
     }
      // ✅ New Order ko State me Add Karo
     

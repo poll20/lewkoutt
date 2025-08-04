@@ -192,6 +192,7 @@ import SlotControl from "./components/dashboardforadmin/SlotControl";
 import Bandle from "./components/dashboardforadmin/Bandle";
 
 import OtpLogin from "./components/OtpLogin";
+import OrderConfirmation from "./components/OrderConfimation";
 
 // import BundleProduct from "./components/BundleProduct";
 
@@ -204,6 +205,7 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
 // const navigate=useNavigate()
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -385,7 +387,7 @@ function Layout({ showPopup }) {
             <Route path="/card" element={<Card />} />
             <Route path="/productmodel/:section" element={<Card />} />
             <Route path="/searchresults" element={<Card />} />
-            <Route path="/productdescription/:id" element={<ProductDescription showPopup={showPopup}/>} />
+            <Route path="/productdescription/:id/:coloring" element={<ProductDescription showPopup={showPopup}/>} />
             <Route path="/cart" element={<AddToCart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/searchme" element={<SearchComponent />} />
@@ -411,6 +413,7 @@ function Layout({ showPopup }) {
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/mood" element={<Moodcom/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
+              <Route path="/orderconfirm" element={<OrderConfirmation/>} />
             
             <Route path="/prdreview/:id/:avgrating" element={<ReviewProduct/>} />
 

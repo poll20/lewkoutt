@@ -37,6 +37,7 @@ let cartscema=mongoose.Schema({
     // itemid: String,
     itemid:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
     productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+    color:String,
     title: String,
     description: String,
     image: [String],
@@ -347,8 +348,13 @@ returncount:{tye:Number},
         type:Number,
         default:0
       },
+
       searchcount:{type:Number,default: 0 },
       ratingCount: { type: Number, default: 0 },
+      viewd: {
+  type: Number,
+  default: 0
+},
       
 sizes: [sizeSchema]
 },{_id:true});
@@ -434,6 +440,7 @@ const CategorySchema = new mongoose.Schema({
       userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
     }
   ],
+  
       occasion: {
         type: String,
         
@@ -459,7 +466,11 @@ const CategorySchema = new mongoose.Schema({
       },
       shopaddress:{
         type:String
-      }
+      },
+      viewd: {
+  type: Number,
+  default: 0
+}
     //   location: {  
     //     type: { type: String, enum: ["Point"], default: "Point" }, // GeoJSON Type
     //     coordinates: { type: [Number], required: true }  // [longitude, latitude]

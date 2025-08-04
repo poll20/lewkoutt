@@ -93,7 +93,7 @@ const AutoScrollCarasoul = ({ data = [], height = "180px" }) => {
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    const scrollSpeed = 1;
+    const scrollSpeed = .5;
     let animationFrame;
 
     const scroll = () => {
@@ -149,14 +149,16 @@ const styles = {
     display: "flex",
     overflowX: "hidden", // prevent scrollbar
     scrollBehavior: "auto",
-    gap: "10px",
+    gap: "25px",
+    scrollbarWidth: "none", // Firefox
+msOverflowStyle: "none", // IE/Edge
   },
   card: {
     border:"1px solid gray",
-    width:"60px",
-    height:"60px",
+    width:"45px",
+    height:"45px",
     borderRadius: "100%",
-    overflow: "hidden",
+    overflow: "scroll",
     flex: "0 0 auto",
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
   },
@@ -166,6 +168,7 @@ const styles = {
     objectFit: "cover",
     display: "block",
   },
+  
 };
 
 

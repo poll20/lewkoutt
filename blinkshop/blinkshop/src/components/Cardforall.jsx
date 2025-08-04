@@ -25,11 +25,11 @@ console.log("wishlist in coa",wishlistdata)
       {/* Image Section */}
       <div className="image-container">
         
-      <NavLink to={props.section!='bundel'?(`/productdescription/${props.id._id}`):(`/productdescription/${props.id}`)}>
+      <NavLink to={props.section!='bundel'?(`/productdescription/${props?.id?._id || props?.id}/${props.defaultcolor}`):(`/productdescription/${props?.id}/${props.defaultcolor}`)}>
         <img
   src={
     props.section != "bundel"
-      ?( props?.id?.image?.[0] || "fallback.jpg")
+      ?( props?.id?.image?.[0] || props?.image || "fallback.jpg")
       : (props.image || "fallback.jpg")
   }
   alt="Product"
@@ -46,12 +46,12 @@ console.log("wishlist in coa",wishlistdata)
           }
           
         </div> */}
-        {props.section != "bundel" &&
+        {/* {props.section != "bundel" &&
   props?.id?.colors?.[0]?.ratingCount > 0 && (
     <div className="rating" style={{ display: "flex" }}>
       {`⭐ ${props.id.colors[0].avgRating} | ${props.id.colors[0].ratingCount}`}
     </div>
-)}
+)} */}
 
       </div>
 

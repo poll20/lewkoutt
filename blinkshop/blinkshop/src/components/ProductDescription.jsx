@@ -60,8 +60,8 @@ const imageRef = useRef();
 // const [isSticky, setIsSticky] = useState(true);
 //   const targetRef = useRef(null);
 const targetRef = useRef(null);
-  let { id } = useParams();
-  console.log("fwff",id)
+  let { id,coloring} = useParams();
+  console.log("fwff",id,coloring)
   let navigate=useNavigate()
   let {handleClick,productdata,handleAddToCart,takebuydata, productdataonlydetail,fetchCoupons,coupons,getbundeldata,getBundleColorData,showloginpage,setshowloginpage}=useBio()
   let {setIsLoading}=useLoading()
@@ -193,76 +193,165 @@ const targetRef = useRef(null);
 
 
 
-useEffect(() => {
-  const fetchProductFromBackend = async () => {
-    try {
-      setIsLoading(true)
-      const res = await fetch(`${apiUrl}/product/${id}`);
-      const data = await res.json();
+// useEffect(() => {
+//   const fetchProductFromBackend = async (clr) => {
+//     console.log("miliid",id)
+//     console.log("colorid",colorid)
+//     console.log("clrchange",clr)
+    
+//     try {
+//       setIsLoading(true)
+//       const res = await fetch(`${apiUrl}/product/${colorid!=undefined?(colorid):(id) }`);
+//       const data = await res.json();
 
-      console.log("🔥 Product data from backend:", data);
+//       console.log("🔥 Product data from backend:", data);
 
-      // Set the full product object (including all productdetails/colors)
-      setmainprodutt(data);
+//       // Set the full product object (including all productdetails/colors)
+//       setmainprodutt(data);
 
-      let mainProduct;
-      let variantProduct;
+//       let mainProduct;
+//       let variantProduct;
 
-      // CASE 1: Direct match (e.g., _id === productdetails._id)
-      if (data.productdetails && data.productdetails.length > 0) {
-        mainProduct = data.productdetails[0];
+//       // CASE 1: Direct match (e.g., _id === productdetails._id)
+//       if (data.productdetails && data.productdetails.length > 0) {
+//         mainProduct = data.productdetails[0];
 
-        // Try finding matching color
-        const defaultVariant =
-          mainProduct.colors.find((e) => e.color === Selectedcolor) ||
-          mainProduct.colors.find((e) => e.color === data.defaultColor) ||
-          mainProduct.colors[0];
-
-        if (defaultVariant) {
-          setproduct({
-            ...defaultVariant,
-            price: mainProduct.price,
-            discountprice: mainProduct.discountprice,
-            shopname: data.shopname,
-            shopaddress: data.shopaddress,
-            discount: mainProduct.discount,
-            cate: mainProduct.cate,
-            image: mainProduct?.image?.length>0?(mainProduct?.image[0]):(mainProduct?.image)
-          });
-        }
-      } 
+//         // Try finding matching color
+//         const defaultVariant =
+//           mainProduct.colors.find((e) => e.color === Selectedcolor) ||
+//           mainProduct.colors.find((e) => e.color === data.defaultColor) ||
+//           mainProduct.colors[0];
+//   console.log("samosa varient",defaultVariant)
+//           console.log("default varient",defaultVariant.color)
+//             // 👇 yeh dono line add karo
+           
+          
+//            if(clr==undefined){
+//            setSelectedcolor(coloring);
+//   setcolorid(defaultVariant._id);  
+//            }
+//            else{
+//   setSelectedcolor(defaultVariant.color);
+//   setcolorid(defaultVariant._id);
+//            }
+           
+//         if (defaultVariant) {
+//           setproduct({
+//             ...defaultVariant,
+//             price: mainProduct.price,
+//             discountprice: mainProduct.discountprice,
+//             shopname: data.shopname,
+//             shopaddress: data.shopaddress,
+//             discount: mainProduct.discount,
+//             cate: mainProduct.cate,
+//             image: mainProduct?.image?.length>0?(mainProduct?.image[0]):(mainProduct?.image)
+//           });
+//         }
+//         console.log("if defprd",product)
+//       } 
       
-      // CASE 2: Match via colors._id (subvariant match)
-      else if (data.productdetails && data.productdetails.length === 0 && data.colors) {
-        variantProduct = {
-          ...data,
-          colors: [data.colors[0]], // assuming server returned only matched color
-        };
+//       // CASE 2: Match via colors._id (subvariant match)
+//       else if (data.productdetails && data.productdetails.length === 0 && data.colors) {
+//         variantProduct = {  
+//           ...data,
+//           colors: [data.colors[0]], // assuming server returned only matched color
+//         };
+// console.log("varientrd",variantProduct)
+//         setproduct({
+//           ...variantProduct.colors[0],
+//           price: variantProduct.price,
+//           discountprice: variantProduct.discountprice,
+//           shopname: variantProduct.shopname,
+//           shopaddress: variantProduct.shopaddress,
+//           discount: variantProduct.discount,
+//           cate: variantProduct.cate,
+//           image: variantProduct?.image?.length>0?(variantProduct?.image[0]):(variantProduct?.image) ,
+//         });
+//       } else {
+//         console.warn("⚠️ Unexpected data shape from server");
+//       }
+//     } catch (err) {
+//       console.error("❌ Error fetching product:", err);
+//     }
+//     finally{
+//       setIsLoading(false)
+//     }
+//   };
+// console.log("Effect triggered:", { id, Selectedcolor });
+//   fetchProductFromBackend();
+// }, [id, Selectedcolor,colorid]);
 
+const fetchProductFromBackend = async (clr) => {
+  console.log("🔥 clrchange", clr); // ✅ yahan value milegi
+
+  try {
+    setIsLoading(true);
+    const res = await fetch(`${apiUrl}/product/${colorid !== undefined ? colorid : id}`);
+    const data = await res.json();
+
+    console.log("🔥 Product data from backend:", data);
+    setmainprodutt(data);
+
+    let mainProduct;
+    let variantProduct;
+
+    if (data.productdetails && data.productdetails.length > 0) {
+      mainProduct = data.productdetails[0];
+
+      const defaultVariant =
+        mainProduct.colors.find((e) => e.color === clr) ||
+        mainProduct.colors.find((e) => e.color === data.defaultColor) ||
+        mainProduct.colors[0];
+
+      console.log("samosa variant", defaultVariant);
+
+      setSelectedcolor(defaultVariant.color);
+      setcolorid(defaultVariant._id);
+
+      if (defaultVariant) {
         setproduct({
-          ...variantProduct.colors[0],
-          price: variantProduct.price,
-          discountprice: variantProduct.discountprice,
-          shopname: variantProduct.shopname,
-          shopaddress: variantProduct.shopaddress,
-          discount: variantProduct.discount,
-          cate: variantProduct.cate,
-          image: variantProduct?.image?.length>0?(variantProduct?.image[0]):(variantProduct?.image) ,
+          ...defaultVariant,
+          price: mainProduct.price,
+          discountprice: mainProduct.discountprice,
+          shopname: data.shopname,
+          shopaddress: data.shopaddress,
+          discount: mainProduct.discount,
+          cate: mainProduct.cate,
+          image:
+            mainProduct?.image?.length > 0
+              ? mainProduct?.image[0]
+              : mainProduct?.image,
         });
-      } else {
-        console.warn("⚠️ Unexpected data shape from server");
       }
-    } catch (err) {
-      console.error("❌ Error fetching product:", err);
-    }
-    finally{
-      setIsLoading(false)
-    }
-  };
-console.log("Effect triggered:", { id, Selectedcolor });
-  fetchProductFromBackend();
-}, [id, Selectedcolor]);
+    } else if (data.productdetails.length === 0 && data.colors) {
+      variantProduct = {
+        ...data,
+        colors: [data.colors[0]],
+      };
 
+      setproduct({
+        ...variantProduct.colors[0],
+        price: variantProduct.price,
+        discountprice: variantProduct.discountprice,
+        shopname: variantProduct.shopname,
+        shopaddress: variantProduct.shopaddress,
+        discount: variantProduct.discount,
+        cate: variantProduct.cate,
+        image:
+          variantProduct?.image?.length > 0
+            ? variantProduct?.image[0]
+            : variantProduct?.image,
+      });
+    }
+  } catch (err) {
+    console.error("❌ Error fetching product:", err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+useEffect(() => {
+  fetchProductFromBackend(coloring); // pass default coloring
+}, [id]);
 
 
 useEffect(() => {
@@ -759,11 +848,11 @@ if(getbundeldata){
       textAlign:"center"
      }}
     >
-      <span>{'★'.repeat(product?.avgRate!=0?(product?.avgRating):(5))}</span>
-      <span style={{color:"gray",fontWeight:"lighter"}}>{product?.avgRate!=null?(product?.avgRating):("")}</span>
-     {product.ratingCount!=null?(<span style={{color:"gray",fontWeight:"lighter"}}>-</span>):('')} 
-       <span style={{color:"gray",fontWeight:"lighter"}}>{product?.ratingCount!=null?(product?.ratingCount):("No")} Reviews</span>
-      <span></span>
+      {/* <span>{'★'.repeat(product?.avgRate!=0?(product?.avgRating):(5))}</span> */}
+      {/* <span style={{color:"gray",fontWeight:"lighter"}}>{product?.avgRate!=null?(product?.avgRating):("")}</span> */}
+     {/* {product.ratingCount!=null?(<span style={{color:"gray",fontWeight:"lighter"}}>-</span>):('')}  */}
+       {/* <span style={{color:"gray",fontWeight:"lighter"}}>{product?.ratingCount!=null?(product?.ratingCount):("No")} Reviews</span> */}
+      {/* <span></span> */}
     </span>
           </div>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
@@ -864,12 +953,23 @@ if(getbundeldata){
           width: "20px",
           height: "20px",
           margin: "5px",
-          border: Selectedcolor === color.color ? "2px solid black" : "1px solid #ccc",
+          border:Selectedcolor === color.color ? "2px solid black" : "1px solid #ccc",
         }}
         className={`colour-btn ${Selectedcolor === color.color ? "clractive" : ""}`}
         onClick={() => {
-          setSelectedcolor(color.color);
-          setcolorid(color._id);
+           const clr = color.color;
+  const cid = color._id;
+          // setSelectedcolor(color.color);
+          // setcolorid(color._id);
+          // console.log("clrrrrr",color.color)
+          // fetchProductFromBackend(color.color) 
+          setSelectedcolor(clr);
+  setcolorid(cid);
+
+  console.log("clrrrrr", clr); // ✅ yeh sahi dikhega
+  fetchProductFromBackend(clr); // ✅ yeh bhi sahi value lega
+          
+           
         }}
       >
         {/* No text, just a color dot */}

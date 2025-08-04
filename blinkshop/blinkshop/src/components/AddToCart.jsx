@@ -11,6 +11,7 @@ import { CiHeart } from "react-icons/ci";
 import { NavLink, useNavigate } from 'react-router-dom';
 import newme from "./image/img3.jpg";
 import BundleProduct from './BundleProduct';
+import Cardforall from './Cardforall';
 
 const AddToCart = () => {
   const navigate = useNavigate();
@@ -323,8 +324,8 @@ if(!addtocartdatas){
        
        <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),flexDirection:"column", alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
-       <span>Would you like ti move this item to Wishlist?</span>
-       <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-around"}}>
+       <span style={{fontWeight:"bold",fontSize:"large"}}>Would you like ti move this item to Wishlist?</span>
+       <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-around",marginTop:"7px"}}>
         <button className="buy-buttonss" style={{width:"140px" ,background:"black",color:"white"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Yes move this item</button>
 
          <button className="buy-buttonss" style={{width:"140px",background:"white",color:"black"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
@@ -377,7 +378,7 @@ if(!addtocartdatas){
        <div>
       {/* Your cart items here */}
 
-      {recommendations?.length > 0 && (
+      {/* {recommendations?.length > 0 && (
   <div className="you-might-like" style={{ padding: "10px" }}>
     <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
     <div style={{
@@ -412,15 +413,46 @@ if(!addtocartdatas){
                 display: "block"
               }}
             />
-            {/* <p style={{ textAlign: "center", fontSize: "14px", padding: "5px 0", margin: 0 }}>
-              {product.category}
-            </p> */}
+           
           </div>
         );
       })}
     </div>
   </div>
+)} */}
+{recommendations?.length > 0 && (
+  <div className="you-might-like" style={{ padding: "10px" }}>
+    <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
+    <div style={{
+      display: "flex",
+      overflowX: "auto",
+      gap: "12px",
+      paddingBottom: "10px",
+      scrollbarWidth: "none",
+      msOverflowStyle: "none"
+    }}>
+      {recommendations.map((product, index) => (
+        product.productdetails?.map((detail, i) =>
+          detail.colors?.map((color, j) => (
+            <Cardforall
+              key={color._id || `${index}-${i}-${j}`}
+              id={color._id}
+              discription={color.description}
+              image={Array.isArray(color.image) ? color.image[0] : product.image}
+              price={detail.price}
+              discountprice={detail.discountprice}
+              discount={detail.discount}
+            />
+          ))
+        )
+      ))}
+    </div>
+  </div>
 )}
+
+
+
+
 
     </div>
       </div>
