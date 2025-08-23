@@ -1,11 +1,17 @@
 {
-  "dependencies": { "bun": "^1.2.4", "react-fontawesome": "^1.7.1" },
+  "dependencies": {
+    "bun": "^1.2.4",
+    "react-fontawesome": "^1.7.1"
+  },
   "devDependencies": {
     "vite": "^6.2.0"
-  }, 
-
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "engines": {
-  "node": "22.x"
-}
-
+    "node": "22.x"
+  }
 }
