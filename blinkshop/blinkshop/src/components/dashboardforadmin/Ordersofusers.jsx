@@ -128,11 +128,11 @@ const Ordersofusers = () => {
               return (
                 <React.Fragment key={order._id}>
                   <tr>
-                    <td>{order._id}</td>
-                    <td>{order.userId}</td>
-                    <td>{order.name}</td>
-                    <td>{order.email}</td>
-                    <td>{order.phone}</td>
+                    <td>{order?._id}</td>
+                    <td>{order?.userId}</td>
+                    <td>{order?.address[0]?.uname}</td>
+                    <td>{order?.email}</td>
+                    <td>{order?.address[0]?.phone[0]}</td>
                     <td>{fullAddress}</td>
                     <td>
                       {order.products.map((product, index) => (

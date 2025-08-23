@@ -208,6 +208,7 @@ const SearchComponent = () => {
         setIsLoading(true);
         const res = await fetch(`${apiUrl}/search?q=${debouncedSearch}`);
         const data = await res.json();
+        console.log("kone kone data",data.products)
         setFilteredProducts(data.products || []);
       } catch (err) {
         console.error("Error fetching search:", err);
@@ -295,7 +296,7 @@ const SearchComponent = () => {
                   <div key={index} className="search-item" style={{ borderBottom: '1px solid gray' }}>
                     <img src={product.image[0]} alt={product.name} />
                     <div style={{ width: "79%", height: "50px", display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-                      <NavLink className='navlink' to={`/productdescription/${product._id}`}>
+                      <NavLink className='navlink' to={`/productdescription/${product._id}/${product?.color}`}>
                         <span className="product-name" style={{ fontWeight: "lighter" }}>{product.title}</span>
                         <span className="product-price" style={{ fontWeight: "lighter", fontSize: 'small' }}>₹{product.discountprice}</span>
                       </NavLink>

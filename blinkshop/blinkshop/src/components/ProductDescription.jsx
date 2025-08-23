@@ -317,6 +317,15 @@ const fetchProductFromBackend = async (clr) => {
           shopaddress: data.shopaddress,
           discount: mainProduct.discount,
           cate: mainProduct.cate,
+          material: mainProduct.material,
+          neckline: mainProduct.neckline,
+          occasion: mainProduct.occasion,
+
+
+          printtype: mainProduct.printtype,
+          ratingCount: mainProduct.ratingCount,
+          // cate: mainProduct.cate,
+
           image:
             mainProduct?.image?.length > 0
               ? mainProduct?.image[0]
@@ -337,6 +346,12 @@ const fetchProductFromBackend = async (clr) => {
         shopaddress: variantProduct.shopaddress,
         discount: variantProduct.discount,
         cate: variantProduct.cate,
+         material: mainProduct.material,
+          neckline: mainProduct.neckline,
+          occasion: mainProduct.occasion,
+
+
+          printtype: mainProduct.printtype,
         image:
           variantProduct?.image?.length > 0
             ? variantProduct?.image[0]
@@ -669,7 +684,7 @@ useEffect(() => {
   // product[0].discount=productofreview[0].discount
   // product[0].cate=productofreview[0].cate
   if (!product || product.length === 0) {
-    return <p>Loading...</p>;
+    return <p>Loadingkoko...</p>;
   }
 
 console.log("lplp",product)
@@ -833,7 +848,7 @@ if(getbundeldata){
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
-          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder"}} >{product.description.slice(0,1).toUpperCase()+product.description.slice(1)}</span>
+          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder"}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
           <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px",color:"#c7522a"}}>{product.discount} off</span></span>
           <span
       style={{
@@ -856,9 +871,9 @@ if(getbundeldata){
     </span>
           </div>
           {/* <p style={{fontWeight:"bold"}}>{product[0].price}</p> */}
-          <div className="icons" onClick={() => handleClick(product,product._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"17px",bottom:"120px"}}>
+          <div className="icons" onClick={() => handleClick(product,product?._id)} style={{display:"flex",alignItems:"center",justifyContent:"center", background:"white",width:"33px",height:"33px",borderRadius:"100%",position:"absolute",right:"17px",bottom:"120px"}}>
           
-<HeartButton   cardid={product._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-7} pdml={4}
+<HeartButton   cardid={product?._id} w={23} h={23} mt={6} dw={45} dh={45} dmt={-7} dml={-7} pdml={4}
 
 />
 
@@ -899,9 +914,9 @@ if(getbundeldata){
     </div>
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}> */}
           {/* <div className="size-options" style={{gap:"10px",padding:'10px 0', borderBottom:"1px solid black"}}> */}
-          <div   className="size-options" style={{gap:"10px",padding:'10px 0',border:"1px solid white"}}>
+          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white"}}>
 
-          <label>Size:</label>
+          <label>Size</label>
           
 
 
@@ -923,7 +938,7 @@ if(getbundeldata){
           </div>
 
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}> */}
-          <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0',marginTop:"4px"}}>
+          <div className="size-options" style={{gap:"5px", borderTop:'1px solid white',padding:'8px 0',marginBottom:"3px"}}>
 
           {/* <label>Colors:</label>
             <div className="sizes">
@@ -940,7 +955,7 @@ if(getbundeldata){
               }
               
             </div> */}
-            <label>Colors:</label>
+            <label>Colors</label>
 <div className="sizes" >
   {mainProductt && mainProductt.productdetails?.length > 0 ? (
     mainProductt.productdetails[0].colors?.map((color) => (
@@ -1056,20 +1071,20 @@ if(getbundeldata){
         <div className="prd-ka-dropdown-description">
           <div className="prd-ka-dropdown-row">
             <span className="prd-ka-dropdown-label">Print type</span>
-            <span className="prd-ka-dropdown-value">{product.printtype?(product.printtype):("Solid")}</span>
+            <span className="prd-ka-dropdown-value">{product?.printtype}</span>
           </div>
           <div className="prd-ka-dropdown-row">
             <span className="prd-ka-dropdown-label">Color</span>
-            <span className="prd-ka-dropdown-value">{product.color}</span>
+            <span className="prd-ka-dropdown-value">{product?.color}</span>
           </div>
           <div className="prd-ka-dropdown-row">
             <span className="prd-ka-dropdown-label">Fabric</span>
-            <span className="prd-ka-dropdown-value">{product.material?(product.material):("Cotton")}</span>
+            <span className="prd-ka-dropdown-value">{product?.material?(product.material):("Cotton")}</span>
           </div>
 
           <div className="prd-ka-dropdown-row">
             <span className="prd-ka-dropdown-label">Occasion</span>
-            <span className="prd-ka-dropdown-value">{product.occasion?(product.occasion):("Party")}</span>
+            <span className="prd-ka-dropdown-value">{product?.occasion?(product.occasion):("Party")}</span>
           </div>
         </div>
       )}

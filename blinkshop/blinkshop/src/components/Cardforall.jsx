@@ -25,7 +25,7 @@ console.log("wishlist in coa",wishlistdata)
       {/* Image Section */}
       <div className="image-container">
         
-      <NavLink to={props.section!='bundel'?(`/productdescription/${props?.id?._id || props?.id}/${props.defaultcolor}`):(`/productdescription/${props?.id}/${props.defaultcolor}`)}>
+      <NavLink to={props.section!='bundel'?(`/productdescription/${props?.id?._id || props?.id}/${props?.defaultcolor}`):(`/productdescription/${props?.id}/${props?.defaultcolor}`)}>
         <img
   src={
     props.section != "bundel"

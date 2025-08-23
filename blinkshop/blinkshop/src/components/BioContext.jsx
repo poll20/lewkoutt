@@ -291,9 +291,12 @@ useEffect(() => {
         setshowloginpage(true)
       }
       // Correcting the way matchItem is created
+      // const matchedColors = productdataonlydetail
+      //   .flatMap(product => product.colors)
+      //   .filter(color => color._id == id);
       const matchedColors = productdataonlydetail
-        .flatMap(product => product.colors)
-        .filter(color => color._id == id);
+  .flatMap(product => product.colors || [])
+  .filter(color => color._id == id);
   
       if (matchedColors.length === 0) {
         console.error("No matching item found!");
@@ -310,7 +313,10 @@ useEffect(() => {
       matchItem.discountprice = prd.discountprice;
       matchItem.image = prd.image;
       matchItem.shopname = prd.shopname;
-      matchItem.color=prd.colors[0]?.color || prd.color
+      // matchItem.color=prd?.colors[0]?.color || prd?.color
+      matchItem.color = Array.isArray(prd?.colors) && prd.colors.length > 0 
+  ? prd.colors[0].color 
+  : prd?.color || "defaultColor";
       matchItem.title = prd.title;
       matchItem.description = prd.description;
       matchItem.size = prd.sizes;

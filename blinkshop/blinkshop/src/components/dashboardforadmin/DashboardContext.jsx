@@ -159,11 +159,12 @@ let deletefromexistingproduct=async(id)=>{
 
       let addnewcategory = async (data) => {
         try {
+          console.log("cateka data",data)
           let response = await fetch(`${apiUrl}/productmodel`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-                Authorization: `Bearer ${user.accessToken}`,
+                // Authorization: `Bearer ${user.accessToken}`,
             },
             //  Authorization: `Bearer ${user.accessToken}`,
 

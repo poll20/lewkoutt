@@ -533,7 +533,7 @@ if(searchvalue){
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
         {/* Image Section */}
         <div className="image-container">
-          <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}/${product.color}`}>
+          <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}/${product?.color || product?.defaultColor}`}>
           <img
             src={product.image[0]} // Replace with real image
             alt="Product"
