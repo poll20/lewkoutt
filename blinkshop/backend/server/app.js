@@ -1184,7 +1184,7 @@ catch(e){
 //   }
 // });
 
-app.post("/productmodel",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.post("/productmodel", async (req, res) => {
   try {
     const productData = req.body;
     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
@@ -1192,6 +1192,7 @@ app.post("/productmodel",isAdmin,verifyFirebaseToken, async (req, res) => {
     res.status(201).json(newProduct);
     console.log("ho gyaa",newProduct)
   } catch (error) {
+    console.log(error)
     res.status(500).send("Error saving data");
   }
 });
@@ -2645,30 +2646,63 @@ app.post("/sales/return", async (req, res) => {
   }
 });
 
+
 app.get("/sales/daily", async (req, res) => {
   try {
-      let today = new Date();
-      today.setHours(0, 0, 0, 0);
+    // Optional query params: shopname, from, to
+    const { shopname, from, to } = req.query;
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      let sales = await SalesModel.aggregate([
-          { $match: { saleDate: { $gte: today } } }, 
-          { $group: { 
-              _id: null, 
-              totalSales: { $sum: "$quantity" },  
-              totalReturns: { $sum: "$returnedQuantity" }, 
-              totalRevenue: { $sum: "$totalAmount" }  
-          } }
-      ]);
+    // Build match filter
+    let match = { saleDate: { $gte: today } };
+    if (from || to) {
+      match.saleDate = {};
+      if (from) match.saleDate.$gte = new Date(from);
+      if (to) match.saleDate.$lte = new Date(to);
+    }
+    if (shopname) {
+      match.shopname = shopname;
+    }
 
-      let result = sales[0] || { totalSales: 0, totalReturns: 0, totalRevenue: 0 };
-      result.netSales = result.totalSales - result.totalReturns; // 📉 Net Sales after return
+    let sales = await SalesModel.aggregate([
+      { $match: match },
+      {
+        $group: {
+          _id: null,
+          totalSales: { $sum: "$quantity" },
+          totalReturns: { $sum: "$returnedQuantity" },
+          totalRevenue: { $sum: "$totalAmount" },
+          count: { $sum: 1 }
+        }
+      }
+    ]);
 
-      res.json(result);
+    // Breakdown by product
+    let productBreakdown = await SalesModel.aggregate([
+      { $match: match },
+      {
+        $group: {
+          _id: "$productId",
+          totalSales: { $sum: "$quantity" },
+          totalReturns: { $sum: "$returnedQuantity" },
+          totalRevenue: { $sum: "$totalAmount" }
+        }
+      }
+    ]);
+
+    let result = sales[0] || { totalSales: 0, totalReturns: 0, totalRevenue: 0, count: 0 };
+    result.netSales = result.totalSales - result.totalReturns;
+    result.productBreakdown = productBreakdown;
+
+    res.json(result);
   } catch (error) {
-      console.error("Error fetching daily sales:", error);
-      res.status(500).json({ error: "Failed to fetch sales" });
+    console.error("Error fetching daily sales:", error);
+    res.status(500).json({ error: "Failed to fetch sales", details: error.message });
   }
 });
+
+
 
 app.get("/sales/daily/:shopname", async (req, res) => { 
   try {
@@ -3881,6 +3915,8 @@ app.post("/slot-status/toggle",isAdmin,verifyFirebaseToken, async (req, res) => 
     res.status(500).json({ error: "Toggle failed" });
   }
 });
+
+
 // app.listen(port, "0.0.0.0", () => {
 //   console.log(`🚀 Server running on port: ${port}`);
 // });
