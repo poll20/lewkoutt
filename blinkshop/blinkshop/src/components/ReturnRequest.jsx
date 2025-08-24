@@ -680,7 +680,7 @@ if(addresssetkro){
             <div className="address-section-checkoutbuy">
             <span>
         {addresssetkro.length > 0
-          ? `${addresssetkro[0].building}/${addresssetkro[0].locality}, ${addresssetkro[0].city}`
+          ? `${addresssetkro[0].uname}/${addresssetkro[0].building}/${addresssetkro[0].locality}, ${addresssetkro[0].city}`
           : "No address available"}
           {/* <IoIosArrowForward onClick={()=>{setShowSheet(true)}}></IoIosArrowForward> */}
       </span>

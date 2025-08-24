@@ -193,12 +193,14 @@ import Bandle from "./components/dashboardforadmin/Bandle";
 
 import OtpLogin from "./components/OtpLogin";
 import OrderConfirmation from "./components/OrderConfimation";
-
+import ComingSoon from "./components/ComingSoon";
 // import BundleProduct from "./components/BundleProduct";
 
 export default function App() {
   // const [cartData, setCartData] = useState([]);
   // const [cartItem, setCartItem] = useState([]);
+    const hostname = window.location.hostname;
+
   const [popupMessage, setPopupMessage] = useState("");
   
   const { setIsLoading } = useLoading(); // ✅ add this inside the App component
@@ -340,6 +342,14 @@ function Layout({ showPopup }) {
   const mood = location.pathname.startsWith("/mood");
     const pd = location.pathname.startsWith("/productdescription");
         const searchme = location.pathname.startsWith("/searchme");
+
+
+          if (hostname !== "localhost") {
+    // deployed site ke liye
+    return <ComingSoon/>;
+  }
+
+
   
   return (
     <>
