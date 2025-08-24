@@ -194,6 +194,7 @@ import Bandle from "./components/dashboardforadmin/Bandle";
 import OtpLogin from "./components/OtpLogin";
 import OrderConfirmation from "./components/OrderConfimation";
 import ComingSoon from "./components/ComingSoon";
+
 // import BundleProduct from "./components/BundleProduct";
 
 export default function App() {
@@ -289,6 +290,12 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     setPopupMessage(msg);
   };
 
+     if (hostname !== "localhost") {
+    // deployed site ke liye
+    return <ComingSoon/>;
+  }
+
+
   if (!isMobile && !isAdminRoute) {
     return (
       <div style={{ padding: "50px", textAlign: "center" }}>
@@ -344,11 +351,7 @@ function Layout({ showPopup }) {
         const searchme = location.pathname.startsWith("/searchme");
 
 
-          if (hostname !== "localhost") {
-    // deployed site ke liye
-    return <ComingSoon/>;
-  }
-
+     
 
   
   return (
