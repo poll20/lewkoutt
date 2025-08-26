@@ -887,10 +887,11 @@ if(getbundeldata){
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
-          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder"}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
-          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"5px",color:"white", border:"2px solid red",padding:"5px 15px",borderRadius:"90px",background:"rgb(241, 90, 41"}}>{product.discount} off</span></span>
+          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder",}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
+          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"5px",color:"white", border:"2px solid red",padding:"2px 5px",borderRadius:"90px",background:"rgb(241, 90, 41",fontSize:"11px"}}>{product.discount}% off</span></span>
           <span
       style={{
+        
         display: 'flex',
         alignItems: 'stat',
         gap: '5px',
