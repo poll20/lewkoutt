@@ -194,7 +194,10 @@ import Bandle from "./components/dashboardforadmin/Bandle";
 import OtpLogin from "./components/OtpLogin";
 import OrderConfirmation from "./components/OrderConfimation";
 import ComingSoon from "./components/ComingSoon";
-
+import { OrderAlertProvider } from "./components/dashboardforadmin/OrderAlertProvider";
+// import { OrderAlertProvider } from "./components/OrderAlertProvider";
+// import { useOrderAlert } from "./components/OrderAlertProvider";
+// import { OrderAlertProvider } from "./OrderAlertContext";
 // import BundleProduct from "./components/BundleProduct";
 
 export default function App() {
@@ -290,7 +293,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     setPopupMessage(msg);
   };
 
-     if (hostname !== "localhost") {
+     if (hostname !== "localhost" || "lewkout.netlify.app") {
     // deployed site ke liye
     return <ComingSoon/>;
   }
@@ -364,8 +367,11 @@ function Layout({ showPopup }) {
           <DashNavbar />
           {/* <OfferBanner/> */}
           <GlobalAlert/>
+          <OrderAlertProvider>
           <div className="admin-ka-panel-main">
+              
             <Routes>
+            
               <Route path="/admin" element={<DahBoard />} />
               <Route path="/admin/available-products" element={<AvailableProduct />} />
               <Route path="/admin/category" element={<DashCategory />} />
@@ -387,9 +393,11 @@ function Layout({ showPopup }) {
 
 
 
-
             </Routes>
+            
+
           </div>
+          </OrderAlertProvider>
         </div>
       ):( <div className="mainnn-contenttttttt">
         <div className="contenttt" >

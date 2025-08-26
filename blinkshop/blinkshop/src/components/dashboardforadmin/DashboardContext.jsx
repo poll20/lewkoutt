@@ -5,13 +5,20 @@ import { useFirebaseAuth } from "../FirebaseContext";
 import axios from "axios";
 import { useLoading } from "../LoadingContext";
 import { faL } from "@fortawesome/free-solid-svg-icons";
+// import { useOrderAlert } from "./OrderAlertProvider";
+// import { OrderAlertProvider } from "./OrderAlertProvider";
+
 
 // ✅ 1️⃣ Create the context
 const DashboardContext = createContext();
 
 // ✅ 2️⃣ Create the provider component
 export const DashboardProvider = ({ children }) => {
+  // let { playAudio } = useOrderAlert();
+
   const apiUrl = import.meta.env.VITE_API_URL;
+   
+   
     // const{user,userDetails}=useAuth()
     const{user,userDetails}=useFirebaseAuth()
     
@@ -234,13 +241,17 @@ useEffect(()=>{
 
     eventSource.onmessage = () => {
     fetchuserorder(); // 🟢 Jab bhi event aaye, orders fetch karo
+      
+    
+      // playAudio();
+    
     };
 
     return () => {
         eventSource.close();
     };
     
-},[])
+},[userorder])
 
 
   

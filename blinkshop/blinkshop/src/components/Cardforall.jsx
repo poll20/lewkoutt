@@ -32,7 +32,7 @@ console.log("wishlist in coa",wishlistdata)
       ?( props?.id?.image?.[0] || props?.image || "fallback.jpg")
       : (props.image || "fallback.jpg")
   }
-  alt="Product"
+  alt={props.discription || "Product"}
   className="product-image"
 />
         </NavLink> 

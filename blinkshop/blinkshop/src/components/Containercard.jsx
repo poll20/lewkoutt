@@ -172,7 +172,7 @@ let Clickcard=(id)=>{
           
         // </div>
         <div key={card._id} className='om-card'  style={{borderRadius:"0px"}}>
-        <Cardforall id={card} discription={card.description} price={card.price} discountprice={card.discountprice} image={card.image[0]} discount={card.discount} defaultcolor={card.defaultColor}/>
+        <Cardforall id={card} title={card.title} discription={card.description} price={card.price} discountprice={card.discountprice} image={card.image[0]} discount={card.discount} defaultcolor={card.defaultColor}/>
         {/* <h3>{card._id}</h3> */}
         </div>
       ))}

@@ -2256,13 +2256,27 @@ console.log("neworder",newOrder)
 
 
 // 🔵 GET: Fetch all orders (For Admin)
+// app.get('/orders', async (req, res) => {
+//   try {
+//       const orders = await orderr.find().populate('products.productId').lean(); // Populate product details
+//       res.status(200).json(orders);
+//   } catch (error) {
+//       console.error("Fetch Orders Error:", error);
+//       res.status(500).json({ error: "Failed to fetch orders" });
+//   }
+// });
 app.get('/orders', async (req, res) => {
   try {
-      const orders = await orderr.find().populate('products.productId').lean(); // Populate product details
-      res.status(200).json(orders);
+    const orders = await orderr
+      .find()
+      .populate('products.productId')
+      .sort({ orderedAt: -1 }) // 🔑 -1 = newest first, 1 = oldest first
+      .lean();
+
+    res.status(200).json(orders);
   } catch (error) {
-      console.error("Fetch Orders Error:", error);
-      res.status(500).json({ error: "Failed to fetch orders" });
+    console.error("Fetch Orders Error:", error);
+    res.status(500).json({ error: "Failed to fetch orders" });
   }
 });
 

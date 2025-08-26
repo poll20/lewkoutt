@@ -50,6 +50,7 @@ const [cartData, setCartData] = useState([]);
   const [popupImage, setPopupImage] = useState(""); // State to store the clicked image
   const [Selectedcolor,setSelectedcolor]=useState([])
   const [colorid,setcolorid]=useState()
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
    const [isOpen, setIsOpen] = useState(false);
 const[product,setproduct]=useState([])
 
@@ -802,7 +803,7 @@ if(getbundeldata){
               
               <img
               //  ref={imageRef}
-                src={image}
+                src={product.sizes[0].image[currentImageIndex]} // Show only the current image
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
@@ -845,11 +846,49 @@ if(getbundeldata){
 <svg onClick={()=>{navigate('/searchme')}} style={{position:"absolute",top:"24px",right:"60px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px", backgroundColor: "rgba(255, 255, 255, 0.5)" }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
 </svg>
+
+{/* Mobile Thumbnail Strip */}
+          <div style={{ 
+            display: 'flex', 
+            gap: '0.5rem', 
+            padding: '1rem',
+            overflowX: 'auto',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}>
+            {product.sizes[0].image.map((img, index) => (
+              <div 
+                key={index} 
+                onClick={() => setCurrentImageIndex(index)}
+                style={{
+                  minWidth: '60px',
+                  height: '80px',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  border: currentImageIndex === index ? '2px solid #667eea' : '2px solid transparent',
+                  opacity: currentImageIndex === index ? 1 : 0.7
+                }}
+              >
+                <img 
+                  src={img} 
+                  alt={`Product view ${index + 1}`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        
+
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
           <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder"}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
-          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"3px",color:"#c7522a"}}>{product.discount} off</span></span>
+          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"5px",color:"white", border:"2px solid red",padding:"5px 15px",borderRadius:"90px",background:"rgb(241, 90, 41"}}>{product.discount} off</span></span>
           <span
       style={{
         display: 'flex',

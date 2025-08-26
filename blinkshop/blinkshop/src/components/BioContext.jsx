@@ -7,6 +7,7 @@ import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
+// import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
 
 // import { ToastContainer, toast } from 'react-toastify';
 // import Toast from './Toast';
@@ -19,6 +20,7 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   console.log("urll",apiUrl)
   // const { user,userDetails } = useAuth();
     const {user, userDetails, } = useFirebaseAuth();
+    // const { playAudio } = OrderAlertProvider();
     // const {slots,toggleSlot,fetchSlots,slotVersion }=useDashboard()
   const { setIsLoading } = useLoading();
   // const navigate=useNavigate()
@@ -1075,6 +1077,7 @@ if(user && userDetails){
     })
     if(orderpost.ok){
       console.log("address edit")
+      
       // navigate("/orderconfirm")
     }
      // ✅ New Order ko State me Add Karo
@@ -1137,7 +1140,7 @@ useEffect(() => {
         eventSource.close();
     };
   }
-}, [user, userDetails?._id]);
+}, [user, userDetails?._id,userorder?.status]);
 
 
 // useEffect(()=>{

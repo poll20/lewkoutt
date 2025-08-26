@@ -155,7 +155,7 @@ const handleSubmit = async (productId) => {
   <div key={product._id} className="product-container">
      <div className="order-status">
               <span className={`status-badge ${order.status.toLowerCase()}`}>
-                {order.status}
+                {order?.status}
               </span>
             </div>
     {
