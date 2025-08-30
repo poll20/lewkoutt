@@ -136,8 +136,10 @@ let distinctcat=[... new Set(data)]
   // className="w-1 h-1" // 👈 Changed from w-5 h-5 to w-4 h-4
 >
   <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm9.25 2a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zM12 7.25a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5z" />
-</svg>
-            <span>@lewkout</span>
+</svg>      
+              <NavLink to='https://www.instagram.com/lewkout.in/' target="_blank" rel="noopener noreferrer" className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>
+            <span >@lewkout.in</span>
+            </NavLink>
           </div>
         </div>
       </div>

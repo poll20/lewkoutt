@@ -331,6 +331,7 @@ console.log("bodycheck kroo",body)
 
       const bundleData = body.bundle.map((item) => ({
         productId: item.productId,
+        color: item.color,
         title: item.title,
         image: item.image,
         color: item.color,
@@ -366,6 +367,7 @@ console.log("bodycheck kroo",body)
       description,
       qty,
       size,
+      color,
       sizes,
       price,
       discountprice,
@@ -382,6 +384,7 @@ console.log("bodycheck kroo",body)
       description,
       image: image || (sizes?.[0]?.image?.[0] ?? ""),
       qty,
+      color,
       size,
       price,
       discountprice,

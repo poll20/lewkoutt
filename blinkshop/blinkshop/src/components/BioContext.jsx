@@ -7,6 +7,7 @@ import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
+import { color } from 'framer-motion';
 // import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
 
 // import { ToastContainer, toast } from 'react-toastify';
@@ -594,6 +595,7 @@ finally{
           userid: userDetails?._id,
           productId: prd._id,
           productid: prd._id,
+          color: prd?.color,
           image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
           title: prd.title,
           description: prd.description,

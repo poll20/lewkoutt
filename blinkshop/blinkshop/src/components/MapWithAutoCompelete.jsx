@@ -248,7 +248,10 @@ useEffect(() => {
       //   types: ["geocode"],
       //   componentRestrictions: { country: "in" },
       // });
-  const autocomplete = new window.google.maps.places.Autocomplete(input);
+  const autocomplete = new window.google.maps.places.Autocomplete(input, {
+  types: ["address"], // sirf addresses allow karega
+  componentRestrictions: { country: "in" } // optional (India ke liye)
+});
 // autocomplete.setFields(["address_components", "formatted_address", "geometry"]);
 autocomplete.setFields([
   "place_id",

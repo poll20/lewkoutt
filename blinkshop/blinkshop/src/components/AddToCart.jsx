@@ -12,6 +12,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import newme from "./image/img3.jpg";
 import BundleProduct from './BundleProduct';
 import Cardforall from './Cardforall';
+import { color } from 'framer-motion';
 
 const AddToCart = () => {
   const navigate = useNavigate();
@@ -271,7 +272,7 @@ if(!addtocartdatas){
               onChange={(e) => handlechoosebuy(order, e.target.checked)}
             />
           </div>
-          <NavLink to={`/productdescription/${order.productid}`} className="navlink">
+          <NavLink to={`/productdescription/${order?.productid}/${order.color}`} className="navlink">
             <div>
               <img src={order.image} alt={order.title} className="order-imagee-addtocart" />
             </div>
@@ -421,33 +422,72 @@ if(!addtocartdatas){
   </div>
 )} */}
 {recommendations?.length > 0 && (
-  <div className="you-might-like" style={{ padding: "10px" }}>
-    <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
-    <div style={{
+  // <div className="you-might-like" style={{ padding: "10px",border:"2px solid red" }}>
+  //   <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
+  //   <div style={{
+  //     display: "flex",
+  //     overflowX: "auto",
+  //     gap: "12px",
+  //     paddingBottom: "10px",
+  //     scrollbarWidth: "none",
+  //     msOverflowStyle: "none",
+  //     overflowX:"auto"
+  //   }}>
+  //     {recommendations.map((product, index) => (
+  //       product.productdetails?.map((detail, i) =>
+  //         detail.colors?.map((color, j) => (
+  //           <Cardforall
+  //             key={color._id || `${index}-${i}-${j}`}
+  //             id={color._id}
+  //             discription={color.description}
+  //             image={Array.isArray(color.image) ? color.image[0] : product.image}
+  //             price={detail.price}
+  //             discountprice={detail.discountprice}
+  //             discount={detail.discount}
+  //           />
+  //         ))
+  //       )
+  //     ))}
+  //   </div>
+  // </div>
+  <div className="you-might-like" style={{ padding: "10px", border: "2px solid red" }}>
+  <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
+  <div
+    style={{
       display: "flex",
       overflowX: "auto",
       gap: "12px",
       paddingBottom: "10px",
-      scrollbarWidth: "none",
-      msOverflowStyle: "none"
-    }}>
-      {recommendations.map((product, index) => (
-        product.productdetails?.map((detail, i) =>
-          detail.colors?.map((color, j) => (
+      scrollbarWidth: "none", // Firefox
+      msOverflowStyle: "none", // IE/Edge
+    }}
+  >
+    {recommendations.map((product, index) =>
+      product.productdetails?.map((detail, i) =>
+        detail.colors?.map((color, j) => (
+          <div
+            key={color._id || `${index}-${i}-${j}`}
+            style={{
+              flex: "0 0 auto", // 🔑 stop shrinking, force fixed width
+              minWidth: "200px", // apni card width decide karo
+            }}
+          >
             <Cardforall
-              key={color._id || `${index}-${i}-${j}`}
               id={color._id}
+              colorid={color.color}
               discription={color.description}
               image={Array.isArray(color.image) ? color.image[0] : product.image}
               price={detail.price}
               discountprice={detail.discountprice}
               discount={detail.discount}
             />
-          ))
-        )
-      ))}
-    </div>
+          </div>
+        ))
+      )
+    )}
   </div>
+</div>
+
 )}
 
 

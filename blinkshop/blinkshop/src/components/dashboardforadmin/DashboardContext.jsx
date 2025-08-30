@@ -8,6 +8,7 @@ import { faL } from "@fortawesome/free-solid-svg-icons";
 // import { useOrderAlert } from "./OrderAlertProvider";
 // import { OrderAlertProvider } from "./OrderAlertProvider";
 
+// import { useOrderAlert } from "./OrderAlertProvider"; // path apne hisaab se set karo
 
 // ✅ 1️⃣ Create the context
 const DashboardContext = createContext();
@@ -23,7 +24,7 @@ export const DashboardProvider = ({ children }) => {
     const{user,userDetails}=useFirebaseAuth()
     
     const [users, setUsers] = useState([]);
-    
+    const [ordersound,setordersound]=useState(false)
     const [userorder,setuserorder]=useState([])
     const[shopkeeperprd,setshopkeeperprd]=useState([])
     const[productonlydetails,setproductonlydetails]=useState([])
@@ -242,7 +243,7 @@ useEffect(()=>{
     eventSource.onmessage = () => {
     fetchuserorder(); // 🟢 Jab bhi event aaye, orders fetch karo
       
-    
+     setordersound(true)
       // playAudio();
     
     };
@@ -251,7 +252,7 @@ useEffect(()=>{
         eventSource.close();
     };
     
-},[userorder])
+},[])
 
 
   
@@ -821,7 +822,8 @@ setSlotVersion((prev) => prev + 1);
         setdis,showalert, userorder,markAsDelivered,updateUserRole,shopkeeperprd,recordMultipleSales,
         shopkeepersale,updateOrdersWithReturnDetails,
         returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
-        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle,slots,fetchSlots,toggleSlot}}
+        addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle,slots,fetchSlots,toggleSlot,
+      ordersound,setordersound}}
     >
       {children}
     </DashboardContext.Provider>

@@ -310,6 +310,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
   return (
     <FirebaseAuthProvider showPopup={showPopup}>
     <AuthProvider>
+      
     <DashboardProvider>
     
       <BioProvider  showPopup={showPopup} >

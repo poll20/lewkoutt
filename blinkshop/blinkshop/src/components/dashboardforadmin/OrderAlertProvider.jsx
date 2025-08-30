@@ -1,44 +1,104 @@
+// // OrderAlertContext.js
+// import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+// import sound from "../../assets/ordervoice.ogg";
+// import { useDashboard } from "./DashboardContext";
+
+// const OrderAlertContext = createContext();
+
+// export const OrderAlertProvider = ({ children }) => {
+
+//   console.log("orderalertprovider rendered",sound);
+//   const {ordersound,setordersound}=useDashboard()
+//   const audioRef = useRef(null);
+//   const [playing, setPlaying] = useState(true);
+
+//   const playAudio = () => {
+//     if (audioRef.current) {
+//       audioRef.current.play().catch((err) => {
+//         console.log("Autoplay blocked:", err);
+//       });
+//       setPlaying(true);
+
+//       // Alert show karo
+//       setTimeout(() => {
+//         const stop = window.confirm("⚡ New Order Received! Stop the alert sound?");
+//         if (stop && audioRef.current) {
+//           audioRef.current.pause();
+//           audioRef.current.currentTime = 0;
+//           setPlaying(false);
+//           setordersound(false)
+//         }
+//       }, 500); // thoda delay taki audio start ho jaye
+//     }
+//   };
+  
+//   useEffect(()=>{
+//      if(ordersound){
+//     playAudio();
+//     // setordersound(false)
+//   }
+//   },[ordersound])
+ 
+
+//   return (
+//     <OrderAlertContext.Provider value={{ playAudio, playing }}>
+//       {/* Hidden Audio Tag */}
+//       <audio ref={audioRef} src={sound} loop />
+
+//        {/* <audio >
+//         <source ref={audioRef} src={sound}  />
+        
+//       </audio> */}
+//       {children}
+//     </OrderAlertContext.Provider>
+//   );
+// };
+
+// export const useOrderAlert = () => useContext(OrderAlertContext);
+
 // OrderAlertContext.js
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import sound from "../../assets/ordervoice.ogg";
+import { useDashboard } from "./DashboardContext";
+
 const OrderAlertContext = createContext();
 
 export const OrderAlertProvider = ({ children }) => {
-  console.log("orderalertprovider rendered",sound);
+  const { ordersound, setordersound } = useDashboard();
   const audioRef = useRef(null);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
 
   const playAudio = () => {
+    console.log("playAudio called");
     if (audioRef.current) {
       audioRef.current.play().catch((err) => {
         console.log("Autoplay blocked:", err);
       });
       setPlaying(true);
 
-      // Alert show karo
       setTimeout(() => {
         const stop = window.confirm("⚡ New Order Received! Stop the alert sound?");
         if (stop && audioRef.current) {
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
           setPlaying(false);
+          setordersound(false); // stop karne ke baad ordersound false
         }
-      }, 500); // thoda delay taki audio start ho jaye
+      }, 500);
     }
   };
 
+  useEffect(() => {
+    console.log("fuck ")
+    if (ordersound) {
+      playAudio();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ordersound]); // sirf ordersound true hone pe chalega
+
   return (
     <OrderAlertContext.Provider value={{ playAudio, playing }}>
-      {/* Hidden Audio Tag */}
-      {/* <audio ref={audioRef} src={sound} loop /> */}
-      <audio ref={audioRef}  loop>
-        <source  src={sound} type="audio/ogg" />
-        {/* Your browser does not support the audio element. */}
-      </audio>
-       {/* <audio >
-        <source ref={audioRef} src={sound}  />
-        
-      </audio> */}
+      <audio ref={audioRef} src={sound} loop hidden />
       {children}
     </OrderAlertContext.Provider>
   );

@@ -60,6 +60,7 @@ let cartz=mongoose.Schema({
     price:Number,
     shopname:String,
     discountprice:Number,
+    color:String,
     bundle:[{
        productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
       title:{type:String},
