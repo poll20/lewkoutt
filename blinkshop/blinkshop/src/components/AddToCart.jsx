@@ -450,13 +450,52 @@ if(!addtocartdatas){
   //     ))}
   //   </div>
   // </div>
-  <div className="you-might-like" style={{ padding: "10px", border: "2px solid red" }}>
+//   <div className="you-might-like" style={{ padding: "10px", border: "2px solid red" }}>
+//   <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
+//   <div
+//     style={{
+//       display: "flex",
+//       flexDirection:"column",
+//       overflowY: "auto",
+//       gap: "12px",
+//       paddingBottom: "10px",
+//       scrollbarWidth: "none", // Firefox
+//       msOverflowStyle: "none", // IE/Edge
+//     }}
+//   >
+//     {recommendations.map((product, index) =>
+//       product.productdetails?.map((detail, i) =>
+//         detail.colors?.map((color, j) => (
+//           <div
+//             key={color._id || `${index}-${i}-${j}`}
+//             style={{
+//               flex: "0 0 auto", // 🔑 stop shrinking, force fixed width
+//               minWidth: "150px", // apni card width decide karo
+//             }}
+//           >
+//             <Cardforall
+//               id={color._id}
+//               colorid={color.color}
+//               discription={color.description}
+//               image={Array.isArray(color.image) ? color.image[0] : product.image}
+//               price={detail.price}
+//               discountprice={detail.discountprice}
+//               discount={detail.discount}
+//             />
+//           </div>
+//         ))
+//       )
+//     )}
+//   </div>
+// </div>
+<div className="you-might-like" style={{ padding: "10px"}}>
   <h3 style={{ fontWeight: "normal", marginBottom: "10px" }}>You Might Also Like</h3>
   <div
     style={{
-      display: "flex",
-      overflowX: "auto",
+      display: "grid",
+      gridTemplateColumns: "repeat(2, 1fr)", // ek row me 2 columns
       gap: "12px",
+      overflowY: "auto",
       paddingBottom: "10px",
       scrollbarWidth: "none", // Firefox
       msOverflowStyle: "none", // IE/Edge
@@ -468,8 +507,7 @@ if(!addtocartdatas){
           <div
             key={color._id || `${index}-${i}-${j}`}
             style={{
-              flex: "0 0 auto", // 🔑 stop shrinking, force fixed width
-              minWidth: "200px", // apni card width decide karo
+              minWidth: "150px", // card ka min width
             }}
           >
             <Cardforall
@@ -487,6 +525,7 @@ if(!addtocartdatas){
     )}
   </div>
 </div>
+
 
 )}
 

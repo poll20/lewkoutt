@@ -248,7 +248,7 @@ const faqData = [
 const Faq = () => {
   const [openCategory, setOpenCategory] = useState(null);
   const [openQuestion, setOpenQuestion] = useState(null);
-  const phoneNumber = '6377563527';
+  const phoneNumber = '+917014996104';
   const supportEmail = 'sharmaabhay1549@gmail.com';
 
   const containerStyle = {
@@ -295,8 +295,9 @@ const Faq = () => {
     <div style={containerStyle}>
       {/* Phone Icon */}
       <a
+    
         href={`tel:${phoneNumber}`}
-        style={{ ...iconStyle, textDecoration: 'none' }}
+        style={{ ...iconStyle, textDecoration: 'none',color:"#555" }}
         onMouseOver={(e) => (e.currentTarget.style.color = '#007BFF')}
         onMouseOut={(e) => (e.currentTarget.style.color = '#555')}
       >

@@ -1,17 +1,18 @@
 import React from "react";
 import "./AboutUs.css";
 import aboutImage from "./image/img3.jpg"; // Replace with your image path
+import { NavLink } from "react-router-dom";
 
 const AboutUs = () => {
   return (
-    <div className="about-container" style={{marginTop:"10px",border:"2px solid red"}}>
+    <div className="about-container" style={{margin:"50px 0"}}>
       {/* Header with Gradient Text */}
       {/* <h2 className="gradient-text">#iamallcolors</h2> */}
 
       {/* Image Section */}
-      <div className="abtimage-container">
+      {/* <div className="abtimage-container">
         <img src={aboutImage} alt="Team" />
-      </div>
+      </div> */}
 
       {/* About Us Content */}
       <div className="about-content">
@@ -30,18 +31,18 @@ const AboutUs = () => {
       <div className="about-footer">
         <p>We’d just let you be whoever you’d like to be.</p>
 
-        <a href="https://instagram.com" className="instagram-button">
+        <NavLink  to='https://www.instagram.com/lewkout.in/' className="instagram-button navlink">
           <i className="fab fa-instagram"></i> Follow LEWKOUT on Instagram
-        </a>
+        </NavLink>
 
-        <div className="company-info">
+        {/* <div className="company-info">
           <h3>LEWKOUT (Fraicheur Retail Private Limited)</h3>
           <p>
            Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, cum.
           </p>
-        </div>
+        </div> */}
 
-        <div className="footer-links" style={{marginBottom:"13px",border:"2px solid red"}}>
+        <div className="footer-links" style={{marginBottom:"13px"}}>
           <a href="#">Terms & Conditions</a> •
           <a href="#">Privacy Policy</a> •
           <a href="#">Refund policy</a>

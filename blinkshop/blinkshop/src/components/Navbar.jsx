@@ -23,7 +23,7 @@ import { useAuth } from './AuthContext';
 import { useFirebaseAuth } from './FirebaseContext';
 import VibeSticker from './VibeSticker';
 import LewkoutLogo from './LewkoutLogo';
-
+import lewkoutlogo from "../components/image/lewklogo.png"
 const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()
@@ -133,7 +133,7 @@ console.log("navbar m props.pdd value",props.pd)
         <div className="mobile-menu-icon" onClick={handleSideNavbarToggle}>
           <IoIosMenu  size={30} />
         </div>
-        <div className="logo lato-thin" ><LewkoutLogo/></div>
+        <div className="logo lato-thin" ><img style={{width:"150px"}}  src={lewkoutlogo}></img></div>
         
         <div style={{display:"flex",gap:"15%"}}>
         <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?('position-relative'):('')}`}>
@@ -207,7 +207,7 @@ console.log("navbar m props.pdd value",props.pd)
 
       {/* Bottom Navbar for mobile screens */}
       
-      <nav className="navbar bottom-navbar">
+      <nav className="navbar bottom-navbar" style={{border:"1px solid red",display:"flex",alignItems:"center",justifyContent:"center"}}>
         <ul className="nav-links">
           <div className="homeeee">
           <NavLink to="/" className="homeeee">
@@ -306,9 +306,9 @@ console.log("navbar m props.pdd value",props.pd)
             <NavLink to='/loginn'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} onClick={closeslidecategorynav}>Login</li>
             </NavLink>
-            <NavLink to='/mood'>
+            {/* <NavLink to='/mood'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} >Mood</li>
-            </NavLink>
+            </NavLink> */}
             {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")}
           </ul>
         </div>

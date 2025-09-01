@@ -21,69 +21,25 @@ const [selectedDate, setSelectedDate] = useState(() => {
   
 const { settimeslotlelo,distance } = useBio();
 
-// const isDisabled = (slot) => {
-//     const now = new Date();
-  
-//     // ✅ Selected date is tomorrow? → All slots enabled
-//     if (selectedDate) {
-//       const tomorrow = new Date();
-//       tomorrow.setDate(tomorrow.getDate() + 1);
-  
-//       const selected = new Date(selectedDate);
-//       if (
-//         selected.getDate() === tomorrow.getDate() &&
-//         selected.getMonth() === tomorrow.getMonth() &&
-//         selected.getFullYear() === tomorrow.getFullYear()
-//       ) {
-//         return false;
-//       }
-//       // ✅ For "Within 60 minutes" slot
-// if (slot.label === 'Within 60 minutes') {
-//   // ❌ Disable if distance is more than 10 km
-//   const distanceInKm = parseFloat(distance?.replace("km", "").trim());
-//   if (!isNaN(distanceInKm) && distanceInKm > 10) return true;
 
-//   const otherSlots = timeSlots.filter(s => s.label !== 'Within 60 minutes');
-//   const allOtherSlotsDisabled = otherSlots.every(s => isDisabled(s));
-
-//   // ❌ Disable if it's past 9:00 PM
-//   const isAfter9PM = now.getHours() >= 21;
-
-//   if (allOtherSlotsDisabled || isAfter9PM) return true;
-
-//   return false; // else still allow
-// }
-
-//     }
-    
-  
-//     // ✅ For regular time slots (not "Within 60 minutes")
-//     if (slot.label !== 'Within 60 minutes') {
-//       const slotEndTime = new Date(now);
-//       slotEndTime.setHours(slot.end, 0, 0, 0);
-  
-//       const minutesRemaining = (slotEndTime - now) / (1000 * 60);
-  
-//       if (minutesRemaining <= 0 || minutesRemaining < 60) return true;
-//       return false;
-//     }
-    
-  
-//     // ✅ For "Within 60 minutes" slot
-//     const otherSlots = timeSlots.filter(s => s.label !== 'Within 60 minutes');
-//     const allOtherSlotsDisabled = otherSlots.every(s => isDisabled(s));
-  
-//     // ❌ Disable if it's past 9:00 PM
-//     const isAfter9PM = now.getHours() >= 21;
-  
-//     if (allOtherSlotsDisabled || isAfter9PM) return true;
-  
-//     return false; // else still allow
-//   };
 const isDisabled = (slot) => {
   const now = new Date();
   const selected = new Date(selectedDate);
   const distanceInKm = parseFloat(distance?.replace("km", "").trim());
+
+
+ // ✅ Special case: Tomorrow ke liye "Within 60 minutes" hamesha disable
+  const tomorrow = new Date();
+  tomorrow.setDate(now.getDate() + 1);
+
+  if (
+    slot.label === "Within 60 minutes" &&
+    selected.toDateString() === tomorrow.toDateString()
+  ) {
+    return true;
+  }
+
+
 
   // ✅ For "Within 60 minutes" slot
   if (slot.label === 'Within 60 minutes') {
@@ -123,48 +79,6 @@ const isDisabled = (slot) => {
 if(distance){
   console.log("distance hai i",distance)
 }
-
-// const isDisabled = (slot) => {
-//   const now = new Date();
-
-//   // ✅ Selected date is tomorrow? → All slots enabled
-//   if (selectedDate) {
-//     const tomorrow = new Date();
-//     tomorrow.setDate(tomorrow.getDate() + 1);
-
-//     const selected = new Date(selectedDate);
-//     if (
-//       selected.getDate() === tomorrow.getDate() &&
-//       selected.getMonth() === tomorrow.getMonth() &&
-//       selected.getFullYear() === tomorrow.getFullYear()
-//     ) {
-//       return false;
-//     }
-//   }
-
-//   // ✅ For "Within 60 minutes" slot
-//   if (slot.label === 'Within 60 minutes') {
-//     const distanceInKm = parseFloat(distance?.replace("km", "").trim());
-//     if (!isNaN(distanceInKm) && distanceInKm > 10) return true;
-
-//     const otherSlots = timeSlots.filter(s => s.label !== 'Within 60 minutes');
-//     const allOtherSlotsDisabled = otherSlots.every(s => isDisabled(s));
-
-//     const isAfter9PM = now.getHours() >= 21;
-//     if (allOtherSlotsDisabled || isAfter9PM) return true;
-
-//     return false;
-//   }
-
-//   // ✅ For regular slots
-//   const slotEndTime = new Date(now);
-//   slotEndTime.setHours(slot.end, 0, 0, 0);
-//   const minutesRemaining = (slotEndTime - now) / (1000 * 60);
-
-//   if (minutesRemaining <= 0 || minutesRemaining < 60) return true;
-//   return false;
-// };
-
 
 
   const handleSelect = (slotLabel) => {
@@ -217,7 +131,7 @@ const handleDateChange = (e) => {
 
       {/* Calendar button & input */}
       <button
-        className="mb-3 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-full"
+        className="mb-3 bg-green-600 hover:bg-green-700 text-black py-2 px-4 rounded w-full"
         onClick={() => document.getElementById('datePicker').showPicker()}
       >
         Select Delivery Date
@@ -288,180 +202,3 @@ const handleDateChange = (e) => {
   );
 }
 
-// ✅ Updated DeliveryTimeSlot.jsx with admin-controlled slot disable
-// import React, { useEffect, useState } from 'react';
-// import { useBio } from './BioContext';
-// import axios from 'axios';
-// import { useDashboard } from './dashboardforadmin/DashboardContext';
-// // import { userr } from '../../../backend/database/collection';
-// import { useFirebaseAuth } from './FirebaseContext';
-
-// export default function DeliveryTimeSlot() {
-//     const apiUrl = import.meta.env.VITE_API_URL;
-//     const {slots,toggleSlot,fetchSlots,slotVersion}=useDashboard()
-//   const [selectedSlot, setSelectedSlot] = useState(null);
-//     const {user, userDetails, } = useFirebaseAuth();
-//   const [selectedDate, setSelectedDate] = useState(() => {
-//     const tomorrow = new Date();
-//     tomorrow.setDate(tomorrow.getDate());
-//     return tomorrow.toISOString().split("T")[0];
-//   });
-//   // const [slots, setSlots] = useState([]);
-
-//   const { settimeslotlelo, distance } = useBio();
-
- 
-
-//   useEffect(()=>{
-    
-//     fetchSlots()
-    
-//   },[])
- 
-//   useEffect(()=>{
-//     fetchSlots()
-//   },[slotVersion])
-  
-//   const isDisabled = (slot) => {
-//     const now = new Date();
-//     const selected = new Date(selectedDate);
-//     const distanceInKm = parseFloat(distance?.replace("km", "").trim());
-
-//     if (slot.disabled) return true;
-
-//     if (slot.label === 'Within 60 minutes') {
-//       if (!isNaN(distanceInKm) && distanceInKm > 10) return true;
-
-//       if (
-//         selected.toDateString() === now.toDateString() &&
-//         now.getHours() >= 21
-//       ) return true;
-
-//       const otherSlots = slots?.filter(s => s.label !== 'Within 60 minutes');
-//       const allOtherSlotsDisabled = otherSlots.every(s => isDisabled(s));
-
-//       if (allOtherSlotsDisabled) return true;
-
-//       return false;
-//     }
-
-//     if (selected > now) return false;
-
-//     const slotEndTime = new Date(now);
-//     slotEndTime.setHours(slot.end, 0, 0, 0);
-//     const minutesRemaining = (slotEndTime - now) / (1000 * 60);
-
-//     if (minutesRemaining <= 0 || minutesRemaining < 60) return true;
-
-//     return false;
-//   };
-
-//   const handleSelect = (slotLabel) => {
-//     setSelectedSlot(slotLabel);
-//   };
-
-//   const handleDateChange = (e) => {
-//     const selected = new Date(e.target.value);
-//     const today = new Date();
-//     const tomorrow = new Date();
-//     today.setHours(0, 0, 0, 0);
-//     tomorrow.setDate(today.getDate() + 1);
-//     tomorrow.setHours(0, 0, 0, 0);
-
-//     if (
-//       selected.toDateString() !== today.toDateString() &&
-//       selected.toDateString() !== tomorrow.toDateString()
-//     ) {
-//       alert("Please select either today or tomorrow only.");
-//       const formattedTomorrow = tomorrow.toISOString().split("T")[0];
-//       setSelectedDate(formattedTomorrow);
-//     } else {
-//       setSelectedDate(e.target.value);
-//     }
-//   };
-
-//   if (selectedSlot) {
-//     settimeslotlelo(selectedSlot);
-//   }
-
-//   return (
-//     <div className="max-w-md mx-auto p-4 border rounded-lg shadow-sm">
-//       {parseFloat(distance?.replace("km", "").trim()) > 10 ? (
-//         <span>You’re a lil’ out of our speed zone 👀 So the 60-min ride won’t make it… but other slots are waiting to be picked 💅</span>
-//       ) : (
-//         ''
-//       )}
-
-//       <h2 className="text-xl font-bold mb-2">
-//         Delivery Time Slot <span className="text-gray-500 text-sm">(Required)</span>
-//       </h2>
-
-//       <button
-//         className="mb-3 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-full"
-//         onClick={() => document.getElementById('datePicker').showPicker()}
-//       >
-//         Select Delivery Date
-//       </button>
-
-//       <input
-//         id="datePicker"
-//         type="date"
-//         value={selectedDate}
-//         onChange={handleDateChange}
-//         className="mb-4 w-full p-2 border rounded"
-//         min={new Date().toISOString().split('T')[0]}
-//         max={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
-//       />
-
-//       <p className="font-semibold mb-2">Select Time Window:</p>
-
-//       {slots?.map((slot, index) => {
-//         const disabled = isDisabled(slot);
-//         return (
-//           <label
-//             key={index}
-//             style={{
-//               display: 'flex',
-//               alignItems: 'center',
-//               marginBottom: '8px',
-//               cursor: disabled ? 'not-allowed' : 'pointer',
-//               padding: '8px',
-//               borderRadius: '4px',
-//               backgroundColor: disabled ? '#fee2e2' : 'transparent',
-//               border: disabled ? '1px solid #dc2626' : '1px solid #d1d5db',
-//               color: disabled ? '#b91c1c' : '#000000',
-//               opacity: disabled ? 0.7 : 1,
-//               transition: 'background-color 0.3s',
-//             }}
-//             onMouseEnter={(e) => {
-//               if (!disabled) e.currentTarget.style.backgroundColor = '#f3f4f6';
-//             }}
-//             onMouseLeave={(e) => {
-//               if (!disabled) e.currentTarget.style.backgroundColor = 'transparent';
-//             }}
-//           >
-//             <input
-//               type="radio"
-//               name="delivery-slot"
-//               value={slot.label}
-//               disabled={disabled}
-//               checked={selectedSlot === slot.label}
-//               onChange={() => handleSelect(slot.label)}
-//               style={{ marginRight: '8px' }}
-//             />
-//             <span style={{ marginLeft: '4px', fontWeight: '300' }}>{slot.label}</span>
-//           </label>
-//         );
-//       })}
-
-//       <button
-//         style={{ width: '100%' }}
-//         className="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-full"
-//         disabled={!selectedSlot}
-//         onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
-//       >
-//         Confirm Slot
-//       </button>
-//     </div>
-//   );
-// }

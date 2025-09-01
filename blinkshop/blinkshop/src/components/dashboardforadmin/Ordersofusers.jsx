@@ -73,17 +73,20 @@
 
 // export default Ordersofusers;
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Ordersofusers.css";
 import { useDashboard } from "./DashboardContext";
 
 
 const Ordersofusers = () => {
-  const { userorder, markAsDelivered } = useDashboard();
+  const { userorder, markAsDelivered} = useDashboard();
   const [openMapId, setOpenMapId] = useState(null); // ✅ Track which map is open
   const [zoomedImage, setZoomedImage] = useState(null); // ✅ Track which image is zoomed
     
 
+
+
+  
   const toggleZoom = (src) => {
     setZoomedImage(zoomedImage === src ? null : src);
   };
@@ -132,7 +135,7 @@ const Ordersofusers = () => {
                     <td>{order?.userId}</td>
                     <td>{order?.address[0]?.uname}</td>
                     <td>{order?.email}</td>
-                    <td>{order?.address[0]?.phone[0]}</td>
+                    <td>{order?.address[0]?.phone [0]}</td>
                     <td>{fullAddress}</td>
                     <td>
                       {order.products.map((product, index) => (

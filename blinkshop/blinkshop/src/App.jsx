@@ -195,6 +195,7 @@ import OtpLogin from "./components/OtpLogin";
 import OrderConfirmation from "./components/OrderConfimation";
 import ComingSoon from "./components/ComingSoon";
 import { OrderAlertProvider } from "./components/dashboardforadmin/OrderAlertProvider";
+import PrivacyPolicy from "./components/PrivicyPolicy";
 // import { OrderAlertProvider } from "./components/OrderAlertProvider";
 // import { useOrderAlert } from "./components/OrderAlertProvider";
 // import { OrderAlertProvider } from "./OrderAlertContext";
@@ -418,7 +419,7 @@ function Layout({ showPopup }) {
             <Route path="/rentcompo" element={<BottomUpSlidingList />} />
             <Route path="/userorder" element={<UserOrder />} />
             <Route path="/address/:sec" element={<AddressList />} />
-            <Route path="/refferal" element={<Refferal />} />
+            {/* <Route path="/refferal" element={<Refferal />} /> */}
             <Route path="/sizechart/:cate" element={<SizeChart />} />
             <Route path="/store/:store" element={<Card />} />
             <Route path="/rent/:rent" element={<Card />} />
@@ -435,6 +436,9 @@ function Layout({ showPopup }) {
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/mood" element={<Moodcom/>} />
             <Route path="/maps" element={<MapWithAutocompelete/>} />
+            <Route path="/privicy" element={<PrivacyPolicy email="" phone=""/>}/> 
+           
+
               <Route path="/orderconfirm" element={<OrderConfirmation/>} />
             
             <Route path="/prdreview/:id/:avgrating" element={<ReviewProduct/>} />

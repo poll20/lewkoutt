@@ -128,23 +128,52 @@ app.get("/ping", (req, res) => {
   res.status(200).send("Server is awake!");
 });
 
+// app.get("/events", (req, res) => {
+//   res.setHeader("Content-Type", "text/event-stream");
+//   res.setHeader("Cache-Control", "no-cache");
+//   res.setHeader("Connection", "keep-alive");
+
+//   const sendEvent = () => {
+//       res.write("data: update\n\n"); // 🔄 Notify client
+//   };
+
+//   orderEvent.on("orderUpdated", sendEvent);
+//   // slotevent.on("slotUpdated",sendEvent)
+
+//   req.on("close", () => {
+//       orderEvent.removeListener("orderUpdated", sendEvent);
+//   // slotevent.removeListener("slotUpdated", sendEvent);
+
+//   });
+// });
+// app.get("/events", (req, res) => {
+//   res.setHeader("Content-Type", "text/event-stream");
+//   res.setHeader("Cache-Control", "no-cache");
+//   res.setHeader("Connection", "keep-alive");
+//   res.flushHeaders();
+
+//   const sendEvent = (eventData) => {
+//     res.write(`data: ${JSON.stringify(eventData)}\n\n`);
+//   };
+
+//   // ✅ Listen for events
+//   orderEvent.on("new_order", (data) => sendEvent(data));
+//   orderEvent.on("order_Updated", (data) => sendEvent(data));
+// });
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
 
-  const sendEvent = () => {
-      res.write("data: update\n\n"); // 🔄 Notify client
+  const sendEvent = (eventData) => {
+    res.write(`data: ${JSON.stringify(eventData)}\n\n`);
   };
 
-  orderEvent.on("orderUpdated", sendEvent);
-  // slotevent.on("slotUpdated",sendEvent)
+  orderEvent.on("new_order", (data) => sendEvent(data));
+  orderEvent.on("order_updated", (data) => sendEvent(data));
+  orderEvent.on("order_return", (data) => sendEvent(data));
 
-  req.on("close", () => {
-      orderEvent.removeListener("orderUpdated", sendEvent);
-  // slotevent.removeListener("slotUpdated", sendEvent);
-
-  });
 });
 
 
@@ -2234,7 +2263,7 @@ console.log("ordr process hua",addressd)
     });
 console.log("neworder",newOrder)
     await newOrder.save();
-    orderEvent.emit('orderUpdated');
+    orderEvent.emit('new_order', { type: "new_order", order });
 
     res.status(201).json({ message: "Order Placed & Admin Notified!" });
 
@@ -2322,51 +2351,89 @@ console.log("Order Products:", userOrders[0].products);
   }
 });
 
-app.put('/order/deliver/:id',verifyFirebaseToken, async (req, res) => {
-  try {
-      const order = await orderr.findById(req.params.id);
-      const {userDetails}=req.body 
-      if (!order) {
-          return res.status(404).json({ error: "Order not found" });
-      }
+// app.put('/order/deliver/:id',verifyFirebaseToken, async (req, res) => {
+//   try {
+//       const order = await orderr.findById(req.params.id);
+//       const {userDetails}=req.body 
+//       if (!order) {
+//           return res.status(404).json({ error: "Order not found" });
+//       }
 
-      // ✅ Sirf SHIPPED order ko DELIVERED karne de
-      if (order.status == "Pending") {
-          // return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
-          order.status = "shipped";
-          await order.save();
-          orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
-          res.json({ message: "Order marked as shipped!" });
+//       // ✅ Sirf SHIPPED order ko DELIVERED karne de
+//       if (order.status == "Pending") {
+//           // return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
+//           order.status = "shipped";
+//           await order.save();
+//           orderEvent.emit('order_Updated'); // 🔄 Notify frontend
+//           res.json({ message: "Order marked as shipped!" });
           
-      }
+//       }
       
  
-      else if(order.status=="shipped"){
-        order.status = "delivered";
-        order.deliveredAt = new Date(); // ✅ Store delivery time
-        await order.save();
-        orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
-        res.json({ message: "Order marked as delivered!" });
+//       else if(order.status=="shipped"){
+//         order.status = "delivered";
+//         order.deliveredAt = new Date(); // ✅ Store delivery time
+//         await order.save();
+//         orderEvent.emit('order_Updated'); // 🔄 Notify frontend
+//         res.json({ message: "Order marked as delivered!" });
         
-      }
+//       }
 
-      else if(order.status=="pending-returned"){
-        order.status = "returned";
-        await order.save();
-        orderEvent.emit('orderUpdated'); // 🔄 Notify frontend
-        res.json({ message: "Order marked as returned!" });
+//       else if(order.status=="pending-returned"){
+//         order.status = "returned";
+//         await order.save();
+//         orderEvent.emit('order_Updated'); // 🔄 Notify frontend
+//         res.json({ message: "Order marked as returned!" });
       
-      }
-      else{
-        return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
-      }
+//       }
+//       else{
+//         return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
+//       }
 
      
+//   } catch (error) {
+//       console.error("Error updating order:", error);
+//       res.status(500).json({ error: "Server error" });
+//   }
+// });
+app.put('/order/deliver/:id', verifyFirebaseToken, async (req, res) => {
+  try {
+    const order = await orderr.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    if (order.status === "Pending") {
+      order.status = "shipped";
+      await order.save();
+
+      orderEvent.emit("order_updated", { type: "order_updated", order });
+      return res.json({ message: "Order marked as shipped!" });
+
+    } else if (order.status === "shipped") {
+      order.status = "delivered";
+      order.deliveredAt = new Date();
+      await order.save();
+
+      orderEvent.emit("order_updated", { type: "order_updated", order });
+      return res.json({ message: "Order marked as delivered!" });
+
+    } else if (order.status === "pending-returned") {
+      order.status = "returned";
+      await order.save();
+
+      orderEvent.emit("order_updated", { type: "order_updated", order });
+      return res.json({ message: "Order marked as returned!" });
+    }
+
+    return res.status(400).json({ error: "Invalid status transition" });
+
   } catch (error) {
-      console.error("Error updating order:", error);
-      res.status(500).json({ error: "Server error" });
+    console.error("Error updating order:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
 
 // setInterval(async () => {
 //   try {
@@ -2887,6 +2954,7 @@ app.post("/return", async (req, res) => {
 
     let savedReturns = await returnmodel.create(returnData);
     console.log("✅ Return Saved:", savedReturns);
+    orderEvent.emit('order_return', { type: "order_return", orderdata });
 
     return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
 

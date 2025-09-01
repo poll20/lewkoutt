@@ -59,12 +59,15 @@
 // OrderAlertContext.js
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import sound from "../../assets/ordervoice.ogg";
+import returnsound from "../../assets/returnorder.ogg";
 import { useDashboard } from "./DashboardContext";
 
 const OrderAlertContext = createContext();
 
 export const OrderAlertProvider = ({ children }) => {
-  const { ordersound, setordersound } = useDashboard();
+  const { ordersound, setordersound, returnordersound, setreturnordersound } = useDashboard();
+  
+
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
@@ -88,6 +91,26 @@ export const OrderAlertProvider = ({ children }) => {
     }
   };
 
+  const playAudioreturn = () => {
+    console.log("playAudio called");
+    if (audioRef.current) {
+      audioRef.current.play().catch((err) => {
+        console.log("Autoplay blocked:", err);
+      });
+      setPlaying(true);
+
+      setTimeout(() => {
+        const stop = window.confirm("⚡ return request comming");
+        if (stop && audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+          setPlaying(false);
+          setreturnordersound(false); // stop karne ke baad ordersound false
+        }
+      }, 500);
+    }
+  };
+
   useEffect(() => {
     console.log("fuck ")
     if (ordersound) {
@@ -96,9 +119,19 @@ export const OrderAlertProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ordersound]); // sirf ordersound true hone pe chalega
 
+  useEffect(() => {
+    console.log("fuck ")
+    if (returnordersound) {
+      playAudioreturn();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [returnordersound]); // sirf ordersound true hone pe chalega
+
   return (
-    <OrderAlertContext.Provider value={{ playAudio, playing }}>
+    <OrderAlertContext.Provider value={{ playAudio, playing,playAudioreturn }}>
       <audio ref={audioRef} src={sound} loop hidden />
+      <audio ref={audioRef} src={returnsound} loop hidden />
+
       {children}
     </OrderAlertContext.Provider>
   );

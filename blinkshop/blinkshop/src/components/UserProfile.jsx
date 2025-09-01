@@ -244,10 +244,10 @@ let navigate=useNavigate()
           <p>Wallet Balance<br /><span>₹0</span></p>
         </NavLink>
       
-        <div className="balance-item">
+        {/* <div className="balance-item">
           <FaUserFriends />
           <p>Referral Earnings<br /><span>₹0</span></p>
-        </div>
+        </div> */}
       </div>
       <div className="profile-menu">
         <NavLink to={`/userorder`} className="menu-item navlink">
@@ -255,11 +255,11 @@ let navigate=useNavigate()
           <p>Orders</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink to={`/refferal`} className="menu-item navlink">
+        {/* <NavLink to={`/refferal`} className="menu-item navlink">
           <FaBox/>
           <p>Referrals</p>
           <IoIosArrowForward />
-        </NavLink>
+        </NavLink> */}
         
         <NavLink to={`/address/upp`} className="menu-item navlink">
           <IoHome/>
@@ -276,11 +276,11 @@ let navigate=useNavigate()
           <p>Help & Support</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink className="menu-item navlink">
+        {/* <NavLink className="menu-item navlink">
           <RiLogoutBoxLine  onClick={() => openPopup()}/>
           <p onClick={() => openPopup()}>Logout</p>
           <IoIosArrowForward onClick={() => openPopup()}/>
-        </NavLink>
+        </NavLink> */}
         {/* <NavLink to='/wallet' className="menu-item navlink">
           <RiLogoutBoxLine/>
           <p>Wallet</p>
@@ -326,11 +326,16 @@ let navigate=useNavigate()
         value={formData.email}
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
       />
+    <div>
+      <label htmlFor="" style={{color:"white"}}>DOB</label>
       <input
         type="date"
+        
         value={formData.dob}
         onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+      
       />
+      </div>
       <button className="submit-btn" onClick={() => sendtofirebase()}>Submit</button>
     </div>
   </div>

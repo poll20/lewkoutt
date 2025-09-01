@@ -55,6 +55,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .image-slide img {
@@ -456,8 +457,8 @@ margin-top: 3%
     
     flex-direction: row;
     height: auto;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    overflow-x:hidden;
+    scroll-snap-type:none;
   }
 
   .image-slide {

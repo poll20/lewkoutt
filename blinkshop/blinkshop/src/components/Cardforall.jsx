@@ -61,7 +61,7 @@ console.log("wishlist in coa",wishlistdata)
         <div className="product-pricing">
           <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{props.discountprice}</span>
           <span className="original-price"style={{ fontFamily: "'Oswald', sans-serif" }}>₹{props.price}</span>
-          <span className="discount" style={{ fontFamily: "'Oswald', sans-serif" }}>{props.discount}</span>
+          <span className="discount" style={{ fontFamily: "'Oswald', sans-serif" }}>{props.discount}% off</span>
           
         </div>
         {/* <div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'10px'}}>⚡Fast Delivery</div> */}

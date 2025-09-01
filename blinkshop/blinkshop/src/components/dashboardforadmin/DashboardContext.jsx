@@ -24,6 +24,7 @@ export const DashboardProvider = ({ children }) => {
     const{user,userDetails}=useFirebaseAuth()
     
     const [users, setUsers] = useState([]);
+    const[ returnordersound, setreturnordersound]=useState(false)
     const [ordersound,setordersound]=useState(false)
     const [userorder,setuserorder]=useState([])
     const[shopkeeperprd,setshopkeeperprd]=useState([])
@@ -46,6 +47,7 @@ export const DashboardProvider = ({ children }) => {
     const [refetch,setRefetch]=useState(false)
      const [slots, setSlots] = useState([]);
      const [slotVersion, setSlotVersion] = useState(0);
+
     // const [loading ,setIsLoading]=useState(false)
     const{setIsLoading}=useLoading()
     let showalert=()=>{
@@ -233,26 +235,104 @@ console.log(err)
 }
 }
 
-useEffect(()=>{
+// useEffect(()=>{
+  
     
-    fetchuserorder()
+//     fetchuserorder()
 
 
-    const eventSource = new EventSource(`${apiUrl}/events`);
+//     const eventSource = new EventSource(`${apiUrl}/events`);
 
-    eventSource.onmessage = () => {
-    fetchuserorder(); // 🟢 Jab bhi event aaye, orders fetch karo
+//     eventSource.onmessage = () => {
+//     fetchuserorder(); // 🟢 Jab bhi event aaye, orders fetch karo
       
-     setordersound(true)
-      // playAudio();
+//      setordersound(true)
+//       // playAudio();
     
-    };
+//     };
 
-    return () => {
-        eventSource.close();
-    };
+//     return () => {
+//         eventSource.close();
+//     };
     
-},[])
+// },[])
+// useEffect(() => {
+//   fetchuserorder();
+
+//   const eventSource = new EventSource(`${apiUrl}/events`);
+
+//   eventSource.onmessage = (event) => {
+
+//   try {
+//     // fetchuserorder();
+//     const parsedData = JSON.parse(event.data);
+//     console.log("📩 SSE Data:", parsedData);
+
+//     // ✅ Sirf new order pe sound bajana hai
+//     if (parsedData.type === "new_order") {
+//       fetchuserorder();
+//       setordersound(true);
+//     } 
+//     if(parsedData.type==="order_update"){ 
+//       fetchuserorder();
+//     setordersound(false);
+//     }
+//     else {
+//       console.log("⚡ Status update aya, sound nahi bajega");
+      
+//     }
+//   } catch (err) {
+//     console.error("Event parse error:", err);
+//   }
+// };
+
+//   return () => {
+//     eventSource.close();
+//   };
+// }, []);
+useEffect(() => {
+  fetchuserorder();
+
+  const eventSource = new EventSource(`${apiUrl}/events`);
+
+  eventSource.onmessage = async (event) => {
+    try {
+      const parsedData = JSON.parse(event.data);
+      console.log("📩 SSE Data:", parsedData);
+
+      if (parsedData.type === "new_order") {
+         setordersound(true);
+        await fetchuserorder();
+       
+
+      } else if (parsedData.type === "order_updated") {
+        await fetchuserorder();
+        setordersound(false);
+
+      } 
+      
+      else if (parsedData.type === "order_return") {
+        console.log("return order aya");
+        setreturnordersound(true);
+        await fetchuserorder();
+        
+
+      } 
+      
+      else {
+        console.log("⚡ Unknown event:", parsedData.type);
+      }
+    } catch (err) {
+      console.error("Event parse error:", err);
+    }
+  };
+
+  return () => {
+    eventSource.close();
+  };
+}, [apiUrl]);
+
+
 
 
   
@@ -823,7 +903,7 @@ setSlotVersion((prev) => prev + 1);
         shopkeepersale,updateOrdersWithReturnDetails,
         returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
         addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle,slots,fetchSlots,toggleSlot,
-      ordersound,setordersound}}
+      ordersound,setordersound,fetchuserorder, returnordersound, setreturnordersound}}
     >
       {children}
     </DashboardContext.Provider>

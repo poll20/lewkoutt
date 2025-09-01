@@ -1,5 +1,6 @@
  // export default ProductDescription;
 import React, { useState, useEffect ,useRef } from "react";
+import { Shield, Clock, RefreshCcw } from "lucide-react"; // lucide-react icons
 import { useAuth } from "./AuthContext";
 import "./ProductDescription.css";
 import img1 from "./image/img1.jpg";
@@ -365,6 +366,9 @@ const fetchProductFromBackend = async (clr) => {
     setIsLoading(false);
   }
 };
+
+
+
 useEffect(() => {
   fetchProductFromBackend(coloring); // pass default coloring
 }, [id]);
@@ -701,6 +705,8 @@ console.log("lplp",product)
   // const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
   const sizes=product?.sizes?.map((e)=>(e.size)) 
 
+
+  
   let handleqty=(e)=>{
     // console.log(e.target.value)
 setqty(e.target.value)
@@ -770,6 +776,21 @@ let cate=product.cate
 //     //   }
 //     // };
 //   }, []);
+const handleNext = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === product.sizes[0].image.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePrev = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.sizes[0].image.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleThumbnailClick = (index) => {
+    setCurrentImageIndex(index);
+  };
 
 if(getbundeldata){
   console.log("bundle data in prdd",getbundeldata)
@@ -777,18 +798,6 @@ if(getbundeldata){
 
   return (
     <>
-    {/* <ToastContainer 
-            position="top-center" // You can set the position of the toast
-            autoClose={3000} // Automatically close after 3 seconds
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light" // You can change the theme: light or dark
-          /> */}
           
     <div className="container">
       
@@ -799,8 +808,20 @@ if(getbundeldata){
         <div className="image-slider">
           
           {product.sizes[0].image.map((image, index) => (
-            <div key={index} className="image-slide" >
-              
+            <div key={index} className="image-slide">
+                <button
+          onClick={handlePrev}
+          style={{
+            position: "absolute",
+            left: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 10,
+          }}
+        >
+          ◀
+        </button>
+         
               <img
               //  ref={imageRef}
                 src={product.sizes[0].image[currentImageIndex]} // Show only the current image
@@ -808,7 +829,20 @@ if(getbundeldata){
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
               />
+               <button
+          onClick={handleNext}
+          style={{
+            position: "absolute",
+            right: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 10,
+          }}
+        >
+          ▶
+        </button>
             </div>
+           
           ))}
         </div>
 
@@ -821,7 +855,7 @@ if(getbundeldata){
         <div className="popup" onClick={closePopup} style={{backgroundColor:"black"}}>
           <div className="image-slider" >
           {product.sizes[0].image.map((image, index) => (
-            <div key={index} className="image-slide"  >
+            <div key={index} className="image-slide" style={{minHeight:"100vh"}}  >
               <img
                 src={image}
                 alt={`Product ${index + 1}`}
@@ -954,28 +988,7 @@ if(getbundeldata){
     </div>
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid black',padding:'10px 0', borderBottom:"1px solid black"}}> */}
           {/* <div className="size-options" style={{gap:"10px",padding:'10px 0', borderBottom:"1px solid black"}}> */}
-          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white"}}>
-
-          <label>Size</label>
           
-
-
-            <div className="sizes">
-
-              {sizes.map((size) => (
-                
-                <button
-                style={{borderRadius:"30px",width:"50px"}}
-                  key={size}
-                  className={`size-btn ${selectedSize === size ? "active" : ""}` }
-                  onClick={() => setSelectedSize(size)}>
-
-                  <span>{size.toUpperCase()}</span>
-                </button>
-              ))}
-            </div>
-            {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px",color:"white",fontWeight:"lighter"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label> */}
-          </div>
 
           {/* <div className="size-options" style={{gap:"10px", borderTop:'1px solid white',padding:'10px 0', borderBottom:"1px solid black",marginTop:"10px"}}> */}
           <div className="size-options" style={{gap:"5px", borderTop:'1px solid white',padding:'8px 0',marginBottom:"3px"}}>
@@ -995,8 +1008,10 @@ if(getbundeldata){
               }
               
             </div> */}
-            <label>Colors</label>
-<div className="sizes" >
+          
+{/* <div className="sizes" style={{diplay:"flex",alignItems:"center",justifyContent:"start"
+}}>
+    <label>Colors</label>
   {mainProductt && mainProductt.productdetails?.length > 0 ? (
     mainProductt.productdetails[0].colors?.map((color) => (
     <div style={{border: Selectedcolor === color.color? "1px solid black" : "1px solid #ccc" ,borderRadius: "100%",}}>
@@ -1014,31 +1029,183 @@ if(getbundeldata){
         onClick={() => {
            const clr = color.color;
   const cid = color._id;
-          // setSelectedcolor(color.color);
-          // setcolorid(color._id);
-          // console.log("clrrrrr",color.color)
-          // fetchProductFromBackend(color.color) 
+          
           setSelectedcolor(clr);
   setcolorid(cid);
 
-  console.log("clrrrrr", clr); // ✅ yeh sahi dikhega
-  fetchProductFromBackend(clr); // ✅ yeh bhi sahi value lega
+  console.log("clrrrrr", clr); 
+  fetchProductFromBackend(clr); 
           
            
         }}
       >
-        {/* No text, just a color dot */}
+        
       </button>
       </div>
     ))
   ) : (
     <p>No colors available</p>
   )}
+</div> */}
+<div
+  className="sizes"
+  style={{
+
+   fontSize:"14px", fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"start",justifyContent:"start"
+  }}
+>
+  <label>Colors: </label>
+  {mainProductt && mainProductt.productdetails?.length > 0 ? (
+    mainProductt.productdetails[0].colors?.length === 1 ? (
+      // ✅ Sirf ek color h to text dikhayenge
+      <label>
+        {mainProductt.productdetails[0].colors[0].color.toUpperCase()}
+      </label>
+    ) : (
+      // ✅ Agar multiple colors hain to buttons dikhayenge
+      mainProductt.productdetails[0].colors?.map((color) => (
+        <div
+          key={color._id}
+          style={{
+            border:
+              Selectedcolor === color.color
+                ? "1px solid black"
+                : "1px solid #ccc",
+            borderRadius: "100%",
+          }}
+        >
+          <button
+            style={{
+              background: color.color,
+              borderRadius: "100%",
+              width: "20px",
+              height: "20px",
+              margin: "5px",
+              border:
+                Selectedcolor === color.color
+                  ? "2px solid black"
+                  : "1px solid #ccc",
+            }}
+            className={`colour-btn ${
+              Selectedcolor === color.color ? "clractive" : ""
+            }`}
+            onClick={() => {
+              const clr = color.color;
+              const cid = color._id;
+              setSelectedcolor(clr);
+              setcolorid(cid);
+              console.log("clrrrrr", clr);
+              fetchProductFromBackend(clr);
+            }}
+          ></button>
+        </div>
+      ))
+    )
+  ) : (
+    <p>No colors available</p>
+  )}
 </div>
+
 
             
             {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px"}} className="navlink" to={`/sizechart/${product[0].cate}`}>Size Guide</NavLink></label> */}
           </div>
+
+
+          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white"}}>
+
+          
+          
+
+
+            <div className="sizes" style={{display:"flex",alignItems:"center",justifyContent:"start",gap:"5px",padding:"5px",borderRadius:"10px"}}>
+<label>Size</label>
+              {sizes.map((size) => (
+                
+                <button
+                style={{borderRadius:"30px",width:"50px"}}
+                  key={size}
+                  className={`size-btn ${selectedSize === size ? "active" : ""}` }
+                  onClick={() => setSelectedSize(size)}>
+
+                  <span>{size.toUpperCase()}</span>
+                </button>
+              ))}
+            </div>
+            {/* <label className="sizeguide"><NavLink style={{paddingLeft:"10px",color:"white",fontWeight:"lighter"}} className="navlink" to={`/sizechart/${product.cate}`}>Size Guide</NavLink></label> */}
+          </div>
+
+            <div
+      style={{
+        // border: "1px solid red",
+        width: "100%",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "25px 0",
+        backgroundColor: "#f5f5f5",
+        borderRadius: "8px",
+        fontSize: "10px",
+        // fontFamily: "Arial, sans-serif",
+        fontWeight: "500",
+        fontFamily: 'Nunito,sans-serif',
+        marginTop: "14px",
+        fontWeight:"800",
+      }}
+    >
+      {/* Left - Secure Payments */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          flex: 1,
+          gap:"5px",
+          // ,fontWeight:"bold",
+          // fontSize:"10px"
+        }}
+      >
+        <Shield size={22} />
+        <span style={{ marginTop: "5px" }}>Secure Payments</span>
+      </div>
+
+      {/* Middle - Clock with text */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          flex: 1,
+          textAlign: "center",
+          gap:"5px",
+          // fontSize:"10px"
+          
+          
+        }}
+      >
+        <Clock size={22} />
+        <span >
+          Genuine products
+        </span>
+        {/* <span style={{ fontSize: "11px", color: "#555" }}>in Jaipur</span> */}
+      </div>
+
+      {/* Right - 7 days Return */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          flex: 1,
+          gap:"5px",
+          // fontWeight:"bold",
+          // fontSize:"10px"
+        }}
+      >
+        <RefreshCcw size={22} />
+        <span style={{ marginTop: "5px" }}>Return Available</span>
+      </div>
+    </div>
     {/* <CouponCard coupon={{
   code: coupons[0]?.code,
   discountType: coupons[0]?.discountType,

@@ -48,7 +48,7 @@ export default function Home() {
        <CategoriesLayout/>
 
      {/* <HorizontalScrollContainer/>  */}
-     <VibeSticker/>
+     {/* <VibeSticker/> */}
      
      <CustomerLove/>
      {showloginpage==true?(

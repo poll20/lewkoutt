@@ -279,12 +279,31 @@ useEffect(() => {
           />
           <input
             type="text"
+            value={editedAddress.city}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, city: e.target.value })
+            }
+            placeholder="Pincode"
+          />
+          <input
+            type="text"
+            value={editedAddress.state}
+            onChange={(e) =>
+              setEditedAddress({ ...editedAddress, state: e.target.value })
+            }
+            placeholder="Pincode"
+          />
+          <input
+            type="text"
             value={editedAddress.phone}
             onChange={(e) =>
               setEditedAddress({ ...editedAddress, phone: e.target.value })
             }
             placeholder="Phone"
           />
+      
+      
+          <button onClick={()=>{setEditingAddressId(null);}} style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}>back</button>
         </>
       ) : (
         <>
