@@ -235,6 +235,7 @@ app.post("/cart", async (req, res) => {
       image,
       price,
       discountprice,
+      discount,
       userid,
       productId,
       shopname,
@@ -255,6 +256,7 @@ app.post("/cart", async (req, res) => {
       image,
       price,
       discountprice,
+      discount,
       userId: userid,
       productId,
       shopname,
@@ -2399,6 +2401,8 @@ console.log("Order Products:", userOrders[0].products);
 app.put('/order/deliver/:id', verifyFirebaseToken, async (req, res) => {
   try {
     const order = await orderr.findById(req.params.id);
+   const decision = req.body.decision // ✅ clearer
+    
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
@@ -2417,15 +2421,76 @@ app.put('/order/deliver/:id', verifyFirebaseToken, async (req, res) => {
 
       orderEvent.emit("order_updated", { type: "order_updated", order });
       return res.json({ message: "Order marked as delivered!" });
-
-    } else if (order.status === "pending-returned") {
-      order.status = "returned";
-      await order.save();
-
-      orderEvent.emit("order_updated", { type: "order_updated", order });
-      return res.json({ message: "Order marked as returned!" });
     }
+    //  else if (order.status === "Returned Requested") {
+      
+    //   order.status = "Returned Approved";
+    //   await order.save();
 
+    //   orderEvent.emit("order_updated", { type: "order_updated", order });
+    //   return res.json({ message: "Order marked as returned!" });
+    // }
+    else if (order.status === "Returned Requested") {
+
+
+  if ( decision === "Returned Approved") {
+    order.status = "Returned Approved";
+    await order.save();
+
+    orderEvent.emit("order_updated", { type: "order_updated", order });
+    return res.json({ message: "Order marked as returned and approved!" });
+
+  } else if ( decision === "Returned Rejected") {
+    order.status = "Returned Rejected";
+    await order.save();
+
+    orderEvent.emit("order_updated", { type: "order_updated", order });
+    return res.json({ message: "Order return request rejected!" });
+
+  } else {
+    return res.status(400).json({ error: "Invalid decision for returned request" });
+  }
+}
+else if (order.status === "Returned Approved") {
+   order.status = "Pickup Scheduled";
+    await order.save();
+      orderEvent.emit("order_updated", { type: "order_updated", order });
+      return res.json({ message: "Return Requested  marked as Pickup Sceduled" });
+}
+
+else if (order.status === "Pickup Scheduled") {
+   order.status = "Picked Up";
+    await order.save();
+      orderEvent.emit("order_updated", { type: "order_updated", order });
+      return res.json({ message: "Return Requested  marked as Picked Up" });
+}
+else if (order.status === "Picked Up") {
+   order.status = "Refund Processed";
+    await order.save();
+      orderEvent.emit("order_updated", { type: "order_updated", order });
+      return res.json({ message: "Return Requested  marked as Refund Processed" });
+}
+else if (order.status === "Refund Processed") {
+
+
+  if ( decision === "Refund Approved") {
+    order.status = "Refund Approved";
+    await order.save();
+
+    orderEvent.emit("order_updated", { type: "order_updated", order });
+    return res.json({ message: "Order marked as Refund Approved" });
+
+  } else if ( decision === "Refund Rejected") {
+    order.status = "Refund Rejected";
+    await order.save();
+
+    orderEvent.emit("order_updated", { type: "order_updated", order });
+    return res.json({ message: "Order return Refund Rejected" });
+
+  } else {
+    return res.status(400).json({ error: "Invalid decision for returned request" });
+  }
+}
     return res.status(400).json({ error: "Invalid status transition" });
 
   } catch (error) {
@@ -3061,7 +3126,7 @@ app.get("/return", async (req, res) => {
         order.subreason = ret.subreason;
         order.selectedOption = ret.selectedOption;
         order.returnDate = ret.returnDate; // Assuming Date or ISO string
-        order.status = "pending-returned";
+        order.status = "Returned Requested";
 
         // Save updated order
         await order.save();
@@ -3069,7 +3134,7 @@ app.get("/return", async (req, res) => {
     }
 
     // 🔹 Return all orders again after update
-    const updatedOrders = await orderr.find({ status: "pending-returned" });
+    const updatedOrders = await orderr.find({ status: "Returned Requested" });
 
     res.status(200).json({
       message: "Orders updated with return details.",

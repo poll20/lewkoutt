@@ -69,6 +69,8 @@ export const OrderAlertProvider = ({ children }) => {
   
 
   const audioRef = useRef(null);
+  const returnaudioRef = useRef(null);
+
   const [playing, setPlaying] = useState(false);
 
   const playAudio = () => {
@@ -93,17 +95,17 @@ export const OrderAlertProvider = ({ children }) => {
 
   const playAudioreturn = () => {
     console.log("playAudio called");
-    if (audioRef.current) {
-      audioRef.current.play().catch((err) => {
+    if (returnaudioRef.current) {
+      returnaudioRef.current.play().catch((err) => {
         console.log("Autoplay blocked:", err);
       });
       setPlaying(true);
 
       setTimeout(() => {
         const stop = window.confirm("⚡ return request comming");
-        if (stop && audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
+        if (stop && returnaudioRef.current) {
+          returnaudioRef.current.pause();
+          returnaudioRef.current.currentTime = 0;
           setPlaying(false);
           setreturnordersound(false); // stop karne ke baad ordersound false
         }
@@ -114,6 +116,7 @@ export const OrderAlertProvider = ({ children }) => {
   useEffect(() => {
     console.log("fuck ")
     if (ordersound) {
+      console.log("fuck222")
       playAudio();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,7 +133,7 @@ export const OrderAlertProvider = ({ children }) => {
   return (
     <OrderAlertContext.Provider value={{ playAudio, playing,playAudioreturn }}>
       <audio ref={audioRef} src={sound} loop hidden />
-      <audio ref={audioRef} src={returnsound} loop hidden />
+      <audio ref={returnaudioRef} src={returnsound} loop hidden />
 
       {children}
     </OrderAlertContext.Provider>

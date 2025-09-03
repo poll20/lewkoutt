@@ -77,3 +77,235 @@ console.log("wishlist in coa",wishlistdata)
     </>
   )
 }
+
+
+
+// import React, { useState } from 'react';
+// import { NavLink } from 'react-router-dom';
+// import { useBio } from './BioContext';
+// import HeartButton from './HeartButton';
+
+// export default function Cardforall(props) {
+//   const [showToast, setShowToast] = useState(false);
+//   const { handleClick, wishlistdata } = useBio();
+
+//   if (!wishlistdata) {
+//     return (
+//       <div style={{
+//         padding: '20px',
+//         textAlign: 'center',
+//         color: '#666',
+//         fontFamily: "'Inter', sans-serif"
+//       }}>
+//         Loading...
+//       </div>
+//     );
+//   }
+
+//   const cardStyle = {
+//     backgroundColor: 'white',
+//     borderRadius: '16px',
+//     overflow: 'hidden',
+//     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+//     transition: 'all 0.3s ease-in-out',
+//     cursor: 'pointer',
+//     position: 'relative',
+//     width: '100%',
+//     maxWidth: '160px'
+//   };
+
+//   const imageContainerStyle = {
+//     position: 'relative',
+//     width: '100%',
+//     height: '180px',
+//     overflow: 'hidden'
+//   };
+
+//   const productImageStyle = {
+//     width: '100%',
+//     height: '100%',
+//     objectFit: 'cover',
+//     transition: 'transform 0.3s ease-in-out'
+//   };
+
+//   const heartIconStyle = {
+//     position: 'absolute',
+//     top: '8px',
+//     right: '8px',
+//     width: '32px',
+//     height: '32px',
+//     borderRadius: '50%',
+//     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+//     display: 'flex',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     cursor: 'pointer',
+//     transition: 'all 0.3s ease-in-out',
+//     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+//   };
+
+//   const ratingStyle = {
+//     position: 'absolute',
+//     bottom: '8px',
+//     left: '8px',
+//     backgroundColor: 'rgba(0, 0, 0, 0.7)',
+//     color: 'white',
+//     padding: '4px 8px',
+//     borderRadius: '8px',
+//     fontSize: '12px',
+//     fontWeight: '500'
+//   };
+
+//   const detailsStyle = {
+//     padding: '12px',
+//     backgroundColor: 'white'
+//   };
+
+//   const titleStyle = {
+//     fontSize: '14px',
+//     fontWeight: '500',
+//     color: '#333',
+//     marginBottom: '8px',
+//     fontFamily: "'Inter', sans-serif",
+//     lineHeight: '1.3',
+//     display: '-webkit-box',
+//     WebkitLineClamp: 2,
+//     WebkitBoxOrient: 'vertical',
+//     overflow: 'hidden'
+//   };
+
+//   const pricingContainerStyle = {
+//     display: 'flex',
+//     alignItems: 'center',
+//     gap: '6px',
+//     marginBottom: '6px'
+//   };
+
+//   const currentPriceStyle = {
+//     fontSize: '16px',
+//     fontWeight: '700',
+//     color: '#FF6B9D',
+//     fontFamily: "'Inter', sans-serif"
+//   };
+
+//   const originalPriceStyle = {
+//     fontSize: '12px',
+//     color: '#999',
+//     textDecoration: 'line-through',
+//     fontFamily: "'Inter', sans-serif"
+//   };
+
+//   const discountStyle = {
+//     fontSize: '11px',
+//     color: '#22C55E',
+//     fontWeight: '600',
+//     backgroundColor: '#DCFCE7',
+//     padding: '2px 6px',
+//     borderRadius: '4px',
+//     fontFamily: "'Inter', sans-serif"
+//   };
+
+//   const deliveryInfoStyle = {
+//     fontSize: '11px',
+//     color: '#FF6B9D',
+//     fontWeight: '500',
+//     display: 'flex',
+//     alignItems: 'center',
+//     gap: '4px'
+//   };
+
+//   return (
+//     <div 
+//       style={cardStyle}
+//       onMouseEnter={(e) => {
+//         e.currentTarget.style.transform = 'translateY(-8px)';
+//         e.currentTarget.style.boxShadow = '0 12px 30px rgba(255, 107, 157, 0.15)';
+//         const img = e.currentTarget.querySelector('img');
+//         if (img) img.style.transform = 'scale(1.1)';
+//       }}
+//       onMouseLeave={(e) => {
+//         e.currentTarget.style.transform = 'translateY(0)';
+//         e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+//         const img = e.currentTarget.querySelector('img');
+//         if (img) img.style.transform = 'scale(1)';
+//       }}
+//     >
+//       {/* Image Section */}
+//       <div style={imageContainerStyle}>
+//         <NavLink 
+//           to={
+//             props.section !== 'bundel' 
+//               ? `/productdescription/${props?.id?._id || props?.id}/${props?.defaultcolor}`
+//               : `/productdescription/${props?.id}/${props?.defaultcolor}`
+//           }
+//         >
+//           <img
+//             src={
+//               props.section !== "bundel"
+//                 ? (props?.id?.image?.[0] || props?.image || "https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg")
+//                 : (props.image || "https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg")
+//             }
+//             alt={props.discription || "Product"}
+//             style={productImageStyle}
+//           />
+//         </NavLink>
+        
+//         {/* Heart Icon */}
+//         <div 
+//           style={heartIconStyle}
+//           onClick={(e) => {
+//             e.stopPropagation();
+//             handleClick(props.id, props.id.colors?.[0]?._id);
+//             setShowToast(true);
+//           }}
+//           onMouseEnter={(e) => {
+//             e.currentTarget.style.transform = 'scale(1.1)';
+//             e.currentTarget.style.backgroundColor = '#FF6B9D';
+//           }}
+//           onMouseLeave={(e) => {
+//             e.currentTarget.style.transform = 'scale(1)';
+//             e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+//           }}
+//         >
+//           <HeartButton 
+//             cardid={props.id.colors?.[0]?._id} 
+//             w={15} 
+//             h={15} 
+//             dw={20} 
+//             dh={20} 
+//             dmt={0} 
+//             dml={0}
+//           />
+//         </div>
+
+//         {/* Rating */}
+//         {props.section !== "bundel" &&
+//           props?.id?.colors?.[0]?.ratingCount > 0 && (
+//             <div style={ratingStyle}>
+//               ⭐ {props.id.colors[0].avgRating} ({props.id.colors[0].ratingCount})
+//             </div>
+//         )}
+//       </div>
+
+//       {/* Details Section */}
+//       <div style={detailsStyle}>
+//         <div style={titleStyle}>
+//           {props.discription?.length > 25 
+//             ? props.discription?.slice(0, 25) + '...' 
+//             : props.discription}
+//         </div>
+        
+//         <div style={pricingContainerStyle}>
+//           <span style={currentPriceStyle}>₹{props.discountprice}</span>
+//           <span style={originalPriceStyle}>₹{props.price}</span>
+//           <span style={discountStyle}>{props.discount}% off</span>
+//         </div>
+        
+//         <div style={deliveryInfoStyle}>
+//           <span>⚡</span>
+//           <span>Fast Delivery</span>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

@@ -1028,19 +1028,38 @@ const UserOrder = () => {
     const newTimers = {};
     
     userorder.forEach(order => {
-      if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
-        order.products?.forEach(product => {
-          const deliveredTime = new Date(order.deliveredAt);
-          const now = new Date();
-          const diffInMs = now - deliveredTime;
-          const oneHourInMs = 60 * 60 * 1000; // 1 hour in milliseconds
+      // if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
+      //   order.products?.forEach(product => {
+      //     const deliveredTime = new Date(order.deliveredAt);
+      //     const now = new Date();
+      //     const diffInMs = now - deliveredTime;
+      //     const oneHourInMs = 60 * 60 * 1000; // 1 hour in milliseconds
           
-          if (diffInMs < oneHourInMs) {
-            const remainingMs = oneHourInMs - diffInMs;
-            newTimers[product._id] = Math.max(0, Math.floor(remainingMs / 1000));
-          }
-        });
-      }
+      //     if (diffInMs < oneHourInMs) {
+      //       const remainingMs = oneHourInMs - diffInMs;
+      //       newTimers[product._id] = Math.max(0, Math.floor(remainingMs / 1000));
+      //     }
+      //   });
+      // }
+      if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
+  order.products?.forEach(product => {
+    const deliveredTime = new Date(order.deliveredAt);
+    const now = new Date();
+    const diffInMs = now - deliveredTime;
+
+    // ✅ Agar Jaipur hai to 1 hour otherwise 2 days
+    const isJaipur = order.address?.[0]?.city?.toLowerCase() === "jaipur";
+    const allowedTimeInMs = isJaipur 
+      ? 60 * 60 * 1000               // 1 hour
+      : 2 * 24 * 60 * 60 * 1000;     // 2 days
+
+    if (diffInMs < allowedTimeInMs) {
+      const remainingMs = allowedTimeInMs - diffInMs;
+      newTimers[product._id] = Math.max(0, Math.floor(remainingMs / 1000));
+    }
+  });
+}
+
     });
     
     setTimers(newTimers);
@@ -1378,32 +1397,22 @@ const UserOrder = () => {
                       {/* Return Window with Timer */}
                       {timeRemaining > 0 ? (
                         <div style={{
-                          backgroundColor: '#fef2f2',
-                          border: '2px solid #fecaca',
+                          // backgroundColor: '#fef2f2',
+                          // border: '2px solid #fecaca',
                           borderRadius: '12px',
-                          padding: '16px',
-                          marginBottom: '16px'
+                          padding: '10px',
+                          marginBottom: '10px'
                         }}>
                           <div style={{
                             display: 'flex',
                             flexDirection: 'column',
                             gap: '12px',
-                            alignItems: 'center',
+                            alignItems: 'start',
                             textAlign: 'center'
                           }}>
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                              fontSize: '14px',
-                              color: '#dc2626',
-                              fontWeight: '600'
-                            }}>
-                              <span style={{ fontSize: '18px' }}>⏰</span>
-                              Return Window Expires In
-                            </div>
                             
-                            <div style={{
+                            
+                            {/* <div style={{
                               fontSize: '24px',
                               fontWeight: '700',
                               color: '#dc2626',
@@ -1414,20 +1423,20 @@ const UserOrder = () => {
                               border: '2px solid #dc2626'
                             }}>
                               {formatTime(timeRemaining)}
-                            </div>
+                            </div> */}
                             
                             <NavLink to={`/return/${product._id}`} style={{ textDecoration: 'none' }}>
                               <button style={{
-                                backgroundColor: '#dc2626',
-                                color: 'white',
-                                padding: '12px 24px',
-                                border: 'none',
+                                backgroundColor: 'white',
+                                color: 'black',
+                                padding: '5px 10px',
+                                border: '1px solid black',
                                 borderRadius: '8px',
                                 fontSize: '14px',
-                                fontWeight: '600',
+                                fontWeight: '500',
                                 cursor: 'pointer',
                                 transition: 'all 0.2s ease',
-                                boxShadow: '0 2px 4px rgba(220, 38, 38, 0.2)',
+                                // boxShadow: '0 2px 4px rgba(220, 38, 38, 0.2)',
                                 width: '100%',
                                 maxWidth: '200px'
                               }}
@@ -1441,9 +1450,27 @@ const UserOrder = () => {
                                 e.target.style.transform = 'translateY(0)';
                                 e.target.style.boxShadow = '0 2px 4px rgba(220, 38, 38, 0.2)';
                               }}>
-                                Return Product
+                                Return
                               </button>
                             </NavLink>
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'start',
+                              gap: '8px',
+                              fontSize: '10px',
+                              color: '#dc2626',
+                              fontWeight: '400'
+                            }}>
+                              {/* <span style={{ fontSize: '18px' }}>⏰</span> */}
+                              {/* Return Window Expires In 1 Houre Of Order  */}
+                              <p>
+  Return Window Expires In{" "}
+  {order.address?.[0]?.city?.toLowerCase() === "jaipur"
+    ? "1 Hour Of Order"
+    : "2 Days Of Order"}
+</p>
+
+                            </div>
                           </div>
                         </div>
                       ) : (

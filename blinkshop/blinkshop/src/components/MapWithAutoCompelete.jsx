@@ -322,9 +322,7 @@ autocomplete.setFields([
 
   return (
     <div style={{ padding: "10px", fontFamily: "sans-serif" ,marginTop:"60px" }}>
-      <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
-        <FaMapMarkerAlt /> Drag this to select your location
-      </h6>
+
 
       {/* <input
         id="autocomplete"
@@ -353,6 +351,10 @@ autocomplete.setFields([
         }}
   
 />
+
+      <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
+       Drag<span> <FaMapMarkerAlt color="red"/> </span> to select your location
+      </h6>
       <div
         ref={mapRef}
         style={{

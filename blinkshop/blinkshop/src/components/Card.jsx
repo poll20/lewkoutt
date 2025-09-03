@@ -563,7 +563,7 @@ if(searchvalue){
           <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.price}</span>
-            <span className="discount">{product.discount}% off</span>
+            <span className="discount">{product?.discount}% off</span>
             
           </div>
           

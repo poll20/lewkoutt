@@ -207,7 +207,20 @@ const CtegoriesLayout = () => {
 
       </div>
       
-      <NavLink to={`/productmodel/${e.category}`} style={{margin:"auto"}}><button className="catebtn" style={{width:"100%",margin:"auto",width:"90vw",padding:"10px 0",borderRadius:"8px",backgroundColor:"white"}}>View All</button></NavLink>
+      <NavLink to={`/productmodel/${e.category}`} ><button className="catebtn" style={{width: '100%',
+    padding: '16px 0',
+    borderRadius: '12px',
+    background: 'white',
+    color: 'black',
+    border: 'none',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease-in-out',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+    marginTop: '10px'}}>View All</button></NavLink>
     </div>
       ))
     }

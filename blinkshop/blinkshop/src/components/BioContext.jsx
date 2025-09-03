@@ -314,6 +314,8 @@ useEffect(() => {
       matchItem.productId = id;
       matchItem.price = prd.price;
       matchItem.discountprice = prd.discountprice;
+      matchItem.discount = prd.discount;
+
       matchItem.image = prd.image;
       matchItem.shopname = prd.shopname;
       // matchItem.color=prd?.colors[0]?.color || prd?.color
@@ -464,6 +466,8 @@ console.log("iredandid",prd,id)
       matchItem.productId = id;
       matchItem.price = prd.price;
       matchItem.discountprice = prd.discountprice;
+      matchItem.discount = prd.discount;
+
       matchItem.image = prd.image;
       matchItem.shopname = prd.shopname;
       matchItem.title = prd.title;
@@ -1305,7 +1309,7 @@ let orderreturn = async (reason, subreason, selectedOption, orderdata, uploadedU
     });
 
     if (orderpost.ok) {
-      showPopup("Return Requested...");
+      showPopup("Return Requested");
     } else {
       const errData = await orderpost.json();
       console.error("❌ Return failed (400 or 500):", errData);

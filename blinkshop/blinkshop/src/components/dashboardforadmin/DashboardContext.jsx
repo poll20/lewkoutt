@@ -364,7 +364,7 @@ useEffect(() => {
       };
 
       
-      const markAsDelivered = async (orderId) => {
+      const markAsDelivered = async (orderId,decision) => {
         if(userDetails)
         {
         try {
@@ -376,7 +376,7 @@ useEffect(() => {
                 },
             //  Authorization: `Bearer ${user.accessToken}`,
                 
-                body: JSON.stringify({userDetails}), // Convert object to JSON string
+                body: JSON.stringify({userDetails,decision}), // Convert object to JSON string
                 
             });
             const data = await response.json();

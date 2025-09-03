@@ -163,7 +163,7 @@ const Ordersofusers = () => {
                       {order.status}
                     </td>
                     <td>{new Date(order.orderedAt).toLocaleString()}</td>
-                    <td>
+                    {/* <td>
                      <button
   className="user-ke-orders-btn"
   onClick={() => {
@@ -174,7 +174,81 @@ const Ordersofusers = () => {
   Update Status
 </button>
 
-                    </td>
+                    </td> */}
+                    {/* <td>
+  {order.status === "Returned Requested" ? (
+    <>
+      <button
+        className="user-ke-orders-btn"
+        onClick={() =>  markAsDelivered(order._id,'Returned Approved')}
+      >
+        Returned Approved
+      </button>
+      <button
+        className="user-ke-orders-btn"
+        style={{ marginLeft: "10px" }}
+        onClick={() =>  markAsDelivered(order._id,'Returned Rejected')}
+      >
+        Returned Rejected
+      </button>
+    </>
+  ) : (
+    <button
+      className="user-ke-orders-btn"
+      onClick={() => {
+        markAsDelivered(order._id);
+      }}
+    >
+      Update Status
+    </button>
+  )}
+</td> */}
+<td>
+  {order.status === "Returned Requested" ? (
+    <>
+      <button
+        className="user-ke-orders-btn"
+        onClick={() => markAsDelivered(order._id, "Returned Approved")}
+      >
+        Returned Approved
+      </button>
+      <button
+        className="user-ke-orders-btn"
+        style={{ marginLeft: "10px" }}
+        onClick={() => markAsDelivered(order._id, "Returned Rejected")}
+      >
+        Returned Rejected
+      </button>
+    </>
+  ) : order.status === "Refund Processed" ? (
+    <>
+      <button
+        className="user-ke-orders-btn"
+        onClick={() => markAsDelivered(order._id, "Refund Approved")}
+      >
+        Refund Approved
+      </button>
+      <button
+        className="user-ke-orders-btn"
+        style={{ marginLeft: "10px" }}
+        onClick={() => markAsDelivered(order._id, "Refund Rejected")}
+      >
+        Refund Rejected
+      </button>
+    </>
+  ) : (
+    <button
+      className="user-ke-orders-btn"
+      onClick={() => {
+        markAsDelivered(order._id);
+      }}
+    >
+      Update Status
+    </button>
+  )}
+</td>
+
+
                     <td>
                       <button
                         className="user-ke-orders-btn"

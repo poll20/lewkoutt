@@ -44,7 +44,8 @@ let cartscema=mongoose.Schema({
     price:Number,
     shopname:String,
     size:[String],
-    discountprice:Number
+    discountprice:Number,
+    discount:Number,
    // price: String,
 })
 
@@ -477,7 +478,17 @@ const CategorySchema = new mongoose.Schema({
     //     coordinates: { type: [Number], required: true }  // [longitude, latitude]
     // }
   },{_id:true})
-
+// ✅ Pre-save hook for discountprice
+CategorySchema.pre("save", function (next) {
+  if (this.price && this.discount) {
+    this.discountprice = Math.round(
+      this.price - (this.price * this.discount) / 100
+    );
+  } else {
+    this.discountprice = this.price; // agar discount nahi hai to same price save hoga
+  }
+  next();
+});
 
 
   // Define the main Product schema
