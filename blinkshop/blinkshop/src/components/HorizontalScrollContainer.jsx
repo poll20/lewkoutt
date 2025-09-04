@@ -21,7 +21,7 @@ const HorizontalScrollContainer = () => {
       <div className="scroll-content">
         {cards.map((card) => (
           <div key={card.id} className="scroll-card">
-            <img src={card.image} alt={card.description} className="card-image" />
+            <img src={card.image} alt={card.description} className="card-image" loading="lazy"/>
             <div className="card-description">{card.description}</div>
           </div>
         ))}

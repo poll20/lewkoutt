@@ -57,7 +57,7 @@ const ProductReview = () => {
             onClick={openFullscreen} // Trigger full screen on click
           >
             <h4>Preview:</h4>
-            <img src={image} alt="Preview" />
+            <img src={image} alt="Preview" loading="lazy"/>
           </div>
         )}
       </div>
@@ -66,7 +66,7 @@ const ProductReview = () => {
       {isFullscreen && (
         <div className="fullscreen-overlay">
           <span className="close-icon" onClick={closeFullscreen}>&times;</span>
-          <img src={image} alt="Fullscreen Preview" className="fullscreen-image" />
+          <img src={image} alt="Fullscreen Preview" className="fullscreen-image" loading="lazy"/>
         </div>
       )}
 

@@ -1313,6 +1313,7 @@ const UserOrder = () => {
                               border: '2px solid #e5e7eb',
                               flexShrink: 0
                             }}
+                            loading="lazy"
                           />
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <h3 style={{
@@ -1593,6 +1594,7 @@ const UserOrder = () => {
                                   marginTop: '12px',
                                   border: '2px solid #e5e7eb'
                                 }}
+                                loading="lazy"
                               />
                             )}
                           </div>
@@ -1673,6 +1675,7 @@ const UserOrder = () => {
                               border: '1px solid #d1d5db',
                               flexShrink: 0
                             }}
+                            loading="lazy"
                           />
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <p style={{

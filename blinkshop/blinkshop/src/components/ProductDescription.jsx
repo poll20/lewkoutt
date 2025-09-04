@@ -828,6 +828,7 @@ if(getbundeldata){
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
+                loading="lazy"
               />
                <button
           onClick={handleNext}
@@ -861,6 +862,7 @@ if(getbundeldata){
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])} // Open popup on image click
                 style={{ cursor: "pointer" }} // Add pointer cursor to indicate clickability
+                loading="lazy"
               />
               
               
@@ -911,7 +913,9 @@ if(getbundeldata){
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover'
+                    
                   }}
+                  loading="lazy"
                 />
               </div>
             ))}

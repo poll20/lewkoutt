@@ -101,6 +101,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
             objectFit: 'cover',
             borderRadius: '8px',
           }}
+          loading="lazy"
         />
       </div>
 

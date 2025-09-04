@@ -183,6 +183,7 @@ const CtegoriesLayout = () => {
           src={e.image}
           alt="Parent Card"
           className="parent-image"
+          loading="lazy" // Lazy loading for better performance
         />
         </NavLink>
       </div>

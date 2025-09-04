@@ -274,7 +274,7 @@ if(!addtocartdatas){
           </div>
           <NavLink to={`/productdescription/${order?.productid}/${order.color}`} className="navlink">
             <div>
-              <img src={order.image} alt={order.title} className="order-imagee-addtocart" />
+              <img src={order.image} alt={order.title} className="order-imagee-addtocart" loading="lazy" />
             </div>
           </NavLink>
           <div>

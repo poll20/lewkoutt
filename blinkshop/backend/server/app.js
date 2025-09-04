@@ -1221,6 +1221,20 @@ catch(e){
 app.post("/productmodel", async (req, res) => {
   try {
     const productData = req.body;
+      // ✅ Fix image URLs if present
+    if (productData.image) {
+      if (Array.isArray(productData.image)) {
+        productData.image = productData.image.map((url) =>
+          url.replace("/upload/", "/upload/f_auto,q_auto/")
+        );
+      } else if (typeof productData.image === "string") {
+        productData.image = productData.image.replace(
+          "/upload/",
+          "/upload/f_auto,q_auto/"
+        );
+      }
+    }
+
     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
     await newProduct.save();
     res.status(201).json(newProduct);
@@ -1679,6 +1693,23 @@ app.patch('/productmodel/:id', async (req, res) => {
 
   try {
     let updateData = req.body;
+
+    // ✅ Price discount calculation same as before
+    if (
+      updateData.productdetails &&
+      updateData.productdetails.price &&
+      updateData.productdetails.discount
+    ) {
+      const originalPrice = parseFloat(updateData.productdetails.price);
+      const discountPercent = parseFloat(updateData.productdetails.discount);
+
+      if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
+        const discountAmount = (originalPrice * discountPercent) / 100;
+        updateData.productdetails.discountprice = Math.round(
+          originalPrice - discountAmount
+        );
+      }
+    }
     console.log("update data", Array.isArray(updateData.image));
     console.log("ab to ubdatd",updateData)
 

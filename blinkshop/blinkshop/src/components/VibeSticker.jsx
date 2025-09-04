@@ -32,7 +32,7 @@ const VibeSticker = () => {
      
         <span className="cross-icon" onClick={()=>{setvisi(!visi)}}><FaTimes onClick={()=>{setvisi(!visi)}}/></span>
          <NavLink to='/mood' className='navlink' style={{display:"flex"}}>
-        <img src={img} alt="" style={{width:"120px",height:"120px", transform: 'rotate(10deg)'}} />
+        <img src={img} alt="" style={{width:"120px",height:"120px", transform: 'rotate(10deg)'}} loading="lazy"/>
         </NavLink> 
     
       

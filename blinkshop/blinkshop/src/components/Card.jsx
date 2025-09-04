@@ -538,6 +538,8 @@ if(searchvalue){
             src={product.image[0]} // Replace with real image
             alt="Product"
             className="product-image"
+            loading="lazy"
+
           />
           </NavLink>
           {/* Heart Icon */}

@@ -500,10 +500,10 @@ setyppicode(true)
         </div>
 
         <div style={upiIcons} >
-          <img style={phnupiIcon} src={phonepay} alt="PhonePe"/>
-          <img style={gpayupiIcon} src={gpay} alt="GPay" />
-          <img style={paytmupiIcon} src={paytm} alt="Paytm" />
-          <img style={anyupiIcon} src={upi} alt="Paytm" />
+          <img style={phnupiIcon} src={phonepay} alt="PhonePe" loading="lazy"/>
+          <img style={gpayupiIcon} src={gpay} alt="GPay" loading="lazy"/>
+          <img style={paytmupiIcon} src={paytm} alt="Paytm" loading="lazy" />
+          <img style={anyupiIcon} src={upi} alt="Paytm" loading="lazy"/>
           {/* <img style={upiIcon} src= alt="Any UPI" /> */}
         </div>
 
@@ -724,6 +724,7 @@ setyppicode(true)
             src={order.image}
             alt="Product"
             className="product-image-sheet"
+            loading="lazy"
           />
           <div className="item-details">
             <span className="item-price">₹{order.discountprice}</span>

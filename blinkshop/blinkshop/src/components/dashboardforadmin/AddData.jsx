@@ -563,28 +563,57 @@ const AddData = () => {
     }));
   };
 
+  // const handleCategoryImageUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("upload_preset", "lewkout");
+  //   formData.append("cloud_name", "ddbz9m39a");
+
+  //   try {
+  //     const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+  //     const data = await res.json();
+  //     const uploadedUrl = data.secure_url;
+  //     setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
+  //   } catch (err) {
+  //     console.error("Category image upload failed:", err);
+  //     alert("Failed to upload category image.");
+  //   }
+  // };
   const handleCategoryImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "lewkout");
-    formData.append("cloud_name", "ddbz9m39a");
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "lewkout");
+  formData.append("cloud_name", "ddbz9m39a");
 
-    try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      const uploadedUrl = data.secure_url;
-      setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
-    } catch (err) {
-      console.error("Category image upload failed:", err);
-      alert("Failed to upload category image.");
-    }
-  };
+  try {
+    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    // ✅ optimize kar diya
+    const uploadedUrl = data.secure_url.replace(
+      "/upload/",
+      "/upload/f_auto,q_auto/"
+    );
+
+    setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
+  } catch (err) {
+    console.error("Category image upload failed:", err);
+    alert("Failed to upload category image.");
+  }
+};
+
 
   const addColor = (isNewCategory) => {
     if (newColor.color.trim()) {
@@ -664,23 +693,45 @@ const AddData = () => {
     setNewSize((prev) => ({ ...prev, image: [...prev.image, ...files] }));
   };
 
-  const uploadToCloudinary = async (files) => {
-    const urls = [];
-    for (let file of files) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "lewkout");
-      formData.append("cloud_name", "ddbz9m39a");
+  // const uploadToCloudinary = async (files) => {
+  //   const urls = [];
+  //   for (let file of files) {
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+  //     formData.append("upload_preset", "lewkout");
+  //     formData.append("cloud_name", "ddbz9m39a");
 
-      const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      urls.push(data.secure_url);
-    }
-    return urls;
-  };
+  //     const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+  //     const data = await res.json();
+  //     urls.push(data.secure_url);
+  //   }
+  //   return urls;
+  // };
+  const uploadToCloudinary = async (files) => {
+  const urls = [];
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "lewkout");
+    formData.append("cloud_name", "ddbz9m39a");
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    // ✅ optimize kar diya
+    urls.push(
+      data.secure_url.replace("/upload/", "/upload/f_auto,q_auto/")
+    );
+  }
+  return urls;
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -1195,6 +1246,7 @@ const AddData = () => {
             src={newProduct.image}
             alt="Preview"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            loading="lazy"
           />
           <button  onClick={(e) => {
                 e.preventDefault(); // file input khulne se rokta hai
@@ -1407,6 +1459,7 @@ const AddData = () => {
             height: '100%',
             objectFit: 'cover',
           }}
+          loading="lazy"
         />
         
       </div>

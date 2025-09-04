@@ -140,7 +140,7 @@ if(prdreviewdata){
               <p>{r.review}</p>
             </div>
             <div style={{ display: "flex", flexDirection: "row", overflowX: "auto" }}>
-              <img src={r.image} alt="user" className="avatar" />
+              <img src={r.image} alt="user" className="avatar" loading="lazy"/>
             </div>
           </div>
         ))}

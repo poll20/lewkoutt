@@ -34,6 +34,7 @@ console.log("wishlist in coa",wishlistdata)
   }
   alt={props.discription || "Product"}
   className="product-image"
+  loading="lazy" // Lazy loading for better performance
 />
         </NavLink> 
         {/* Heart Icon */}

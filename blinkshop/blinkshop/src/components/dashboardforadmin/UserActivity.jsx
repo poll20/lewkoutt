@@ -117,7 +117,7 @@ export default function UserActivity() {
                   <td style={thTdStyle}>{item.userId}</td>
                   <td style={thTdStyle}>
                     {item.image && item.image.length > 0 && (
-                      <img src={item.image[0]} alt="product" style={imgStyle} />
+                      <img src={item.image[0]} alt="product" style={imgStyle} loading="lazy"/>
                     )}
                   </td>
                   <td style={thTdStyle}>{item._id}</td>
@@ -164,7 +164,7 @@ export default function UserActivity() {
                 <td style={tdStyle}>{item.discountprice}</td>
                 <td style={tdStyle}>
                   {item.image && item.image.map((img, i) => (
-                    <img key={i} src={img} alt="wishlist-img" style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '5px' }} />
+                    <img key={i} src={img} alt="wishlist-img" style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '5px' }} loading="lazy"/>
                   ))}
                 </td>
                 <td style={tdStyle}>

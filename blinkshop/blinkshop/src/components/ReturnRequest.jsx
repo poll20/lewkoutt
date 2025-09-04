@@ -993,6 +993,7 @@ if(addresssetkro){
               borderRadius: "6px",
               border: "1px solid #e5e7eb"
             }} 
+            loading="lazy"
           />
           <div style={{ flex: 1 }}>
             <h3 style={{ 
@@ -1154,6 +1155,7 @@ if(addresssetkro){
                       borderRadius: "6px",
                       border: "1px solid #e5e7eb"
                     }} 
+                    loading="lazy"
                   />
                 ))}
               </div>

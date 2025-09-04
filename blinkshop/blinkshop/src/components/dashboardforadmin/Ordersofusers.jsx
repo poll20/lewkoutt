@@ -153,6 +153,7 @@ const Ordersofusers = () => {
                       style={{ width: "150px", height: "150px", cursor: "pointer", objectFit: "cover" }}
                       src={product.image[0]}
                       alt=""
+                      loading="lazy"
                     />
                   </div>
                 ))}
@@ -291,7 +292,7 @@ const Ordersofusers = () => {
           className="zoomed-image-overlay"
           onClick={() => setZoomedImage(null)}
         >
-          <img src={zoomedImage} alt="Zoomed" className="zoomed-image" />
+          <img src={zoomedImage} alt="Zoomed" className="zoomed-image" loading="lazy"/>
         </div>
       )}
       </div>
