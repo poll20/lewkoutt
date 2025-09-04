@@ -294,10 +294,10 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     setPopupMessage(msg);
   };
 
-     if (hostname !== "localhost" && hostname !== "lewkout.netlify.app") {
-    // deployed site ke liye
-    return <ComingSoon/>;
-  }
+  //    if (hostname !== "localhost" && hostname !== "lewkout.netlify.app") {
+  //   // deployed site ke liye
+  //   return <ComingSoon/>;
+  // }
 
 
   if (!isMobile && !isAdminRoute) {
