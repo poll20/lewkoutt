@@ -1491,7 +1491,7 @@ const fetchTopSearched = async () => {
         handleAddToCart,
         handleRemoveClickwishlist ,
         productdata,
-        productfetch,
+        // productfetch,
         newarrival,
         productdataonlydetail,
         addtocartdatas,

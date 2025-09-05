@@ -23,7 +23,7 @@ const Login = React.lazy(() => import("./components/Login"));
 // import UserProfile from "./components/UserProfile";
 const UserProfile = React.lazy(() => import("./components/UserProfile"));
 // import Checkout from "./components/CheckOut";
-const Checkout = React.lazy(() => import("./components/Checkout"));
+const Checkout = React.lazy(() => import("./components/CheckOut"));
 // import AddressList from "./components/AddressList";
 const AddressList = React.lazy(() => import("./components/AddressList"));
 // import SearchComponent from "./components/SearchComponent";
