@@ -227,21 +227,7 @@ function Layout({ showPopup }) {
           {/* <OfferBanner/> */}
           <GlobalAlert/>
           <OrderAlertProvider>
-          <div className="admin-ka-panel-main" style={{
-    border: "2px solid blue",
-    padding: "20px",
-    margin: "10px auto",
-    boxSizing: "border-box",
-    width: "95%",
-    maxWidth: "1400px",
-    minHeight: "80vh",
-    borderRadius: "10px",
-    backgroundColor: "#f9f9f9",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-    overflowX: "auto",
-  }}>
+          <div className="admin-ka-panel-main">
                 <Suspense fallback={<GlobalLoader />}>
             <Routes>
             
