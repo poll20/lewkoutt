@@ -71,7 +71,7 @@ const CtegoriesLayout = () => {
         <NavLink to={`/productmodel/${e.category}`}>
         <img
           src={e.image}
-          alt="Parent Card"
+          alt={e.title || "product"}
           className="parent-image"
           loading="lazy" // Lazy loading for better performance
         />

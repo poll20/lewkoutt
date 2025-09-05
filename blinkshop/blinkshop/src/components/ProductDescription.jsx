@@ -151,7 +151,7 @@ const fetchProductFromBackend = async (clr) => {
 // }, [id, coloring]); // 🔥 This will trigger whenever URL changes
 
 useEffect(() => {
-  // Reset state immediately
+  // Reset state immediat/ely
   setproduct(null);
   setmainprodutt(null);
   setSelectedcolor([]);
@@ -165,7 +165,7 @@ useEffect(() => {
 
   // Fetch new product after reset
   fetchProductFromBackend(coloring);
-}, [id, coloring]);
+}, [id]);
 
 useEffect(() => {
   const timer = setTimeout(() => {
@@ -309,7 +309,7 @@ if(getbundeldata){
          
               <img
                 src={product?.sizes[0]?.image[currentImageIndex]}
-                alt={`Product ${index + 1}`}
+                alt={product.title || "dress"}
                 onClick={() => handleImageClick(image[0])}
                 style={{ cursor: "pointer" }}
                 loading="lazy"
@@ -616,6 +616,14 @@ if(getbundeldata){
             <span className="prd-ka-dropdown-label">Occasion</span>
             <span className="prd-ka-dropdown-value">{product?.occasion?(product.occasion):("Party")}</span>
           </div>
+           <div className="prd-ka-dropdown-row">
+            <span className="prd-ka-dropdown-label">Nackline</span>
+            <span className="prd-ka-dropdown-value">{product?.neckline?(product.neckline):("Rounded")}</span>
+          </div>
+           {/* <div className="prd-ka-dropdown-row">
+            <span className="prd-ka-dropdown-label">Style type</span>
+            <span className="prd-ka-dropdown-value">{product?.styletype?(product.styletype):("")}</span>
+          </div> */}
         </div>
       )}
 

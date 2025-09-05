@@ -536,7 +536,7 @@ if(searchvalue){
           <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}/${product?.color || product?.defaultColor}`}>
           <img
             src={product.image[0]} // Replace with real image
-            alt="Product"
+            alt={product?.title || "Product"}
             className="product-image"
             loading="lazy"
 
