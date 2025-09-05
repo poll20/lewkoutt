@@ -66,12 +66,12 @@ const products = [
 
 
 const cors = require('cors');
-app.use(cors());//te localhost m h
-// app.use(cors({
-//   origin: "https://lewkout.netlify.app"||"http://localhost:3000", // Your frontend URL
-//   methods: "GET,POST,PUT,PATCH,DELETE",
-//   credentials: true
-// }));//ye deploy ke baad 
+// app.use(cors());//te localhost m h
+app.use(cors({
+  origin: "https://lewkout.netlify.app"||"http://localhost:3000"|| "https://lewkout.com", // Your frontend URL
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
