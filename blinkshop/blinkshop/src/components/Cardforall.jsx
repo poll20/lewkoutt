@@ -21,12 +21,13 @@ console.log("wishlist in coa",wishlistdata)
  return (
     <>
     
-      <div className="product-card">
+      <div className="product-card" style={{boxShadow:"0 2px 8px rgba(0, 0, 0, 0.1)"}}>
       {/* Image Section */}
       <div className="image-container">
         
       <NavLink to={props.section!='bundel'?(`/productdescription/${props?.id?._id || props?.id}/${props?.defaultcolor}`):(`/productdescription/${props?.id}/${props?.defaultcolor}`)}>
         <img
+        style={{height:"300px"}}
   src={
     props.section != "bundel"
       ?( props?.id?.image?.[0] || props?.image || "fallback.jpg")

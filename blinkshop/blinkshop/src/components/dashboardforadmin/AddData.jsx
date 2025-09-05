@@ -1374,7 +1374,7 @@ const AddData = () => {
     URL.createObjectURL(file)
   );
 
-  step === 1
+  step === 1 || step === 3
     ? setNewProduct((prev) => ({
         ...prev,
         productdetails: {
@@ -1420,8 +1420,8 @@ const AddData = () => {
     </label>
   </div>
 
-  {/* Preview Images */}
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+  Preview Images
+  {/* <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
     {(step === 1
       ? newProduct.productdetails.image
       : product.productdetails.image
@@ -1464,7 +1464,64 @@ const AddData = () => {
         
       </div>
     ))}
-  </div>
+  </div> */}
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+  {newProduct.productdetails.image.map((img, index) => (
+    <div
+      key={index}
+      style={{
+        width: '120px',
+        height: '120px',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        border: '1px solid #e2e8f0',
+        position: 'relative', // button ke liye
+      }}
+    >
+      <button
+        onClick={() => {
+          const updatedImages = newProduct.productdetails.image.filter(
+            (_, i) => i !== index
+          );
+          setNewProduct({
+            ...newProduct,
+            productdetails: {
+              ...newProduct.productdetails,
+              image: updatedImages,
+            },
+          });
+        }}
+        style={{
+          position: 'absolute',
+          top: '4px',
+          right: '4px',
+          background: 'rgba(0,0,0,0.6)',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '50%',
+          width: '20px',
+          height: '20px',
+          cursor: 'pointer',
+          zIndex: 10,
+        }}
+      >
+        ✕
+      </button>
+
+      <img
+        src={img}
+        alt="Preview"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+        loading="lazy"
+      />
+    </div>
+  ))}
+</div>
+
 </div>
               </div>
 
