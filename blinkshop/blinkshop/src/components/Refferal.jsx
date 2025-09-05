@@ -28,7 +28,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import img from "./image/rae.avif"
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 import { useFirebaseAuth } from './FirebaseContext';
 import { useBio } from './BioContext';
 

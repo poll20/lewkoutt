@@ -172,7 +172,7 @@
 
 import React, { useState, useEffect } from "react";
 import "./SearchComponent.css";
-import img1 from "./image/img3.jpg";
+// import img1 from "./image/img3.jpg";
 import { useBio } from "./BioContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Typewriter } from 'react-simple-typewriter';

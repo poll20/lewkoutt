@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 
 /**
  * Mobile-only Privacy Policy page for Lewkout

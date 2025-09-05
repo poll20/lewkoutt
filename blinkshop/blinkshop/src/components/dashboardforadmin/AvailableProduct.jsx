@@ -251,7 +251,7 @@ const AvailableProduct = () => {
               </td>
               <td>
                 {product.image.map((img, i) => (
-                  <img key={i} src={img} alt="Product" width="50" />
+                  <img key={i} src={img} alt="Product" width="50" loading="lazy"/>
                 ))}
                 {editingIndex === index && (
                   <input type="file" multiple onChange={(e) => handleImageUpload(e, index)} />
@@ -320,7 +320,7 @@ const AvailableProduct = () => {
                           <>
                             {size.size} ({size.quantity})
                             {size.image.map((img, i) => (
-                              <img key={i} src={img} width="30" />
+                              <img key={i} src={img} width="30" loading="lazy"/>
                             ))}
                           </>
                         )}

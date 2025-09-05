@@ -1,123 +1,4 @@
-// // Carousel.js
-// import React, { useState, useEffect, useRef } from "react";
-// import "./Carousel.css";
 
-// const Carousel = ({ images }) => {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const timeoutRef = useRef(null);
-//   const touchStartX = useRef(0);
-//   const touchEndX = useRef(0);
-
-//   // Function to go to the next slide
-//   const nextSlide = () => {
-//     setCurrentIndex((prevIndex) =>
-//       prevIndex === images.length - 1 ? 0 : prevIndex + 1
-//     );
-//   };
-
-//   // Function to go to the previous slide
-//   const prevSlide = () => {
-//     setCurrentIndex((prevIndex) =>
-//       prevIndex === 0 ? images.length - 1 : prevIndex - 1
-//     );
-//   };
-
-//   // Automatically change slides every 4 seconds
-//   useEffect(() => {
-//     timeoutRef.current = setTimeout(() => {
-//       nextSlide();
-//     }, 4000);
-
-//     // Clear timeout on slide change or unmount
-//     return () => clearTimeout(timeoutRef.current);
-//   }, [currentIndex]);
-
-//   // Function to handle the swipe on mobile
-//   const handleTouchStart = (e) => {
-//     touchStartX.current = e.touches[0].clientX;
-//   };
-
-//   const handleTouchMove = (e) => {
-//     touchEndX.current = e.touches[0].clientX;
-//   };
-
-//   const handleTouchEnd = () => {
-//     if (touchStartX.current - touchEndX.current > 50) {
-//       // Swipe left
-//       nextSlide();
-//     }
-//     if (touchEndX.current - touchStartX.current > 50) {
-//       // Swipe right
-//       prevSlide();
-//     }
-//   };
-
-//   return (
-//     <div
-//       className="carousel-container"
-//       onTouchStart={handleTouchStart}
-//       onTouchMove={handleTouchMove}
-//       onTouchEnd={handleTouchEnd}
-//     >
-//       <div
-//         className="carousel-slide"
-//         style={{
-//           backgroundImage: `url(${images[currentIndex]})`,
-//           backgroundRepeat: "no-repeat",
-//           backgroundPosition: "center",
-//           backgroundSize: "cover",
-//         }}
-//       >
-//         {/* Left Arrow */}
-//         <div className="carousel-arrow left-arrow" onClick={prevSlide}>
-//           &#10094;
-//         </div>
-
-//         {/* Right Arrow */}
-//         <div className="carousel-arrow right-arrow" onClick={nextSlide}>
-//           &#10095;
-//         </div>
-//       </div>
-
-//       <div className="carousel-indicators">
-//         {images.map((_, index) => (
-//           <span
-//             key={index}
-//             className={`indicator ${currentIndex === index ? "active" : ""}`}
-//             onClick={() => setCurrentIndex(index)}
-//           ></span>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Carousel;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Carousel.js
 // import React, { useState, useEffect, useRef } from "react";
 // import { NavLink } from "react-router-dom";
 // import "./Carousel.css";
@@ -140,12 +21,22 @@
 //     );
 //   };
 
+//   // Reset currentIndex if images change or are shorter
 //   useEffect(() => {
-//     timeoutRef.current = setTimeout(() => {
-//       nextSlide();
-//     }, 4000);
+//     if (currentIndex >= images.length) {
+//       setCurrentIndex(0);
+//     }
+//   }, [images]);
+
+//   // Auto slide
+//   useEffect(() => {
+//     if (images.length > 1) {
+//       timeoutRef.current = setTimeout(() => {
+//         nextSlide();
+//       }, 4000);
+//     }
 //     return () => clearTimeout(timeoutRef.current);
-//   }, [currentIndex]);
+//   }, [currentIndex, images]);
 
 //   const handleTouchStart = (e) => {
 //     touchStartX.current = e.touches[0].clientX;
@@ -156,45 +47,58 @@
 //   };
 
 //   const handleTouchEnd = () => {
-//     if (touchStartX.current - touchEndX.current > 50) {
-//       nextSlide();
-//     }
-//     if (touchEndX.current - touchStartX.current > 50) {
-//       prevSlide();
-//     }
+//     const diff = touchStartX.current - touchEndX.current;
+//     if (diff > 50) nextSlide();
+//     else if (diff < -50) prevSlide();
 //   };
+
+//   // Guard clause
+//   if (!images || images.length === 0) {
+//     return <div className="carousel-container">No images to show</div>;
+//   }
+
+//   const current = images[currentIndex];
 
 //   return (
 //     <div
-  
 //       className="carousel-container"
 //       onTouchStart={handleTouchStart}
 //       onTouchMove={handleTouchMove}
 //       onTouchEnd={handleTouchEnd}
-//       style={{borderRadius:"0"}}
 //     >
 //       <NavLink
-//         to={`/productmodel/${images[currentIndex]?.category}`}
+//         to={`/productmodel/${current?.category || ""}`}
 //         className="carousel-slide"
 //         style={{
-//           backgroundImage: `url(${images[currentIndex].image})`,
+//           backgroundImage: current?.image ? `url(${current.image})` : "none",
 //           backgroundRepeat: "no-repeat",
 //           backgroundPosition: "center",
 //           backgroundSize: "cover",
 //         }}
 //       >
-//         <div className="carousel-arrow left-arrow" onClick={(e) => { e.preventDefault(); prevSlide(); }}>
+//         {/* <div
+//           className="carousel-arrow left-arrow"
+//           onClick={(e) => {
+//             e.preventDefault();
+//             prevSlide();
+//           }}
+//         >
 //           &#10094;
 //         </div>
 
-//         <div className="carousel-arrow right-arrow" onClick={(e) => { e.preventDefault(); nextSlide(); }}>
+//         <div
+//           className="carousel-arrow right-arrow"
+//           onClick={(e) => {
+//             e.preventDefault();
+//             nextSlide();
+//           }}
+//         >
 //           &#10095;
-//         </div>
+//         </div> */}
 //       </NavLink>
 
-//       <div className="carousel-indicators" >
-        
-//         {images?.map((_, index) => (
+//       <div className="carousel-indicators">
+//         {images.map((_, index) => (
 //           <span
 //             key={index}
 //             className={`indicator ${currentIndex === index ? "active" : ""}`}
@@ -207,55 +111,42 @@
 // };
 
 // export default Carousel;
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import "./Carousel.css";
 
-const Carousel = ({ images }) => {
+const Carousel = ({ images = [], interval = 4000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const timeoutRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
-  };
+  }, [images.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
-  };
+  }, [images.length]);
 
-  // Reset currentIndex if images change or are shorter
+  // Reset index if images change
   useEffect(() => {
     if (currentIndex >= images.length) {
       setCurrentIndex(0);
     }
-  }, [images]);
+  }, [images.length, currentIndex]);
 
   // Auto slide
   useEffect(() => {
     if (images.length > 1) {
-      timeoutRef.current = setTimeout(() => {
-        nextSlide();
-      }, 4000);
+      timeoutRef.current = setTimeout(nextSlide, interval);
     }
     return () => clearTimeout(timeoutRef.current);
-  }, [currentIndex, images]);
+  }, [currentIndex, images.length, nextSlide, interval]);
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -271,8 +162,7 @@ const Carousel = ({ images }) => {
     else if (diff < -50) prevSlide();
   };
 
-  // Guard clause
-  if (!images || images.length === 0) {
+  if (images.length === 0) {
     return <div className="carousel-container">No images to show</div>;
   }
 
@@ -294,27 +184,7 @@ const Carousel = ({ images }) => {
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
-      >
-        {/* <div
-          className="carousel-arrow left-arrow"
-          onClick={(e) => {
-            e.preventDefault();
-            prevSlide();
-          }}
-        >
-          &#10094;
-        </div>
-
-        <div
-          className="carousel-arrow right-arrow"
-          onClick={(e) => {
-            e.preventDefault();
-            nextSlide();
-          }}
-        >
-          &#10095;
-        </div> */}
-      </NavLink>
+      />
 
       <div className="carousel-indicators">
         {images.map((_, index) => (
@@ -322,7 +192,7 @@ const Carousel = ({ images }) => {
             key={index}
             className={`indicator ${currentIndex === index ? "active" : ""}`}
             onClick={() => setCurrentIndex(index)}
-          ></span>
+          />
         ))}
       </div>
     </div>

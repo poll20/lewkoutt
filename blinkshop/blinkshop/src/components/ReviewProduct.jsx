@@ -1,9 +1,9 @@
-import React from "react";
+// import React from "react";
 import "./ReviewProduct.css";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useBio } from "./BioContext";
-import { useState } from "react";
+// import { useState } from "react";
 
 const reviews = [
   {

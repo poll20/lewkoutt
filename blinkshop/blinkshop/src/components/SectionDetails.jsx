@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import "./UserProfile.css";
 
 const SectionDetails = ({ section, onBack }) => {

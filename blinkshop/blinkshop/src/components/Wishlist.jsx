@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import './Wishlist.css';
+// import './Wishlist.css';
 import { BioContext } from './BioContext';
-import EmptyCart from './EmptyCart';
-import { useParams } from 'react-router-dom';
+// import EmptyCart from './EmptyCart';
+// import { useParams } from 'react-router-dom';
 import { useBio } from './BioContext';
 import { ToastContainer, toast } from 'react-toastify';
 import Card from './Card';
@@ -10,10 +10,10 @@ export default function Wishlist() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const {addtocartitem,cartitem} = useContext(BioContext);
   console.log("wish",addtocartitem)
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const {wishlistdata,handleRemoveClickwishlist, addToCart}=useBio()
   const [selectedSizes, setSelectedSizes] = useState({}); // Store sizes for each item
-  const [cartData, setCartData] = useState([]);
+  // const [cartData, setCartData] = useState([]);
  const endpoint=window.location.pathname;
  let t=endpoint.substring(1);
  console.log("ssss"+t)
@@ -32,57 +32,57 @@ export default function Wishlist() {
   // }, []);
 
   // Handle size selection for each item
-  const handleSizeClick = (size, id) => {
-    setSelectedSizes((prevSizes) => ({
-      ...prevSizes,
-      [id]: size, // Set size for the specific item
-    }));
-  };
+  // const handleSizeClick = (size, id) => {
+  //   setSelectedSizes((prevSizes) => ({
+  //     ...prevSizes,
+  //     [id]: size, // Set size for the specific item
+  //   }));
+  // };
 
   // Handle move to bag click
-  let handleclick = async (id) => {
+  // let handleclick = async (id) => {
 
-    // if(cartData.some((item) => item.id === id==true)){
-    // alert("item already in cart")
-    // return
-    //     }
-    if (!selectedSizes[id]) {
-      toast.info("Please select a size before adding to the cart.");
-      return;
-    }
+  //   // if(cartData.some((item) => item.id === id==true)){
+  //   // alert("item already in cart")
+  //   // return
+  //   //     }
+  //   if (!selectedSizes[id]) {
+  //     toast.info("Please select a size before adding to the cart.");
+  //     return;
+  //   }
 
-    try {
+  //   try {
       
-      let data = wishlistdata.find((e) => e.id === id);
-      console.log("jij",data)
-      data['size'] = selectedSizes[id]; // Use the selected size for this item
-         console.log("xqe",selectedSizes[id])
-      let res = await fetch(`${apiUrl}/addtocart`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+  //     let data = wishlistdata.find((e) => e.id === id);
+  //     console.log("jij",data)
+  //     data['size'] = selectedSizes[id]; // Use the selected size for this item
+  //        console.log("xqe",selectedSizes[id])
+  //     let res = await fetch(`${apiUrl}/addtocart`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(data),
+  //     });
 
-      if (res.ok) {
-        toast.success("itme move to bag successfully")
-        console.log("Item added to cart successfully");
-      } else {
-        console.log("Failed to add item to cart");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     if (res.ok) {
+  //       toast.success("itme move to bag successfully")
+  //       console.log("Item added to cart successfully");
+  //     } else {
+  //       console.log("Failed to add item to cart");
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   // Handle remove from wish click
-  let handleRemoveClick = (id) => {
-   handleRemoveClickwishlist(id)
-  };
+  // let handleRemoveClick = (id) => {
+  //  handleRemoveClickwishlist(id)
+  // };
 
   // Check if item is already in the cart
-  const isInCart = (id) => {
-    return wishlist.some((item) => item.id === id);
-  };
+  // const isInCart = (id) => {
+  //   return wishlist.some((item) => item.id === id);
+  // };
 console.log(wishlistdata)
   return (
     <>

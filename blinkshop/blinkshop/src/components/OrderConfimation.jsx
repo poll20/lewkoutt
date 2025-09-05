@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Check, Package, Truck, Clock, Phone, Mail, MapPin, CreditCard } from 'lucide-react';
 
 const OrderConfirmation = () => {

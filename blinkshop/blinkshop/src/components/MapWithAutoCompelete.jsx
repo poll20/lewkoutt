@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useBio } from "./BioContext";
-import { useAuth } from "./AuthContext";
+// import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 

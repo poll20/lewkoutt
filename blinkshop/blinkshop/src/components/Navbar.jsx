@@ -2,27 +2,27 @@ import React, { useState,useRef,useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import { CiShoppingCart, CiHome, CiLogin} from "react-icons/ci";
 import { PiDressThin } from "react-icons/pi";
-import { CiUser } from "react-icons/ci";
+// import { CiUser } from "react-icons/ci";
 import { IoIosMenu } from "react-icons/io";
-import { PiStorefrontThin } from "react-icons/pi";
+// import { PiStorefrontThin } from "react-icons/pi";
 import './Navbar.css'; // CSS for professional styling
-import SearchBar from './SearchBar';
+// import SearchBar from './SearchBar';
 import { CiHeart } from "react-icons/ci";
-import { CiSearch } from "react-icons/ci";
+// import { CiSearch } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import LoginButton from './Login';
-import dress from "./image/dress.png"
-import { GoHeart } from "react-icons/go";
-import { FaRegUser } from "react-icons/fa6"; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GoHome } from "react-icons/go";
-import { BsShop } from "react-icons/bs";
+// import dress from "./image/dress.png"
+// import { GoHeart } from "react-icons/go";
+// import { FaRegUser } from "react-icons/fa6"; 
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { GoHome } from "react-icons/go";
+// import { BsShop } from "react-icons/bs";
 import { useBio } from './BioContext';
 // import { set } from 'mongoose';
-import { useAuth } from './AuthContext';
+// import { useAuth } from './AuthContext';
 import { useFirebaseAuth } from './FirebaseContext';
-import VibeSticker from './VibeSticker';
-import LewkoutLogo from './LewkoutLogo';
+// import VibeSticker from './VibeSticker';
+// import LewkoutLogo from './LewkoutLogo';
 import lewkoutlogo from "../components/image/lewklogo.png"
 const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -33,10 +33,10 @@ const ResponsiveNavbar = (props) => {
   const [sideNavbarOpen, setSideNavbarOpen] = useState(false);
 const navigate=useNavigate()
   // Toggle for the category dropdown
-  const handleDropdownToggle = () => {
-    setDropdown(!dropdown);
+  // const handleDropdownToggle = () => {
+  //   setDropdown(!dropdown);
     
-  };
+  // };
   if(addtocartdatas){
     console.log("plzaaaaaaaaaaaa aajaaaaaaa",addtocartdatas.length)
   }

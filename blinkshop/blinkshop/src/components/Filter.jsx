@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useBio } from './BioContext';
-import { NavLink } from 'react-router-dom';
-import { BiArrowBack } from "react-icons/bi";
+// import { NavLink } from 'react-router-dom';
+// import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom';
 import "./Filter.css";
 import CatlogPriceFilter from './CatlogPriceFilter';

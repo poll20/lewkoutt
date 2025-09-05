@@ -985,15 +985,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
-import img1 from "./image/img3.jpg";
+// import img1 from "./image/img3.jpg";
 import { FaStar } from "react-icons/fa";
-import { useAuth } from "./AuthContext";
+// import { useAuth } from "./AuthContext";
 import { NavLink } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 
 const UserOrder = () => {
   const { userorder, submitRating, fetchRatings, rating } = useBio();
-  const [userorderr, setuserorder] = useState([]);
+  // const [userorderr, setuserorder] = useState([]);
   const { userDetails } = useFirebaseAuth();
 
   if (!userorder && !userDetails) {

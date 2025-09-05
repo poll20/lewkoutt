@@ -1,6 +1,6 @@
   import React, { useState } from "react";
   import "./Wallet.css";
-  import { useAuth } from "./AuthContext";
+  // import { useAuth } from "./AuthContext";
 import { useFirebaseAuth } from "./FirebaseContext";
   
   const Wallet = ({ cashback, points }) => {

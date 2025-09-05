@@ -1,6 +1,6 @@
-import React from 'react'
+// import React from 'react'
 import Card from './Card'
-import Filters from './Filters'
+// import Filters from './Filters'
 
 export default function DressandFilterform() {
   return (

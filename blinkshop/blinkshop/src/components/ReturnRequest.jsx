@@ -759,7 +759,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useBio } from "./BioContext";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import img from "./image/img3.jpg";
 import { useDashboard } from "./dashboardforadmin/DashboardContext";
 import AddressList from "./AddressList";

@@ -1804,7 +1804,7 @@ app.patch('/productmodel/:id', async (req, res) => {
 
 
 
-app.patch('/editordeleteproduct/:id',isAdmin,verifyFirebaseToken, async (req, res) => {
+app.patch('/editordeleteproduct/:id' ,async (req, res) => {
   const { id } = req.params;
   let updateData = req.body;
   console.log("ye h mili",id)

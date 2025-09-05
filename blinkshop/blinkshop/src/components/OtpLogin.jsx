@@ -270,8 +270,8 @@
     import { FaLock } from "react-icons/fa";
    import { FaPhone } from "react-icons/fa6";
     import { useLocation } from "react-router-dom";
-    import { BiTime } from "react-icons/bi";
-    import { MdSecurity } from "react-icons/md";
+    // import { BiTime } from "react-icons/bi";
+    // import { MdSecurity } from "react-icons/md";
 
     // import { useFirebaseAuth } from "./firebaseContext"; // Import Firebase Context
 
@@ -292,7 +292,7 @@
     const [timer, setTimer] = useState(30);
     const [canResend, setCanResend] = useState(false);
     const inputRefs = useRef([]);
-    const [confirmationResult, setConfirmationResult] = useState(null);
+    // const [confirmationResult, setConfirmationResult] = useState(null);
     const [referralCode, setReferralCode] = useState("");
     const navigate=useNavigate()
 

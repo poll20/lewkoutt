@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import "./SizeChart.css";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";

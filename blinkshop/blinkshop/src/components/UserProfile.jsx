@@ -142,11 +142,11 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { IoLogoDropbox} from "react-icons/io";
 import { IoHome } from "react-icons/io5";
 import { FaShop } from "react-icons/fa6";
-import { FaBox } from "react-icons/fa";
+// import { FaBox } from "react-icons/fa";
 import { BiHelpCircle } from "react-icons/bi";
-import { RiLogoutBoxLine } from "react-icons/ri";
+// import { RiLogoutBoxLine } from "react-icons/ri";
 import { NavLink } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+// import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from './FirebaseContext';
 
@@ -174,16 +174,16 @@ let navigate=useNavigate()
     console.log("lolokii",userDetails)
   }
 
-  const openPopup = (id,prd) => {
-    setPopup(true);
-    // setPopupProductId(id); // Save the specific product ID for the popup
-    // setwowalaprd(prd)
-  };
+  // const openPopup = (id,prd) => {
+  //   setPopup(true);
+  //   // setPopupProductId(id); // Save the specific product ID for the popup
+  //   // setwowalaprd(prd)
+  // };
 
-  const closePopup = () => {
-    setPopup(false);
-    // setPopupProductId(null);
-  };
+  // const closePopup = () => {
+  //   setPopup(false);
+  //   // setPopupProductId(null);
+  // };
   let logouttheuser=async()=>{
     
         const { success, user, error } = await logout();
