@@ -1359,12 +1359,26 @@ const AvailableProduct = () => {
     setProducts(updatedProducts);
   };
 
-  const handleImageUpload = (e, index) => {
-    const files = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+  // const handleImageUpload = (e, index) => {
+  //   const files = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+  //   const updatedProducts = [...products];
+  //   updatedProducts[index].image = [...updatedProducts[index].image, ...files];
+  //   setProducts(updatedProducts);
+  // };
+const handleImageUpload = async (e, index) => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+
+  try {
+    const uploadedUrls = await uploadToCloudinary(files);
     const updatedProducts = [...products];
-    updatedProducts[index].image = [...updatedProducts[index].image, ...files];
+    updatedProducts[index].image = [...updatedProducts[index].image, ...uploadedUrls];
     setProducts(updatedProducts);
-  };
+  } catch (err) {
+    console.error("Product image upload failed:", err);
+    alert("Failed to upload product images.");
+  }
+};
 
   const handleColorChange = (e, pIndex, cIndex) => {
     const value = e.target.value;
@@ -1380,12 +1394,30 @@ const AvailableProduct = () => {
     setProducts(updatedProducts);
   };
 
-  const handleSizeImageUpload = (e, pIndex, cIndex, sIndex) => {
-    const files = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+  // const handleSizeImageUpload = (e, pIndex, cIndex, sIndex) => {
+  //   const files = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+  //   const updatedProducts = [...products];
+  //   updatedProducts[pIndex].colors[cIndex].sizes[sIndex].image = [...files];
+  //   setProducts(updatedProducts);
+  // };
+
+  const handleSizeImageUpload = async (e, pIndex, cIndex, sIndex) => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+
+  try {
+    const uploadedUrls = await uploadToCloudinary(files);
     const updatedProducts = [...products];
-    updatedProducts[pIndex].colors[cIndex].sizes[sIndex].image = [...files];
+    updatedProducts[pIndex].colors[cIndex].sizes[sIndex].image = [
+      ...(updatedProducts[pIndex].colors[cIndex].sizes[sIndex].image || []),
+      ...uploadedUrls
+    ];
     setProducts(updatedProducts);
-  };
+  } catch (err) {
+    console.error("Size image upload failed:", err);
+    alert("Failed to upload size images.");
+  }
+};
 
   const handleSave = (id, index) => {
     const updatedProduct = products[index];
@@ -1411,6 +1443,57 @@ const AvailableProduct = () => {
     setProducts(updatedProducts);
   };
 
+  const handleCategoryImageUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "lewkout");
+  formData.append("cloud_name", "ddbz9m39a");
+
+  try {
+    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    // ✅ optimize kar diya
+    const uploadedUrl = data.secure_url.replace(
+      "/upload/",
+      "/upload/f_auto,q_auto/"
+    );
+
+    // setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
+  } catch (err) {
+    console.error("Category image upload failed:", err);
+    alert("Failed to upload category image.");
+  }
+};
+
+
+  const uploadToCloudinary = async (files) => {
+  const urls = [];
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "lewkout");
+    formData.append("cloud_name", "ddbz9m39a");
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    // ✅ optimize kar diya
+    urls.push(
+      data.secure_url.replace("/upload/", "/upload/f_auto,q_auto/")
+    );
+  }
+  return urls;
+};
   // Styles
   const styles = {
     container: {
