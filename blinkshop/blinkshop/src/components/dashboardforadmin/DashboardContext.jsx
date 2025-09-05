@@ -60,7 +60,7 @@ export const DashboardProvider = ({ children }) => {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
-                Authorization: `Bearer ${user.accessToken}`,
+                // Authorization: `Bearer ${user.accessToken}`,
             },
             //  Authorization: `Bearer ${user.accessToken}`,
             
@@ -91,7 +91,7 @@ export const DashboardProvider = ({ children }) => {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
-                Authorization: `Bearer ${user.accessToken}`,
+                // Authorization: `Bearer ${user.accessToken}`,
             },
             //  Authorization: `Bearer ${user.accessToken}`,
 
@@ -144,7 +144,7 @@ let deletefromexistingproduct=async(id)=>{
                 method: "PATCH",
                 headers: {
                   "Content-Type": "application/json",
-                    Authorization: `Bearer ${user.accessToken}`,
+                    // Authorization: `Bearer ${user.accessToken}`,
                 },
            
                  // Convert object to JSON string
@@ -372,7 +372,7 @@ useEffect(() => {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json", // Sending JSON data
-                    Authorization: `Bearer ${user.accessToken}`,
+                    // Authorization: `Bearer ${user.accessToken}`,
                 },
             //  Authorization: `Bearer ${user.accessToken}`,
                 
@@ -426,7 +426,7 @@ useEffect(() => {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                      Authorization: `Bearer ${user.accessToken}`,
+                      // Authorization: `Bearer ${user.accessToken}`,
                 },
 
             //  Authorization: `Bearer ${user.accessToken}`,
@@ -577,7 +577,7 @@ useEffect(()=>{
         method:'POST',
         headers: {
           "Content-Type": "application/json",
-            Authorization: `Bearer ${user.accessToken}`,
+            // Authorization: `Bearer ${user.accessToken}`,
       },
             //  Authorization: `Bearer ${user.accessToken}`,
 
@@ -602,7 +602,7 @@ const deleteMoodMsg = async (id) => {
     let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
       method: 'DELETE',
       headers:{
-             Authorization: `Bearer ${user.accessToken}`,
+            //  Authorization: `Bearer ${user.accessToken}`,
       }
 
     });
@@ -619,7 +619,7 @@ const updateMoodMsg = async (id, updatedData) => {
     let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
       method: 'PUT',
       headers: { "Content-Type": "application/json",
-          Authorization: `Bearer ${user.accessToken}`,
+          // Authorization: `Bearer ${user.accessToken}`,
        },
             //  Authorization: `Bearer ${user.accessToken}`,
 
@@ -740,7 +740,7 @@ const createCoupon = async (cpn) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-          Authorization: `Bearer ${user.accessToken}`,
+          // Authorization: `Bearer ${user.accessToken}`,
       },
             //  Authorization: `Bearer ${user.accessToken}`,
 
@@ -825,7 +825,7 @@ const createBundle = async (ids,val) => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-          Authorization: `Bearer ${user.accessToken}`,
+          // Authorization: `Bearer ${user.accessToken}`,
       },
             //  Authorization: `Bearer ${user.accessToken}`,
 
@@ -875,7 +875,7 @@ const toggleSlot = async (label) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-          Authorization: `Bearer ${user.accessToken}`,
+          // Authorization: `Bearer ${user.accessToken}`,
       },
             //  Authorization: `Bearer ${user.accessToken}`,
 

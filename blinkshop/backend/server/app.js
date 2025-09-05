@@ -700,7 +700,7 @@ app.post("/user/logout", async (req, res) => {
 //   }
 // });
 
-app.put("/user/update-role/:userId",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.put("/user/update-role/:userId", async (req, res) => {
   try {
       const { role, shopname, shopaddress } = req.body;
 
@@ -1872,7 +1872,7 @@ console.log("updated my data",updatedProduct)
 });
 
 
-app.patch("/deleteproductfromcate/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.patch("/deleteproductfromcate/:id", async (req, res) => {
   let { id } = req.params;
 
   try {
@@ -2433,7 +2433,7 @@ console.log("Order Products:", userOrders[0].products);
 //       res.status(500).json({ error: "Server error" });
 //   }
 // });
-app.put('/order/deliver/:id', verifyFirebaseToken, async (req, res) => {
+app.put('/order/deliver/:id', async (req, res) => {
   try {
     const order = await orderr.findById(req.params.id);
    const decision = req.body.decision // ✅ clearer
@@ -3181,7 +3181,7 @@ app.get("/return", async (req, res) => {
   }
 });
 
-app.post("/moodmsg",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.post("/moodmsg", async (req, res) => {
   try {
     const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
 
@@ -3225,7 +3225,7 @@ app.get("/moodmessage", async (req, res) => {
 });
 
 // DELETE
-app.delete("/moodmsg/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.delete("/moodmsg/:id", async (req, res) => {
   try {
     await moodmodel.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Deleted successfully" });
@@ -3235,7 +3235,7 @@ app.delete("/moodmsg/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
 });
 
 // UPDATE
-app.put("/moodmsg/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.put("/moodmsg/:id", async (req, res) => {
   try {
     const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
     const updated = await moodmodel.findByIdAndUpdate(
@@ -3249,7 +3249,7 @@ app.put("/moodmsg/:id",isAdmin,verifyFirebaseToken, async (req, res) => {
   }
 });
 
-app.post("/create",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.post("/create", async (req, res) => {
   try {
     const newCoupon = new cpn(req.body);
     await newCoupon.save();
@@ -3390,7 +3390,7 @@ app.get("/rate/:id", async (req, res) => {
 });
 
 
-app.patch("/bundle",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.patch("/bundle", async (req, res) => {
   const { ids,val } = req.body;
 console.log("bundleprice",val)
   if (!Array.isArray(ids) || ids.length !== 2) {
@@ -4086,7 +4086,7 @@ app.get("/slots", async (req, res) => {
 });
 
 // ✅ TOGGLE slot disable/enable
-app.post("/slot-status/toggle",isAdmin,verifyFirebaseToken, async (req, res) => {
+app.post("/slot-status/toggle", async (req, res) => {
   const { label } = req.body;
   try {
     const slot = await slotmodel.findOne({ label });
