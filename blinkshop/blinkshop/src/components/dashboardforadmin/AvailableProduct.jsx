@@ -1499,6 +1499,8 @@ const handleImageUpload = async (e, index) => {
     container: {
       backgroundColor: '#f8fafc',
       minHeight: '100vh',
+      minWidth:"100vw",
+      
       padding: isMobile ? '16px' : '24px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     },

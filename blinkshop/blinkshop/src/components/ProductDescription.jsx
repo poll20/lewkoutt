@@ -131,12 +131,29 @@ const fetchProductFromBackend = async (clr) => {
 };
 
 // 🔥 KEY FIX: Reset all states when URL params change
-useEffect(() => {
-  console.log("🔥 URL Params changed, resetting component state");
+// useEffect(() => {
+//   console.log("🔥 URL Params changed, resetting component state");
   
-  // Reset all states to initial values
-  setproduct([]);
-  setmainprodutt([]);
+//   // Reset all states to initial values
+//   setproduct([]);
+//   setmainprodutt([]);
+//   setSelectedcolor([]);
+//   setcolorid(undefined);
+//   setSelectedSize("");
+//   setQuantity(1);
+//   setCurrentImageIndex(0);
+//   setIsOpen(false);
+//   setIsPopupOpen(false);
+//   setPopupImage("");
+  
+//   // Fetch new product data
+//   fetchProductFromBackend(coloring);
+// }, [id, coloring]); // 🔥 This will trigger whenever URL changes
+
+useEffect(() => {
+  // Reset state immediately
+  setproduct(null);
+  setmainprodutt(null);
   setSelectedcolor([]);
   setcolorid(undefined);
   setSelectedSize("");
@@ -145,10 +162,10 @@ useEffect(() => {
   setIsOpen(false);
   setIsPopupOpen(false);
   setPopupImage("");
-  
-  // Fetch new product data
+
+  // Fetch new product after reset
   fetchProductFromBackend(coloring);
-}, [id, coloring]); // 🔥 This will trigger whenever URL changes
+}, [id, coloring]);
 
 useEffect(() => {
   const timer = setTimeout(() => {
@@ -196,11 +213,11 @@ useEffect(() => {
     }
   };
 
-  if (!product || product.length === 0) {
+  if (!product || product.length==0) {
     return <p>Loading...</p>;
   }
 
-console.log("lplp",product)
+// console.log("lplp",product)
 
   const sizes=product?.sizes?.map((e)=>(e.size)) 
 
@@ -246,13 +263,13 @@ let cate=product.cate
 
 const handleNext = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === product.sizes[0].image.length - 1 ? 0 : prevIndex + 1
+      prevIndex === product?.sizes[0]?.image.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const handlePrev = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? product.sizes[0].image.length - 1 : prevIndex - 1
+      prevIndex === 0 ? product?.sizes[0].image.length - 1 : prevIndex - 1
     );
   };
 
@@ -275,7 +292,7 @@ if(getbundeldata){
         
         <div className="image-slider">
           
-          {product.sizes[0].image.map((image, index) => (
+          {product?.sizes?.[0]?.image?.map((image, index) => (
             <div key={index} className="image-slide">
                 <button
           onClick={handlePrev}
@@ -291,7 +308,7 @@ if(getbundeldata){
         </button>
          
               <img
-                src={product.sizes[0].image[currentImageIndex]}
+                src={product?.sizes[0]?.image[currentImageIndex]}
                 alt={`Product ${index + 1}`}
                 onClick={() => handleImageClick(image[0])}
                 style={{ cursor: "pointer" }}
@@ -320,7 +337,7 @@ if(getbundeldata){
       {isPopupOpen && (
         <div className="popup" onClick={closePopup} style={{backgroundColor:"black"}}>
           <div className="image-slider" >
-          {product.sizes[0].image.map((image, index) => (
+          {product?.sizes[0]?.image.map((image, index) => (
             <div key={index} className="image-slide" style={{minHeight:"100vh"}}  >
               <img
                 src={image}
@@ -352,7 +369,7 @@ if(getbundeldata){
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'
           }}>
-            {product.sizes[0].image.map((img, index) => (
+            {product?.sizes[0]?.image.map((img, index) => (
               <div 
                 key={index} 
                 onClick={() => setCurrentImageIndex(index)}

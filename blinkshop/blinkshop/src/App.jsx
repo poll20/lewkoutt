@@ -221,13 +221,27 @@ function Layout({ showPopup }) {
     <GlobalLoader/>
       {!isAdminRoute && <ResponsiveNavbar pd={pd}/>}
       {isAdminRoute ? (
-        <div className="admin-ka-panel-container">
+        <div className="admin-ka-panel-container" >
 
           <DashNavbar />
           {/* <OfferBanner/> */}
           <GlobalAlert/>
           <OrderAlertProvider>
-          <div className="admin-ka-panel-main">
+          <div className="admin-ka-panel-main" style={{
+    border: "2px solid blue",
+    padding: "20px",
+    margin: "10px auto",
+    boxSizing: "border-box",
+    width: "95%",
+    maxWidth: "1400px",
+    minHeight: "80vh",
+    borderRadius: "10px",
+    backgroundColor: "#f9f9f9",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    overflowX: "auto",
+  }}>
                 <Suspense fallback={<GlobalLoader />}>
             <Routes>
             
