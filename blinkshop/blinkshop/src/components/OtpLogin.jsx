@@ -400,7 +400,7 @@ import { useState, useRef, useEffect } from "react";
           margin: "auto",
         }}
       >
-        <div
+        {/* <div
           style={{
             display: "flex",
             width: "100%",
@@ -431,7 +431,44 @@ import { useState, useRef, useEffect } from "react";
               disabled={loading}
             />
           ))}
-        </div>
+        </div> */}
+        <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px",
+    width: "100%",
+    marginTop: "10px",
+  }}
+>
+  {otp.map((digit, index) => (
+    <input
+      key={index}
+      type="text"
+      inputMode="numeric" // better for mobile keyboards
+      maxLength="1"
+      ref={(ref) => (inputRefs.current[index] = ref)}
+      value={digit}
+      onChange={(e) => handleChange(e.target, index)}
+      onKeyDown={(e) => handleKeyDown(e, index)}
+      style={{
+        width: "48px",
+        height: "48px",
+        border: "2px solid #D1D5DB",
+        borderRadius: "10px",
+        textAlign: "center",
+        fontSize: "20px",
+        fontWeight: "600",
+        outline: "none",
+        transition: "0.2s",
+      }}
+      onFocus={(e) => (e.target.style.border = "2px solid #6366F1")}
+      onBlur={(e) => (e.target.style.border = "2px solid #D1D5DB")}
+      disabled={loading}
+    />
+  ))}
+</div>
+
 
         {error && (
           <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>
