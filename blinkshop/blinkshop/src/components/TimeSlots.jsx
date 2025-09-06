@@ -201,6 +201,7 @@ const handleDateChange = (e) => {
 //     </div>
 <div
   style={{
+    border:"2px solid blue",
     maxWidth: "28rem", // max-w-md
     marginLeft: "auto", // mx-auto
     marginRight: "auto",
@@ -283,6 +284,7 @@ const handleDateChange = (e) => {
         style={{
           display: "flex",
           alignItems: "center",
+          // justifyContent:"center",
           marginBottom: "8px",
           cursor: disabled ? "not-allowed" : "pointer",
           padding: "8px",
@@ -292,6 +294,7 @@ const handleDateChange = (e) => {
           color: disabled ? "#b91c1c" : "#000000",
           opacity: disabled ? 0.7 : 1,
           transition: "background-color 0.3s",
+          // border:"2px solid blue"
         }}
         onMouseEnter={(e) => {
           if (!disabled) e.currentTarget.style.backgroundColor = "#f3f4f6"; // gray-100
@@ -300,6 +303,9 @@ const handleDateChange = (e) => {
           if (!disabled) e.currentTarget.style.backgroundColor = "transparent";
         }}
       >
+        <span style={{ marginLeft: "4px", fontWeight: "300",width:"500px" }}>
+          {slot.label}
+        </span>
         <input
           type="radio"
           name="delivery-slot"
@@ -307,11 +313,9 @@ const handleDateChange = (e) => {
           disabled={disabled}
           checked={selectedSlot === slot.label}
           onChange={() => handleSelect(slot.label)}
-          style={{ marginRight: "8px" }}
+          style={{ marginRight: "2px" ,width:"100%"}}
         />
-        <span style={{ marginLeft: "4px", fontWeight: "300" }}>
-          {slot.label}
-        </span>
+        
       </label>
     );
   })}

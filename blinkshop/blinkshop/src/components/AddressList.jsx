@@ -231,7 +231,7 @@ useEffect(() => {
 
             { userprf?.address?.map((addr) => (
   <div className="address-card" key={addr._id}>
-    <div className="custom-checkbox">
+    <div className="custom-checkbo">
       <input
         type="radio"
         name="address"

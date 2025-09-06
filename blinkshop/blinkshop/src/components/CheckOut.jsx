@@ -398,7 +398,7 @@ setyppicode(true)
 }
 }, [coupons, totalDiscountPrice,karocode,firstcpn]);
 
-
+const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();
 
   return (
     <div className="checkout-container-checkoutbuy">
@@ -622,11 +622,75 @@ setyppicode(true)
 
      {/* {deleveryaddress[0]?.city=="Jaipur"?(<TimeSlots/>):('') } */}
      {/* {deleveryaddress[0]?.city=="jaipur"?(<TimeSlots/>):('') } */}
+{/* {deleveryaddress?.[0]?.city?.toString().toLowerCase().includes("jaipur") ? (
+  <TimeSlots />
+) : null}
 
 
 
-  <button className="pay-now-btn-checkoutbuy" onClick={() => { orderplaced(purchaseproduct, deleveryaddress);}}>Pay Now</button>
+{timeslotlelo ? (
+  <button
+    className="pay-now-btn-checkoutbuy"
+    onClick={() => {
+      orderplaced(purchaseproduct, deleveryaddress);
+    }}
+  >
+    Pay Now
+  </button>
+) : (
+  ''
+)} */}
 
+{/* {deleveryaddress?.[0]?.city?.toString().trim().toLowerCase() === "jaipur" || "Jaipur" ? (
+  <>
+    <TimeSlots />
+    <button
+      className="pay-now-btn-checkoutbuy"
+      disabled={!timeslotlelo} // disable jab tak timeslotlelo empty/false hai
+      onClick={() => {
+        if (timeslotlelo) {
+          orderplaced(purchaseproduct, deleveryaddress);
+        }
+      }}
+    >
+      Pay Now
+    </button>
+  </>
+) : (
+  <button
+    className="pay-now-btn-checkoutbuy"
+    onClick={() => {
+      orderplaced(purchaseproduct, deleveryaddress);
+    }}
+  >
+    Pay Now
+  </button>
+)} */}
+{city && city.includes("jaipur") ? (
+  <>
+    <TimeSlots />
+    <button
+      className="pay-now-btn-checkoutbuy"
+      disabled={!timeslotlelo}
+      onClick={() => {
+        if (timeslotlelo) {
+          orderplaced(purchaseproduct, deleveryaddress);
+        }
+      }}
+    >
+      Pay Now
+    </button>
+  </>
+) : (
+  <button
+    className="pay-now-btn-checkoutbuy"
+    onClick={() => {
+      orderplaced(purchaseproduct, deleveryaddress);
+    }}
+  >
+    Pay Now
+  </button>
+)}
 
 
 {
