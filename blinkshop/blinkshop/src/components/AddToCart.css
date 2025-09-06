@@ -94,7 +94,7 @@ body {
 
 /* Add hover effect */
 .custom-checkbox input[type="checkbox"]:hover {
-  border-color: #555;
+  border-color:black;
 }
 
 /* Bottom Sheet Styles */
@@ -103,13 +103,12 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: transparent;
-  border-radius: 20px 20px 0 0;
-  /* box-shadow:white; */
-  /* border: 2px solid red; */
+  background-color: white;
+  border-radius: 0; /* force flat border */
   animation: slide-up 0.3s ease-out;
-  padding:20px;
+  padding: 20px;
 }
+
 
 @keyframes slide-up {
   from {
