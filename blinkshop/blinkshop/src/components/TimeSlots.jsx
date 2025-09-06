@@ -119,86 +119,225 @@ const handleDateChange = (e) => {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4 border rounded-lg shadow-sm">
-      {parseFloat(distance?.replace("km", "").trim()) > 10 ? (
-  <span>You’re a lil’ out of our speed zone 👀 So the 60-min ride won’t make it… but other slots are waiting to be picked 💅</span>
-) : (
-  ''
-)}
-      <h2 className="text-xl font-bold mb-2">
-        Delivery Time Slot <span className="text-gray-500 text-sm">(Required)</span>
-      </h2>
+//     <div className="max-w-md mx-auto p-4 border rounded-lg shadow-sm">
+//       {parseFloat(distance?.replace("km", "").trim()) > 10 ? (
+//   <span>You’re a lil’ out of our speed zone 👀 So the 60-min ride won’t make it… but other slots are waiting to be picked 💅</span>
+// ) : (
+//   ''
+// )}
+//       <h2 className="text-xl font-bold mb-2">
+//         Delivery Time Slot <span className="text-gray-500 text-sm">(Required)</span>
+//       </h2>
 
-      {/* Calendar button & input */}
-      <button
-        className="mb-3 bg-green-600 hover:bg-green-700 text-black py-2 px-4 rounded w-full"
-        onClick={() => document.getElementById('datePicker').showPicker()}
-      >
-        Select Delivery Date
-      </button>
+//       {/* Calendar button & input */}
+//       <button
+//         className="mb-3 bg-green-600 hover:bg-green-700 text-black py-2 px-4 rounded w-full"
+//         onClick={() => document.getElementById('datePicker').showPicker()}
+//       >
+//         Select Delivery Date
+//       </button>
    
-      <input
-  id="datePicker"
-  type="date"
-  value={selectedDate}
-  onChange={handleDateChange}
-  className="mb-4 w-full p-2 border rounded"
-  min={new Date().toISOString().split('T')[0]}
-  max={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
-/>
+//       <input
+//   id="datePicker"
+//   type="date"
+//   value={selectedDate}
+//   onChange={handleDateChange}
+//   className="mb-4 w-full p-2 border rounded"
+//   min={new Date().toISOString().split('T')[0]}
+//   max={new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0]}
+// />
 
-      <p className="font-semibold mb-2">Select Time Window:</p>
+//       <p className="font-semibold mb-2">Select Time Window:</p>
 
-      {timeSlots.map((slot, index) => {
-        const disabled = isDisabled(slot);
-        return (
+//       {timeSlots.map((slot, index) => {
+//         const disabled = isDisabled(slot);
+//         return (
        
-        <label
-  key={index}
+//         <label
+//   key={index}
+//   style={{
+//     display: 'flex',
+//     alignItems: 'center',
+//     marginBottom: '8px',
+//     cursor: disabled ? 'not-allowed' : 'pointer',
+//     padding: '8px',
+//     borderRadius: '4px',
+//     backgroundColor: disabled ? '#fee2e2' : 'transparent', // light red background
+//     border: disabled ? '1px solid #dc2626' : '1px solid #d1d5db', // red or gray border
+//     color: disabled ? '#b91c1c' : '#000000', // red text for disabled
+//     opacity: disabled ? 0.7 : 1,
+//     transition: 'background-color 0.3s',
+//   }}
+//   onMouseEnter={(e) => {
+//     if (!disabled) e.currentTarget.style.backgroundColor = '#f3f4f6'; // light gray on hover
+//   }}
+//   onMouseLeave={(e) => {
+//     if (!disabled) e.currentTarget.style.backgroundColor = 'transparent';
+//   }}
+// >
+//   <input
+//     type="radio"
+//     name="delivery-slot"
+//     value={slot.label}
+//     disabled={disabled}
+//     checked={selectedSlot === slot.label}
+//     onChange={() => handleSelect(slot.label)}
+//     style={{ marginRight: '8px' }}
+//   />
+//   <span style={{ marginLeft: '4px', fontWeight: '300' }}>{slot.label}</span>
+// </label>
+
+//         );
+//       })}
+
+//       <button
+//         style={{ width: '100%'}}
+//         className="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-full"
+//         disabled={!selectedSlot}
+//         onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
+//       >
+//         Confirm Slot
+//       </button>
+//     </div>
+<div
   style={{
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '8px',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    padding: '8px',
-    borderRadius: '4px',
-    backgroundColor: disabled ? '#fee2e2' : 'transparent', // light red background
-    border: disabled ? '1px solid #dc2626' : '1px solid #d1d5db', // red or gray border
-    color: disabled ? '#b91c1c' : '#000000', // red text for disabled
-    opacity: disabled ? 0.7 : 1,
-    transition: 'background-color 0.3s',
-  }}
-  onMouseEnter={(e) => {
-    if (!disabled) e.currentTarget.style.backgroundColor = '#f3f4f6'; // light gray on hover
-  }}
-  onMouseLeave={(e) => {
-    if (!disabled) e.currentTarget.style.backgroundColor = 'transparent';
+    maxWidth: "28rem", // max-w-md
+    marginLeft: "auto", // mx-auto
+    marginRight: "auto",
+    padding: "1rem", // p-4
+    border: "1px solid #e5e7eb", // border gray-200
+    borderRadius: "0.5rem", // rounded-lg
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", // shadow-sm
   }}
 >
+  {parseFloat(distance?.replace("km", "").trim()) > 10 ? (
+    <span>
+      You’re a lil’ out of our speed zone 👀 So the 60-min ride won’t make it… but
+      other slots are waiting to be picked 💅
+    </span>
+  ) : (
+    ""
+  )}
+
+  <h2
+    style={{
+      fontSize: "1.25rem", // text-xl
+      fontWeight: "700", // font-bold
+      marginBottom: "0.5rem", // mb-2
+    }}
+  >
+    Delivery Time Slot{" "}
+    <span style={{ color: "#6b7280", fontSize: "0.875rem" }}>
+      (Required)
+    </span>
+  </h2>
+
+  {/* Calendar button */}
+  <button
+    style={{
+      marginBottom: "0.75rem", // mb-3
+      backgroundColor: "#16a34a", // bg-green-600
+      color: "black",
+      paddingTop: "0.5rem", // py-2
+      paddingBottom: "0.5rem",
+      paddingLeft: "1rem", // px-4
+      paddingRight: "1rem",
+      borderRadius: "0.25rem", // rounded
+      width: "100%", // w-full
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#15803d")} // hover:bg-green-700
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#16a34a")}
+    onClick={() => document.getElementById("datePicker").showPicker()}
+  >
+    Select Delivery Date
+  </button>
+
   <input
-    type="radio"
-    name="delivery-slot"
-    value={slot.label}
-    disabled={disabled}
-    checked={selectedSlot === slot.label}
-    onChange={() => handleSelect(slot.label)}
-    style={{ marginRight: '8px' }}
+    id="datePicker"
+    type="date"
+    value={selectedDate}
+    onChange={handleDateChange}
+    min={new Date().toISOString().split("T")[0]}
+    max={new Date(
+      new Date().setDate(new Date().getDate() + 1)
+    ).toISOString().split("T")[0]}
+    style={{
+      marginBottom: "1rem", // mb-4
+      width: "100%", // w-full
+      padding: "0.5rem", // p-2
+      border: "1px solid #d1d5db", // border
+      borderRadius: "0.25rem", // rounded
+    }}
   />
-  <span style={{ marginLeft: '4px', fontWeight: '300' }}>{slot.label}</span>
-</label>
 
-        );
-      })}
+  <p style={{ fontWeight: "600", marginBottom: "0.5rem" }}>
+    Select Time Window:
+  </p>
 
-      <button
-        style={{ width: '100%'}}
-        className="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-full"
-        disabled={!selectedSlot}
-        onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
+  {timeSlots.map((slot, index) => {
+    const disabled = isDisabled(slot);
+    return (
+      <label
+        key={index}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "8px",
+          cursor: disabled ? "not-allowed" : "pointer",
+          padding: "8px",
+          borderRadius: "4px",
+          backgroundColor: disabled ? "#fee2e2" : "transparent", // light red if disabled
+          border: disabled ? "1px solid #dc2626" : "1px solid #d1d5db", // red or gray
+          color: disabled ? "#b91c1c" : "#000000",
+          opacity: disabled ? 0.7 : 1,
+          transition: "background-color 0.3s",
+        }}
+        onMouseEnter={(e) => {
+          if (!disabled) e.currentTarget.style.backgroundColor = "#f3f4f6"; // gray-100
+        }}
+        onMouseLeave={(e) => {
+          if (!disabled) e.currentTarget.style.backgroundColor = "transparent";
+        }}
       >
-        Confirm Slot
-      </button>
-    </div>
+        <input
+          type="radio"
+          name="delivery-slot"
+          value={slot.label}
+          disabled={disabled}
+          checked={selectedSlot === slot.label}
+          onChange={() => handleSelect(slot.label)}
+          style={{ marginRight: "8px" }}
+        />
+        <span style={{ marginLeft: "4px", fontWeight: "300" }}>
+          {slot.label}
+        </span>
+      </label>
+    );
+  })}
+
+  <button
+    style={{
+      marginTop: "1rem", // mt-4
+      backgroundColor: "#2563eb", // bg-blue-600
+      color: "#ffffff",
+      paddingTop: "0.5rem",
+      paddingBottom: "0.5rem",
+      paddingLeft: "1rem",
+      paddingRight: "1rem",
+      borderRadius: "0.25rem",
+      width: "100%",
+      cursor: "pointer",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1d4ed8")} // hover:bg-blue-700
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2563eb")}
+    disabled={!selectedSlot}
+    onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
+  >
+    Confirm Slot
+  </button>
+</div>
+
   );
 }
 

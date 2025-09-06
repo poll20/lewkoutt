@@ -1082,6 +1082,8 @@ if(user && userDetails){
 
     })
     if(orderpost.ok){
+      showPopup("Your Order Has Been Confirmed")
+
       console.log("address edit")
       
       // navigate("/orderconfirm")

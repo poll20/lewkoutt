@@ -621,10 +621,12 @@ setyppicode(true)
       </div>
 
      {/* {deleveryaddress[0]?.city=="Jaipur"?(<TimeSlots/>):('') } */}
-     {deleveryaddress[0]?.city=="jaipur"?(<TimeSlots/>):('') }
+     {/* {deleveryaddress[0]?.city=="jaipur"?(<TimeSlots/>):('') } */}
 
 
-    {timeslotlelo?(<button className="pay-now-btn-checkoutbuy" onClick={()=>{orderplaced(purchaseproduct,deleveryaddress);/*setTimeout(()=>{recordMultipleSales(purchaseproduct)},300)*/ }} >Pay Now</button>):('')}
+
+  <button className="pay-now-btn-checkoutbuy" onClick={() => { orderplaced(purchaseproduct, deleveryaddress);}}>Pay Now</button>
+
 
 
 {

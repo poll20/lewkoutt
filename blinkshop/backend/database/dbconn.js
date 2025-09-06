@@ -3,7 +3,7 @@ let mongoose=require("mongoose")
 let {productsmodel}=require("./collection.js")
 const connectDB = async () => {
    try {
-     mongoose.set('bufferCommands', false); // ✅ पहले ही सेट कर दो
+    //  mongoose.set('bufferCommands', false); // ✅ पहले ही सेट कर दो
  
      await mongoose.connect(process.env.MONGO_URI
       , {

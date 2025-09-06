@@ -232,8 +232,8 @@ console.log("navbar m props.pdd value",props.pd)
           
           <div  style={{borderRadius:"100%",backgroundColor:"pink"}}>
           <NavLink to="/rent/rent" className='homeeee'>
-          <li><PiDressThin style={{color:"black"}} size={20}/></li>
-          <li  style={{color:"black"}}>Rent</li>
+          <li  style={{color:"black",fontSize:"8px"}}>Coming</li>
+          <li  style={{color:"black",fontSize:"8px"}}>Soon</li>
           </NavLink>
           </div>
           
