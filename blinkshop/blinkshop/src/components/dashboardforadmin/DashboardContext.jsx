@@ -500,21 +500,21 @@ useEffect(() => {
         }
     };
     
-useEffect(()=>{
-    const getShopDailySales = async () => {
+// useEffect(()=>{
+//     const getShopDailySales = async () => {
 
-        if(user || userDetails)
-        try {
-            let response = await fetch(`${apiUrl}/sales/daily/${userDetails.shopname}`);
-            let data = await response.json();
-            console.log("✅ Shopkeeper Sales Data:", data);
-            setshopkepersale(data)
-        } catch (error) {
-            console.error("❌ Error fetching sales:", error);
-        }
-    }
-    getShopDailySales()
-},[user,userDetails])
+//         if(user || userDetails)
+//         try {
+//             let response = await fetch(`${apiUrl}/sales/daily/${userDetails.shopname}`);
+//             let data = await response.json();
+//             console.log("✅ Shopkeeper Sales Data:", data);
+//             setshopkepersale(data)
+//         } catch (error) {
+//             console.error("❌ Error fetching sales:", error);
+//         }
+//     }
+//     getShopDailySales()
+// },[user,userDetails])
     
     const updateOrdersWithReturnDetails = async () => {
       try {
@@ -555,22 +555,22 @@ useEffect(()=>{
     //   getMoodMessages();
     // }, [user]);
     // 🔁 Reusable Fetch Function
-  const getMoodMessages = async () => {
-    if (!user) return;
-    try {
+  // const getMoodMessages = async () => {
+  //   if (!user) return;
+  //   try {
       
-      const res = await fetch(`${apiUrl}/moodmessage`);
-      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-      const data = await res.json();
-      setmoodmsg(data);
-    } catch (error) {
-      console.error("❌ Failed to fetch mood messages:", error);
-    }
-  };
+  //     const res = await fetch(`${apiUrl}/moodmessage`);
+  //     if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+  //     const data = await res.json();
+  //     setmoodmsg(data);
+  //   } catch (error) {
+  //     console.error("❌ Failed to fetch mood messages:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getMoodMessages();
-  }, [user]);
+  // useEffect(() => {
+  //   getMoodMessages();
+  // }, [user]);
     let moodmsg=async(data)=>{
       try{
       let response=await fetch(`${apiUrl}/moodmsg`,{
