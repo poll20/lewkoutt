@@ -3514,280 +3514,410 @@ console.log("bundleprice",val)
 //   }
 // });
 
+// app.get("/search", async (req, res) => {
+//   const { q } = req.query;
+
+//   // 1) खाली query तो खाली रिज़ल्ट
+//   if (!q || q.trim() === "") return res.json({ products: [] });
+
+//   // 2) regex बना लें (case‑insensitive + special‑char escape)
+//   const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+//   const r = new RegExp(escapeRegex(q.trim()), "i");
+
+//   // 3) MongoDB Atlas Search + projection
+//   // const pipeline = [
+//   //   {
+//   //     $search: {
+//   //       index: "lewkoutsearch",      // ⬅️ अपना सर्च इंडेक्स
+//   //       compound: {
+//   //         should: [
+//   //           {
+//   //             text: {
+//   //               query: q,
+//   //               path: [
+//   //                 "productdetails.tag",
+//   //                 "productdetails.title",
+//   //                 "productdetails.description",
+//   //                  "productdetails.occasion",
+//   //                 "productdetails.neckline",
+//   //                 "productdetails.material",
+//   //                 "productdetails.printtype",
+//   //                 "productdetails.styletype",
+//   //                 "productdetails.colors.title",
+//   //                 "productdetails.colors.tag",
+//   //                 "productdetails.colors.description",
+//   //                 "productdetails.colors.occasion",
+//   //                 "productdetails.colors.neckline",
+//   //                 "productdetails.colors.material",
+//   //                 "productdetails.colors.printtype",
+//   //                 "productdetails.colors.styletype",
+
+
+
+                  
+
+
+                  
+                  
+//   //               ],
+//   //               fuzzy: { maxEdits: 2 }
+//   //             }
+//   //           }
+//   //         ]
+//   //       }
+//   //     }
+//   //   },
+//   //   {
+//   //     $project: {
+//   //       category: 1,
+//   //       image: 1,
+//   //       productdetails: {
+//   //         $filter: {
+//   //           input: "$productdetails",
+//   //           as: "pd",
+//   //           cond: {
+//   //             $or: [
+//   //               { $regexMatch: { input: "$$pd.title", regex: r } },
+//   //               { $regexMatch: { input: "$$pd.tag", regex: r } },
+//   //               { $regexMatch: { input: "$$pd.description", regex: r } },
+//   //                 { $regexMatch: { input: "$$pd.occasion", regex: r } },
+//   //                  { $regexMatch: { input: "$$pd.neckline", regex: r } },
+//   //                   { $regexMatch: { input: "$$pd.material", regex: r } },
+//   //                    { $regexMatch: { input: "$$pd.printtype", regex: r } },
+//   //                    { $regexMatch: { input: "$$pd.styletype", regex: r } },
+//   //               {
+//   //                 $gt: [
+//   //                   {
+//   //                     $size: {
+//   //                       $filter: {
+//   //                         input: "$$pd.colors",
+//   //                         as: "c",
+//   //                         cond: {
+//   //                           $or: [
+//   //                             { $regexMatch: { input: "$$c.title", regex: r } },
+//   //                             { $regexMatch: { input: "$$c.tag", regex: r } },
+//   //                             { $regexMatch: { input: "$$c.description", regex: r } },
+//   //                             { $regexMatch: { input: "$$pd.occasion", regex: r } },
+//   //                  { $regexMatch: { input: "$$pd.neckline", regex: r } },
+//   //                   { $regexMatch: { input: "$$pd.material", regex: r } },
+//   //                    { $regexMatch: { input: "$$pd.printtype", regex: r } },
+//   //                    { $regexMatch: { input: "$$pd.styletype", regex: r } }
+//   //                           ]
+//   //                         }
+//   //                       }
+//   //                     }
+//   //                   },
+//   //                   0
+//   //                 ]
+//   //               }
+//   //             ]
+//   //           }
+//   //         }
+//   //       }
+//   //     }
+//   //   },
+//   //   { $limit: 10 }
+//   // ];
+// const pipeline = [
+//   {
+//     $search: {
+//       index: "lewkoutsearch",
+//       compound: {
+//         should: [
+//           {
+//             text: {
+//               query: q,
+//               path: [
+//                 "productdetails.tag",
+//                 "productdetails.title",
+//                 "productdetails.description",
+//                 "productdetails.occasion",
+//                 "productdetails.neckline",
+//                 "productdetails.material",
+//                 "productdetails.printtype",
+//                 "productdetails.styletype",
+//                 "productdetails.colors.title",
+//                 "productdetails.colors.tag",
+//                 "productdetails.colors.description",
+//                 "productdetails.colors.occasion",
+//                 "productdetails.colors.neckline",
+//                 "productdetails.colors.material",
+//                 "productdetails.colors.printtype",
+//                 "productdetails.colors.styletype"
+//               ],
+//               fuzzy: { maxEdits: 2 }
+//             }
+//           }
+//         ]
+//       }
+//     }
+//   },
+//   {
+//     $project: {
+//       category: 1,
+//       image: 1,
+//       productdetails: {
+//         $filter: {
+//           input: "$productdetails",
+//           as: "pd",
+//           cond: {
+//             $or: [
+//               { $regexMatch: { input: "$$pd.title", regex: r } },
+//               { $regexMatch: { input: "$$pd.tag", regex: r } },
+//               { $regexMatch: { input: "$$pd.description", regex: r } },
+//               { $regexMatch: { input: "$$pd.occasion", regex: r } },
+//               { $regexMatch: { input: "$$pd.neckline", regex: r } },
+//               { $regexMatch: { input: "$$pd.material", regex: r } },
+//               { $regexMatch: { input: "$$pd.printtype", regex: r } },
+//               { $regexMatch: { input: "$$pd.styletype", regex: r } },
+//               {
+//                 $gt: [
+//                   {
+//                     $size: {
+//                       $filter: {
+//                         input: "$$pd.colors",
+//                         as: "c",
+//                         cond: {
+//                           $or: [
+//                             { $regexMatch: { input: "$$c.title", regex: r } },
+//                             { $regexMatch: { input: "$$c.tag", regex: r } },
+//                             { $regexMatch: { input: "$$c.description", regex: r } },
+//                             { $regexMatch: { input: "$$c.occasion", regex: r } },
+//                             { $regexMatch: { input: "$$c.neckline", regex: r } },
+//                             { $regexMatch: { input: "$$c.material", regex: r } },
+//                             { $regexMatch: { input: "$$c.printtype", regex: r } },
+//                             { $regexMatch: { input: "$$c.styletype", regex: r } }
+//                           ]
+//                         }
+//                       }
+//                     }
+//                   },
+//                   0
+//                 ]
+//               }
+//             ]
+//           }
+//         }
+//       }
+//     }
+//   },
+//   { $limit: 10 }
+// ];
+
+//   try {
+//     // 4) सर्च चलाइए
+//     const products = await productsmodel.aggregate(pipeline);
+
+//     // 5) bulk‑update ops तैयार कीजिए
+//     const bulkOps = products.map((doc) => ({
+//       updateOne: {
+//         filter: { _id: doc._id },
+//         /** MongoDB 4.2+ pipeline‑update */
+//         update: [
+//           {
+//             $set: {
+//               productdetails: {
+//                 $map: {
+//                   input: "$productdetails",
+//                   as: "pd",
+//                   in: {
+//                     $mergeObjects: [
+//                       "$$pd",
+//                       {
+//                         /** ---------- productdetails.searchcount ---------- */
+//                         searchcount: {
+//                           $cond: [
+//                             {
+//                               $or: [
+//                                 { $regexMatch: { input: "$$pd.title", regex: r } },
+//                                 { $regexMatch: { input: "$$pd.tag", regex: r } },
+//                                 { $regexMatch: { input: "$$pd.description", regex: r } },
+//                                 { $regexMatch: { input: "$$pd.occassion", regex: r } },
+//                                 { $regexMatch: { input: "$$pd.neckline", regex: r } },
+//                                 { $regexMatch: { input: "$$pd.material", regex: r } },
+//                                 { $regexMatch: { input: "$$pd.printtype", regex: r } },
+
+//                                 { $regexMatch: { input: "$$pd.styletype", regex: r } },
+
+
+
+
+
+//                               ]
+//                             },
+//                             { $add: ["$$pd.searchcount", 1] },
+//                             "$$pd.searchcount"
+//                           ]
+//                         },
+//                         /** ---------- colors[].searchcount ---------- */
+//                         colors: {
+//                           $map: {
+//                             input: "$$pd.colors",
+//                             as: "c",
+//                             in: {
+//                               $mergeObjects: [
+//                                 "$$c",
+//                                 {
+//                                   searchcount: {
+//                                     $cond: [
+//                                       {
+//                                         $or: [
+//                                           { $regexMatch: { input: "$$c.title", regex: r } },
+//                                           { $regexMatch: { input: "$$c.tag", regex: r } },
+//                                           { $regexMatch: { input: "$$c.description", regex: r } },
+//                                            { $regexMatch: { input: "$$c.occassion", regex: r } },
+//                                 { $regexMatch: { input: "$$c.neckline", regex: r } },
+//                                 { $regexMatch: { input: "$$c.material", regex: r } },
+//                                 { $regexMatch: { input: "$$c.printtype", regex: r } },
+
+//                                 { $regexMatch: { input: "$$c.styletype", regex: r } },
+
+//                                         ]
+//                                       },
+//                                       { $add: ["$$c.searchcount", 1] },
+//                                       "$$c.searchcount"
+//                                     ]
+//                                   }
+//                                 }
+//                               ]
+//                             }
+//                           }
+//                         }
+//                       }
+//                     ]
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         ]
+//       }
+//     }));
+
+//     // 6) bulkWrite फ़ायर कीजिए (अगर कुछ मिला)
+//     if (bulkOps.length) await productsmodel.bulkWrite(bulkOps);
+
+//     // 7) response
+//     res.json({ products });
+//   } catch (err) {
+//     console.error("Search Error:", err);
+//     res.status(500).json({ error: "Search failed" });
+//   }
+// });
+
 app.get("/search", async (req, res) => {
   const { q } = req.query;
 
-  // 1) खाली query तो खाली रिज़ल्ट
   if (!q || q.trim() === "") return res.json({ products: [] });
 
-  // 2) regex बना लें (case‑insensitive + special‑char escape)
+  // 🔹 Split query into words
   const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const r = new RegExp(escapeRegex(q.trim()), "i");
+  const words = q.trim().split(/\s+/);
+  const regexes = words.map((w) => new RegExp(escapeRegex(w), "i"));
 
-  // 3) MongoDB Atlas Search + projection
-  // const pipeline = [
-  //   {
-  //     $search: {
-  //       index: "lewkoutsearch",      // ⬅️ अपना सर्च इंडेक्स
-  //       compound: {
-  //         should: [
-  //           {
-  //             text: {
-  //               query: q,
-  //               path: [
-  //                 "productdetails.tag",
-  //                 "productdetails.title",
-  //                 "productdetails.description",
-  //                  "productdetails.occasion",
-  //                 "productdetails.neckline",
-  //                 "productdetails.material",
-  //                 "productdetails.printtype",
-  //                 "productdetails.styletype",
-  //                 "productdetails.colors.title",
-  //                 "productdetails.colors.tag",
-  //                 "productdetails.colors.description",
-  //                 "productdetails.colors.occasion",
-  //                 "productdetails.colors.neckline",
-  //                 "productdetails.colors.material",
-  //                 "productdetails.colors.printtype",
-  //                 "productdetails.colors.styletype",
-
-
-
-                  
-
-
-                  
-                  
-  //               ],
-  //               fuzzy: { maxEdits: 2 }
-  //             }
-  //           }
-  //         ]
-  //       }
-  //     }
-  //   },
-  //   {
-  //     $project: {
-  //       category: 1,
-  //       image: 1,
-  //       productdetails: {
-  //         $filter: {
-  //           input: "$productdetails",
-  //           as: "pd",
-  //           cond: {
-  //             $or: [
-  //               { $regexMatch: { input: "$$pd.title", regex: r } },
-  //               { $regexMatch: { input: "$$pd.tag", regex: r } },
-  //               { $regexMatch: { input: "$$pd.description", regex: r } },
-  //                 { $regexMatch: { input: "$$pd.occasion", regex: r } },
-  //                  { $regexMatch: { input: "$$pd.neckline", regex: r } },
-  //                   { $regexMatch: { input: "$$pd.material", regex: r } },
-  //                    { $regexMatch: { input: "$$pd.printtype", regex: r } },
-  //                    { $regexMatch: { input: "$$pd.styletype", regex: r } },
-  //               {
-  //                 $gt: [
-  //                   {
-  //                     $size: {
-  //                       $filter: {
-  //                         input: "$$pd.colors",
-  //                         as: "c",
-  //                         cond: {
-  //                           $or: [
-  //                             { $regexMatch: { input: "$$c.title", regex: r } },
-  //                             { $regexMatch: { input: "$$c.tag", regex: r } },
-  //                             { $regexMatch: { input: "$$c.description", regex: r } },
-  //                             { $regexMatch: { input: "$$pd.occasion", regex: r } },
-  //                  { $regexMatch: { input: "$$pd.neckline", regex: r } },
-  //                   { $regexMatch: { input: "$$pd.material", regex: r } },
-  //                    { $regexMatch: { input: "$$pd.printtype", regex: r } },
-  //                    { $regexMatch: { input: "$$pd.styletype", regex: r } }
-  //                           ]
-  //                         }
-  //                       }
-  //                     }
-  //                   },
-  //                   0
-  //                 ]
-  //               }
-  //             ]
-  //           }
-  //         }
-  //       }
-  //     }
-  //   },
-  //   { $limit: 10 }
-  // ];
-const pipeline = [
-  {
-    $search: {
-      index: "lewkoutsearch",
-      compound: {
-        should: [
-          {
-            text: {
-              query: q,
-              path: [
-                "productdetails.tag",
-                "productdetails.title",
-                "productdetails.description",
-                "productdetails.occasion",
-                "productdetails.neckline",
-                "productdetails.material",
-                "productdetails.printtype",
-                "productdetails.styletype",
-                "productdetails.colors.title",
-                "productdetails.colors.tag",
-                "productdetails.colors.description",
-                "productdetails.colors.occasion",
-                "productdetails.colors.neckline",
-                "productdetails.colors.material",
-                "productdetails.colors.printtype",
-                "productdetails.colors.styletype"
-              ],
-              fuzzy: { maxEdits: 2 }
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    $project: {
-      category: 1,
-      image: 1,
-      productdetails: {
-        $filter: {
-          input: "$productdetails",
-          as: "pd",
-          cond: {
-            $or: [
-              { $regexMatch: { input: "$$pd.title", regex: r } },
-              { $regexMatch: { input: "$$pd.tag", regex: r } },
-              { $regexMatch: { input: "$$pd.description", regex: r } },
-              { $regexMatch: { input: "$$pd.occasion", regex: r } },
-              { $regexMatch: { input: "$$pd.neckline", regex: r } },
-              { $regexMatch: { input: "$$pd.material", regex: r } },
-              { $regexMatch: { input: "$$pd.printtype", regex: r } },
-              { $regexMatch: { input: "$$pd.styletype", regex: r } },
-              {
-                $gt: [
-                  {
-                    $size: {
-                      $filter: {
-                        input: "$$pd.colors",
-                        as: "c",
-                        cond: {
-                          $or: [
-                            { $regexMatch: { input: "$$c.title", regex: r } },
-                            { $regexMatch: { input: "$$c.tag", regex: r } },
-                            { $regexMatch: { input: "$$c.description", regex: r } },
-                            { $regexMatch: { input: "$$c.occasion", regex: r } },
-                            { $regexMatch: { input: "$$c.neckline", regex: r } },
-                            { $regexMatch: { input: "$$c.material", regex: r } },
-                            { $regexMatch: { input: "$$c.printtype", regex: r } },
-                            { $regexMatch: { input: "$$c.styletype", regex: r } }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  0
+  // 🔹 function to build OR conditions for a single word
+  const buildWordConditions = (r) => ([
+    { $regexMatch: { input: "$$pd.title", regex: r } },
+    { $regexMatch: { input: "$$pd.tag", regex: r } },
+    { $regexMatch: { input: "$$pd.description", regex: r } },
+    { $regexMatch: { input: "$$pd.occasion", regex: r } },
+    { $regexMatch: { input: "$$pd.neckline", regex: r } },
+    { $regexMatch: { input: "$$pd.material", regex: r } },
+    { $regexMatch: { input: "$$pd.printtype", regex: r } },
+    { $regexMatch: { input: "$$pd.styletype", regex: r } },
+    {
+      $gt: [
+        {
+          $size: {
+            $filter: {
+              input: "$$pd.colors",
+              as: "c",
+              cond: {
+                $or: [
+                  { $regexMatch: { input: "$$c.title", regex: r } },
+                  { $regexMatch: { input: "$$c.tag", regex: r } },
+                  { $regexMatch: { input: "$$c.description", regex: r } },
+                  { $regexMatch: { input: "$$c.occasion", regex: r } },
+                  { $regexMatch: { input: "$$c.neckline", regex: r } },
+                  { $regexMatch: { input: "$$c.material", regex: r } },
+                  { $regexMatch: { input: "$$c.printtype", regex: r } },
+                  { $regexMatch: { input: "$$c.styletype", regex: r } }
                 ]
               }
-            ]
+            }
+          }
+        },
+        0
+      ]
+    }
+  ]);
+
+  // 🔹 Single word => OR, Multiple words => AND
+  let regexConditions;
+  if (regexes.length === 1) {
+    regexConditions = { $or: buildWordConditions(regexes[0]) };
+  } else {
+    regexConditions = { $and: regexes.map((r) => ({ $or: buildWordConditions(r) })) };
+  }
+
+  const pipeline = [
+    {
+      $search: {
+        index: "lewkoutsearch",
+        compound: {
+          should: [
+            {
+              text: {
+                query: q,
+                path: [
+                  "productdetails.tag",
+                  "productdetails.title",
+                  "productdetails.description",
+                  "productdetails.occasion",
+                  "productdetails.neckline",
+                  "productdetails.material",
+                  "productdetails.printtype",
+                  "productdetails.styletype",
+                  "productdetails.colors.title",
+                  "productdetails.colors.tag",
+                  "productdetails.colors.description",
+                  "productdetails.colors.occasion",
+                  "productdetails.colors.neckline",
+                  "productdetails.colors.material",
+                  "productdetails.colors.printtype",
+                  "productdetails.colors.styletype"
+                ],
+                fuzzy: { maxEdits: 2 }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      $project: {
+        category: 1,
+        image: 1,
+        productdetails: {
+          $filter: {
+            input: "$productdetails",
+            as: "pd",
+            cond: regexConditions
           }
         }
       }
-    }
-  },
-  { $limit: 10 }
-];
+    },
+    { $limit: 20 }
+  ];
 
   try {
-    // 4) सर्च चलाइए
     const products = await productsmodel.aggregate(pipeline);
-
-    // 5) bulk‑update ops तैयार कीजिए
-    const bulkOps = products.map((doc) => ({
-      updateOne: {
-        filter: { _id: doc._id },
-        /** MongoDB 4.2+ pipeline‑update */
-        update: [
-          {
-            $set: {
-              productdetails: {
-                $map: {
-                  input: "$productdetails",
-                  as: "pd",
-                  in: {
-                    $mergeObjects: [
-                      "$$pd",
-                      {
-                        /** ---------- productdetails.searchcount ---------- */
-                        searchcount: {
-                          $cond: [
-                            {
-                              $or: [
-                                { $regexMatch: { input: "$$pd.title", regex: r } },
-                                { $regexMatch: { input: "$$pd.tag", regex: r } },
-                                { $regexMatch: { input: "$$pd.description", regex: r } }
-                              ]
-                            },
-                            { $add: ["$$pd.searchcount", 1] },
-                            "$$pd.searchcount"
-                          ]
-                        },
-                        /** ---------- colors[].searchcount ---------- */
-                        colors: {
-                          $map: {
-                            input: "$$pd.colors",
-                            as: "c",
-                            in: {
-                              $mergeObjects: [
-                                "$$c",
-                                {
-                                  searchcount: {
-                                    $cond: [
-                                      {
-                                        $or: [
-                                          { $regexMatch: { input: "$$c.title", regex: r } },
-                                          { $regexMatch: { input: "$$c.tag", regex: r } },
-                                          { $regexMatch: { input: "$$c.description", regex: r } }
-                                        ]
-                                      },
-                                      { $add: ["$$c.searchcount", 1] },
-                                      "$$c.searchcount"
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        ]
-      }
-    }));
-
-    // 6) bulkWrite फ़ायर कीजिए (अगर कुछ मिला)
-    if (bulkOps.length) await productsmodel.bulkWrite(bulkOps);
-
-    // 7) response
     res.json({ products });
   } catch (err) {
     console.error("Search Error:", err);
     res.status(500).json({ error: "Search failed" });
   }
 });
-
-
 
 
 
@@ -3883,16 +4013,26 @@ const pipeline = [
 app.get("/cart/recommendations/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-
+console.log("jaja",userId)
     const cart = await addtocart.find({ userId }).lean();
-
+console.log("")
     if (!cart || cart.length === 0) {
       return res.json({ products: [] });
     }
 
     // ✅ Step 1: Get all productIds from cart
-    const cartIds = cart.map((item) => (item.productId));
-    console.log("🛒 Cart IDs:", cartIds);
+    // const cartIds = cart.map((item) => (item.productId));
+    // console.log("🛒 Cart IDs:", cartIds);
+    const { Types } = require("mongoose");
+
+// Step 1: Cart IDs ko ObjectId banado
+const cartIds = cart.map((item) => {
+  try {
+    return Types.ObjectId(item.productId);
+  } catch (err) {
+    return null;
+  }
+}).filter(Boolean);
 
     // ✅ Step 2: Match via productdetails._id and productdetails.colors._id
     const cartMeta = await productsmodel.aggregate([
@@ -3951,7 +4091,7 @@ app.get("/cart/recommendations/:userId", async (req, res) => {
 }
 
     ]);
-
+console.log("lop",suggestions)
     res.json({ products: suggestions });
   } catch (err) {
     console.error("🔥 Rec Error:", err);

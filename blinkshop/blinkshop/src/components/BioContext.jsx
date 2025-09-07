@@ -1008,7 +1008,7 @@ console.log("sara add mil jaye",addresid,action,user,addr)
     //   console.log("Previous Address State", prev); // Debug check
     //   return prev.filter(a => a._id !== addresid);
     // });
-    showPopup("Adress Delete")
+    showPopup("Adress Deleted")
   }
   else{
     console.log("issue")
@@ -1419,25 +1419,49 @@ const fetchDistance = async (deleveryaddress) => {
   }
 };
 
+// const getRecommendationsFromCart = async () => {
+//   console.log("call ho rha hai na loduu")
+
+//   try {
+//    setIsLoading(true)
+//     const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails?._id}`);
+      
+//     const data = await res.json();
+//     console.log("mixx cart",data)
+//     setRecommendations(data.products || []);
+//   } catch (error) {
+//     console.error("Recommendation fetch error", error);
+//     setRecommendations([]);
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
+// };
 const getRecommendationsFromCart = async () => {
-  console.log("call ho rha hai na loduu")
+  if (!userDetails?._id) {
+    console.log("❌ User not logged in or userId missing");
+    return;
+  }
 
   try {
-   setIsLoading(true)
-console.log("user tokening",user?.accessToken)
-    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails?._id}`);
-
+    setIsLoading(true);
+    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails._id}`);
     const data = await res.json();
-    console.log("mixx cart",data)
+    console.log("mixx cart", data);
     setRecommendations(data.products || []);
   } catch (error) {
     console.error("Recommendation fetch error", error);
     setRecommendations([]);
-  }
-  finally{
-    setIsLoading(false)
+  } finally {
+    setIsLoading(false);
   }
 };
+
+useEffect(() => {
+  if (userDetails?._id) {
+    getRecommendationsFromCart();
+  }
+}, [userDetails]);
 
 // somewhere in BioContext or useEffect in component
 const fetchTopSearched = async () => {

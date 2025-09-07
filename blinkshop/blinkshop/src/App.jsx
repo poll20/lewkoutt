@@ -122,6 +122,7 @@ import OrderConfirmation from "./components/OrderConfimation";
 // import ComingSoon from "./components/ComingSoon";
 import { OrderAlertProvider } from "./components/dashboardforadmin/OrderAlertProvider";
 import PrivacyPolicy from "./components/PrivicyPolicy";
+// import CitySelection from "./components/CitySelection";
 // const PrivacyPolicy = React.lazy(() => import("./components/PrivicyPolicy"));
 
 export default function App() {
@@ -293,6 +294,9 @@ function Layout({ showPopup }) {
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/mood" element={<Moodcom/>} />
+            {/* <Route path="/cityselection" element={<CitySelection/>} /> */}
+
+
             <Route path="/maps" element={<MapWithAutocompelete/>} />
             <Route path="/privicy" element={<PrivacyPolicy email="" phone=""/>}/> 
            

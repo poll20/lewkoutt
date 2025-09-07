@@ -68,7 +68,7 @@ body {
   height: 15px;
   border:1px solid black;
   border-radius:0; /* Make it rounded if needed */
-  background-color: #fff;
+  background-color:white;
   cursor: pointer;
   outline: none;
   transition: all 0.3s ease;
@@ -76,7 +76,7 @@ body {
 
 /* Add styles for the checked state */
 .custom-checkbox input[type="checkbox"]:checked {
-  background-color: #ffffff;
+  background-color:black;
   border-color: #000000;
   position: relative;
 }

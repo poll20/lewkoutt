@@ -23,6 +23,9 @@ const AddToCart = () => {
   const [popupProductId, setPopupProductId] = useState(null);
   const [wowalaprd, setwowalaprd] = useState(null);
  const[totalprice,settotalprice]=useState(0)
+ const[discounttotal,settotaldiscountprice]=useState(0)
+
+  
  const [isChecked, setIsChecked] = useState(false);
  const[cprice,setcprice]=useState(0)
   
@@ -59,9 +62,13 @@ const AddToCart = () => {
 
 
 useEffect(() => {
-  const total = choosebuy.reduce((acc, item) => acc + ( item.discountprice || item.bundle[0].bundletotalamount ), 0);
+  const total = choosebuy.reduce((acc, item) => acc + ( item.price || item.bundle[0].bundletotalamount ), 0);
+  const discounttotal = choosebuy.reduce((acc, item) => acc + ( item.discountprice || item.bundle[0].bundletotalamount ), 0);
+
   const ct=choosebuy.reduce((acc,item)=>acc +( item.price || item.bundle[0].bundletotalamount ) ,0)
   settotalprice(total);
+  settotaldiscountprice(discounttotal);
+
   setcprice(ct);
 }, [choosebuy]);
 
@@ -316,7 +323,7 @@ if(!addtocartdatas){
   }}>
           <div style={{display:"flex",alignItems:"center",flexDirection:"column"}}>
             <div>
-         <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{totalprice}</span>
+         <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{discounttotal}</span>
          <span className="original-price">₹{cprice}</span>
          </div>
          <span style={{fontSize:"14px"}} onClick={(()=>(setpopupbreakup(!popupbreakup)))}>View breakup</span>
@@ -348,36 +355,72 @@ if(!addtocartdatas){
       <p style={styles.orderDetails}>Order Details {choosebuy?.length==1?(<span>{choosebuy?.length} Item</span>):(<span>{choosebuy?.length} Items</span>)}</p>
 
       <div style={styles.row}>
-        <span>MRP</span>
+        <span>Total MRP</span>
         <span>{totalprice}</span>
+        
+      </div>
+      <div style={styles.row}>
+        <span>Discount on MRP</span>
+        <span style={{color:"green",fontWeight:"bold"}}>-{totalprice-discounttotal}</span>
+        
+      </div>
+        <div style={styles.row}>
+        <span>Coupon Discount</span>
+        <span style={{color:"green",fontWeight:"bold"}}>-{totalprice-discounttotal}</span>
+        
       </div>
 
-      <div style={styles.row}>
+      {/* <div style={styles.row}>
         <div>
           <span>Coupon Discount</span>
           <div style={styles.couponCode}>(EXTRA250)</div>
         </div>
         <span style={styles.greenText}>-₹250.0</span>
-      </div>
+      </div> */}
 
       <div style={styles.row}>
         <span>Shipping Fee</span>
-        <div>
+        {/* <div>
           <span style={styles.greenText}>Free</span>
-          <span style={styles.strike}> ₹99.0</span>
-        </div>
+          
+          <span style={styles.strike}> ₹49.0</span>
+        </div> */}
+        <div>
+  {discounttotal >= 799 ? (
+    <>
+      <span style={{ color: "green", fontWeight: "600" }}>Free</span>
+      <span
+        style={{
+          textDecoration: "line-through",
+          color: "gray",
+          marginLeft: "8px",
+        }}
+      >
+        ₹49.0
+      </span>
+    </>
+  ) : (
+    <span style={{ fontWeight: "600", color: "black" }}>₹49.0</span>
+  )}
+</div>
+
       </div>
 
       <hr />
 
       <div style={{ ...styles.row, fontWeight: 'bold' }}>
         <span>Payable amount</span>
-        <span>{totalprice}</span>
-      </div>
+        {/* <span>{discounttotal}</span> */}
+        <span>
+  {discounttotal < 799 ? `${discounttotal + 49}` : discounttotal}
+</span>
+        
 
+      </div>
+{/* 
       <div style={styles.successBox}>
         <span role="img" aria-label="celebrate">🎉</span> Yay! you saved ₹250.0 on final amount
-      </div>
+      </div> */}
     </div>
        </div>
 
@@ -506,8 +549,8 @@ if(!addtocartdatas){
       msOverflowStyle: "none", // IE/Edge
     }}
   >
-    {recommendations.map((product, index) =>
-      product.productdetails?.map((detail, i) =>
+    {recommendations?.map((product, index) =>
+      product?.productdetails?.map((detail, i) =>
         detail.colors?.map((color, j) => (
           <div
             key={color._id || `${index}-${i}-${j}`}

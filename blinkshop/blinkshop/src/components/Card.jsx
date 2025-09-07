@@ -151,13 +151,23 @@ const Card = (props) => {
  }
  console.log("sled",selectedSizes)
       // Filter by price range
+      // if (pricerangemin || pricerangemax) {
+      //   filteredProducts = filteredProducts.filter(
+      //     (product) =>
+      //       product.discountprice >= (pricerangemin || 0) &&
+      //       product.discountprice <= (pricerangemax || Infinity)
+            
+      //   );
+      // }
       if (pricerangemin || pricerangemax) {
-        filteredProducts = filteredProducts.filter(
-          (product) =>
-            product.price >= (pricerangemin || 0) &&
-            product.price <= (pricerangemax || Infinity)
-        );
-      }
+  filteredProducts = filteredProducts.filter((product) =>
+    (
+      console.log("gotty",product.discountprice),
+      product.discountprice >= (pricerangemin || 0) &&
+      product.discountprice <= (pricerangemax || Infinity)
+    ) );
+}
+
     
     //  Filter by sizes
       if (sizes.length > 0) {
@@ -210,11 +220,11 @@ const Card = (props) => {
       // Apply sorting
       switch (selectedSortOption) {
         case "Price: Low to High":
-          filteredProducts.sort((a, b) => a.price - b.price);
+          filteredProducts.sort((a, b) => a.discountprice - b.discountprice);
           console.log("lh",filteredProducts)
           break;
         case "Price: High to Low":
-          filteredProducts.sort((a, b) => b.price - a.price);
+          filteredProducts.sort((a, b) => b.discountprice - a.discountprice);
           break;
         case "New Arrival":
           // filteredProducts.sort(
@@ -252,6 +262,7 @@ const Card = (props) => {
     console.log("rnadi",filteredProducts)
       return filteredProducts;
     };
+
 
 
   
@@ -561,7 +572,7 @@ if(searchvalue){
         {/* Details Section */}
         <div className="product-details" style={{backgroundColor:"white"}}>
           {/* fontFamily: "'Inter', sans-serif */}
-          <p className="product-title" style={{fontFamily: "'Oswald', sans-serif",fontWeight:"400",fontSize:"15px"}}>{product.description?.length>19?(product.description?.slice(0,18)+`...`):(product.description)}</p>
+          <p className="product-title" style={{fontFamily: "'Oswald', sans-serif",fontWeight:"400",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,20)+`...`):(product.description)}</p>
           <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.price}</span>

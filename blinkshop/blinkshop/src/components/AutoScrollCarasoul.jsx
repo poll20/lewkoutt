@@ -122,7 +122,7 @@ const AutoScrollCarasoul = ({ data = [], height = "180px" }) => {
       <div ref={scrollRef} style={{ ...styles.scrollContainer}}>
         {loopedData.map((item, idx) => (
           <div key={`${item._id}-${idx}`} style={{ ...styles.card}}>
-            <NavLink className='navlink' to={`/productdescription/${item._id}`}>
+            <NavLink className='navlink' to={`/productdescription/${item._id}/${item.color}`}>
             <img
               src={item.image}
               alt={`product-${item._id}`}
