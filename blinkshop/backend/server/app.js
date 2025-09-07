@@ -66,7 +66,7 @@ const products = [
 
 
 // const cors = require('cors');
-app.use(cors());//te localhost m h
+// app.use(cors());//te localhost m h
 app.use(cors({
     origin: [
     "https://www.lewkout.com",

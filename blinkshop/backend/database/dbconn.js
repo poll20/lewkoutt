@@ -20,7 +20,7 @@ const connectDB = async () => {
 //   { arrayFilters: [{ "pd.searchcount": null }] }
 // );
 
-// // colors[].searchcount == null
+// // colors[].searchcount == null null is 
 // await productsmodel.updateMany(
 //   { "productdetails.colors.searchcount": null },
 //   { $set: { "productdetails.$[].colors.$[c].searchcount": 0 } },
