@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./AddressList.css";
 import { useAuth } from "./AuthContext";
-import { HiH1 } from "react-icons/hi2";
+
 import { useBio } from "./BioContext";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { use } from "react";
@@ -380,7 +380,7 @@ useEffect(() => {
         )}
         {
           userprf?.address?.length<=0?( <NavLink to='/' className='navlink'>
-            <button className="back-to-home" style={{position:"absolute",bottom:"80px",left:"140px"}}>Back to home</button>
+            <button className="back-to-home" style={{position:"absolute",bottom:"80px",width:"auto"}}>Back to home</button>
             </NavLink>):('')
         }
         {/* <NavLink to='/' className='navlink'>

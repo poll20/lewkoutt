@@ -1,6 +1,5 @@
 import React from "react";
 import "./AboutUs.css";
-import aboutImage from "./image/img3.jpg"; // Replace with your image path
 import { NavLink } from "react-router-dom";
 
 const AboutUs = () => {

@@ -2,21 +2,19 @@ import React from 'react';
 import { useState,useEffect } from 'react';
 
 import './CardLayout.css';
-import ImageSlider from './ImageSlider';
-import CardSlider from './HorizontalScrollContainer';
-import HorizontalScrollContainer from './HorizontalScrollContainer';
-import ProductDescription from './ProductDescription';
-import { CiShoppingCart } from "react-icons/ci";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import img1 from "./image/img1.jpg"
-import img2 from "./image/img2.webp"
-import img3 from "./image/img3.jpg"
-import img4 from "./image/img4.jpeg"  
+// import ImageSlider from './ImageSlider';
+// import CardSlider from './HorizontalScrollContainer';
+// import HorizontalScrollContainer from './HorizontalScrollContainer';
+// import ProductDescription from './ProductDescription';
+// import { CiShoppingCart } from "react-icons/ci";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faHeart } from "@fortawesome/free-solid-svg-icons";
+
+ 
 import { useBio } from './BioContext';
 import { NavLink } from 'react-router-dom';
-import Card from './Card';
-import CategoriesLayout from './CategoriesLayout';
+// import Card from './Card';
+// import CategoriesLayout from './CategoriesLayout';
 import Cardforall from './Cardforall';
 
 
@@ -43,48 +41,7 @@ const CardLayout = () => {
     console.log('No products found');
   }
   const limitedProductData = filteredProducts.slice(0, 7); // 👈 limit to 7 items
-  const cards = [
-    {
-      id: 1,
-      title: 'Card 1',
-      description: 'This is the description for card 1.',
-      image: img1, 
-      category:"top"
-    },
-    {
-      id: 2,
-      title: 'Card 2',
-      description: 'This is the description for card 2.',
-      image: img1,
-      category:"top"
-    },
-    {
-      id: 3,
-      title: 'Card 3',
-      description: 'This is the description for card 3.',
-      image: img1,
-      category:"bottom"
-    },
-    {
-      id: 4,
-      title: 'Card 4',
-      description: 'This is the description for card 4.',
-      image: img1,
-      category:"bottom"
-    },
-    {
-      id: 5,
-      title: 'Card 5',
-      description: 'This is the description for card 5.',
-      image: img1,
-    },
-    {
-      id: 6,
-      title: 'Card 6',
-      description: 'This is the description for card 6.',
-      image: img1,
-    },
-  ];
+  
 
  
   // useEffect(() => {

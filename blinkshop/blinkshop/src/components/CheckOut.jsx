@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import "./CheckOut.css";
 import { useBio } from "./BioContext";
-import img1 from "./image/img3.jpg"
+
 import { useDashboard } from "./dashboardforadmin/DashboardContext";
 import { IoIosArrowForward } from "react-icons/io";
 import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";

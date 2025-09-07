@@ -11,7 +11,7 @@ import { LoadingProvider } from './components/LoadingContext.jsx';
 import { FirebaseAuthProvider } from './components/FirebaseContext.jsx';
 import { UserProvider } from './components/UserContext.jsx';
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
    <LoadingProvider>
    <FirebaseAuthProvider>
    <UserProvider>
@@ -26,5 +26,5 @@ createRoot(document.getElementById('root')).render(
     </LoadingProvider>
     
   
-  </StrictMode>
+  // </StrictMode>
 )

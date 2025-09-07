@@ -1,12 +1,11 @@
 import React,{useState} from 'react'
-import img2 from "./image/img3.jpg";
 import "./Cardforall.css"
 import { NavLink } from 'react-router-dom';
 // import { GoHeart } from "react-icons/go";
-import { GoHeart } from "react-icons/go";
+// import { GoHeart } from "react-icons/go";
 import { useBio } from './BioContext';
 import HeartButton from './HeartButton';
-import Toast from './Toast';
+// import Toast from './Toast';
 
 export default function Cardforall(props) {
 

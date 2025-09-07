@@ -1,10 +1,5 @@
 import React from "react";
 import "./CategoriesLayout.css";
-import img1 from "./image/img1.jpg"
-import newme1 from "./image/newme.jpg"
-import newme2 from "./image/newme2.jpg"
-import newme3 from "./image/newme3.jpg"
-import newme4 from "./image/newme4.jpg"
 import { NavLink } from "react-router-dom";
 import Cardforall from "./Cardforall";
 import { useBio } from "./BioContext";

@@ -51,7 +51,9 @@ const GlobalLoader = () => {
         zIndex: 9999,
         width: "100vw",
         height: "100vh",
-        backgroundColor: "white", // ✅ poora white screen
+        background: "transparent",
+
+        // backgroundColor: "white", // ✅ poora white screen
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

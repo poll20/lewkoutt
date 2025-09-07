@@ -75,7 +75,7 @@ import { useBio } from "./BioContext";
 
 // ✅ Lazy imports
 const Carousel = React.lazy(() => import("./Carasoul"));
-const CustomerLove = React.lazy(() => import("./CustomerLove"));
+// const CustomerLove = React.lazy(() => import("./CustomerLove"));
 const CategoriesLayout = React.lazy(() => import("./CategoriesLayout"));
 const OfferBanner = React.lazy(() => import("./OfferBanner"));
 const OtpLogin = React.lazy(() => import("./OtpLogin"));
@@ -95,7 +95,7 @@ export default function Home() {
         <OfferBanner />
         <Carousel images={productdata} />
         <CategoriesLayout />
-        <CustomerLove />
+        {/* <CustomerLove /> */}
 
         {showloginpage && (
           <SlideUpModal

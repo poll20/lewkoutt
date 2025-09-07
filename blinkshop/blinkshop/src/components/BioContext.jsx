@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect ,useRef} from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
-import img1 from "./image/img1.jpg"
+
 import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
@@ -82,44 +82,7 @@ console.log("myfil",filters)
 const backendURL = `${apiUrl}:3000`;
 // const notify = () => toast("Plese Login For Add Items In Wishlist");
  const itemsPerPage = 10;
-  const cards = [
-    {
-      id:1,
-      title: 'Card 1',
-      description: 'This is the description for card 1.',
-      image: img1,
-    },
-    {
-      id:2,
-      title: 'Card 2',
-      description: 'This is the description for card 2.',
-      image: img1,
-    },
-    {
-      id:3,
-      title: 'Card 3',
-      description: 'This is the description for card 3.',
-      image: img1,
-    },
-    {
-      id:4,
-      title: 'Card 4',
-      description: 'This is the description for card 4.',
-      image: img1,
-    },
-    {
-      id:5,
-      title: 'Card 5',
-      description: 'This is the description for card 5.',
-      image: img1,
-    },
-    {
-      id: 6,
-      title: 'Card 6',
-      description: 'This is the description for card 6.',
-      image: img1,
-    },
-  ];
+ 
   
   let allproductdata=productdata.map((e)=>(e.productdetails)).flat()
   // allproductdata.map((e)=>{

@@ -23,7 +23,7 @@ import { useBio } from './BioContext';
 import { useFirebaseAuth } from './FirebaseContext';
 // import VibeSticker from './VibeSticker';
 // import LewkoutLogo from './LewkoutLogo';
-import lewkoutlogo from "../components/image/lewklogo.png"
+import lewkoutlogo from "../components/image/lewklogo.webp"
 const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()

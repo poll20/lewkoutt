@@ -63,8 +63,8 @@
 
 import React, { useState, useMemo } from "react";
 import "./CustomerLove.css";
-import img1 from "./image/img1.jpg";
-
+// import img2 from "./image/img2.webp";
+import lewklogo from "./image/lewklogo.webp"
 const CustomerLove = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsPerPage = 3; // responsive ke liye prop banaya jaa sakta hai
@@ -74,7 +74,7 @@ const CustomerLove = () => {
     () =>
       Array.from({ length: 9 }, (_, i) => ({
         id: i + 1,
-        image: img1,
+        image: lewklogo,
         description: `Description for Card ${i + 1}`,
       })),
     []

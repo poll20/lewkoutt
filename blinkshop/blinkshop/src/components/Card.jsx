@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 
   import "./Card.css";
   import { NavLink, useParams,useSearchParams  } from "react-router-dom";
-  import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+  // import { FaChevronDown, FaChevronUp } from "react-icons/fa";
   import { useBio } from "./BioContext";
-  import img1 from "./image/img1.jpg";
-  import img2 from "./image/img3.jpg";
   import { useMemo } from "react";
   import { IoIosArrowDown } from "react-icons/io";
   import { RxCross1 } from "react-icons/rx";
@@ -182,9 +180,11 @@ const Card = (props) => {
     
       // Filter by color
       if (color.length > 0) {
-        filteredProducts = filteredProducts.filter((product) =>
-          color.includes(product.defaultColor)
+        console.log("filterpp",filteredProducts)
+        filteredProducts = filteredProducts?.filter((product) =>
+          color?.includes(product.defaultColor.toLowerCase())
         );
+        console.log("coloring",color,filteredProducts)
       }
     
       // Filter by categories
@@ -576,7 +576,7 @@ if(searchvalue){
           <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.price}</span>
-            <span className="discount">{product?.discount}% off</span>
+            <span className="discount"style={{ fontFamily: "'Oswald', sans-serif" }}>{product?.discount}% off</span>
             
           </div>
           

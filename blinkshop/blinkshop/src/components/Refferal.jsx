@@ -27,7 +27,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
-import img from "./image/rae.avif"
+// import img from "./image/rae.avif"
 // import { NavLink } from 'react-router-dom';
 import { useFirebaseAuth } from './FirebaseContext';
 import { useBio } from './BioContext';
@@ -92,7 +92,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
 
       {/* Banner */}
       <div style={{ width: '100%', marginBottom: '16px', borderRadius: '8px', overflow: 'hidden' }}>
-        <img
+        {/* <img
           src={img}
           alt="Refer Banner"
           style={{
@@ -102,7 +102,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
             borderRadius: '8px',
           }}
           loading="lazy"
-        />
+        /> */}
       </div>
 
       {/* Earnings Overview */}
