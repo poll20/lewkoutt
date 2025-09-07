@@ -292,7 +292,7 @@ if(!addtocartdatas){
                   : order.description}
               </h3>
               <p className="order-meta-addtocart">
-                Size: {order.size} | Qty: {order.qty} | {order.discountprice}rs.
+                Size: {order?.size} | Qty: {order?.qty} | {order?.discountprice}rs.
               </p>
               <p className="order-delivery-addtocart">
                 <span>📦 Delivery in 60 min</span>
@@ -337,9 +337,9 @@ if(!addtocartdatas){
        
        <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),flexDirection:"column", alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>
        <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
-       <span style={{fontWeight:"bold",fontSize:"large"}}>Would you like ti move this item to Wishlist?</span>
+       <span style={{fontWeight:"bold",fontSize:"17px"}}>Would you like to move this item to Wishlist?</span>
        <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-around",marginTop:"7px"}}>
-        <button className="buy-buttonss" style={{width:"140px" ,background:"black",color:"white"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Yes move this item</button>
+        <button className="buy-buttonss" style={{width:"140px" ,background:"black",color:"white"}} onClick={() => {addtowishlistonly(popupProductId,wowalaprd);closePopup();}}>Yes</button>
 
          <button className="buy-buttonss" style={{width:"140px",background:"white",color:"black"}} onClick={() => {removefromaddtocart(popupProductId);closePopup();}}>Remove</button> 
          </div>

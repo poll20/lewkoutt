@@ -65,8 +65,8 @@ const products = [
 // Twilio credentials from .env
 
 
-const cors = require('cors');
-// app.use(cors());//te localhost m h
+// const cors = require('cors');
+app.use(cors());//te localhost m h
 app.use(cors({
     origin: [
     "https://www.lewkout.com",
