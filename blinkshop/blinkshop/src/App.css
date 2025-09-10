@@ -1,28 +1,31 @@
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 
 *{
   user-select: none;
   -webkit-user-select: none;
+}
+* {
+  box-sizing: border-box;
 }
 /* Full page layout plzzz sab kuch fix ho jaye kaash */
 html, body, #root {
         height: 100%;
         margin: 0;
         padding: 0;
-        /* overflow-x: hidden; */
-        /* font-family: 'Courier New', Courier, monospace;
-         */
-         /* font-family: 'Playfair Display', serif; */
+        
         background-color:white;
       }
-      /* div{
-        background-color: white;
-      } */
+   
       h1{
         font-family: 'Playfair Display', serif;
       }
       button{
         font-family: 'Montserrat', sans-serif;
-        /* background-color:#f98866; */
+        
       }
       #popup-wrapper {
         position: fixed;
@@ -41,7 +44,8 @@ html, body, #root {
   background-color: white;
         display: flex;
         flex-direction: column;
-        /* min-height: 100vh;  Full height page */
+          min-height: 100vh; /* ye uncomment karke rakho */
+      
       }
       /* Content jo grow hoga */
 .contenttt {
@@ -50,13 +54,7 @@ html, body, #root {
       }
 
 
-      /* ✅ Main Content for Normal Website */
-/* .main-content {
-        flex: 1;
-        padding: 0;
-        min-height: 100vh;
-      } */
-      
+
       /* ✅ Fix for Admin Panel */
       .dashboard-container {
         border: 1px solid black;
@@ -89,11 +87,6 @@ html, body, #root {
         color: black;
 }
   
-
-/* .admin-ka-panel-main{
-  width: 100%;
-  height: 100%;
-} */
 
 /* Container for the whole admin panel */
 .admin-ka-panel-container {

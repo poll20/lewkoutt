@@ -55,11 +55,7 @@ const faqData = [
         answer:
           "Once an order is placed, it is processed immediately to ensure fast delivery. Unfortunately, modifications or cancellations are not possible after confirmation.",
       },
-      {
-        question: "What should I do if I receive the wrong product or size?",
-        answer:
-          "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free return, and you won’t have to pay shipping fees again. However, returns won't be accepted after 60 minutes.",
-      },
+     
       {
         question: "Can I place multiple orders at the same time?",
         answer:
@@ -89,12 +85,9 @@ const faqData = [
       {
         question: "What payment methods do you accept?",
         answer:
-          "We accept UPI (Google Pay, PhonePe, Paytm), debit/credit cards, net banking, and cash on delivery (COD).",
+          "We accept UPI (Google Pay, PhonePe, Paytm), debit/credit cards, net banking.",
       },
-      {
-        question: "Is there an extra charge for COD?",
-        answer: "Sorry, COD is not available right now",
-      },
+     
       {
         question: "Do you charge for shipping?",
         answer:
@@ -169,7 +162,7 @@ const faqData = [
       },
        {
         question: "When will Pan India orders be delivered?",
-        answer: "Delivery usually takes 5–7 working days, depending on courier partner and destination.",
+        answer: "The average delivery time across India is 2 to 6 working days after dispatch.Delivery times may vary depending on your location, local courier availability, and external factors.",
       },
 
       {
@@ -178,14 +171,15 @@ const faqData = [
           "Yes! You can schedule your delivery at a preferred time during checkout. Just select the time slot that works best for you.",
       },
       {
-        question: "What happens if I'm not available when the delivery arrives?",
-        answer:
-          "Since we deliver through third-party services, our delivery partner cannot wait or reattempt the delivery. If you are unavailable at the time of delivery:\n\n• The rider will try to contact you.\n• If you do not answer or cannot receive the order, it will be marked as delivered, and no refund will be provided.\n• If you think you might not be available, we recommend scheduling your delivery at a convenient time or providing an alternate contact person to receive the order.",
-      },
+  question: "What happens if I'm not available when the delivery arrives?",
+  answer: 
+    "**For Jaipur Deliveries:**\nSince we deliver through third-party services, our delivery partner cannot wait or reattempt the delivery. If you are unavailable at the time of delivery.\n\n• The rider will try to contact you.\n• If you do not answer or cannot receive the order, it will be marked as delivered, and no refund will be provided.\n• We recommend scheduling your delivery at a convenient time or providing an alternate contact person to receive the order.\n\n**For Pan India Deliveries:**\nOur courier partners usually attempt delivery more than once. If you are unavailable during the first attempt, they may try again. However:\n\n• If you still do not answer or cannot receive the order after reattempts, it will be marked as delivered, and no refund will be provided.\n• We strongly suggest tracking your shipment.",
+}
+,
       {
         question: "How can I track my order?",
         answer:
-          "Once your order is placed, you’ll receive a tracking link Whatsapp. You can check the live status of your delivery there.",
+          "You can easily track your order status directly on our website. Simply log in to your account, go to the “My Orders” section, and check the live status of your delivery there.",
       },
       {
         question: "Can I change my address after placing an order?",
@@ -221,14 +215,13 @@ const faqData = [
         "question": "Can I exchange my product instead of returning it?",
         "answer": "Currently, we do not offer exchanges. You can return the item and place a new order."
       },
-      {
-        "question": "Is there a return pickup service?",
-        "answer": "Yes, our team will arrange a pickup for eligible returns."
-      },
-      {
-        "question": "Will you return the delivery charge?",
-        "answer": "No. Delivery charges are non-refundable."
-      },
+    {
+  question: "Is there a return pickup service?",
+  answer: 
+    "Yes, our team will arrange a pickup for eligible returns.\n\nHowever, sometimes pickups may fail due to courier or delivery boy issues. In such cases, we kindly request you to self-ship the product back to our warehouse.\n\nTo appreciate your time and effort:\n• **For Returns →** We'll compensate you with ₹100 towards your shipping cost.\n\nWe truly value your patience and cooperation, and this way, we can ensure your request is processed smoothly and without delays. 💙",
+}
+,
+      
       {
         "question": "What if I miss the 60-minute return window?",
         "answer": "Unfortunately, returns cannot be processed after 60 minutes."
@@ -236,6 +229,10 @@ const faqData = [
       {
         "question": "Will I get a full refund?",
         "answer": "Once we receive and verify the returned item, you will receive a refund as per our refund policy."
+      },
+      {
+        "question": "Will I get a refund for the delivery charges if I return my order?",
+         "Answer": "Delivery charges are non-refundable for orders below ₹799. If you choose to return a product from such an order, only the product cost will be refunded. This helps us cover the standard logistics and handling expenses that occur with every shipment."
       },
       {
         "question": "How long does it take to process a refund?",
@@ -247,11 +244,11 @@ const faqData = [
       },
       {
         "question": "What should I do if I receive the wrong product or size?",
-        "answer": "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free exchange."
+        "answer": "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free Return."
       },
       {
         "question": "When can my return request be rejected?",
-        "answer":"Returns may be rejected if\n\n 1.The product tag is missing\n\n2.The product is damaged after delivery.\n\n3.The product shows signs of being worn or used."
+        "answer":"Returns may be rejected if\n\n 1.The product tag is missing\n\n 2.The product is damaged after delivery.\n\n 3.The product shows signs of being worn or used."
       }
     ]
   }

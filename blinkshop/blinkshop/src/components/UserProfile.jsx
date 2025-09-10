@@ -252,7 +252,7 @@ let navigate=useNavigate()
       <div className="profile-menu">
         <NavLink to={`/userorder`} className="menu-item navlink">
           <IoLogoDropbox/>
-          <p>Orders</p>
+          <p>My Orders</p>
           <IoIosArrowForward />
         </NavLink>
         {/* <NavLink to={`/refferal`} className="menu-item navlink">
@@ -274,6 +274,11 @@ let navigate=useNavigate()
         <NavLink className="menu-item navlink" to={'/faq'}>
           <BiHelpCircle/>
           <p>Help & Support</p>
+          <IoIosArrowForward />
+        </NavLink>
+        <NavLink className="menu-item navlink" to={'/policy'}>
+          <BiHelpCircle/>
+          <p>Privicy Policy</p>
           <IoIosArrowForward />
         </NavLink>
         {/* <NavLink className="menu-item navlink">
