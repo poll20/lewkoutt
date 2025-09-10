@@ -15,7 +15,11 @@ export default function Cardforall(props) {
   // console.log(handleClicks
 if(!wishlistdata){
   return(<p>loading...</p>)
+  // Utils file ya component ke andar ek slugify fn bna lo
+
 }
+
+
 console.log("wishlist in coa",wishlistdata)
  return (
     <>

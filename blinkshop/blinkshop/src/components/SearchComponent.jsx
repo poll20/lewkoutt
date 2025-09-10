@@ -179,7 +179,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import { LoadingProvider, useLoading } from "./LoadingContext";
 import useDebounce from "./useDeboune";
 import AutoScrollCarasoul from "./AutoScrollCarasoul";
-
+import { FaArrowLeft } from "react-icons/fa6";
 const SearchComponent = () => {
   const { bestsellingdata, productdataonlydetail, getsearchinput, catecate,fetchTopSearched,topproducts } = useBio();
   const {setIsLoading}=useLoading()
@@ -263,14 +263,17 @@ const SearchComponent = () => {
 };
   return (
     <div className="trending-container">
+      
       {/* Search Input */}
       <div className="search-barrrrr">
+      
         <input
           className="inppp"
           type="text"
           value={search}
           onChange={handleChange}
         />
+        
         {search === '' && (
           <div className="fake-placeholder">
             <Typewriter

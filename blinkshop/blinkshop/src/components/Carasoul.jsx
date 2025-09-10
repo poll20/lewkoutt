@@ -58,6 +58,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
 
   return (
     <div
+       
       className="carousel-container"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -74,7 +75,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
         }}
       />
 
-      <div className="carousel-indicators">
+      <div className="carousel-indicators" style={{margin:"auto"}}>
         {images.map((_, index) => (
           <span
             key={index}

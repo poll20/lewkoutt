@@ -103,7 +103,6 @@ import UserActivity from "./components/dashboardforadmin/UserActivity";
 // const MoodMagManager = React.lazy(() => import("./components/dashboardforadmin/MoodMsgManager"));
 // const UserActivity = React.lazy(() => import("./components/dashboardforadmin/UserActivity"));
 
-
 // import OfferBanner from "./components/OfferBanner";
 // import Coupon from "./components/dashboardforadmin/CouponForm";
 import CouponForm from "./components/dashboardforadmin/CouponForm";
@@ -132,7 +131,7 @@ export default function App() {
 
   const [popupMessage, setPopupMessage] = useState("");
   
-  const { setIsLoading } = useLoading(); // ✅ add this inside the App component
+  const { setIsLoading,isLoading } = useLoading(); // ✅ add this inside the App component
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
 // const navigate=useNavigate()
@@ -323,8 +322,18 @@ function Layout({ showPopup }) {
      
       
 
-      {!isAdminRoute && !isabout && !isref  && !mood  &&  !searchme && <div className="mainnn-contenttttttt"> <Footer /></div>}
-    
+    {/* {!isAdminRoute && !isabout && !isref  && !mood  &&  !searchme   && <div className="mainnn-contenttttttt"> <Footer /></div>} */}
+    {/* ✅ Footer ab sirf tab show hoga jab loader OFF hai */}
+      {!useLoading &&
+        !isAdminRoute &&
+        !isabout &&
+        !isref &&
+        !mood &&
+        !searchme && (
+          <div className="mainnn-contenttttttt">
+            <Footer />
+          </div>
+        )}
     
     </>
   );

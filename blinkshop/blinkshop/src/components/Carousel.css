@@ -89,6 +89,7 @@
 @media (max-width: 768px) {
   .carousel-container {
     height: 70vh; /* smaller height for mobile */
+    
   }
 
   .carousel-img {

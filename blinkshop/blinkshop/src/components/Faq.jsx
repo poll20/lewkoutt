@@ -15,18 +15,10 @@ const faqData = [
       {
         question: "How do I create an account?",
         answer:
-          "You can sign up using your mobile number, email, or Google login on our website.",
+          "You can sign up using your mobile number on our website.",
       },
-      {
-        question: "I forgot my password. How can I reset it?",
-        answer:
-          "Click on “Forgot Password” on the login page and follow the instructions to reset your password.",
-      },
-      {
-        question: "Can I update my phone number or email after signing up?",
-        answer:
-          `Yes, you can update your phone number or email from the "Profile" section in your account settings.`,
-      },
+      
+     
       {
         question: "Can I save multiple addresses in my account?",
         answer:
@@ -52,16 +44,11 @@ const faqData = [
         answer:
           "You can place an order on Lewkout by browsing our website, selecting your favorite outfit, choosing your preferred size and color, and proceeding to checkout. Once you complete the payment, your order will be confirmed.",
       },
-      {
-        question: "Do I need to create an account to place an order?",
-        answer:
-          "Yes, you need to create an account before placing an order. This helps you track your orders, save your preferences, and receive exclusive offers.",
-
-      },
+      
       {
         question: "How do I know if my order is confirmed?",
         answer:
-          "Once your order is placed successfully, you will receive a confirmation email and WhatsApp with your order details. You can also check the order status in your account.",
+          "Once your order is placed successfully, you will receive WhatsApp message with your order details. You can also check the order status in your account.",
       },
       {
         question: "Can I modify or cancel my order after placing it?",
@@ -71,7 +58,7 @@ const faqData = [
       {
         question: "What should I do if I receive the wrong product or size?",
         answer:
-          "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free exchange, and you won’t have to pay shipping fees again. However, returns or exchanges won't be accepted after 60 minutes.",
+          "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free return, and you won’t have to pay shipping fees again. However, returns won't be accepted after 60 minutes.",
       },
       {
         question: "Can I place multiple orders at the same time?",
@@ -87,7 +74,7 @@ const faqData = [
       {
         question: "How can I track my order?",
         answer:
-          `You can track your order from the "My Orders" section on our website. You will also receive tracking updates via email and SMS.`,
+          `You can track your order from the "My Orders" section on our website. You will also receive tracking updates via Whatsapp.`,
       },
       {
         question: "Can I change my delivery address after placing an order?",
@@ -106,12 +93,12 @@ const faqData = [
       },
       {
         question: "Is there an extra charge for COD?",
-        answer: "Yes, a ₹25 fee is applicable for COD orders.",
+        answer: "Sorry, COD is not available right now",
       },
       {
         question: "Do you charge for shipping?",
         answer:
-          "• Orders above ₹799: Free shipping\n• Orders below ₹799: ₹25 shipping fee",
+          "• Orders above ₹799: Free shipping\• Orders below ₹799: ₹49 shipping fee",
       },
       {
         question: "My payment failed, but the amount was deducted. What should I do?",
@@ -150,8 +137,13 @@ const faqData = [
     ],
   },
   {
-    category: "DELIVERY",
+    category: "SHIPPING AND DELIVERY",
     questions: [
+      {
+        question: "When will my order be dispatched in Jaipur?",
+        answer: "Jaipur orders are dispatched within 15–20 minutes of confirmation.",
+      },
+     
       {
         question: "Do you really deliver within 60 minutes?",
         answer: "Yes! We deliver within 60 minutes in Jaipur.",
@@ -159,7 +151,7 @@ const faqData = [
       {
         question: "Which areas in Jaipur are covered under 60-minute delivery?",
         answer:
-          "We offer 60-minute delivery in major parts of Jaipur. You can check your pin code at checkout to confirm availability.",
+          "We offer 60-minute delivery in major parts of Jaipur. You can check the 60-minute delivery at checkout to confirm availability.",
       },
       {
         question: "What if my order is not delivered within 60 minutes?",
@@ -169,8 +161,17 @@ const faqData = [
       {
         question: "Do you provide delivery outside Jaipur?",
         answer:
-          "Currently, we only deliver in Jaipur with a 60-minute guarantee. We are expanding city by city, and soon, we will offer 60-minute delivery in more cities. Stay tuned!",
+          "Yes, We deliver all over India.",
       },
+       {
+        question: "When are Pan India orders dispatched?",
+        answer: "Pan India orders are dispatched within 1–3 working days.",
+      },
+       {
+        question: "When will Pan India orders be delivered?",
+        answer: "Delivery usually takes 5–7 working days, depending on courier partner and destination.",
+      },
+
       {
         question: "Can I schedule my delivery for a later time?",
         answer:
@@ -184,7 +185,7 @@ const faqData = [
       {
         question: "How can I track my order?",
         answer:
-          "Once your order is placed, you’ll receive a tracking link via SMS or email. You can check the live status of your delivery there.",
+          "Once your order is placed, you’ll receive a tracking link Whatsapp. You can check the live status of your delivery there.",
       },
       {
         question: "Can I change my address after placing an order?",
@@ -197,8 +198,12 @@ const faqData = [
     "category": "RETURNS, EXCHANGE & REFUND",
     "questions": [
       {
-        "question": "What is the return window for my order?",
+        "question": "What is the return window for my order in Jaipur?",
         "answer": "You must request a return within 60 minutes of delivery."
+      },
+       {
+        "question": "What is the return window for Pan India orders?",
+        "answer": "You must request a return within 2 days of delivery"
       },
       {
         "question": "Why is the return window only 60 minutes?",
@@ -218,7 +223,11 @@ const faqData = [
       },
       {
         "question": "Is there a return pickup service?",
-        "answer": "Yes, our team will arrange a pickup within Jaipur for eligible returns."
+        "answer": "Yes, our team will arrange a pickup for eligible returns."
+      },
+      {
+        "question": "Will you return the delivery charge?",
+        "answer": "No. Delivery charges are non-refundable."
       },
       {
         "question": "What if I miss the 60-minute return window?",
@@ -239,6 +248,10 @@ const faqData = [
       {
         "question": "What should I do if I receive the wrong product or size?",
         "answer": "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free exchange."
+      },
+      {
+        "question": "When can my return request be rejected?",
+        "answer":"Returns may be rejected if\n\n 1.The product tag is missing\n\n2.The product is damaged after delivery.\n\n3.The product shows signs of being worn or used."
       }
     ]
   }
