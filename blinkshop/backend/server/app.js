@@ -3,7 +3,7 @@ let express=require("express")
 const helmet = require("helmet");
 let app= express()
 // security middleware
-app.use(helmet());
+// app.use(helmet());
 // const mongoose = require("mongoose");
 
 const axios = require("axios");
