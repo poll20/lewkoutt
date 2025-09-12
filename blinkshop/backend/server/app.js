@@ -1,9 +1,11 @@
 require('dotenv').config();
 let express=require("express")
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 let app= express()
+app.use(cookieParser());
 // security middleware
-// app.use(helmet());
+app.use(helmet());
 // const mongoose = require("mongoose");
 
 const axios = require("axios");
@@ -55,16 +57,16 @@ const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 
 const cors = require('cors');
 // app.use(cors());//te localhost m h
-app.use(cors({ origin: '*' }));
-// app.use(cors({
-//     origin: [
-//     "https://www.lewkout.com",
-//     "https://lewkout.netlify.app",
-//     "http://localhost:3000"
-//   ],
-//   methods: "GET,POST,PUT,PATCH,DELETE",
-//   credentials: true
-// }));//ye deploy ke baad 
+// app.use(cors({ origin: '*' }));
+app.use(cors({
+    origin: [
+    "https://www.lewkout.com",
+    "https://lewkout.netlify.app",
+    "http://localhost:3000"
+  ],
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));//ye deploy ke baad 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
