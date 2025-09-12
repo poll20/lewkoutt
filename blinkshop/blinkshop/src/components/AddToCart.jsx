@@ -10,6 +10,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import BundleProduct from './BundleProduct';
 import Cardforall from './Cardforall';
 import { color } from 'framer-motion';
+import { slugify } from './Slugify';
 
 const AddToCart = () => {
   const navigate = useNavigate();
@@ -276,7 +277,7 @@ if(!addtocartdatas){
               onChange={(e) => handlechoosebuy(order, e.target.checked)}
             />
           </div>
-          <NavLink to={`/productdescription/${order?.productid}/${order.color}`} className="navlink">
+          <NavLink to={`/productdescription/${slugify(order.title)}/${order?.productid}/${order.color}`} className="navlink">
             <div>
               <img src={order.image} alt={order.title} className="order-imagee-addtocart" loading="lazy" />
             </div>

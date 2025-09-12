@@ -180,6 +180,8 @@ import { LoadingProvider, useLoading } from "./LoadingContext";
 import useDebounce from "./useDeboune";
 import AutoScrollCarasoul from "./AutoScrollCarasoul";
 import { FaArrowLeft } from "react-icons/fa6";
+import { slugify } from "./Slugify";
+  
 const SearchComponent = () => {
   const { bestsellingdata, productdataonlydetail, getsearchinput, catecate,fetchTopSearched,topproducts } = useBio();
   const {setIsLoading}=useLoading()
@@ -299,7 +301,7 @@ const SearchComponent = () => {
                   <div key={index} className="search-item" style={{ borderBottom: '1px solid gray' }}>
                     <img src={product.image[0]} alt={product.title} loading="lazy"/>
                     <div style={{ width: "79%", height: "50px", display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-                      <NavLink className='navlink' to={`/productdescription/${product._id}/${product?.color}`}>
+                      <NavLink className='navlink' to={`/productdescription/${slugify(product?.title)}/${product._id}/${product?.color}`}>
                         <span className="product-name" style={{ fontWeight: "lighter" }}>{product.title}</span>
                         <span className="product-price" style={{ fontWeight: "lighter", fontSize: 'small' }}>₹{product.discountprice}</span>
                       </NavLink>

@@ -11,19 +11,31 @@
   overflow: hidden;
 }
 
-.carousel-slide {
+/* .carousel-slide {
   display: block;
   width: 100%;
   height: 100%;
   position: relative;
   text-decoration: none;
   z-index: 0;
+} */
+.carousel-slide {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-.carousel-img {
+/* .carousel-img {
   width: 100%;
   height: 10%;
-  object-fit: cover; /* ✅ fills container fully, maintains aspect ratio */
+  object-fit: cover; 
+  display: block;
+} */
+ .carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* same as background-size: cover */
   display: block;
 }
 

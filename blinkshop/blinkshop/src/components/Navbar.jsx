@@ -133,7 +133,7 @@ console.log("navbar m props.pdd value",props.pd)
         <div className="mobile-menu-icon" onClick={handleSideNavbarToggle}>
           <IoIosMenu  size={30} />
         </div>
-        <div className="logo lato-thin" ><img style={{width:"150px"}} alt='lewkout'  src={lewkoutlogo} loading="lazy"></img></div>
+        <div className="logo lato-thin" ><img style={{width:"150px",height:"auto"}} alt='lewkout'  src={lewkoutlogo} loading="lazy"></img></div>
         
         <div style={{display:"flex",gap:"15%"}}>
         <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?('position-relative'):('')}`}>

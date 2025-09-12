@@ -227,7 +227,7 @@ function Layout({ showPopup }) {
             <Route path="/card" element={<Card />} />
             <Route path="/productmodel/:section" element={<Card />} />
             <Route path="/searchresults" element={<Card />} />
-            <Route path="/productdescription/:id/:coloring" element={<ProductDescription showPopup={showPopup}/>} />
+            <Route path="/productdescription/:slug/:id/:coloring" element={<ProductDescription showPopup={showPopup}/>} />
             <Route path="/cart" element={<AddToCart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/searchme" element={<SearchComponent />} />
@@ -247,7 +247,7 @@ function Layout({ showPopup }) {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/faq" element={<Faq/>} />
             <Route path="/aboutus" element={<AboutUs/>} />
-            <Route path="/terms" element={<TermsAndConditions/>} />
+            {/* <Route path="/terms" element={<TermsAndConditions/>} /> */}
             
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />

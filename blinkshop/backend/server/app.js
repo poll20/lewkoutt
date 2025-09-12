@@ -1,10 +1,15 @@
 require('dotenv').config();
 let express=require("express")
+const helmet = require("helmet");
 let app= express()
+// security middleware
+app.use(helmet());
 // const mongoose = require("mongoose");
+
 const axios = require("axios");
 const cron = require("node-cron")
 const jwt = require("jsonwebtoken");
+const admin = require("firebase-admin");
 // const http = require("http"); // ✅ Required for Socket.io abhi nhiii
 // const socketIo = require("socket.io"); // ✅ Import Socket.io
 const EventEmitter = require('events');
@@ -22,25 +27,7 @@ let port=process.env.PORT || 3000
 // const server = http.createServer(app); // ✅ Create HTTP Server
 
 
-// const io = socketIo(server, {
-//   cors: {
-//     origin: "http://localhost:5173", // ✅ Update with your frontend URL
-//     methods: ["GET", "POST", "PATCH", "DELETE"]
-//   }
-// });
 
-// io.on("connection", (socket) => {
-//   console.log("New client connected:", socket.id);
-
-
-//   socket.on("testEvent", (data) => {
-//     console.log("Received test event:", data);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//   });
-// });
 
 let mongoose=require("mongoose")
 const twilio = require("twilio");
@@ -61,7 +48,8 @@ const products = [
 ];
 
 
-
+const COOKIE_NAME = "session";
+const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 // Twilio credentials from .env
 
 
@@ -87,83 +75,17 @@ app.use(bodyparser.json())
 // require("../database/dbconn.js")
 const connectDB = require('../database/dbconn.js');
 const isAdmin = require('./adminCheck.js');
-const verifyFirebaseToken = require('./authMiddleWare.js');
+const verifySessionCookie = require('./authMiddleWare.js');
 app.get("/",(req,res)=>{
     res.send("hello")
 })
-// app.post("/user", async (req, res) => {
-//     try {
-//       //console.log("Received data:", req.body); // Log the incoming data
-//       let { password, confirmPassword } = req.body;
-  
-//       if (password === confirmPassword) {
-//         let data = new model({
-//           name: req.body.name,
-//           email: req.body.email,
-//           password: req.body.password,
-//           confirmPassword: req.body.confirmPassword,
-//         });
-  
-//         let savedata = await data.save();
-//         res.status(201).json({ message: "Data saved successfully", savedata });
-//       } else {
-//         res.status(400).json({ message: "eeeemail is exist" });
-//       }
-//     } catch (error) {
-//       console.error("Error while saving data:", error); // Log any errors
-//       res.status(500).json({ error: "Internal Server Error" });
-//     }
-//   });
-//   app.get("/user",async(req,res)=>{
-//     try{
-//     let data=await model.find({})
-//     //console.log(data)a
-//     res.send(data)
-//     }
-//     catch(e){
-//         //console.log(e)
-//         res.send(e)
-//     }
-// })
-
 
 
 app.get("/ping", (req, res) => {
   res.status(200).send("Server is awake!");
 });
 
-// app.get("/events", (req, res) => {
-//   res.setHeader("Content-Type", "text/event-stream");
-//   res.setHeader("Cache-Control", "no-cache");
-//   res.setHeader("Connection", "keep-alive");
 
-//   const sendEvent = () => {
-//       res.write("data: update\n\n"); // 🔄 Notify client
-//   };
-
-//   orderEvent.on("orderUpdated", sendEvent);
-//   // slotevent.on("slotUpdated",sendEvent)
-
-//   req.on("close", () => {
-//       orderEvent.removeListener("orderUpdated", sendEvent);
-//   // slotevent.removeListener("slotUpdated", sendEvent);
-
-//   });
-// });
-// app.get("/events", (req, res) => {
-//   res.setHeader("Content-Type", "text/event-stream");
-//   res.setHeader("Cache-Control", "no-cache");
-//   res.setHeader("Connection", "keep-alive");
-//   res.flushHeaders();
-
-//   const sendEvent = (eventData) => {
-//     res.write(`data: ${JSON.stringify(eventData)}\n\n`);
-//   };
-
-//   // ✅ Listen for events
-//   orderEvent.on("new_order", (data) => sendEvent(data));
-//   orderEvent.on("order_Updated", (data) => sendEvent(data));
-// });
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -181,23 +103,6 @@ app.get("/events", (req, res) => {
 });
 
 
-// ✅ Middleware to Verify Auth0 JWT
-// const verifyToken = async (req, res, next) => {
-//   const token = req.header("Authorization");
-//   if (!token) return res.status(401).json({ error: "Access denied" });
-
-//   try {
-//     const response = await axios.get(
-//       `https://${process.env.AUTH0_DOMAIN}/userinfo`,
-//       { headers: { Authorization: token } }
-//     );
-
-//     req.user = response.data;
-//     next();
-//   } catch (error) {
-//     res.status(400).json({ error: "Invalid token" });
-//   }
-// };
 
 
 const client = twilio(process.env.ACCOUNTSID,process.env.AUTHTOKEN);
@@ -216,20 +121,8 @@ app.get("/card", (req, res) => {
   }
 });
 
-//save itm to cart
-// app.post('/cart', async (req, res) => {
-//   const { _id,title,description,image,price,discountprice,userid,productId,shopname} = req.body;
-//   const newItem = new wishmodel({ itemid:_id, title, description, image,price,discountprice,userId:userid ,productId,shopname});
-// console.log("wish",newItem)
-//   try {
-//     await newItem.save();
-//     res.status(201).json(newItem);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//     //console.log(err)
-//   }
-// });
-app.post("/cart", async (req, res) => {
+
+app.post("/cart",verifySessionCookie, async (req, res) => {
   try {
     const {
       _id,
@@ -278,7 +171,7 @@ app.post("/cart", async (req, res) => {
 });
 
 //get cart item
-app.get('/cart/:uid', async (req, res) => {
+app.get('/cart/:uid',verifySessionCookie, async (req, res) => {
   let { uid } = req.params;
 
   // ✅ Validate UID before using ObjectId
@@ -295,7 +188,7 @@ app.get('/cart/:uid', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-app.delete('/cart/:id', async (req, res) => {
+app.delete('/cart/:id',verifySessionCookie, async (req, res) => {
   const { id } = req.params; // Extract the item ID from the URL params
 console.log(id)
 
@@ -326,35 +219,8 @@ console.log(id)
   }
 });
 
-// app.get("/user",async(req,res)=>{
-//     try{
-//     let userdata=await model.find({})
-//     res.send(userdata)
-//     }
 
-// catch(e){
-//     res.status(400).send(e)
-// }
-// })
-
-// addtocart
-// app.post("/addtocart",async(req,res)=>{
- 
-//   let {_id,image,title,description,qty,size,sizes,price,discountprice,userid,productId,shopname,bundle}=req.body
-// let cartadding=await new addtocart({productid:_id,title,description,image:image||(sizes?.[0]?.image?.[0] ?? ""),qty,size,price,discountprice,userId:userid ,productId,shopname,bundle:bundle})
-// console.log("cart itm",cartadding)
-// try{
-// let savecartdata=await cartadding.save()
-// res.status(200).json(savecartdata);
-// console.log("lolaa")
-//   } 
-//   catch (err) {
-//     res.status(400).json({ error: err.message });
-//     console.log("kolla")
-//   }
-
-// })
-app.post("/addtocart", async (req, res) => {
+app.post("/addtocart",verifySessionCookie, async (req, res) => {
   const body = req.body;
 console.log("bodycheck kroo",body)
   // 1. Check if it's a bundle (array of objects)
@@ -438,7 +304,7 @@ console.log("bodycheck kroo",body)
   }
 });
 
-app.get("/addtocart/:uid",async(req,res)=>{
+app.get("/addtocart/:uid",verifySessionCookie,async(req,res)=>{
 
   let { uid } = req.params;
 
@@ -458,7 +324,7 @@ app.get("/addtocart/:uid",async(req,res)=>{
   }
 })
 
-app.delete('/addtocart/:id', async (req, res) => {
+app.delete('/addtocart/:id', verifySessionCookie,async (req, res) => {
   const { id } = req.params; // Extract the item ID from the URL params
 //console.log(id)
   try {
@@ -515,80 +381,131 @@ app.get("/wear",async(req,res)=>{
 
 //user created or registered
 app.post("/user/register", async (req, res) => {
-  console.log("Request received at /user/register:", req.body); // ✅ Backend logging
-  // const { name, email, updated_at } = req.body;
-  const {phoneNumber,uid,refcode, updated_at } = req.body
-  console.log("phonenumberrrrr",phoneNumber)
-  if (phoneNumber && uid && !refcode) { 
-    try {
-      // Check if user already exists
-      const existingUser = await userr.findOne({ phonenumber:phoneNumber });
-      if (!existingUser) {
-        const newUser = new userr({
-          // name: name,
-          // email: email,
-          phonenumber:phoneNumber,
-          uid:uid,
-          created_at: updated_at,
-        });
-        console.log("dekghte h",newUser)
-        const savedUser = await newUser.save();
-        console.log("User saved:", savedUser);
-        res.status(201).json({ message: "User saved successfully", savedUser });
-      } else {
-        res.status(200).json({ message: "User already exists" });
-      }
-    } catch (e) {
-      console.error("Database error:", e);
-      res.status(500).json({ message: e.message });
-    }
-  }
-  else if (phoneNumber && uid && refcode) { 
-    try {
-      // Check if user already exists
-      const existingUser = await userr.findOne({ uid: uid });
-      if (!existingUser) {
-        // Find the user who owns the referral code
-        const referringUser = await userr.findOne({ code: refcode });
+  // console.log("Request received at /user/register:", req.body); // ✅ Backend logging
+  // // const { name, email, updated_at } = req.body;
+  // const {phoneNumber,uid,refcode, updated_at } = req.body
+  // console.log("phonenumberrrrr",phoneNumber)
+  // if (phoneNumber && uid && !refcode) { 
+  //   try {
+  //     // Check if user already exists
+  //     const existingUser = await userr.findOne({ phonenumber:phoneNumber });
+  //     if (!existingUser) {
+  //       const newUser = new userr({
+  //         // name: name,
+  //         // email: email,
+  //         phonenumber:phoneNumber,
+  //         uid:uid,
+  //         created_at: updated_at,
+  //       });
+  //       console.log("dekghte h",newUser)
+  //       const savedUser = await newUser.save();
+  //       console.log("User saved:", savedUser);
+  //       res.status(201).json({ message: "User saved successfully", savedUser });
+  //     } else {
+  //       res.status(200).json({ message: "User already exists" });
+  //     }
+  //   } catch (e) {
+  //     console.error("Database error:", e);
+  //     res.status(500).json({ message: e.message });
+  //   }
+  // }
+  // else if (phoneNumber && uid && refcode) { 
+  //   try {
+  //     // Check if user already exists
+  //     const existingUser = await userr.findOne({ uid: uid });
+  //     if (!existingUser) {
+  //       // Find the user who owns the referral code
+  //       const referringUser = await userr.findOne({ code: refcode });
   
-        if (referringUser) {
-          // Increment codecount by 1
-          referringUser.codecount = (referringUser.codecount || 0) + 1;
-          referringUser.codepoint=(referringUser.codepoint || 0) + 5
-          await referringUser.save(); // save the updated count
-        }
+  //       if (referringUser) {
+  //         // Increment codecount by 1
+  //         referringUser.codecount = (referringUser.codecount || 0) + 1;
+  //         referringUser.codepoint=(referringUser.codepoint || 0) + 5
+  //         await referringUser.save(); // save the updated count
+  //       }
   
-        const newUser = new userr({
-          phonenumber: phoneNumber,
-          uid: uid,
-          refercode:refcode,
-          created_at: updated_at,
-          // code: generatedCode, // if you're generating a code for new user
-        });
+  //       const newUser = new userr({
+  //         phonenumber: phoneNumber,
+  //         uid: uid,
+  //         refercode:refcode,
+  //         created_at: updated_at,
+  //         // code: generatedCode, // if you're generating a code for new user
+  //       });
   
-        console.log("dekghte h", newUser);
-        const savedUser = await newUser.save();
-        console.log("User saved:", savedUser);
+  //       console.log("dekghte h", newUser);
+  //       const savedUser = await newUser.save();
+  //       console.log("User saved:", savedUser);
   
-        res.status(201).json({ message: "User saved successfully", savedUser });
-      } else {
-        res.status(200).json({ message: "User already exists" });
-      }
-    } catch (e) {
-      console.error("Database error:", e);
-      res.status(500).json({ message: e.message });
-    }
-  }
+  //       res.status(201).json({ message: "User saved successfully", savedUser });
+  //     } else {
+  //       res.status(200).json({ message: "User already exists" });
+  //     }
+  //   } catch (e) {
+  //     console.error("Database error:", e);
+  //     res.status(500).json({ message: e.message });
+  //   }
+  // }
   
-  else {
-    console.error("Error saving user:"); // 👈 Error ko log karo
+  // else {
+  //   console.error("Error saving user:"); // 👈 Error ko log karo
 
-    res.status(400).json({ message: "Email is required" });
+  //   res.status(400).json({ message: "Email is required" });
+  // }
+  try {
+    const { idToken, refcode } = req.body;
+    if (!idToken) return res.status(400).json({ error: "Missing ID token" });
+
+    // 🔑 Verify token
+    const decoded = await admin.auth().verifyIdToken(idToken);
+
+    // ✅ Create secure session cookie
+    const sessionCookie = await admin.auth().createSessionCookie(idToken, {
+      expiresIn: SESSION_EXPIRES_IN,
+    });
+
+    res.cookie(COOKIE_NAME, sessionCookie, {
+      maxAge: SESSION_EXPIRES_IN,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+
+    // ✅ Check/create user in DB
+    const phoneNumber = decoded.phone_number;
+    const uid = decoded.uid;
+
+    let user = await userr.findOne({ uid });
+    if (!user) {
+      const newUser = new userr({
+        phonenumber: phoneNumber,
+        uid: uid,
+        refercode: refcode || null,
+        created_at: new Date(),
+      });
+
+      // referral logic
+      if (refcode) {
+        const referringUser = await userr.findOne({ code: refcode });
+        if (referringUser) {
+          referringUser.codecount = (referringUser.codecount || 0) + 1;
+          referringUser.codepoint = (referringUser.codepoint || 0) + 5;
+          await referringUser.save();
+        }
+      }
+
+      user = await newUser.save();
+    }
+
+    res.json({ status: "success", user });
+  } catch (err) {
+    console.error("sessionLogin error:", err);
+    res.status(401).json({ error: "Unauthorized" });
   }
 });
 
 // 🔧 PATCH Route
-app.patch('/useredit', async (req, res) => {
+app.patch('/useredit',verifySessionCookie, async (req, res) => {
   const { data, userid } = req.body;
 
   try {
@@ -619,88 +536,38 @@ app.patch('/useredit', async (req, res) => {
 });
 
 // Delete user data on logout
-app.post("/user/logout", async (req, res) => {
-  const { email } = req.body;
-  if (email) {
-    try {
-      const deletedUser = await userr.deleteMany({ email });
-      if (deletedUser.deletedCount > 0) {
-        res.status(200).json({ message: "User data deleted successfully" });
-      } else {
-        res.status(404).json({ message: "User not found" });
-      }
-    } catch (e) {
-      res.status(500).json({ message: "Error during deletion: " + e.message });
-    }
-  } else {
-    res.status(400).json({ message: "Email is required to delete user data" });
-  }
+// app.post("/user/logout", async (req, res) => {
+//   const { email } = req.body;
+//   if (email) {
+//     try {
+//       const deletedUser = await userr.deleteMany({ email });
+//       if (deletedUser.deletedCount > 0) {
+//         res.status(200).json({ message: "User data deleted successfully" });
+//       } else {
+//         res.status(404).json({ message: "User not found" });
+//       }
+//     } catch (e) {
+//       res.status(500).json({ message: "Error during deletion: " + e.message });
+//     }
+//   } else {
+//     res.status(400).json({ message: "Email is required to delete user data" });
+//   }
+// });
+app.post("/user/logout",(req, res) => {
+  res.clearCookie("session", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+  return res.json({ message: "Logged out successfully" });
 });
 
 
-//update user role 
-// app.put("/user/update-role/:id", async (req, res) => {
-//   const { id } = req.params; // URL se user ka ID le rahe hain
-//   const { role } = req.body; // Body se naya role le rahe hain
 
-//   if (!role) {
-//     return res.status(400).json({ message: "Role is required" });
-//   }
 
-//   try {
-//     const updatedUser = await userr.findByIdAndUpdate(
-//       id,
-//       { role: role },
-//       { new: true } // Yeh ensure karega ki updated document return ho
-//     );
 
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     res.status(200).json({ message: "User role updated successfully", updatedUser });
-//   } catch (error) {
-//     res.status(500).json({ message: "Error updating role", error: error.message });
-//   }
-// });
-
-// app.put("/user/update-role/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const { role, shopname, shopaddress } = req.body;
-// console.log("rolz",role,shopname,shopaddress)
-//   if (!role) {
-//     return res.status(400).json({ message: "Role is required" });
-//   }
-
-//   try {
-//     let updateData = { role };
-
-//     if (role === "shopkeeper") {
-//       if (!shopname || !shopaddress) {
-//         return res.status(400).json({ message: "Shop Name and Address are required for Shopkeeper!" });
-//       }
-//       updateData.shopname = shopname;
-//       updateData.shopaddress = shopaddress;
-//     } else {
-//       updateData.shopname = "";
-//       updateData.shopaddress = "";
-//     }
-
-//     const updatedUser = await userr.findByIdAndUpdate(id, updateData, { new: true });
-
-//     if (!updatedUser) {
-//       console.log("user not found")
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     res.status(200).json({ message: "User updated successfully", updatedUser });
-//   } catch (error) {
-//     console.log('ye h error',error.message)
-//     res.status(500).json({ message: "Error updating user", error: error.message });
-//   }
-// });
-
-app.put("/user/update-role/:userId", async (req, res) => {
+app.put("/user/update-role/:userId", verifySessionCookie,isAdmin,async (req, res) => {
   try {
       const { role, shopname, shopaddress } = req.body;
 
@@ -730,177 +597,7 @@ app.put("/user/update-role/:userId", async (req, res) => {
 });
 
 
-// app.patch('/user/:userId/address', async (req, res) => {
-//   const { userId } = req.params; // Extract userId from the URL parameter
-//   console.log("uid",userId)
-//   const { pincode,phone,otp, building, locality, isDefault } = req.body; // Extract address data from the request body
 
-//   try {
-//     // Find the user by userId
-//     const user = await userr.findById(userId);
-    
-//     if(user)
-//     {
-//     console.log("user",user)
-//     }
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-  
-//     if (phone) {
-//       console.log("phone received:", phone);
-     
-//       // ✅ Step 2a: Check if phone is unique
-//       const existingUser = await userr.findOne({ phone });
-//       if (existingUser) {
-//         return res.status(400).json({ message: "Phone number already exists" });
-//       }
-
-//       // ✅ Step 2b: If OTP is **not provided**, generate and send OTP
-//       if (!otp) {
-//         const otpCode = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
-
-//         // Save OTP in DB (Replace if phone already exists)
-//         await otpmodel.findOneAndUpdate(
-//           { phone },
-//           { otp: otpCode, createdAt: Date.now() },
-//           { upsert: true, new: true }
-//         );
-
-//         // Send OTP via Twilio
-//         await client.messages.create({
-//           body: `Your OTP is ${otpCode}. It will expire in 5 minutes.`,
-//           from: '688056',
-//           to: phone,
-//         });
-
-//         return res.status(200).json({ message: "OTP sent successfully" });
-//       }
-
-//       // ✅ Step 2c: If OTP is provided, verify OTP
-//       const otpRecord = await otpmodel.findOne({ phone, otp });
-//       if (!otpRecord) {
-//         return res.status(400).json({ message: "Invalid or expired OTP" });
-//       }
-
-//       // ✅ Step 2d: OTP is correct → Save phone number & delete OTP record
-//       user.phone = phone;
-//       await otpmodel.deleteOne({ phone }); // Remove OTP after verification
-
-//        // Create a new address object
-//        const newAddress = {
-//         pincode,
-//         building,
-//         locality,
-//         city: "Jaipur",  // Default city
-//         state: "Rajasthan",  // Default state
-//         isDefault: isDefault || false,  // Default to false if not provided
-//       };
-   
-//       // Add the new address to the address array
-//       user.address.push(newAddress);
-//    user.phone.push(phone)
-//     // Save the user with the updated address array
-//     await user.save();
-
-//     return res.status(200).json({ message: "Address added successfully", user }); 
-//     }
-
-     
-//   } catch (error) {
-//     console.error('Twilio Error:', error);
-//     return res.status(500).json({ message: "Server error", error });
-//   }
-// });
-
-
-// app.patch('/user/:userId/address', async (req, res) => { 
-//   const { userId } = req.params;
-//   console.log("Request Params:", req.params);
-//   console.log("uid", userId);
-  
-//   const { pincode, phone, otp, building, locality, isDefault } = req.body;
-
-//   try {
-//     // ✅ Step 1: Find User
-//     // const user = await userr.findById(userId);
-//     const user = await userr.findById(new mongoose.Types.ObjectId(userId));
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     if (!mongoose.Types.ObjectId.isValid(userId)) {
-//       return res.status(400).json({ message: "Invalid user ID format" });
-//     } 
-
-//     // ✅ Step 2: Handle Phone & OTP
-//     if (phone) {
-//       console.log("phone received:",phone);
-      
-//       // 🔹 Check if phone is already registered
-//       const existingUser = await userr.findOne({ phone });
-//       if (existingUser) {
-//         return res.status(400).json({ message: "Phone number already exists" });
-//       }
-
-//       // 🔹 If OTP is NOT provided, generate & send OTP
-//       if (!otp) {
-//         const otpCode = Math.floor(100000 + Math.random() * 900000);
-
-//         // 🔹 Save OTP in DB (Replace if phone already exists)
-//         await otpmodel.findOneAndUpdate(
-//           { phone },
-//           { otp: otpCode, createdAt: Date.now() },
-//           { upsert: true, new: true }
-//         );
-
-//         // 🔹 Send OTP via Twilio
-//         await client.messages.create({
-//           body: `Your OTP is ${otpCode}. It will expire in 5 minutes.`,
-//           from: '+13186109829',
-//           to: phone,
-//         });
-
-//         return res.status(200).json({ message: "OTP sent successfully" });
-//       }
-
-//       // ✅ Step 3: If OTP is provided, verify OTP
-//       const otpRecord = await otpmodel.findOne({ phone, otp });
-//       if (!otpRecord) {
-//         return res.status(400).json({ message: "Invalid or expired OTP" });
-//       }
-
-//       // ✅ Step 4: OTP Verified → Save Phone & Address
-//       user.phone.push(phone); // 🔹 Phone number is saved only after OTP verification
-
-//       const newAddress = {
-//         pincode,
-//         building,
-//         locality,
-//         city: "Jaipur",
-//         state: "Rajasthan",
-//         isDefault: isDefault || false,
-//       };
-
-//       user.address.push(newAddress); // 🔹 Address saved only after OTP verification
-
-//       // 🔹 Remove OTP after verification
-//       await otpmodel.deleteOne({ phone });
-
-//       // 🔹 Save updated user
-//       await user.save();
-
-//       return res.status(200).json({ message: "Address & phone saved successfully", user });
-//     }
-
-//     return res.status(400).json({ message: "Phone number is required" });
-
-//   } catch (error) {
-//     console.error('Twilio Error:', error);
-//     return res.status(500).json({ message: "Server error", error });
-//   }
-// });
 
 app.patch('/user/:userId/address', async (req, res) => {
   let { userId } = req.params;
@@ -924,32 +621,7 @@ app.patch('/user/:userId/address', async (req, res) => {
     if (phone) {
       console.log("phone received:", phone);
 
-      // const existingUser = await userr.findOne({ phone });
-      // if (existingUser) {
-      //   return res.status(400).json({ message: "Phone number already exists" });
-      // }
-
-      // if (!otp) {
-      //   const otpCode = Math.floor(100000 + Math.random() * 900000);
-      //   await otpmodel.findOneAndUpdate(
-      //     { phone },
-      //     { otp: otpCode, createdAt: Date.now() },
-      //     { upsert: true, new: true }
-      //   );
-
-      //   await client.messages.create({
-      //     body: `Your OTP is ${otpCode}. It will expire in 5 minutes.`,
-      //     from: '+13186109829',
-      //     to: phone,
-      //   });
-
-      //   return res.status(200).json({ message: "OTP sent successfully" });
-      // }
-
-      // const otpRecord = await otpmodel.findOne({ phone, otp });
-      // if (!otpRecord) {
-      //   return res.status(400).json({ message: "Invalid or expired OTP" });
-      // }
+      
 
       user.phone.push(phone);
       user.address.push({
@@ -990,41 +662,8 @@ app.get("/user", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-// app.patch(`/user/:userId/addressdoe`,async(req,res)=>{
-//   const { userId } = req.params;
-//   console.log("uid", userId);
-//   const {addresid,action} = req.body;
-//   try {
-//     // ✅ Step 1: Find User
-//     const user = await userr.findById(userId);
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-//     if(action=="delete")
-//     {
-//       console.log("helllo delete")
-//       console.log("adress adress",user.address)
-//    let addrestobedelete=user.address.filter((e)=>(e._id!=addresid))
-//    console.log("adddddd",addrestobedelete)
-//    await user.address.push(addrestobedelete)
-//    await user.save()
-//    return res.status(200).json({message:"address deleted successfully"})
 
-//     }
-//     else{
-//       return res.status(400).json({message:"address not found"}) 
-//     }
-
-    
-//   }
-//   catch(e){
-//     console.log(e)
-//     return res.status(500).json({ message: "Server error", e});
-//   }
-
-// })
-
-app.patch(`/user/:userId/addressdoe`, async (req, res) => {
+app.patch(`/user/:userId/addressdoe`,verifySessionCookie,async (req, res) => {
   const { userId } = req.params;
   console.log("uid", userId);
   const { addresid, action,addr } = req.body;
@@ -1053,23 +692,7 @@ console.log("addddddddrrrrrr",addr)
       return res.status(200).json({ message: "Address deleted successfully" });
     } 
     
-  //   else if(action=="edit"){
-  //     console.log("Editing address:", addresid);
-
-  // // ✅ Step 2: Check if address exists before editing
-  // const addressIndex = user.address.findIndex((addr) => addr._id.toString() === addresid);
-  // if (addressIndex === -1) {
-  //   return res.status(404).json({ message: "Address not found" });
-  // }
-
-  // // ✅ Step 3: Update the existing address with new data
-  // user.address[addressIndex] = { ...user.address[addressIndex], ...addr };
-
-  // await user.save(); // ✅ Save updated user
-
-  // return res.status(200).json({ message: "Address updated successfully", updatedAddress: user.address[addressIndex] });
-      
-  //   }
+  
   else if (action === "edit") {
     console.log("✏️ Editing address:", addresid);
 
@@ -1084,10 +707,7 @@ console.log("addddddddrrrrrr",addr)
 
     console.log("🛠️ Old Address Before Update:", user.address[addressIndex]);
 
-    // user.address[addressIndex] = {
-    //   ...user.address[addressIndex]._doc, // Ensure existing schema fields are preserved
-    //   ...addr,
-    // };
+   
     user.address[addressIndex] = {
       ...(user.address[addressIndex]?.toObject?.() || user.address[addressIndex]),
       ...addr,
@@ -1188,41 +808,8 @@ catch(e){
 })
 
 
-// app.post("/productmodel",upload.array('image'), uploadToCloudinary, async (req, res) => {
-//   try {
-//     const productData = req.body;
-//       // If image was uploaded
-//     if (req.imageUrl) {
-//       productData.image = [req.imageUrl]; // Save as array (optional)
-//     }
-//     const newProduct = new productsmodel(productData); // Assuming productsmodel is your mongoose model
-//     await newProduct.save();
-//     res.status(201).json(newProduct);
-//     console.log("ho gyaa",newProduct)
-//   } catch (error) {
-//     res.status(500).send("Error saving data");
-//   }
-// });
-// app.post("/productmodel", upload.array("image"), uploadToCloudinary, async (req, res) => {
-//   try {
-//     const productData = req.body;
-// console.log("dekhu to sahi",productData)
-//     // Add uploaded image URLs  
-//     if (req.imageUrls && req.imageUrls.length > 0) {
-//       productData.image = req.imageUrls; // Save array of URLs
-//     }
 
-//     const newProduct = new productsmodel(productData);
-//     await newProduct.save();
-
-//     res.status(201).json(newProduct);
-//   } catch (error) {
-//     console.error("Save error:", error);
-//     res.status(500).send("Error saving data");
-//   }
-// });
-
-app.post("/productmodel", async (req, res) => {
+app.post("/productmodel", verifySessionCookie,isAdmin,async (req, res) => {
   try {
     const productData = req.body;
       // ✅ Fix image URLs if present
@@ -1249,46 +836,6 @@ app.post("/productmodel", async (req, res) => {
   }
 });
 
-// app.post("/productmodel", async (req, res) => {
-//   try {
-//     const productArray = req.body;
-
-//     // Check if array and has at least one product
-//     if (!Array.isArray(productArray) || productArray.length === 0) {
-//       return res.status(400).json({ error: "Invalid product data." });
-//     }
-
-//     // Get the first product object
-//     const productData = productArray[0];
-
-//     // ✅ Calculate discount price
-//    if (
-//   productData.productdetails &&
-//   productData.productdetails.price &&
-//   productData.productdetails.discount
-// ) {
-//   const originalPrice = parseFloat(productData.productdetails.price);
-//   const discountPercent = parseFloat(productData.productdetails.discount);
-
-//   if (!isNaN(originalPrice) && !isNaN(discountPercent)) {
-//     const discountAmount = (originalPrice * discountPercent) / 100;
-//     productData.productdetails.discountprice = Math.round(originalPrice - discountAmount);
-//     console.log("✔ Calculated discount price:", productData.productdetails.discountprice);
-//   }
-// }
-     
-
-//     // Save product
-//     const newProduct = new productsmodel(productData);
-//     await newProduct.save();
-
-//     console.log("✔ Product saved:", newProduct);
-//     res.status(201).json(newProduct);
-//   } catch (error) {
-//     console.error("❌ Error saving product:", error);
-//     res.status(500).send("Error saving data");
-//   }
-// });
 
 const addIdsToSubCollections = async () => {
     try {
@@ -1423,29 +970,7 @@ console.log("colorid",id)
       });
     }
 
-    // If still not found, try match by productdetails.colors._id
-    // product = await productsmodel.findOne({ "productdetails.colors._id": id });
-    // if (product) {
-    //   // Find the matching productdetail and color
-    //   const matchedDetail = product.productdetails.find((detail) =>
-    //     detail.colors.some((color) => color._id.toString() === id)
-    //   );
-
-    //   const matchedColor = matchedDetail.colors.find(
-    //     (color) => color._id.toString() === id
-    //   );
-
-    //   return res.json({
-    //     ...product.toObject(),
-    //     productdetails: [
-    //       {
-    //         ...matchedDetail,
-    //         colors: [matchedColor], // return only the matched color
-    //       },
-    //     ],
-    //   });
-    // }
-    // If still not found, try match by productdetails.colors._id
+   
 product = await productsmodel.findOne({ "productdetails.colors._id": id });
 if (product) {
   const matchedDetail = product.productdetails.find((detail) =>
@@ -1470,223 +995,8 @@ if (product) {
 
 
 
-// ✅ Define Socket.io notify function
-// const notifyLowStock = (product) => {
-//  console.log("🔥 Emitting low stock alert for:", product.title);
-//   io.emit("lowStockAlert", {
-//     productId: product._id,
-//     title: product.productdetails[0]?.title || "Unknown Product",
-//     newStock: product.productdetails[0]?.colors[0]?.sizes[0]?.quantity || 0
-//   });
-// };
-// const notifyLowStock = (product) => {
-//   if (!product || !product.productdetails || product.productdetails.length === 0) {
-//     console.log("❌ Error: Invalid product data for low stock alert!");
-//     return;
-//   }
 
-//   const title = product.productdetails[0]?.title || "Unknown Product"; // ✅ Ensure title exists
-//   const newStock = product.productdetails[0]?.colors[0]?.sizes[0]?.quantity || 0;
-
-//   console.log("🔥 Emitting low stock alert for:", title);
-//   console.log("🔥 Emitting low stock alert for:",{ productId: product._id, 
-//     title: product.productdetails[product.productdetails.length-1]?.title || "Unknown Product", 
-//     newStock: product.productdetails[product.productdetails.length-1]?.colors[0]?.sizes[0]?.quantity || 0}); // Debugging ke liye
-//   // io.emit("lowStockAlert", {
-//   //   productId: product._id, 
-//   //   title: product.productdetails[product.productdetails.length-1]?.title || "Unknown Product", 
-//   //   newStock: product.productdetails[product.productdetails.length-1]?.colors[0]?.sizes[0]?.quantity || 0
-//   // });
-//   console.log("🔥 Active Connections:", io.engine.clientsCount);
-// if (io.engine.clientsCount > 0) {
-//     io.emit("lowStockAlert", {
-//       productId: product._id,
-//     title: product.productdetails[0]?.title || "Unknown Product",
-//     newStock: product.productdetails[0]?.colors[0]?.sizes[0]?.quantity || 0
-//     });
-//     console.log("✅ Successfully emitted lowStockAlert event!");
-// } else {
-//     console.log("❌ No active socket connections!");
-// }
-//   // io.emit("lowStockAlert", {
-//   //   productId: product._id,
-//   //   title: title,
-//   //   newStock: newStock
-//   // });
-//   console.log("✅ Successfully emitted lowStockAlert event!"); // Check if emit runs
-// };
-// setInterval(() => {
-//   io.emit("lowStockAlert", { productId: "123", title: "Test Product", newStock: 3 });
-//   console.log("✅ Test Emit Sent");
-// }, 5000);
-
-
-
-// app.patch('/productmodel/:id', upload.single('image'), uploadToCloudinary,async (req, res) => {
-//   console.log("haa yhi funtion ccal ho rha hai")
-//   const { id } = req.params;
-   
-//   // Validate ID format
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(400).json({ message: 'Invalid ID format!' });
-//   }
-
-//   try {
-//     let updateData = req.body;
-
-    
-//     console.log("update data",Array.isArray(updateData.image))
-//     // Handle `image` field if it is a stringified array
-//     if (updateData.image) {       
-//       if (typeof updateData.image === 'string') {
-//         try {
-//           // Parse the string back to an array
-//           updateData.image = JSON.parse(updateData.image);
-//         } catch (error) {
-//           return res.status(400).json({ message: 'Invalid image format!' });
-//         }
-//       }
-
-//       // Ensure `image` is an array of strings
-//       if (Array.isArray(updateData.image)) {
-//         updateData.image = updateData.image.map((item) => String(item));
-//       } else {
-//         return res.status(400).json({ message: '`image` must be an array!' });
-//       }
-//     }
-
-//     const updatedProduct = await productsmodel.findByIdAndUpdate(
-//       id,
-//       { $push: updateData },
-//       { new: true, runValidators: true }
-//     );
-//   console.log("updated my data",updatedProduct)
-//     if (!updatedProduct) {
-//       return res.status(404).json({ message: 'Product not found!' });
-//     }
-  
-//     // ✅ Check if product is low stock
-//     // updatedProduct.productdetails.forEach((detail) => {
-//     //   detail.colors.forEach((color) => {
-//     //     color.sizes.forEach((size) => {
-//     //       if (size.quantity <= 5) {
-//     //         notifyLowStock(updatedProduct);
-//     //       }
-//     //     });
-//     //   });
-//     // });
-//     res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
-
-   
-
-//   } catch (error) {
-//     console.error('Error updating product:', error.message);
-//     res.status(500).json({ message: 'Internal Server Error', error: error.message });
-//   }
-// });
-
-
-// PATCH route
-// app.patch("/productmodel/:id", upload.array("image"), uploadToCloudinary, async (req, res) => {
-//   const { id } = req.params;
-
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(400).json({ message: "Invalid ID format" });
-//   }
-
-//   try {
-//     let updateData = req.body;
-
-//     // Parse image field if sent as stringified array
-//     if (updateData.image && typeof updateData.image === 'string') {
-//       updateData.image = JSON.parse(updateData.image);
-//     }
-
-//     // Add new uploaded images if any
-//     if (req.imageUrls && req.imageUrls.length > 0) {
-//       if (!updateData.image) updateData.image = [];
-//       updateData.image = [...updateData.image, ...req.imageUrls];
-//     }
-
-//     const updatedProduct = await productsmodel.findByIdAndUpdate(
-//       id,
-//       { $push: { productdetails: updateData } },
-//       { new: true, runValidators: true }
-//     );
-
-//     if (!updatedProduct) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-
-//     res.status(200).json({ message: "Product updated", data: updatedProduct });
-//   } catch (error) {
-//     console.error("Update error:", error.message);
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// });
-
-// app.patch('/productmodel/:id', async (req, res) => {
-//   console.log("haa yhi funtion ccal ho rha hai")
-//   const { id } = req.params;
-   
-//   // Validate ID format
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(400).json({ message: 'Invalid ID format!' });
-//   }
-
-//   try {
-//     let updateData = req.body;
-//     console.log("update data",Array.isArray(updateData.image))
-//     // Handle `image` field if it is a stringified array
-//     if (updateData.image) {
-//       if (typeof updateData.image === 'string') {
-//         try {
-//           // Parse the string back to an array
-//           updateData.image = JSON.parse(updateData.image);
-//         } catch (error) {
-//           return res.status(400).json({ message: 'Invalid image format!' });
-//         }
-//       }
-
-//       // Ensure `image` is an array of strings
-//       if (Array.isArray(updateData.image)) {
-//         updateData.image = updateData.image.map((item) => String(item));
-//       } else {
-//         return res.status(400).json({ message: '`image` must be an array!' });
-//       }
-//     }
-
-//     const updatedProduct = await productsmodel.findByIdAndUpdate(
-//       id,
-//       { $push: updateData },
-//       { new: true, runValidators: true }
-//     );
-//   console.log("updated my data",updatedProduct)
-//     if (!updatedProduct) {
-//       return res.status(404).json({ message: 'Product not found!' });
-//     }
-  
-//     // ✅ Check if product is low stock
-//     // updatedProduct.productdetails.forEach((detail) => {
-//     //   detail.colors.forEach((color) => {
-//     //     color.sizes.forEach((size) => {
-//     //       if (size.quantity <= 5) {
-//     //         notifyLowStock(updatedProduct);
-//     //       }
-//     //     });
-//     //   });
-//     // });
-//     res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
-
-   
-
-//   } catch (error) {
-//     console.error('Error updating product:', error.message);
-//     res.status(500).json({ message: 'Internal Server Error', error: error.message });
-//   }
-// });
-
-app.patch('/productmodel/:id', async (req, res) => {
+app.patch('/productmodel/:id',verifySessionCookie,isAdmin, async (req, res) => {
   console.log("haa yhi funtion ccal ho rha hai")
   const { id } = req.params;
    
@@ -1770,29 +1080,6 @@ app.patch('/productmodel/:id', async (req, res) => {
 });
 
 
-// ✅ API: Fetch Low Stock Products
-// app.get("/lowstock", async (req, res) => {
-//   try {
-//     let products = await productsmodel.find({});
-//     let lowStockProducts = [];
-
-//     products.forEach((product) => {
-//       product.productdetails.forEach((detail) => {
-//         detail.colors.forEach((color) => {
-//           color.sizes.forEach((size) => {
-//             if (size.quantity <= 5) {
-//               lowStockProducts.push(product);
-//             }
-//           });
-//         });
-//       });
-//     });
-
-//     res.json(lowStockProducts);
-//   } catch (error) {
-//     res.status(500).json({ message: "Error fetching low stock products", error });
-//   }
-// });
 
 
 
@@ -1808,7 +1095,7 @@ app.patch('/productmodel/:id', async (req, res) => {
 
 
 
-app.patch('/editordeleteproduct/:id' ,async (req, res) => {
+app.patch('/editordeleteproduct/:id',verifySessionCookie,isAdmin,async (req, res) => {
   const { id } = req.params;
   let updateData = req.body;
   console.log("ye h mili",id)
@@ -1872,7 +1159,7 @@ console.log("updated my data",updatedProduct)
 });
 
 
-app.patch("/deleteproductfromcate/:id", async (req, res) => {
+app.patch("/deleteproductfromcate/:id",verifySessionCookie,isAdmin, async (req, res) => {
   let { id } = req.params;
 
   try {
@@ -1897,63 +1184,6 @@ app.patch("/deleteproductfromcate/:id", async (req, res) => {
   }
 });
 
-// app.patch('/editordeleteproduct/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { deleteMode, ...updateData } = req.body; // ✅ Extract deleteMode separately
-
-//   console.log("Received ID:", id);
-//   console.log("Received Body:", req.body);
-
-//   // ✅ Validate ID format
-//   if (!mongoose.Types.ObjectId.isValid(id)) {
-//     return res.status(400).json({ message: 'Invalid ID format!' });
-//   }
-
-//   try {
-//     if (deleteMode) {
-//       console.log("Deleting product with ID:", id);
-//       // ✅ Remove the product from `productdetails`
-//       const updatedProduct = await productsmodel.findOneAndUpdate(
-//         { "productdetails._id": id },
-//         { $pull: { productdetails: { _id: id } } },
-//         { new: true }
-//       );
-
-//       if (!updatedProduct) {
-//         return res.status(404).json({ message: 'Product not found!' });
-//       }
-
-//       return res.status(200).json({ message: 'Product deleted successfully!', data: updatedProduct });
-//     }
-
-//     // ✅ If not deleting, update the product
-//     if (Object.keys(updateData).length > 0) {
-//       console.log("Updating product:", updateData);
-//       const updatedProduct = await productsmodel.findOneAndUpdate(
-//         { "productdetails._id": id },
-//         { 
-//           $set: Object.keys(updateData).reduce((acc, key) => {
-//             acc[`productdetails.$.${key}`] = updateData[key];
-//             return acc;
-//           }, {}) 
-//         },
-//         { new: true, runValidators: true }
-//       );
-
-//       if (!updatedProduct) {
-//         return res.status(404).json({ message: 'Product not found!' });
-//       }
-
-//       return res.status(200).json({ message: 'Product updated successfully!', data: updatedProduct });
-//     }
-
-//     return res.status(400).json({ message: 'No valid update fields provided!' });
-
-//   } catch (error) {
-//     console.error('Error updating/deleting product:', error.message);
-//     res.status(500).json({ message: 'Internal Server Error', error: error.message });
-//   }
-// });
 
 
 
@@ -2015,37 +1245,6 @@ const sendWhatsAppMessage = async (order) => {
     }
 };
 
-// 🔄 Cron job jo har minute check karega
-// cron.schedule("* * * * *", async () => {
-//   try {
-//     console.log("cron job is runnig ")
-//       const orders = await orderr.find({ 
-//           status: { $in: ["Pending", "shipped"] }  // Sirf pending aur shipped orders check karega
-//       });
-
-//       let currentTime = new Date();
-
-//       for (let order of orders) {
-//           let orderTime = new Date(order.createdAt);
-//           let timeDiff = (currentTime - orderTime) / (1000 * 60); // Difference in minutes
-
-//           if (order.status === "Pending" && timeDiff >= 1) {
-//               order.status = "shipped"; // ✅ 10 min ke baad order shipped ho jayega
-//               await order.save();
-//               console.log(`🚚 Order ${order._id} is now SHIPPED!`);
-//           } 
-//           // else if (order.status === "shipped" && timeDiff >=3) {
-//           //     order.status = "delivered"; // ✅ 60 min ke baad order delivered ho jayega
-//           //     await order.save();
-//           //     console.log(`📦 Order ${order._id} is now DELIVERED!`);
-//           // }
-//       }
-//   } catch (error) {
-//       console.error("❌ Cron Job Error:", error);
-//   }
-// });
-
-// console.log("✅ Cron Job for Auto Order Status Update is Running!");
 
 
   async function addPointsOnPurchase(userId, purchaseAmount,type) {
@@ -2128,80 +1327,8 @@ const sendWhatsAppMessage = async (order) => {
 
 
 
-// // app.post('/order', async (req, res) => {
-// //   try {
-// //       const {order,address,userDetails,couponcode} = req.body;
 
-// //       // if (!userId || !email || !address || !phone || !products || products.length === 0) {
-// //       //     return res.status(400).json({ error: "All fields are required" });
-// //       // }
-// //  if (!order || !address || !userDetails ) {
-// //           return res.status(400).json({ error: "All fields are required" });
-// //       }
-      
-// //  // 🟢 Ensure 'order' is always an array
-// //  const ordersArray = Array.isArray(order) ? order : [order];
-// // console.log("orderaaarr",ordersArray)
-// //  // 🟢 Map products correctly inside the Order Schema
-// //  const products = ordersArray.map(item => ({
-// //      productId: item.productid?(item.productid):(item._id),
-// //     // productId:item.productid ?? item._id,  // ✅ safe and future-ready
-// //     // productId:item._id,
-// //      tag:item.tag,
-// //      discription:item.description,
-// //      image:item.image,
-// //      quantity: item.qty,
-// //      price: item.price,
-// //      discountprice: item.discountprice,
-// //      size: item.size,
-// //      shopname:item.shopname,
-// //      totalAmount:item.discountprice
-// //  })); 
-
-
-// // // 🟢 Subtract Ordered Quantity from Product Model
-// // for (const item of ordersArray) {
-// //   const product = await productsmodel.findById(item.productid?(item.productid):(item._id));
-// //   if (product) {
-// //       if (product.qty >= item.qty) {
-// //           product.qty -= item.qty; // 🛑 Subtract ordered quantity
-// //           await product.save();
-// //       } else {
-// //           return res.status(400).json({ error: `Not enough stock for product ID: ${item.productid}` });
-// //       }
-// //   }
-// // }
-
-// //       // Save Order in Database
-// //       const newOrder = new orderr ({
-// //         name:userDetails.name,
-// //           userId:userDetails._id,
-// //           email:userDetails.email,
-// //           address,
-// //           phone:userDetails.address[0].phone[0],
-// //           products
-// //               });
-
-// //       await newOrder.save();
-// //       orderEvent.emit('orderUpdated'); // 🔄🔄🔄🔄🛑🛑🛑🛑 Notify frontend
-// //       // Send WhatsApp Notification
-// //       //  sendWhatsAppMessage(newOrder);
-
-// //       res.status(201).json({ message: "Order Placed & Admin Notified!" });
-// //       if(couponcode.length>0){
-// //       applyCouponSuccess(userDetails._id,couponcode)
-// //       }
-// //       let orderprice = ordersArray.reduce((total, e) => total + (Array.isArray(e.discountprice) 
-// //   ? e.discountprice.reduce((sum, price) => sum + price, 0) 
-// //   : e.discountprice), 0);
-// //     // addPointsOnPurchase(userDetails._id,orderprice)
-// //   } catch (error) {
-// //       console.error("Order Error:", error);
-// //       res.status(500).json({ error: "Order Failed" });
-// //   }
-// });
-
-app.post('/order', async (req, res) => {
+app.post('/order', verifySessionCookie,async (req, res) => {
   try {
     const { order, address, userDetails,distance, couponcode } = req.body;
 
@@ -2246,16 +1373,7 @@ app.post('/order', async (req, res) => {
           });
             
 
-          // 🔻 Subtract bundle product quantity from DB
-          // const product = await productsmodel.findById(bundleItem.productid || bundleItem._id);
-          // if (product) {
-          //   if (product.qty >= bundleItem.qty) {
-          //     product.qty -= bundleItem.qty;
-          //     await product.save();
-          //   } else {
-          //     return res.status(400).json({ error: `Not enough stock for bundled product: ${product.title || product.name}` });
-          //   }
-          // }
+        
         }
       }
 
@@ -2324,17 +1442,8 @@ console.log("neworder",newOrder)
 });
 
 
-// 🔵 GET: Fetch all orders (For Admin)
-// app.get('/orders', async (req, res) => {
-//   try {
-//       const orders = await orderr.find().populate('products.productId').lean(); // Populate product details
-//       res.status(200).json(orders);
-//   } catch (error) {
-//       console.error("Fetch Orders Error:", error);
-//       res.status(500).json({ error: "Failed to fetch orders" });
-//   }
-// });
-app.get('/orders', async (req, res) => {
+
+app.get('/orders',verifySessionCookie,isAdmin, async (req, res) => {
   try {
     const orders = await orderr
       .find()
@@ -2364,7 +1473,7 @@ app.get('/order/:id', async (req, res) => {
 });
 
 // 🔵 GET: Fetch orders by User ID
-app.get('/orders/user/:userId', async (req, res) => {
+app.get('/orders/user/:userId',verifySessionCookie, async (req, res) => {
   try {
       const { userId } = req.params;
 
@@ -2388,52 +1497,8 @@ console.log("Order Products:", userOrders[0].products);
   }
 });
 
-// app.put('/order/deliver/:id',verifyFirebaseToken, async (req, res) => {
-//   try {
-//       const order = await orderr.findById(req.params.id);
-//       const {userDetails}=req.body 
-//       if (!order) {
-//           return res.status(404).json({ error: "Order not found" });
-//       }
 
-//       // ✅ Sirf SHIPPED order ko DELIVERED karne de
-//       if (order.status == "Pending") {
-//           // return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
-//           order.status = "shipped";
-//           await order.save();
-//           orderEvent.emit('order_Updated'); // 🔄 Notify frontend
-//           res.json({ message: "Order marked as shipped!" });
-          
-//       }
-      
- 
-//       else if(order.status=="shipped"){
-//         order.status = "delivered";
-//         order.deliveredAt = new Date(); // ✅ Store delivery time
-//         await order.save();
-//         orderEvent.emit('order_Updated'); // 🔄 Notify frontend
-//         res.json({ message: "Order marked as delivered!" });
-        
-//       }
-
-//       else if(order.status=="pending-returned"){
-//         order.status = "returned";
-//         await order.save();
-//         orderEvent.emit('order_Updated'); // 🔄 Notify frontend
-//         res.json({ message: "Order marked as returned!" });
-      
-//       }
-//       else{
-//         return res.status(400).json({ error: "Only shipped orders can be marked as delivered" });
-//       }
-
-     
-//   } catch (error) {
-//       console.error("Error updating order:", error);
-//       res.status(500).json({ error: "Server error" });
-//   }
-// });
-app.put('/order/deliver/:id', async (req, res) => {
+app.put('/order/deliver/:id',verifySessionCookie,isAdmin, async (req, res) => {
   try {
     const order = await orderr.findById(req.params.id);
    const decision = req.body.decision // ✅ clearer
@@ -2457,14 +1522,7 @@ app.put('/order/deliver/:id', async (req, res) => {
       orderEvent.emit("order_updated", { type: "order_updated", order });
       return res.json({ message: "Order marked as delivered!" });
     }
-    //  else if (order.status === "Returned Requested") {
-      
-    //   order.status = "Returned Approved";
-    //   await order.save();
-
-    //   orderEvent.emit("order_updated", { type: "order_updated", order });
-    //   return res.json({ message: "Order marked as returned!" });
-    // }
+    
     else if (order.status === "Returned Requested") {
 
 
@@ -2535,27 +1593,6 @@ else if (order.status === "Refund Processed") {
 });
 
 
-// setInterval(async () => {
-//   try {
-//     const timeLimit = new Date(Date.now() - 65 * 60 * 1000); // 65 minutes ago
-//     const eligibleOrders = await orderr.find({
-//       status: "delivered",
-//       deliveredAt: { $lte: timeLimit }
-//     });
-
-//     for (const order of eligibleOrders) {
-//       await addPointsOnPurchase(order.userId, order.price,"delivered");
-//       console.log(`✅ Points added for Order ID: ${order._id}`);
-
-//       // ✅ Ensure points are only added once
-//       order.status = "points-added";
-//       await order.save();
-//     }
-//   } catch (err) {
-//     console.error("❌ Error in points scheduler:", err);
-//   }
-// }, 5 * 60 * 1000); // ✅ Runs every 5 minutes
-
 setInterval(async () => {
   try {
     const timeLimit = new Date(Date.now() - 24 * 65 * 60 * 1000); // 65 minutes ago
@@ -2587,62 +1624,6 @@ setInterval(async () => {
 }, 2 * 60 * 1000); // ✅ Runs every 5 minutes
 
 
-
-// ✅ User se Rating Accept karna
-// ✅ User se Rating Accept karna
-// app.post("/rate", async (req, res) => { 
-//   try {
-//     const { userId, productId, rating, review,image } = req.body;
-//     console.log("🛩 Received images from frontend:", image);
-//     // 🛑 Ensure `rating` is a number and within 1-5
-//     if (!rating || typeof rating !== "number" || rating < 1 || rating > 5) {
-//       return res.status(400).json({ error: "Invalid rating. It must be a number between 1 and 5." });
-//     }
-
-//     // 🟡 Check if user has already rated this product
-//     let existingRating = await Rating.findOne({ userId, productId });
-
-//     if (existingRating) {
-//       existingRating.rating = rating;
-//       existingRating.review = review || existingRating.review;
-//        existingRating.image = image || existingRating.image;
-//       await existingRating.save();
-//     }
-    
-//      else {
-  
-//       await Rating.create({ userId, productId, rating, review,image});
-//     }
-
-//     // 🔄 Update Average Rating in Product Collection
-//     const allRatings = await Rating.find({ productId });
-//     const totalRatings = allRatings.length;
-//     const avgRating = allRatings.reduce((sum, r) => sum + r.rating, 0) / totalRatings;
-
-//     // await productsmodel.findByIdAndUpdate(productId, { avgRating, ratingCount: totalRatings, });
-
-//     await productsmodel.updateOne(
-//   { _id: productId, "productdetails._id": categoryId, "productdetails.colors._id": colorId },
-//   {
-//     $set: {
-//       "productdetails.$[cat].colors.$[col].avgRating": avgRating,
-//       "productdetails.$[cat].colors.$[col].ratingCount": totalRatings
-//     }
-//   },
-//   {
-//     arrayFilters: [
-//       { "cat._id": categoryId },
-//       { "col._id": colorId }
-//     ]
-//   }
-// );
-
-//     res.status(200).json({ message: "Rating submitted successfully", avgRating });
-//   } catch (error) {
-//     console.error("Error submitting rating:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 app.post("/rate", async (req, res) => {
   try {
@@ -2711,16 +1692,7 @@ app.post("/rate", async (req, res) => {
 });
 
 // ✅ Fetch Product Ratings
-// app.get("/ratings/:productId", async (req, res) => {
-//   try {
-//     const productId = req.params.productId;
-//     const ratings = await Rating.find({ productId }).populate("userId", "name"); // Fetch user details
-//     res.status(200).json(ratings);
-//   } catch (error) {
-//     console.error("Error fetching ratings:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
+
 app.get("/ratings/:userId/:productId", async (req, res) => {
   try {
     const { userId, productId } = req.params;
@@ -2763,7 +1735,7 @@ app.get("/products/shop/:shopname", async (req, res) => {
 });
 
 
-app.post("/sales", async (req, res) => {   
+app.post("/sales",verifySessionCookie,isAdmin, async (req, res) => {   
   try {
       let { sales } = req.body; // sales ko destructure kiya
       console.log("Received sales data:", sales);
@@ -2831,7 +1803,7 @@ app.post("/sales/return", async (req, res) => {
 });
 
 
-app.get("/sales/daily", async (req, res) => {
+app.get("/sales/daily",verifySessionCookie,isAdmin, async (req, res) => {
   try {
     // Optional query params: shopname, from, to
     const { shopname, from, to } = req.query;
@@ -2950,66 +1922,8 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 });
 
 
-// app.get("/products/shop/:shopname", async (req, res) => {
-//   try {
-//       const { shopname } = req.params;
-//       const products = await productsmodel.find({ shopname }); // 🔥 Backend pe filter
-//       res.json(products);
-//   } catch (error) {
-//       res.status(500).json({ error: "Failed to fetch products" });
-//   }
-// });
-// app.listen(port,'0.0.0.0',()=>{
-//     console.log(`server running on port: ${port}`)
-// })
 
-// ✅ Start Server
-
-
-// app.post("/return", async (req, res) => {
-//   try {
-//     let { reason,subreason,selectedOption,orderdata,uploadedUrls,address} = req.body;
-//     console.log("uploadurlimag",uploadedUrls,address)
-//     // ✅ Correct validation
-//     if (!reason || !subreason|| !selectedOption||  !orderdata || !uploadedUrls ||address) {
-//       return res.status(400).json({ error: "All fields are required!" });
-//     }
-
-//         const addressd = {
-//   pincode: address?.[0]?.pincode || "",
-//   building: address?.[0]?.building || "",
-//   locality: address?.[0]?.locality || "",
-//   address: address?.[0]?.address || "",
-//   phone: address?.[0]?.phone || [],
-//   city: address?.[0]?.city || "Jaipur",
-//   state: address?.[0]?.state || "Rajasthan",
-//   isDefault: address?.[0]?.isDefault || false,
-// };
-//     // ✅ Converting frontend data into proper format
-//     const returnData = orderdata.map(e => ({
-//       orderid: e._id,  // `_id` ko `orderId` me convert kiya
-//       reason: reason,
-//       subreason: subreason,
-//       selectedOption:selectedOption,
-//        imageofreturn:uploadedUrls,
-//        addressofreturn:addressd
-      
-//     }));
-//     console.log("return data",returnData)
- 
-//     // ✅ Saving data in database
-//     let savedReturns = await returnmodel.create(returnData);
-//  console.log("savreretun",savedReturns)
-
-// //  await orderr.findByIdAndDelete({_id:orderdata[0]._id})
-//     return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
-//   } catch (error) {
-//     console.error("Error in return request:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-app.post("/return", async (req, res) => {
+app.post("/return",verifySessionCookie, async (req, res) => {
   try {
     let { reason, subreason, selectedOption, orderdata, uploadedUrls, address } = req.body;
 
@@ -3102,45 +2016,7 @@ cron.schedule("*/5 * * * *", async () => {
 
 
 
-// GET /return endpoint
-// app.get("/return", async (req, res) => {
-//   try {
-//     // Fetch all return records from the Return collection
-//     const returns = await returnmodel.find();
-//     if (!returns || returns.length === 0) {
-//       return res.status(404).json({ message: "No return records found." });
-//     }
 
-//     // Array to collect orders that get updated
-//     const updatedOrders = [];
-
-//     // Process each return record
-//     for (const ret of returns) {
-//       // Find the order in Order collection where _id matches ret.orderid and status is 'delivered'
-//       const order = await orderr.findOne({ _id: ret.orderid, status: "delivered" });
-//       console.log("ordd",typeof(order))
-//       if (order) {
-//         // Update the order with return details from the return document
-//         order.reason = ret.reason;
-//         order.subreason = ret.subreason;
-//         order.selectedOption = ret.selectedOption;
-//         order.returnDate = ret.returnDate; // Assuming this is already a Date or ISO string
-//         order.status="pending-returned"
-//         // Save the updated order document
-//         await order.save();
-//         updatedOrders.push(order);
-//       }
-//     }
-
-//     res.status(200).json({
-//       message: "Orders updated with return details.",
-//       updatedOrders,
-//     });
-//   } catch (error) {
-//     console.error("Error updating orders with return details:", error);
-//     res.status(500).json({ message: "Server error.", error: error.message });
-//   }
-// });
 app.get("/return", async (req, res) => {
   try {
     // Fetch all return records from the Return collection
@@ -3181,7 +2057,7 @@ app.get("/return", async (req, res) => {
   }
 });
 
-app.post("/moodmsg", async (req, res) => {
+app.post("/moodmsg",verifySessionCookie,isAdmin, async (req, res) => {
   try {
     const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
 
@@ -3225,7 +2101,7 @@ app.get("/moodmessage", async (req, res) => {
 });
 
 // DELETE
-app.delete("/moodmsg/:id", async (req, res) => {
+app.delete("/moodmsg/:id",verifySessionCookie,isAdmin, async (req, res) => {
   try {
     await moodmodel.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Deleted successfully" });
@@ -3235,7 +2111,7 @@ app.delete("/moodmsg/:id", async (req, res) => {
 });
 
 // UPDATE
-app.put("/moodmsg/:id", async (req, res) => {
+app.put("/moodmsg/:id",verifySessionCookie,isAdmin, async (req, res) => {
   try {
     const {moodemoji,moodcolor, moodtype, msgwithoffer, msgwithoutoffer } = req.body;
     const updated = await moodmodel.findByIdAndUpdate(
@@ -3249,7 +2125,7 @@ app.put("/moodmsg/:id", async (req, res) => {
   }
 });
 
-app.post("/create", async (req, res) => {
+app.post("/create", verifySessionCookie,isAdmin,async (req, res) => {
   try {
     const newCoupon = new cpn(req.body);
     await newCoupon.save();
@@ -3390,7 +2266,7 @@ app.get("/rate/:id", async (req, res) => {
 });
 
 
-app.patch("/bundle", async (req, res) => {
+app.patch("/bundle",verifySessionCookie,isAdmin, async (req, res) => {
   const { ids,val } = req.body;
 console.log("bundleprice",val)
   if (!Array.isArray(ids) || ids.length !== 2) {
@@ -3431,379 +2307,6 @@ console.log("bundleprice",val)
 
 
 
-// app.get("/search", async (req, res) => {
-//   const { q } = req.query;
-
-//   if (!q || q.trim() === "") {
-//     return res.json({ products: [] });
-//   }
-
-//   try {
-//     const results = await productsmodel.aggregate([
-//       {
-//         $search: {
-//           index: "lewkoutsearch",
-//           compound: {
-//             should: [
-//               {
-//                 text: {
-//                   query: q,
-//                   path: [
-//                     "productdetails.tag",
-//                     "productdetails.title",
-//                     "productdetails.description",
-//                     "productdetails.colors.title",
-//                     "productdetails.colors.tag",
-//                     "productdetails.colors.description"
-//                   ],
-//                   fuzzy: {
-//                     maxEdits: 2
-//                   }
-//                 }
-//               }
-//             ]
-//           }
-//         }
-//       },
-//       {
-//         $project: {
-//           category: 1,
-//           image: 1,
-//           productdetails: {
-//             $filter: {
-//               input: "$productdetails",
-//               as: "detail",
-//               cond: {
-//                 $or: [
-//                   { $regexMatch: { input: "$$detail.title", regex: q, options: "i" } },
-//                   { $regexMatch: { input: "$$detail.tag", regex: q, options: "i" } },
-//                   { $regexMatch: { input: "$$detail.description", regex: q, options: "i" } },
-//                   {
-//                     $gt: [
-//                       {
-//                         $size: {
-//                           $filter: {
-//                             input: "$$detail.colors",
-//                             as: "color",
-//                             cond: {
-//                               $or: [
-//                                 { $regexMatch: { input: "$$color.title", regex: q, options: "i" } },
-//                                 { $regexMatch: { input: "$$color.tag", regex: q, options: "i" } },
-//                                 { $regexMatch: { input: "$$color.description", regex: q, options: "i" } }
-//                               ]
-//                             }
-//                           }
-//                         }
-//                       },
-//                       0
-//                     ]
-//                   }
-//                 ]
-//               }
-//             }
-//           }
-//         }
-//       },
-//       { $limit: 10 }
-//     ]);
-
-//     res.json({ products: results });
-//   } catch (err) {
-//     console.error("Search Error:", err);
-//     res.status(500).json({ error: "Search failed" });
-//   }
-// });
-
-// app.get("/search", async (req, res) => {
-//   const { q } = req.query;
-
-//   // 1) खाली query तो खाली रिज़ल्ट
-//   if (!q || q.trim() === "") return res.json({ products: [] });
-
-//   // 2) regex बना लें (case‑insensitive + special‑char escape)
-//   const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-//   const r = new RegExp(escapeRegex(q.trim()), "i");
-
-//   // 3) MongoDB Atlas Search + projection
-//   // const pipeline = [
-//   //   {
-//   //     $search: {
-//   //       index: "lewkoutsearch",      // ⬅️ अपना सर्च इंडेक्स
-//   //       compound: {
-//   //         should: [
-//   //           {
-//   //             text: {
-//   //               query: q,
-//   //               path: [
-//   //                 "productdetails.tag",
-//   //                 "productdetails.title",
-//   //                 "productdetails.description",
-//   //                  "productdetails.occasion",
-//   //                 "productdetails.neckline",
-//   //                 "productdetails.material",
-//   //                 "productdetails.printtype",
-//   //                 "productdetails.styletype",
-//   //                 "productdetails.colors.title",
-//   //                 "productdetails.colors.tag",
-//   //                 "productdetails.colors.description",
-//   //                 "productdetails.colors.occasion",
-//   //                 "productdetails.colors.neckline",
-//   //                 "productdetails.colors.material",
-//   //                 "productdetails.colors.printtype",
-//   //                 "productdetails.colors.styletype",
-
-
-
-                  
-
-
-                  
-                  
-//   //               ],
-//   //               fuzzy: { maxEdits: 2 }
-//   //             }
-//   //           }
-//   //         ]
-//   //       }
-//   //     }
-//   //   },
-//   //   {
-//   //     $project: {
-//   //       category: 1,
-//   //       image: 1,
-//   //       productdetails: {
-//   //         $filter: {
-//   //           input: "$productdetails",
-//   //           as: "pd",
-//   //           cond: {
-//   //             $or: [
-//   //               { $regexMatch: { input: "$$pd.title", regex: r } },
-//   //               { $regexMatch: { input: "$$pd.tag", regex: r } },
-//   //               { $regexMatch: { input: "$$pd.description", regex: r } },
-//   //                 { $regexMatch: { input: "$$pd.occasion", regex: r } },
-//   //                  { $regexMatch: { input: "$$pd.neckline", regex: r } },
-//   //                   { $regexMatch: { input: "$$pd.material", regex: r } },
-//   //                    { $regexMatch: { input: "$$pd.printtype", regex: r } },
-//   //                    { $regexMatch: { input: "$$pd.styletype", regex: r } },
-//   //               {
-//   //                 $gt: [
-//   //                   {
-//   //                     $size: {
-//   //                       $filter: {
-//   //                         input: "$$pd.colors",
-//   //                         as: "c",
-//   //                         cond: {
-//   //                           $or: [
-//   //                             { $regexMatch: { input: "$$c.title", regex: r } },
-//   //                             { $regexMatch: { input: "$$c.tag", regex: r } },
-//   //                             { $regexMatch: { input: "$$c.description", regex: r } },
-//   //                             { $regexMatch: { input: "$$pd.occasion", regex: r } },
-//   //                  { $regexMatch: { input: "$$pd.neckline", regex: r } },
-//   //                   { $regexMatch: { input: "$$pd.material", regex: r } },
-//   //                    { $regexMatch: { input: "$$pd.printtype", regex: r } },
-//   //                    { $regexMatch: { input: "$$pd.styletype", regex: r } }
-//   //                           ]
-//   //                         }
-//   //                       }
-//   //                     }
-//   //                   },
-//   //                   0
-//   //                 ]
-//   //               }
-//   //             ]
-//   //           }
-//   //         }
-//   //       }
-//   //     }
-//   //   },
-//   //   { $limit: 10 }
-//   // ];
-// const pipeline = [
-//   {
-//     $search: {
-//       index: "lewkoutsearch",
-//       compound: {
-//         should: [
-//           {
-//             text: {
-//               query: q,
-//               path: [
-//                 "productdetails.tag",
-//                 "productdetails.title",
-//                 "productdetails.description",
-//                 "productdetails.occasion",
-//                 "productdetails.neckline",
-//                 "productdetails.material",
-//                 "productdetails.printtype",
-//                 "productdetails.styletype",
-//                 "productdetails.colors.title",
-//                 "productdetails.colors.tag",
-//                 "productdetails.colors.description",
-//                 "productdetails.colors.occasion",
-//                 "productdetails.colors.neckline",
-//                 "productdetails.colors.material",
-//                 "productdetails.colors.printtype",
-//                 "productdetails.colors.styletype"
-//               ],
-//               fuzzy: { maxEdits: 2 }
-//             }
-//           }
-//         ]
-//       }
-//     }
-//   },
-//   {
-//     $project: {
-//       category: 1,
-//       image: 1,
-//       productdetails: {
-//         $filter: {
-//           input: "$productdetails",
-//           as: "pd",
-//           cond: {
-//             $or: [
-//               { $regexMatch: { input: "$$pd.title", regex: r } },
-//               { $regexMatch: { input: "$$pd.tag", regex: r } },
-//               { $regexMatch: { input: "$$pd.description", regex: r } },
-//               { $regexMatch: { input: "$$pd.occasion", regex: r } },
-//               { $regexMatch: { input: "$$pd.neckline", regex: r } },
-//               { $regexMatch: { input: "$$pd.material", regex: r } },
-//               { $regexMatch: { input: "$$pd.printtype", regex: r } },
-//               { $regexMatch: { input: "$$pd.styletype", regex: r } },
-//               {
-//                 $gt: [
-//                   {
-//                     $size: {
-//                       $filter: {
-//                         input: "$$pd.colors",
-//                         as: "c",
-//                         cond: {
-//                           $or: [
-//                             { $regexMatch: { input: "$$c.title", regex: r } },
-//                             { $regexMatch: { input: "$$c.tag", regex: r } },
-//                             { $regexMatch: { input: "$$c.description", regex: r } },
-//                             { $regexMatch: { input: "$$c.occasion", regex: r } },
-//                             { $regexMatch: { input: "$$c.neckline", regex: r } },
-//                             { $regexMatch: { input: "$$c.material", regex: r } },
-//                             { $regexMatch: { input: "$$c.printtype", regex: r } },
-//                             { $regexMatch: { input: "$$c.styletype", regex: r } }
-//                           ]
-//                         }
-//                       }
-//                     }
-//                   },
-//                   0
-//                 ]
-//               }
-//             ]
-//           }
-//         }
-//       }
-//     }
-//   },
-//   { $limit: 10 }
-// ];
-
-//   try {
-//     // 4) सर्च चलाइए
-//     const products = await productsmodel.aggregate(pipeline);
-
-//     // 5) bulk‑update ops तैयार कीजिए
-//     const bulkOps = products.map((doc) => ({
-//       updateOne: {
-//         filter: { _id: doc._id },
-//         /** MongoDB 4.2+ pipeline‑update */
-//         update: [
-//           {
-//             $set: {
-//               productdetails: {
-//                 $map: {
-//                   input: "$productdetails",
-//                   as: "pd",
-//                   in: {
-//                     $mergeObjects: [
-//                       "$$pd",
-//                       {
-//                         /** ---------- productdetails.searchcount ---------- */
-//                         searchcount: {
-//                           $cond: [
-//                             {
-//                               $or: [
-//                                 { $regexMatch: { input: "$$pd.title", regex: r } },
-//                                 { $regexMatch: { input: "$$pd.tag", regex: r } },
-//                                 { $regexMatch: { input: "$$pd.description", regex: r } },
-//                                 { $regexMatch: { input: "$$pd.occassion", regex: r } },
-//                                 { $regexMatch: { input: "$$pd.neckline", regex: r } },
-//                                 { $regexMatch: { input: "$$pd.material", regex: r } },
-//                                 { $regexMatch: { input: "$$pd.printtype", regex: r } },
-
-//                                 { $regexMatch: { input: "$$pd.styletype", regex: r } },
-
-
-
-
-
-//                               ]
-//                             },
-//                             { $add: ["$$pd.searchcount", 1] },
-//                             "$$pd.searchcount"
-//                           ]
-//                         },
-//                         /** ---------- colors[].searchcount ---------- */
-//                         colors: {
-//                           $map: {
-//                             input: "$$pd.colors",
-//                             as: "c",
-//                             in: {
-//                               $mergeObjects: [
-//                                 "$$c",
-//                                 {
-//                                   searchcount: {
-//                                     $cond: [
-//                                       {
-//                                         $or: [
-//                                           { $regexMatch: { input: "$$c.title", regex: r } },
-//                                           { $regexMatch: { input: "$$c.tag", regex: r } },
-//                                           { $regexMatch: { input: "$$c.description", regex: r } },
-//                                            { $regexMatch: { input: "$$c.occassion", regex: r } },
-//                                 { $regexMatch: { input: "$$c.neckline", regex: r } },
-//                                 { $regexMatch: { input: "$$c.material", regex: r } },
-//                                 { $regexMatch: { input: "$$c.printtype", regex: r } },
-
-//                                 { $regexMatch: { input: "$$c.styletype", regex: r } },
-
-//                                         ]
-//                                       },
-//                                       { $add: ["$$c.searchcount", 1] },
-//                                       "$$c.searchcount"
-//                                     ]
-//                                   }
-//                                 }
-//                               ]
-//                             }
-//                           }
-//                         }
-//                       }
-//                     ]
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         ]
-//       }
-//     }));
-
-//     // 6) bulkWrite फ़ायर कीजिए (अगर कुछ मिला)
-//     if (bulkOps.length) await productsmodel.bulkWrite(bulkOps);
-
-//     // 7) response
-//     res.json({ products });
-//   } catch (err) {
-//     console.error("Search Error:", err);
-//     res.status(500).json({ error: "Search failed" });
-//   }
-// });
 
 app.get("/search", async (req, res) => {
   const { q } = req.query;
@@ -3922,93 +2425,7 @@ app.get("/search", async (req, res) => {
 
 
 
-/*  GET /cart/recommendations
- *  → 15‑20 products that match cart category/tag but aren’t in cart
- */
 
-// app.get("/cart/recommendations/:userId", async (req, res) => {
-//   try {
-//     const { userId } = req.params;
-// console.log("uerId",userId)
-//     const cart = await addtocart.find({ userId }).lean();
-// console.log("cart",cart)
-//     if (!cart || cart.length === 0) {
-//       return res.json({ products: [] });
-//     }
-
-//     // ✅ Convert to ObjectId array safely
-//     const cartIds = cart.map(item =>(item.productId));
-// console.log("cartIds",typeof(cartIds),cartIds)
-//     // ✅ Get product meta info
-//     const cartMeta = await productsmodel.find(
-//       { _id: { $in: cartIds } },
-//       { category: 1, "productdetails.tag": 1, "productdetails.colors.tag": 1 }
-//     ).lean();
-// console.log("cartmeta",cartMeta)
-//     if (!cartMeta.length) {
-//       return res.json({ products: [] });
-//     }
-
-//     // ✅ Collect category
-//     const cartCategories = [...new Set(cartMeta.map(p => p.category).filter(Boolean))];
-
-//     // ✅ Collect all tags including color tags
-//     const cartTags = [
-//       ...new Set(
-//         cartMeta.flatMap(p =>
-//           (p.productdetails || []).flatMap(detail => [
-//             ...(detail.tag ? [detail.tag] : []),
-//             ...(detail.colors || []).map(c => c.tag).filter(Boolean)
-//           ])
-//         )
-//       )
-//     ];
-
-//     if (!cartCategories.length && !cartTags.length) {
-//       return res.json({ products: [] });
-//     }
-
-//     // ✅ Build match query with case-insensitive regex
-//     const matchConditions = [];
-
-//     if (cartCategories.length) {
-//       matchConditions.push({ category: { $in: cartCategories } });
-//     }
-
-//     if (cartTags.length) {
-//       const regexTags = cartTags.map(tag => new RegExp(tag, "i")); // case-insensitive
-//       matchConditions.push({
-//         $or: [
-//           { "productdetails.tag": { $in: regexTags } },
-//           { "productdetails.colors.tag": { $in: regexTags } }
-//         ]
-//       });
-//     }
-
-//     // ✅ Final aggregate
-//     const suggestions = await productsmodel.aggregate([
-//       {
-//         $match: {
-//           _id: { $nin: cartIds },
-//           $or: matchConditions
-//         }
-//       },
-//       { $sample: { size: 20 } },
-//       {
-//         $project: {
-//           category: 1,
-//           image: { $arrayElemAt: ["$image", 0] },
-//           productdetails: { $slice: ["$productdetails", 1] }
-//         }
-//       }
-//     ]);
-
-//     res.json({ products: suggestions });
-//   } catch (err) {
-//     console.error("🔥 Recommendation Error:", err);
-//     res.status(500).json({ error: "Recommendation failed" });
-//   }
-// });
 
 app.get("/cart/recommendations/:userId", async (req, res) => {
   try {
@@ -4020,9 +2437,7 @@ console.log("")
       return res.json({ products: [] });
     }
 
-    // ✅ Step 1: Get all productIds from cart
-    // const cartIds = cart.map((item) => (item.productId));
-    // console.log("🛒 Cart IDs:", cartIds);
+    
     const { Types } = require("mongoose");
 
 // Step 1: Cart IDs ko ObjectId banado
@@ -4199,78 +2614,7 @@ const geocoding=process.env.GEOCODING_APIKEY
 // ✅ Admin ka fixed address
 const adminAddress = "117 geetanjali colony Salasar enclave mangyawas jaipur rajasthan";
 
-// // ✅ Distance Route
-// app.get("/getdistance", async (req, res) => {
-//   const userAddress = req.query.userAddress;
-// console.log("user ka addres",userAddress)
-//   if (!userAddress) return res.status(400).json({ error: "User address required" });
 
-//   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(adminAddress)}&destinations=${encodeURIComponent(userAddress)}&key=${apiKey}`;
-
-//   try {
-//     const response = await axios.get(url);
-//     const data = response.data;
-//     console.log("disatace",data)
-
-//     if (data.rows[0].elements[0].status === "OK") {
-//          console.log("disatace",data.rows[0].elements[0].distance.text)
-//       const distance = data.rows[0].elements[0].distance.text;
-//       const duration = data.rows[0].elements[0].duration.text;
-//       return res.json({ distance, duration });
-//     } else {
-//       return res.status(400).json({ error: "Could not calculate distance" });
-//     }
-//   } catch (err) {
-//     console.error("Erroring..:", err.message);
-//     return res.status(500).json({ error: "Internal server error" });
-//   }
-// });
-
-// ✅ Route: Calculate Distance + Validate Address
-// app.get("/getdistance", async (req, res) => {
-//   const userAddress = req.query.userAddress;
-// console.log("userka address",userAddress)
-//   if (!userAddress) return res.status(400).json({ error: "User address required" });
-
-//   try {
-//     // ✅ Step 1: Validate Address using Geocoding API
-//     const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(userAddress)}&key=${geocoding}`;
-//     const geoRes = await axios.get(geoURL);
-//     const geoData = geoRes.data;
-
-//    const result = geoData.results[0];
-// console.log("resulttt",result)
-// if (
-//   geoData.status !== "OK" ||
-//   !result ||
-//   result.partial_match || // <-- 🚨 Google's own flag: true if match is incomplete
-//   !result.address_components.some(c => c.types.includes("street_address") || c.types.includes("premise") || c.types.includes("route")) // <-- check for real address components
-// ) {
-//   return res.status(400).json({ error: "Invalid or incomplete address provided" });
-// }
-//     // ✅ Step 2: If valid, proceed to calculate distance
-//     const distURL = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(adminAddress)}&destinations=${encodeURIComponent(userAddress)}&key=${apiKey}`;
-//     const distRes = await axios.get(distURL);
-//     const distData = distRes.data;
-
-//     if (
-//       distData.rows &&
-//       distData.rows[0] &&
-//       distData.rows[0].elements[0] &&
-//       distData.rows[0].elements[0].status === "OK"
-//     ) {
-//       const distance = distData.rows[0].elements[0].distance.text;
-//       const duration = distData.rows[0].elements[0].duration.text;
-//       console.log("distance and duration",distance,duration)
-//       return res.json({ distance, duration });
-//     } else {
-//       return res.status(400).json({ error: "Could not calculate distance" });
-//     }
-//   } catch (err) {
-//     console.error("Error:", err.message);
-//     return res.status(500).json({ error: "Internal server error" });
-//   }
-// });
 // ✅ Route: Calculate Distance + Validate Address
 app.get("/getdistance", async (req, res) => {
   const userAddress = req.query.userAddress;
@@ -4339,7 +2683,7 @@ app.get("/slots", async (req, res) => {
 });
 
 // ✅ TOGGLE slot disable/enable
-app.post("/slot-status/toggle", async (req, res) => {
+app.post("/slot-status/toggle",isAdmin,verifySessionCookie,async (req, res) => {
   const { label } = req.body;
   try {
     const slot = await slotmodel.findOne({ label });

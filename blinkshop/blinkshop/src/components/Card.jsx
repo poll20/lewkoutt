@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import { useLoading } from "./LoadingContext";
 import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
+import { slugify } from "./Slugify";
   
   // import FaChevronDown from "react-icons/fa";
 const Card = (props) => {
@@ -544,7 +545,7 @@ if(searchvalue){
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
         {/* Image Section */}
         <div className="image-container">
-          <NavLink to={`/productdescription/${!wish?(product._id):(product?.itemid)}/${product?.color || product?.defaultColor}`}>
+          <NavLink to={`/productdescription/${ slugify(product.title)}/${!wish?(product._id):(product?.itemid)}/${product?.color || product?.defaultColor}`}>
           <img
             src={product.image[0]} // Replace with real image
             alt={product?.title || "Product"}
