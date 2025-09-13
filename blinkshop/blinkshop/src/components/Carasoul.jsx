@@ -166,23 +166,29 @@ const Carousel = ({ images = [], interval = 4000 }) => {
         to={`/productmodel/${current?.category || ""}`}
         className="carousel-slide"
       >
-        <img
-          src={getOptimizedUrl(current?.image)}
-          alt={current?.category || "carousel image"}
-          className="carousel-image"
-          loading={currentIndex === 0 ? "eager" : "lazy"}
-          fetchpriority={currentIndex === 0 ? "high" : "auto"}
-        />
+       <img
+  src={current?.image}
+  alt={current?.category || "carousel image"}
+  className="carousel-image"
+  loading={index <= 1 ? "eager" : "lazy"}   // ✅ first 2 slides eager
+  fetchpriority={index === 0 ? "high" : "auto"} // ✅ first slide high priority
+  decoding="async"
+/>
+
       </NavLink>
 
       <div className="carousel-indicators" style={{ margin: "auto" }}>
-        {images.map((_, index) => (
-          <span
-            key={index}
-            className={`indicator ${currentIndex === index ? "active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
+        {images.map((img, index) => (
+  <img
+    key={index}
+    src={img.image}
+    alt={img.category || "carousel image"}
+    className="carousel-image"
+    loading={index <= 1 ? "eager" : "lazy"}
+    fetchpriority={index === 0 ? "high" : "auto"}
+  />
+))}
+
       </div>
     </div>
   );
