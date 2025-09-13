@@ -1,81 +1,220 @@
-import React from 'react';
+// import React from 'react';
+
+// const TermsAndConditions = () => {
+//   const containerStyle = {
+//     marginTop:"45px",
+//     padding: '20px',
+//     maxWidth: '600px',
+//     margin: '0 auto',
+//     fontFamily: 'Arial, sans-serif',
+//     color: '#333',
+//     lineHeight: '1.6',
+//   };
+
+//   const headingStyle = {
+//     fontSize: '24px',
+//     fontWeight: 'bold',
+//     marginBottom: '20px',
+//     textAlign: 'center',
+//   };
+
+//   const sectionTitleStyle = {
+//     fontSize: '18px',
+//     fontWeight: '600',
+//     marginTop: '20px',
+//   };
+
+//   const paragraphStyle = {
+//     marginTop: '8px',
+//   };
+
+//   return (
+//     <div style={containerStyle}>
+//       <h1 style={headingStyle}>Terms and Conditions</h1>
+//       <p style={paragraphStyle}>
+//         Welcome to Lewkout. By accessing or using our website, you agree to comply with and be bound by the following Terms and Conditions.
+//       </p>
+
+//       <p style={sectionTitleStyle}>1. Service Overview</p>
+//       <p style={paragraphStyle}>
+//         We are a clothing delivery platform for girls’ western wear. We partner with popular local stores in Jaipur to bring the trendiest outfits directly to your doorstep.
+//       </p>
+
+//       <p style={sectionTitleStyle}>2. Order Timings</p>
+//       <p style={paragraphStyle}>Orders are accepted from 10 AM to 9 PM.</p>
+//       <p style={paragraphStyle}>Midnight orders are not accepted.</p>
+
+//       <p style={sectionTitleStyle}>3. Delivery Policy</p>
+//       <p style={paragraphStyle}>We currently deliver only within Jaipur.</p>
+//       <p style={paragraphStyle}>Delivery Charges:</p>
+//       <ul>
+//         <li>Free delivery on orders above ₹799.</li>
+//         <li>₹25 delivery fee on orders below ₹799.</li>
+//         <li>COD orders include an additional ₹25 COD charge.</li>
+//       </ul>
+
+//       <p style={sectionTitleStyle}>4. Return Policy</p>
+//       <p style={paragraphStyle}>Customers must request a return within 60 minutes of delivery.</p>
+//       <p style={paragraphStyle}>Items must be unworn, unwashed, and in original condition with all tags intact.</p>
+//       <p style={paragraphStyle}>Returns are subject to approval after a basic quality check.</p>
+
+//       <p style={sectionTitleStyle}>5. Payment Options</p>
+//       <p style={paragraphStyle}>We accept UPI, Credit/Debit Cards, and Net Banking.</p>
+//       <p style={paragraphStyle}>COD is available with a ₹25 fee.</p>
+
+//       <p style={sectionTitleStyle}>6. Account Responsibility</p>
+//       <p style={paragraphStyle}>Customers are responsible for maintaining the confidentiality of their account credentials and for all activities under their account.</p>
+
+//       <p style={sectionTitleStyle}>7. Product Representation</p>
+//       <p style={paragraphStyle}>We make every effort to accurately display product images and descriptions. However, actual colors may vary slightly due to screen settings and lighting conditions.</p>
+
+//       <p style={sectionTitleStyle}>8. Intellectual Property</p>
+//       <p style={paragraphStyle}>All content on this website, including images, text, graphics, and logos, is the property of Lewkout and may not be reproduced or used without permission.</p>
+
+//       <p style={sectionTitleStyle}>9. Limitation of Liability</p>
+//       <p style={paragraphStyle}>We are not liable for any indirect, incidental, or consequential damages resulting from the use of our platform or services.</p>
+
+//       <p style={sectionTitleStyle}>10. Updates to Terms</p>
+//       <p style={paragraphStyle}>These Terms and Conditions may be updated at any time. Continued use of our services implies acceptance of any revisions.</p>
+//     </div>
+//   );
+// };
+
+// export default TermsAndConditions;
+import React from "react";
 
 const TermsAndConditions = () => {
   const containerStyle = {
-    marginTop:"45px",
-    padding: '20px',
-    maxWidth: '600px',
-    margin: '0 auto',
-    fontFamily: 'Arial, sans-serif',
-    color: '#333',
-    lineHeight: '1.6',
+    marginTop: "75px",
+    padding: "20px",
+    maxWidth: "800px",
+    margin: "0 auto",
+    fontFamily: "Arial, sans-serif",
+    color: "#333",
+    lineHeight: "1.6",
+    textAlign: "justify",
   };
 
   const headingStyle = {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-    textAlign: 'center',
-  };
-
-  const sectionTitleStyle = {
-    fontSize: '18px',
-    fontWeight: '600',
-    marginTop: '20px',
-  };
-
-  const paragraphStyle = {
-    marginTop: '8px',
+    fontSize: "24px",
+    fontWeight: "bold",
+    marginBottom: "20px",
+    textAlign: "center",
   };
 
   return (
     <div style={containerStyle}>
-      <h1 style={headingStyle}>Terms and Conditions</h1>
-      <p style={paragraphStyle}>
-        Welcome to Lewkout. By accessing or using our website, you agree to comply with and be bound by the following Terms and Conditions.
+      <h1 style={headingStyle}>Terms &amp; Conditions</h1>
+      <p>
+        This document is an electronic record in terms of Information Technology
+        Act, 2000 and rules there under as applicable and the amended provisions
+        pertaining to electronic records in various statutes as amended by the
+        Information Technology Act, 2000. This electronic record is generated by
+        a computer system and does not require any physical or digital
+        signatures.
       </p>
 
-      <p style={sectionTitleStyle}>1. Service Overview</p>
-      <p style={paragraphStyle}>
-        We are a clothing delivery platform for girls’ western wear. We partner with popular local stores in Jaipur to bring the trendiest outfits directly to your doorstep.
+      <p>
+        This document is published in accordance with the provisions of Rule 3
+        (1) of the Information Technology (Intermediaries guidelines) Rules,
+        2011 that require publishing the rules and regulations, privacy policy
+        and Terms of Use for access or usage of domain name{" "}
+        <a href="https://www.lewkout.com">https://www.lewkout.com</a>{" "}
+        ("Website"), including the related mobile site and mobile application
+        (hereinafter referred to as "Platform").
       </p>
 
-      <p style={sectionTitleStyle}>2. Order Timings</p>
-      <p style={paragraphStyle}>Orders are accepted from 10 AM to 9 PM.</p>
-      <p style={paragraphStyle}>Midnight orders are not accepted.</p>
+      <p>
+        The Platform is owned by Lewkout, a company incorporated under the
+        Companies Act, 1956 with its registered office at 117, Salasar Enclave,
+        Nandkishorepura, Manyawas, Jaipur (hereinafter referred to as “Platform
+        Owner”, "we", "us", "our").
+      </p>
 
-      <p style={sectionTitleStyle}>3. Delivery Policy</p>
-      <p style={paragraphStyle}>We currently deliver only within Jaipur.</p>
-      <p style={paragraphStyle}>Delivery Charges:</p>
+      <p>
+        Your use of the Platform and services and tools are governed by the
+        following terms and conditions ("Terms of Use") as applicable to the
+        Platform including the applicable policies which are incorporated herein
+        by way of reference. If You transact on the Platform, You shall be
+        subject to the policies that are applicable to the Platform for such
+        transaction. By mere use of the Platform, You shall be contracting with
+        the Platform Owner and these terms and conditions including the policies
+        constitute Your binding obligations, with Platform Owner.
+      </p>
+
+      <p>
+        These Terms of Use relate to your use of our website, goods (as
+        applicable) or services (as applicable) (collectively, "Services"). Any
+        terms and conditions proposed by You which are in addition to or which
+        conflict with these Terms of Use are expressly rejected by the Platform
+        Owner and shall be of no force or effect. These Terms of Use can be
+        modified at any time without assigning any reason. It is your
+        responsibility to periodically review these Terms of Use to stay
+        informed of updates.
+      </p>
+
+      <p>
+        For the purpose of these Terms of Use, wherever the context so requires
+        "you", "your" or "user" shall mean any natural or legal person who has
+        agreed to become a user/buyer on the Platform.
+      </p>
+
+      <p>
+        ACCESSING, BROWSING OR OTHERWISE USING THE PLATFORM INDICATES YOUR
+        AGREEMENT TO ALL THE TERMS AND CONDITIONS UNDER THESE TERMS OF USE, SO
+        PLEASE READ THE TERMS OF USE CAREFULLY BEFORE PROCEEDING.
+      </p>
+
+      <h3>Key Terms</h3>
       <ul>
-        <li>Free delivery on orders above ₹799.</li>
-        <li>₹25 delivery fee on orders below ₹799.</li>
-        <li>COD orders include an additional ₹25 COD charge.</li>
+        <li>
+          You agree to provide true, accurate and complete information during
+          and after registration.
+        </li>
+        <li>
+          Neither we nor third parties provide any warranty or guarantee as to
+          the accuracy, timeliness, performance, completeness or suitability of
+          the information and materials offered on this website.
+        </li>
+        <li>
+          Your use of the Services and the Platform is solely at your own risk.
+        </li>
+        <li>
+          The contents of the Platform and the Services are proprietary to us.
+        </li>
+        <li>
+          Unauthorized use may lead to action against you as per applicable
+          laws.
+        </li>
+        <li>
+          You agree not to use the Platform/Services for unlawful purposes.
+        </li>
+        <li>
+          Third-party links are governed by their own terms and privacy policy.
+        </li>
+        <li>
+          You shall indemnify and hold harmless Platform Owner and its
+          affiliates against claims arising from your breach of Terms, policies,
+          or violation of laws/rights.
+        </li>
+        <li>
+          Parties shall not be liable for any failure to perform obligations if
+          prevented or delayed by a force majeure event.
+        </li>
       </ul>
 
-      <p style={sectionTitleStyle}>4. Return Policy</p>
-      <p style={paragraphStyle}>Customers must request a return within 60 minutes of delivery.</p>
-      <p style={paragraphStyle}>Items must be unworn, unwashed, and in original condition with all tags intact.</p>
-      <p style={paragraphStyle}>Returns are subject to approval after a basic quality check.</p>
+      <p>
+        These Terms and any dispute or claim relating to it, or its
+        enforceability, shall be governed by and construed in accordance with
+        the laws of India. All disputes shall be subject to the exclusive
+        jurisdiction of the courts in Jaipur, Rajasthan.
+      </p>
 
-      <p style={sectionTitleStyle}>5. Payment Options</p>
-      <p style={paragraphStyle}>We accept UPI, Credit/Debit Cards, and Net Banking.</p>
-      <p style={paragraphStyle}>COD is available with a ₹25 fee.</p>
-
-      <p style={sectionTitleStyle}>6. Account Responsibility</p>
-      <p style={paragraphStyle}>Customers are responsible for maintaining the confidentiality of their account credentials and for all activities under their account.</p>
-
-      <p style={sectionTitleStyle}>7. Product Representation</p>
-      <p style={paragraphStyle}>We make every effort to accurately display product images and descriptions. However, actual colors may vary slightly due to screen settings and lighting conditions.</p>
-
-      <p style={sectionTitleStyle}>8. Intellectual Property</p>
-      <p style={paragraphStyle}>All content on this website, including images, text, graphics, and logos, is the property of Lewkout and may not be reproduced or used without permission.</p>
-
-      <p style={sectionTitleStyle}>9. Limitation of Liability</p>
-      <p style={paragraphStyle}>We are not liable for any indirect, incidental, or consequential damages resulting from the use of our platform or services.</p>
-
-      <p style={sectionTitleStyle}>10. Updates to Terms</p>
-      <p style={paragraphStyle}>These Terms and Conditions may be updated at any time. Continued use of our services implies acceptance of any revisions.</p>
+      <p>
+        All concerns or communications relating to these Terms must be
+        communicated to us using the contact information provided on this
+        website.
+      </p>
     </div>
   );
 };

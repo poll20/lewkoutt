@@ -256,7 +256,7 @@ function Layout({ showPopup }) {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/faq" element={<Faq/>} />
             <Route path="/aboutus" element={<AboutUs/>} />
-            {/* <Route path="/terms" element={<TermsAndConditions/>} /> */}
+            <Route path="/terms" element={<TermsAndConditions/>} />
             
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
