@@ -141,7 +141,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
   };
 
   if (images.length === 0) {
-    return <div className="carousel-container">No images to show</div>;
+    return //<div className="carousel-container">No images to show</div>;
   }
 
   const current = images[currentIndex];
