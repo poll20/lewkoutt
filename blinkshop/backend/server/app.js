@@ -483,7 +483,7 @@ console.log("decode",decoded)
     });
 
     // ✅ Check/create user in DB
-    const phoneNumber = decoded.phoneNumber;
+    const phoneNumber = decoded.phone_number;
     const uid = decoded.uid;
 
     let user = await userr.findOne({ uid });
