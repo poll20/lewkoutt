@@ -69,9 +69,9 @@ app.use(cors({
 }));//ye deploy ke baad 
 
 // ✅ Fir Helmet lagao
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
+// app.use(helmet({
+//   crossOriginResourcePolicy: { policy: "cross-origin" }
+// }));
 
 app.use((express.urlencoded({extented:false})))
     

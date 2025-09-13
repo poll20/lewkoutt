@@ -100,11 +100,9 @@ useEffect(() => {
       try {
         setIsLoading(true)
         let response = await fetch(`${apiUrl}/cart/${userDetails?._id}`, 
-        //   {
-        //   headers: {
-        //     Authorization: `Bearer ${user.accessToken}`,
-        //   },
-        // }
+          {
+          credentials: 'include', // important: allow cookies to be set
+        }
       );
         let data = await response.json();
         // console.log("data in cart",data)
@@ -140,11 +138,9 @@ useEffect(() => {
         try {
           setIsLoading(true)
           let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
-          //   , {
-          //   headers: {
-          //     Authorization: `Bearer ${user.accessToken}`,
-          //   },
-          // }
+            , {
+            credentials: 'include', // important: allow cookies to be set
+          }
         );
           let data = await response.json();
           if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
@@ -167,7 +163,7 @@ useEffect(() => {
     
     
     }, [user,userDetails]);
-
+//ise abhi dekhna h include krna h ya nhi
   useEffect(()=>{
     if(user&& userDetails._id){
       const fetchalluser = async () => {
@@ -297,6 +293,7 @@ useEffect(() => {
         if (!itemInCart) {
           const response = await fetch(`${apiUrl}/cart`, {
             method: "POST",
+            credentials: 'include', // important: allow cookies to be set
             headers: { "Content-Type": "application/json",
               // Authorization: `Bearer ${user.accessToken}`,
             },
@@ -315,6 +312,7 @@ useEffect(() => {
       } else {
         const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
           method: "DELETE",
+          credentials: 'include', // important: allow cookies to be set
           // headers: {
           //   Authorization: `Bearer ${user.accessToken}`,
           // },
@@ -345,6 +343,7 @@ useEffect(() => {
       setIsLoading(true)
       const response = await fetch(`${apiUrl}/cart/${id}`, {
         method: "DELETE",
+        credentials: 'include', // important: allow cookies to be set
         // headers: { 
         //   Authorization: `Bearer ${user.accessToken}`,
         // },
@@ -445,6 +444,7 @@ console.log("iredandid",prd,id)
       
         const response = await fetch(`${apiUrl}/cart`, {
           method: "POST",
+          credentials: 'include', // important: allow cookies to be set
           headers: { "Content-Type": "application/json",
             // Authorization: `Bearer ${user.accessToken}`,
           },
@@ -577,6 +577,7 @@ finally{
 
     const response = await fetch(`${apiUrl}/addtocart`, {
       method: "POST",
+      credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
@@ -610,6 +611,7 @@ finally{
    {
     const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
       method: 'DELETE',
+      credentials: 'include', // important: allow cookies to be set
       // headers: { 
       //   Authorization: `Bearer ${user.accessToken}`,
       // },
@@ -754,6 +756,7 @@ finally{
       console.log("xdx",data)
       let res = await fetch(`${apiUrl}/cart/${data._id}`, {
         method: "DELETE",
+        credentials: 'include', // important: allow cookies to be set
         // headers: { 
         //   Authorization: `Bearer ${user.accessToken}`,
         // },
@@ -923,7 +926,7 @@ let handlenewaddress = async (address, user) => {
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
       method: "PATCH",
-    
+    credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
@@ -960,6 +963,7 @@ console.log("sara add mil jaye",addresid,action,user,addr)
   setIsLoading(true)
   const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
     method: "PATCH",  // Using PATCH request to update the address
+    credentials: 'include', // important: allow cookies to be set
     headers: { "Content-Type": "application/json",
       // Authorization: `Bearer ${user.accessToken}`,
     },
@@ -993,6 +997,7 @@ else{
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
       method: "PATCH",  // Using PATCH request to update the address
+      credentials: 'include', // important: allow cookies to be set
      
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
@@ -1037,7 +1042,7 @@ if(user && userDetails){
     setIsLoading(true)
     let orderpost=await fetch(`${apiUrl}/order`,{
       method:"POST",
-     
+     credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
@@ -1076,7 +1081,9 @@ const fetchUserOrders = async (userId) => {
           console.error("❌ User ID is missing!");
           return;
       }
-      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`
+      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`, {
+        credentials: 'include', // important: allow cookies to be set
+      }
       //   ,{
       //   headers: { 
       //     Authorization: `Bearer ${user.accessToken}`,
