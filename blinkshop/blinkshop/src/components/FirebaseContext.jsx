@@ -119,7 +119,7 @@ const verifyOTP = async (otp, refcode) => {
     // 🔥 Backend ko bhejo
     const res = await fetch(`${apiUrl}/user/register`, {
       method: "POST",
-      withCredentials: true ,   // 👈 ye mandatory hai // cookie set hoga
+      credentials: "include", // cookie set hoga
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ idToken, refcode }),
     });
