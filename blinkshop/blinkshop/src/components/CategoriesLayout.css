@@ -22,6 +22,7 @@
     height: 100%;
     object-fit: cover;
     /* border-radius: 12px; */
+    aspect-ratio: 16 / 9; /* ✅ Helps browser reserve space */
   }
   
   /* Child Cards - Horizontal Scroll */

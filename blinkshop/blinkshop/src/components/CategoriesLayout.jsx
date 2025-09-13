@@ -6,54 +6,10 @@ import { useBio } from "./BioContext";
 const CtegoriesLayout = () => {
   const {productdata}=useBio()
   if(!productdata){
-    return <p>loading....</p>
+    return 
   }
-  console.log("yha bhi mil gya",productdata)
-  // const limitedProductData = productdata?.slice(0, 7); // 👈 limit to 7 items
-  // const cards = [
-  //   {
-  //     id: 1,
-  //     cate:"shirt",
-  //     title: 'Top Wear',
-  //     description: 'This is the description for card 1.',
-  //     image: newme1,
-  //   },
-  //   {
-  //     id: 2,
-  //     cate:"shirt",
-  //     title: 'Formals',
-  //     description: 'This is the description for card 2.',
-  //     image: newme2,
-  //   },
-  //   {
-  //     id: 3,
-  //     cate:"gown",
-  //     title: 'Dress',
-  //     description: 'This is the description for card 3.',
-  //     image: newme3,
-  //   },
-  //   {
-  //     id: 4,
-  //     cate:"t-shirt",
-  //     title: 'Top Wear',
-  //     description: 'This is the description for card 4.',
-  //     image: newme4,
-  //   },
-  //   {
-  //     id: 5,
-  //     cate:"jeans",
-  //     title: 'Bottom Wear',
-  //     description: 'This is the description for card 5.',
-  //     image: newme1,
-  //   },
-  //   {
-  //     id: 6,
-  //     cate:"midi dress",
-  //     title: 'Gowns',
-  //     description: 'This is the description for card 6.',
-  //     image: newme2,
-  //   },
-  // ];
+  
+  
 
   return (
     <>
@@ -68,7 +24,9 @@ const CtegoriesLayout = () => {
           src={e.image}
           alt={e.title || "product"}
           className="parent-image"
-          loading="lazy" // Lazy loading for better performance
+          // loading="lazy" // Lazy loading for better performance
+          fetchpriority="high" // ✅ suggest browser to prioritize
+  decoding="async"
         />
         </NavLink>
       </div>
