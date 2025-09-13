@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 let app= express()
 app.use(cookieParser());
 // security middleware
-app.use(helmet());
+
 // const mongoose = require("mongoose");
 
 const axios = require("axios");
@@ -67,6 +67,12 @@ app.use(cors({
   methods: "GET,POST,PUT,PATCH,DELETE",
   credentials: true
 }));//ye deploy ke baad 
+
+// ✅ Fir Helmet lagao
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
@@ -872,6 +878,7 @@ const addIdsToSubCollections = async () => {
 addIdsToSubCollections();
 
 app.get("/productmodel",async(req,res)=>{
+
   
    let operation=req.query.operation
   let section=req.query.section
