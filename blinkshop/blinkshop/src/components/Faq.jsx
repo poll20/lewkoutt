@@ -332,7 +332,7 @@ const Faq = () => {
         </a>
 
         <a
-          href={`https://mail.google.com/mail/u/0/?fs=1&to=team.lewkout@gmail.com&su=Support+Request+from+Lewkout&tf=cm`}
+          href="mailto:team.lewkout@gmail.com?subject=Support%20Request%20from%20Lewkout"
           target="_blank"
           rel="noopener noreferrer"
           style={{ ...iconStyle, textDecoration: "none" }}
