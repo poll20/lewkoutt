@@ -74,7 +74,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useBio } from "./BioContext";
 
 // ✅ Lazy imports
-const Carousel = React.lazy(() => import("./Carasoul"));
+// const Carousel = React.lazy(() => import("./Carasoul"));
 // const CustomerLove = React.lazy(() => import("./CustomerLove"));
 const CategoriesLayout = React.lazy(() => import("./CategoriesLayout"));
 const OfferBanner = React.lazy(() => import("./OfferBanner"));
@@ -93,7 +93,7 @@ export default function Home() {
     <div className="home">
       <Suspense fallback={<p>Loading Home Content...</p>}>
         <OfferBanner />
-        <Carousel images={productdata} />
+        {/* <Carousel images={productdata} /> */}
         <CategoriesLayout />
         {/* <CustomerLove /> */}
 
