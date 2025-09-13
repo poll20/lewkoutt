@@ -1,4 +1,5 @@
 
+
 // import React, { useState, useEffect, useRef, useCallback } from "react";
 // import { NavLink } from "react-router-dom";
 // import "./Carousel.css";
@@ -58,24 +59,23 @@
 
 //   return (
 //     <div
-       
 //       className="carousel-container"
 //       onTouchStart={handleTouchStart}
 //       onTouchMove={handleTouchMove}
 //       onTouchEnd={handleTouchEnd}
 //     >
-//       <NavLink
-//         to={`/productmodel/${current?.category || ""}`}
-//         className="carousel-slide"
-//         style={{
-//           backgroundImage: current?.image ? `url(${current.image})` : "none",
-//           backgroundRepeat: "no-repeat",
-//           backgroundPosition: "center",
-//           backgroundSize: "cover",
-//         }}
-//       />
+//       <NavLink to={`/productmodel/${current?.category || ""}`} className="carousel-slide">
+//         <img
+//           src={current?.image}
+//           alt={current?.category || "carousel image"}
+//           className="carousel-image"
+//           // First slide eager load + high priority for LCP
+//           loading={currentIndex === 0 ? "eager" : "lazy"}
+//           fetchpriority={currentIndex === 0 ? "high" : "auto"}
+//         />
+//       </NavLink>
 
-//       <div className="carousel-indicators" style={{margin:"auto"}}>
+//       <div className="carousel-indicators" style={{ margin: "auto" }}>
 //         {images.map((_, index) => (
 //           <span
 //             key={index}
@@ -89,8 +89,6 @@
 // };
 
 // export default Carousel;
-
-
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import "./Carousel.css";
@@ -148,6 +146,15 @@ const Carousel = ({ images = [], interval = 4000 }) => {
 
   const current = images[currentIndex];
 
+  // ✅ Cloudinary optimization (w=1200, auto format, auto quality)
+  const getOptimizedUrl = (url) => {
+    if (!url) return "";
+    if (url.includes("/upload/")) {
+      return url.replace("/upload/", "/upload/w_1200,f_auto,q_auto/");
+    }
+    return url;
+  };
+
   return (
     <div
       className="carousel-container"
@@ -155,12 +162,14 @@ const Carousel = ({ images = [], interval = 4000 }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <NavLink to={`/productmodel/${current?.category || ""}`} className="carousel-slide">
+      <NavLink
+        to={`/productmodel/${current?.category || ""}`}
+        className="carousel-slide"
+      >
         <img
-          src={current?.image}
+          src={getOptimizedUrl(current?.image)}
           alt={current?.category || "carousel image"}
           className="carousel-image"
-          // First slide eager load + high priority for LCP
           loading={currentIndex === 0 ? "eager" : "lazy"}
           fetchpriority={currentIndex === 0 ? "high" : "auto"}
         />
