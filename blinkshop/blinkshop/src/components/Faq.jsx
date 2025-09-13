@@ -658,7 +658,7 @@ const Faq = () => {
   const [openQuestion, setOpenQuestion] = useState(null);
 
   const phoneNumber = "+917014996104";
-  const supportEmail = "sharmaabhay1549@gmail.com";
+  const supportEmail = "team.lewkout@gmail.com";
 
   const containerStyle = {
     display: "flex",

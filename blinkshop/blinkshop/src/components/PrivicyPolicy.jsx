@@ -6,7 +6,7 @@
  * - Mobile-first layout (single column, big tap targets, readable text)
  * - Drop-in component: <PrivacyPolicyMobile email="support@lewkout.com" phone="+91-00000-00000" />
  */
-export default function PrivacyPolicy({ email = "[Your Business Email]", phone = "[Your Business Contact Number]" }) {
+export default function PrivacyPolicy({ email = "[team.lewkout@gmail.com]", phone = "[7014996104]" }) {
   const styles = {
     page: {
       marginTop: "70px",
@@ -131,7 +131,7 @@ export default function PrivacyPolicy({ email = "[Your Business Email]", phone =
       <div>
         <div style={styles.titleBox}>
           <h1 style={styles.title}>Privacy Policy</h1>
-          <p style={styles.subtitle}>Effective Date: {effectiveDate}</p>
+          {/* <p style={styles.subtitle}>Effective Date: {effectiveDate}</p> */}
         </div>
       </div>
     </div>
@@ -232,7 +232,7 @@ export default function PrivacyPolicy({ email = "[Your Business Email]", phone =
         And visitors can always refuse to supply personally-identifying information, with the caveat that it may prevent them from engaging in certain website-related activities.
       </p>
       <p style={styles.p}>
-        📧 Company Mail ID: <a style={styles.link} href="mailto:support.lewkout@gmail.com">support.lewkout@gmail.com</a>
+        📧 Company Mail ID: <a style={styles.link} href="mailto:team.lewkout@gmail.com">team.lewkout@gmail.com</a>
       </p>
     </section>
 
