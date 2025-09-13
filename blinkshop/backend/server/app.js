@@ -390,6 +390,8 @@ app.get("/wear",async(req,res)=>{
 
 //user created or registered
 app.post("/user/register", async (req, res) => {
+   console.log("📩 Body received:", req.body);
+  console.log("📩 Headers:", req.headers);
   // console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   // // const { name, email, updated_at } = req.body;
   // const {phoneNumber,uid,refcode, updated_at } = req.body
@@ -466,7 +468,7 @@ app.post("/user/register", async (req, res) => {
 
     // 🔑 Verify token
     const decoded = await admin.auth().verifyIdToken(idToken);
-
+console.log("decode",decoded)
     // ✅ Create secure session cookie
     const sessionCookie = await admin.auth().createSessionCookie(idToken, {
       expiresIn: SESSION_EXPIRES_IN,
@@ -481,7 +483,7 @@ app.post("/user/register", async (req, res) => {
     });
 
     // ✅ Check/create user in DB
-    const phoneNumber = decoded.phone_number;
+    const phoneNumber = decoded.phoneNumber;
     const uid = decoded.uid;
 
     let user = await userr.findOne({ uid });
