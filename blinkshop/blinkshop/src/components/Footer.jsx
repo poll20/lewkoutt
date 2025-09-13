@@ -115,8 +115,8 @@ let distinctcat=[... new Set(data)]
             <li><NavLink to='/store/store' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>Shop</NavLink></li>
             <li><NavLink to='aboutus' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>About Us</NavLink></li>
             <li><NavLink to='/faq' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>Contact</NavLink></li>
-            <li><NavLink to='/policy' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>Privacy Policy</NavLink></li>
-            <li><NavLink to='/terms' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>Terms & Conditions</NavLink></li>
+            <li><NavLink to='/privacy-policy' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>Privacy Policy</NavLink></li>
+            <li><NavLink to='/terms-and-conditions' className="hover:underline navlink" style={{textDecoration:"none",color:"black"}}>Terms & Conditions</NavLink></li>
           </ul>
         </div>
 

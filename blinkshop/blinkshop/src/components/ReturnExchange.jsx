@@ -393,7 +393,7 @@ const Returnexchange = () => {
               <span>--</span>
             </NavLink>
             <NavLink
-            to='/paymentmode'
+            to='/payment-mode'
               className="fq-category-btn hvr navlink"
             //   onClick={() => toggleCategory(catIndex)}
             >
@@ -401,7 +401,7 @@ const Returnexchange = () => {
               <span>--</span>
             </NavLink>
             <NavLink
-            TO='/shippingdelivery'
+            to='/shipping-delivery'
               className="fq-category-btn hvr navlink"
             //   onClick={() => toggleCategory(catIndex)}
             >

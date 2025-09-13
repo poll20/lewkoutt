@@ -85,7 +85,7 @@ import React from "react";
 
 const TermsAndConditions = () => {
   const containerStyle = {
-    marginTop: "75px",
+    marginTop: "80px",
     padding: "20px",
     maxWidth: "800px",
     margin: "0 auto",

@@ -276,7 +276,7 @@ let navigate=useNavigate()
           <p>Help & Support</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink className="menu-item navlink" to={'/policy'}>
+        <NavLink className="menu-item navlink" to={'/privacy-policy'}>
           <BiHelpCircle/>
           <p>Privicy Policy</p>
           <IoIosArrowForward />

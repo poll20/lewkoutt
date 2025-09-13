@@ -9,7 +9,7 @@
 export default function PrivacyPolicy({ email = "[team.lewkout@gmail.com]", phone = "[7014996104]" }) {
   const styles = {
     page: {
-      marginTop: "70px",
+      marginTop: "80px",
       fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
       color: "#111827",
       background: "#ffffff",

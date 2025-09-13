@@ -256,17 +256,17 @@ function Layout({ showPopup }) {
             <Route path="/wallet" element={<Wallet />} />
             <Route path="/faq" element={<Faq/>} />
             <Route path="/aboutus" element={<AboutUs/>} />
-            <Route path="/terms" element={<TermsAndConditions/>} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions/>} />
             
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/mood" element={<Moodcom/>} />
-            <Route path="/paymentmode" element={<Paymentmode/>} />
-            <Route path="/returnexchange" element={<Returnexchange/>} />
-            <Route path="/Shippingdelivery" element={<ShippingDelivery/>} />
+            <Route path="/payment-mode" element={<Paymentmode/>} />
+            <Route path="/return-exchange-refund" element={<Returnexchange/>} />
+            <Route path="/shipping-delivery" element={<ShippingDelivery/>} />
            
             <Route path="/maps" element={<MapWithAutocompelete/>} />
-            <Route path="/policy" element={<PrivacyPolicy email="" phone=""/>}/> 
+            <Route path="/privacy-policy" element={<PrivacyPolicy email="" phone=""/>}/> 
            
 
               <Route path="/orderconfirm" element={<OrderConfirmation/>} />

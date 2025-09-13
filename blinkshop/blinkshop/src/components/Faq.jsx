@@ -332,7 +332,7 @@ const Faq = () => {
         </a>
 
         <a
-          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${supportEmail}&su=Support Request from Lewkout`}
+          href={`https://mail.google.com/mail/u/0/?fs=1&to=team.lewkout@gmail.com&su=Support+Request+from+Lewkout&tf=cm`}
           target="_blank"
           rel="noopener noreferrer"
           style={{ ...iconStyle, textDecoration: "none" }}
@@ -385,7 +385,7 @@ const Faq = () => {
         ))}
       </div>
        <NavLink
-       to='/paymentmode'
+       to='/payment-mode'
               className="fq-category-btn hvr navlink"
               // onClick={() => toggleCategor y(catIndex)}
             >
@@ -393,7 +393,7 @@ const Faq = () => {
               <span>--</span>
             </NavLink>
             <NavLink
-            to='/shippingdelivery'
+            to='/shipping-delivery'
               className="fq-category-btn hvr navlink"
               // onClick={() => toggleCategory(catIndex)}
             >
@@ -401,7 +401,7 @@ const Faq = () => {
               <span>--</span>
             </NavLink>
             <NavLink
-            to='/returnexchange'
+            to='/return-exchange-refund'
               className="fq-category-btn hvr navlink"
               // onClick={() => toggleCategory(catIndex)}
             >

@@ -393,7 +393,7 @@ const Paymentmode = () => {
               <span>-- </span>
             </NavLink>
             <NavLink
-            to='/shippingdelivery'
+            to='/shipping-delivery'
               className="fq-category-btn hvr navlink"
             //   onClick={() => toggleCategory(catIndex)}
             >
@@ -401,7 +401,7 @@ const Paymentmode = () => {
               <span>--</span>
             </NavLink>
             <NavLink
-            to='/returnexchange'
+            to='/return-exchange-refund'
               className="fq-category-btn hvr navlink"
             //   onClick={() => toggleCategory(catIndex)}
             >
