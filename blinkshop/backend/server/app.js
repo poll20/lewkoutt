@@ -387,11 +387,6 @@ app.get("/wear",async(req,res)=>{
   }
   
  })
-
-//user created or registered
-app.post("/user/register", async (req, res) => {
-   console.log("📩 Body received:", req.body);
-  console.log("📩 Headers:", req.headers);
   // console.log("Request received at /user/register:", req.body); // ✅ Backend logging
   // // const { name, email, updated_at } = req.body;
   // const {phoneNumber,uid,refcode, updated_at } = req.body
@@ -461,28 +456,91 @@ app.post("/user/register", async (req, res) => {
   //   console.error("Error saving user:"); // 👈 Error ko log karo
 
   //   res.status(400).json({ message: "Email is required" });
-  // }
+ 
+//user created or registered
+// app.post("/user/register", async (req, res) => {
+//    console.log("📩 Body received:", req.body);
+//   console.log("📩 Headers:", req.headers);
+//  // }
+//   try {
+//     const { idToken, refcode } = req.body;
+//     if (!idToken) return res.status(400).json({ error: "Missing ID token" });
+
+//     // 🔑 Verify token
+//     const decoded = await admin.auth().verifyIdToken(idToken);
+// console.log("decode",decoded)
+//     // ✅ Create secure session cookie
+//     const sessionCookie = await admin.auth().createSessionCookie(idToken, {
+//       expiresIn: SESSION_EXPIRES_IN,
+//     });
+
+//     res.cookie(COOKIE_NAME, sessionCookie, {
+//       maxAge: SESSION_EXPIRES_IN,
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "lax",
+//       path: "/",
+//     });
+
+//     // ✅ Check/create user in DB
+//     const phoneNumber = decoded.phone_number;
+//     const uid = decoded.uid;
+
+//     let user = await userr.findOne({ uid });
+//     if (!user) {
+//       const newUser = new userr({
+//         phonenumber: phoneNumber,
+//         uid: uid,
+//         refercode: refcode || null,
+//         created_at: new Date(),
+//       });
+
+//       // referral logic
+//       if (refcode) {
+//         const referringUser = await userr.findOne({ code: refcode });
+//         if (referringUser) {
+//           referringUser.codecount = (referringUser.codecount || 0) + 1;
+//           referringUser.codepoint = (referringUser.codepoint || 0) + 5;
+//           await referringUser.save();
+//         }
+//       }
+
+//       user = await newUser.save();
+//     }
+
+//     res.json({ status: "success", user });
+//   } catch (err) {
+//     console.error("sessionLogin error:", err);
+//     res.status(401).json({ error: "Unauthorized" });
+//   }
+// });
+
+app.post("/user/register", async (req, res) => {
   try {
     const { idToken, refcode } = req.body;
-    if (!idToken) return res.status(400).json({ error: "Missing ID token" });
+    if (!idToken) {
+      return res.status(400).json({ error: "Missing ID token" });
+    }
 
-    // 🔑 Verify token
+    // 🔑 Verify Firebase ID token
     const decoded = await admin.auth().verifyIdToken(idToken);
-console.log("decode",decoded)
-    // ✅ Create secure session cookie
+    console.log("✅ Decoded token:", decoded);
+
+    // 🔑 Create Firebase session cookie
     const sessionCookie = await admin.auth().createSessionCookie(idToken, {
       expiresIn: SESSION_EXPIRES_IN,
     });
 
+    // ✅ Set secure cookie
     res.cookie(COOKIE_NAME, sessionCookie, {
       maxAge: SESSION_EXPIRES_IN,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production" ? true : false, // local test ke liye false
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // prod = cross-site allowed
       path: "/",
     });
 
-    // ✅ Check/create user in DB
+    // ✅ Check / Create user in DB
     const phoneNumber = decoded.phone_number;
     const uid = decoded.uid;
 
@@ -508,9 +566,14 @@ console.log("decode",decoded)
       user = await newUser.save();
     }
 
-    res.json({ status: "success", user });
+    // ✅ Return response
+    res.status(200).json({
+      status: "success",
+      message: "User registered successfully",
+      user,
+    });
   } catch (err) {
-    console.error("sessionLogin error:", err);
+    console.error("❌ sessionLogin error:", err);
     res.status(401).json({ error: "Unauthorized" });
   }
 });

@@ -6,70 +6,70 @@ import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 
 const faqData = [
-  {
-    category: "MY ACCOUNT & MY ORDER",
-    questions: [
-      {
-        question: "Do I need to create an account to place an order?",
-        answer: "Yes, you need to sign up to place an order. This helps track your orders and provide better support.",
-      },
-      {
-        question: "How do I create an account?",
-        answer: "You can sign up using your mobile number on our website.",
-      },
-      {
-        question: "Can I save multiple addresses in my account?",
-        answer: "Yes, you can save multiple delivery addresses and select one at checkout.",
-      },
-      {
-        question: "Will my payment details be saved in my account?",
-        answer: "Yes, but only if you choose to save them. Lewkout securely encrypts saved details for faster checkout, and you can remove them anytime from your account settings.",
-      },
-      {
-        question: "How can I update my profile details?",
-        answer: "You can edit your name, address, and other details in the “Profile” section of your account.",
-      },
-      {
-        question: "Do I need to log in every time I place an order?",
-        answer: "No, if you stay logged in, you don’t need to enter your details again.",
-      },
-      {
-        question: "How can I place an order on Lewkout?",
-        answer: "You can place an order on Lewkout by browsing our website, selecting your favorite outfit, choosing your preferred size and color, and proceeding to checkout. Once you complete the payment, your order will be confirmed.",
-      },
-      {
-        question: "How do I know if my order is confirmed?",
-        answer: "Once your order is placed successfully, you will receive a WhatsApp message with your order details. You can also check the order status in your account.",
-      },
-      {
-        question: "Can I modify or cancel my order after placing it?",
-        answer: "Once an order is placed, it is processed immediately to ensure fast delivery. Unfortunately, modifications or cancellations are not possible after confirmation.",
-      },
-      {
-        question: "Can I place multiple orders at the same time?",
-        answer: "Yes, you can place multiple orders. However, each order will be processed and delivered separately based on availability.",
-      },
-      {
-        question: "Is there a minimum order value?",
-        answer: `
-          <ul>
-            <li>No minimum order value to place an order.</li>
-            <li>Free shipping on orders above ₹799.</li>
-            <li>Orders below ₹799 will have a standard shipping charge.</li>
-          </ul>
-        `,
-      },
-      {
-        question: "How can I track my order?",
-        answer: `You can track your order from the "My Orders" section on our website. You will also receive tracking updates via WhatsApp.`,
-      },
-      {
-        question: "Can I change my delivery address after placing an order?",
-        answer: "No, once an order is placed, the delivery address cannot be changed. Please double-check your details before confirming the order.",
-      },
-    ]
-  }
-  
+//   {
+//     category: "MY ACCOUNT & MY ORDER",
+//     questions: [
+//       {
+//         question: "Do I need to create an account to place an order?",
+//         answer: "Yes, you need to sign up to place an order. This helps track your orders and provide better support.",
+//       },
+//       {
+//         question: "How do I create an account?",
+//         answer: "You can sign up using your mobile number on our website.",
+//       },
+//       {
+//         question: "Can I save multiple addresses in my account?",
+//         answer: "Yes, you can save multiple delivery addresses and select one at checkout.",
+//       },
+//       {
+//         question: "Will my payment details be saved in my account?",
+//         answer: "Yes, but only if you choose to save them. Lewkout securely encrypts saved details for faster checkout, and you can remove them anytime from your account settings.",
+//       },
+//       {
+//         question: "How can I update my profile details?",
+//         answer: "You can edit your name, address, and other details in the “Profile” section of your account.",
+//       },
+//       {
+//         question: "Do I need to log in every time I place an order?",
+//         answer: "No, if you stay logged in, you don’t need to enter your details again.",
+//       },
+//       {
+//         question: "How can I place an order on Lewkout?",
+//         answer: "You can place an order on Lewkout by browsing our website, selecting your favorite outfit, choosing your preferred size and color, and proceeding to checkout. Once you complete the payment, your order will be confirmed.",
+//       },
+//       {
+//         question: "How do I know if my order is confirmed?",
+//         answer: "Once your order is placed successfully, you will receive a WhatsApp message with your order details. You can also check the order status in your account.",
+//       },
+//       {
+//         question: "Can I modify or cancel my order after placing it?",
+//         answer: "Once an order is placed, it is processed immediately to ensure fast delivery. Unfortunately, modifications or cancellations are not possible after confirmation.",
+//       },
+//       {
+//         question: "Can I place multiple orders at the same time?",
+//         answer: "Yes, you can place multiple orders. However, each order will be processed and delivered separately based on availability.",
+//       },
+//       {
+//         question: "Is there a minimum order value?",
+//         answer: `
+//           <ul>
+//             <li>No minimum order value to place an order.</li>
+//             <li>Free shipping on orders above ₹799.</li>
+//             <li>Orders below ₹799 will have a standard shipping charge.</li>
+//           </ul>
+//         `,
+//       },
+//       {
+//         question: "How can I track my order?",
+//         answer: `You can track your order from the "My Orders" section on our website. You will also receive tracking updates via WhatsApp.`,
+//       },
+//       {
+//         question: "Can I change my delivery address after placing an order?",
+//         answer: "No, once an order is placed, the delivery address cannot be changed. Please double-check your details before confirming the order.",
+//       },
+//     ]
+//   }
+//   ];
   // },
   // {
   //   category: "PAYMENT MODE",
@@ -123,70 +123,70 @@ const faqData = [
   //     },
   //   ],
   // },
-  // {
-  //   category: "SHIPPING AND DELIVERY",
-  //   questions: [
-  //     {
-  //       question: "When will my order be dispatched in Jaipur?",
-  //       answer: "Jaipur orders are dispatched within 15–20 minutes of confirmation.",
-  //     },
-  //     {
-  //       question: "Do you really deliver within 60 minutes?",
-  //       answer: "Yes! We deliver within 60 minutes in Jaipur.",
-  //     },
-  //     {
-  //       question: "Which areas in Jaipur are covered under 60-minute delivery?",
-  //       answer: "We offer 60-minute delivery in major parts of Jaipur. You can check the 60-minute delivery at checkout to confirm availability.",
-  //     },
-  //     {
-  //       question: "What if my order is not delivered within 60 minutes?",
-  //       answer: "If we fail to deliver within 60 minutes (except for uncontrollable delays like weather or traffic), we may offer you a special discount on your next order.",
-  //     },
-  //     {
-  //       question: "Do you provide delivery outside Jaipur?",
-  //       answer: "Yes, we deliver all over India.",
-  //     },
-  //     {
-  //       question: "When are Pan India orders dispatched?",
-  //       answer: "Pan India orders are dispatched within 1–3 working days.",
-  //     },
-  //     {
-  //       question: "When will Pan India orders be delivered?",
-  //       answer: "The average delivery time across India is 2 to 6 working days after dispatch. Delivery times may vary depending on your location, local courier availability, and external factors.",
-  //     },
-  //     {
-  //       question: "Can I schedule my delivery for a later time?",
-  //       answer: "Yes! You can schedule your delivery at a preferred time during checkout. Just select the time slot that works best for you.",
-  //     },
-  //     {
-  //       question: "What happens if I'm not available when the delivery arrives?",
-  //       answer: `
-  //         <b>For Jaipur Deliveries:</b>
-  //         <p>Since we deliver through third-party services, our delivery partner cannot wait or reattempt the delivery. If you are unavailable at the time of delivery:</p>
-  //         <ul>
-  //           <li>The rider will try to contact you.</li>
-  //           <li>If you do not answer or cannot receive the order, it will be marked as delivered, and no refund will be provided.</li>
-  //           <li>We recommend scheduling your delivery at a convenient time or providing an alternate contact person to receive the order.</li>
-  //         </ul>
+  {
+    category: "SHIPPING AND DELIVERY",
+    questions: [
+      {
+        question: "When will my order be dispatched in Jaipur?",
+        answer: "Jaipur orders are dispatched within 15–20 minutes of confirmation.",
+      },
+      {
+        question: "Do you really deliver within 60 minutes?",
+        answer: "Yes! We deliver within 60 minutes in Jaipur.",
+      },
+      {
+        question: "Which areas in Jaipur are covered under 60-minute delivery?",
+        answer: "We offer 60-minute delivery in major parts of Jaipur. You can check the 60-minute delivery at checkout to confirm availability.",
+      },
+      {
+        question: "What if my order is not delivered within 60 minutes?",
+        answer: "If we fail to deliver within 60 minutes (except for uncontrollable delays like weather or traffic), we may offer you a special discount on your next order.",
+      },
+      {
+        question: "Do you provide delivery outside Jaipur?",
+        answer: "Yes, we deliver all over India.",
+      },
+      {
+        question: "When are Pan India orders dispatched?",
+        answer: "Pan India orders are dispatched within 1–3 working days.",
+      },
+      {
+        question: "When will Pan India orders be delivered?",
+        answer: "The average delivery time across India is 2 to 6 working days after dispatch. Delivery times may vary depending on your location, local courier availability, and external factors.",
+      },
+      {
+        question: "Can I schedule my delivery for a later time?",
+        answer: "Yes! You can schedule your delivery at a preferred time during checkout. Just select the time slot that works best for you.",
+      },
+      {
+        question: "What happens if I'm not available when the delivery arrives?",
+        answer: `
+          <b>For Jaipur Deliveries:</b>
+          <p>Since we deliver through third-party services, our delivery partner cannot wait or reattempt the delivery. If you are unavailable at the time of delivery:</p>
+          <ul>
+            <li>The rider will try to contact you.</li>
+            <li>If you do not answer or cannot receive the order, it will be marked as delivered, and no refund will be provided.</li>
+            <li>We recommend scheduling your delivery at a convenient time or providing an alternate contact person to receive the order.</li>
+          </ul>
           
-  //         <b>For Pan India Deliveries:</b>
-  //         <p>Our courier partners usually attempt delivery more than once. If you are unavailable during the first attempt, they may try again. However:</p>
-  //         <ul>
-  //           <li>If you still do not answer or cannot receive the order after reattempts, it will be marked as delivered, and no refund will be provided.</li>
-  //           <li>We strongly suggest tracking your shipment.</li>
-  //         </ul>
-  //       `,
-  //     },
-  //     {
-  //       question: "How can I track my order?",
-  //       answer: "You can easily track your order status directly on our website. Simply log in to your account, go to the “My Orders” section, and check the live status of your delivery there.",
-  //     },
-  //     {
-  //       question: "Can I change my address after placing an order?",
-  //       answer: "No, since we process and dispatch orders instantly, address changes are not possible after placing an order.",
-  //     },
-  //   ],
-  // },
+          <b>For Pan India Deliveries:</b>
+          <p>Our courier partners usually attempt delivery more than once. If you are unavailable during the first attempt, they may try again. However:</p>
+          <ul>
+            <li>If you still do not answer or cannot receive the order after reattempts, it will be marked as delivered, and no refund will be provided.</li>
+            <li>We strongly suggest tracking your shipment.</li>
+          </ul>
+        `,
+      },
+      {
+        question: "How can I track my order?",
+        answer: "You can easily track your order status directly on our website. Simply log in to your account, go to the “My Orders” section, and check the live status of your delivery there.",
+      },
+      {
+        question: "Can I change my address after placing an order?",
+        answer: "No, since we process and dispatch orders instantly, address changes are not possible after placing an order.",
+      },
+    ],
+  },
   // {
   //   category: "RETURNS, EXCHANGE & REFUND",
   //   questions: [
@@ -270,8 +270,7 @@ const faqData = [
   // },
 ];
 
-
-const Faq = () => {
+const ShippingDelivery = () => {
   const [openCategory, setOpenCategory] = useState(null);
   const [openQuestion, setOpenQuestion] = useState(null);
 
@@ -385,25 +384,25 @@ const Faq = () => {
         ))}
       </div>
        <NavLink
-       to='/paymentmode'
+       to='/faq'
               className="fq-category-btn hvr navlink"
-              // onClick={() => toggleCategor y(catIndex)}
+            //   onClick={() => toggleCategory(catIndex)}
+            >
+              MY ACCOUNT & ORDERS
+              <span>--</span>
+            </NavLink>
+            <NavLink
+            to='/paymentmode'
+              className="fq-category-btn hvr navlink"
+            //   onClick={() => toggleCategory(catIndex)}
             >
               PAYMENT MODE
               <span>--</span>
             </NavLink>
             <NavLink
-            to='/shippingdelivery'
-              className="fq-category-btn hvr navlink"
-              // onClick={() => toggleCategory(catIndex)}
-            >
-              SHIPPING AND DELIVERY
-              <span>--</span>
-            </NavLink>
-            <NavLink
             to='/returnexchange'
               className="fq-category-btn hvr navlink"
-              // onClick={() => toggleCategory(catIndex)}
+            //   onClick={() => toggleCategory(catIndex)}
             >
               RETURN, EXCHANGE AND REFUND
               <span>--</span>
@@ -412,4 +411,4 @@ const Faq = () => {
   );
 };
 
-export default Faq;
+export default ShippingDelivery;

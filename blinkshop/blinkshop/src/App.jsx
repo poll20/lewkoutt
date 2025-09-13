@@ -91,6 +91,15 @@ import OrderConfirmation from "./components/OrderConfimation";
 
 import { OrderAlertProvider } from "./components/dashboardforadmin/OrderAlertProvider";
 import PrivacyPolicy from "./components/PrivicyPolicy";
+import Paymentmode from "./components/Paymentmode";
+// import Returnexchange from "./components/ReturnExchange";
+
+import ShippingDelivery from "./components/ShippingDelivery";
+import Returnexchange from "./components/ReturnExchange";
+
+// import Paymentmode from "./components/Paymentmode";
+// import ReturnExchange from "./components/ReturnExchange";
+// import ShippingDelivery from "./components/ShippingDelivery";
 
 
 export default function App() {
@@ -252,9 +261,10 @@ function Layout({ showPopup }) {
             <Route path="/return/:id" element={<ReturnRequest/>} />
             <Route path="/loginn" element={<OTPLogin/>} />
             <Route path="/mood" element={<Moodcom/>} />
-     
-
-
+            <Route path="/paymentmode" element={<Paymentmode/>} />
+            <Route path="/returnexchange" element={<Returnexchange/>} />
+            <Route path="/Shippingdelivery" element={<ShippingDelivery/>} />
+           
             <Route path="/maps" element={<MapWithAutocompelete/>} />
             <Route path="/policy" element={<PrivacyPolicy email="" phone=""/>}/> 
            

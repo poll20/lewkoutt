@@ -1,4 +1,4 @@
-// export default Faq;
+// export default Paymentmode;
 import React, { useState } from "react";
 import "./Faq.css"; // Custom CSS import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,123 +6,123 @@ import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 
 const faqData = [
+//   {
+//     category: "MY ACCOUNT & MY ORDER",
+//     questions: [
+//       {
+//         question: "Do I need to create an account to place an order?",
+//         answer: "Yes, you need to sign up to place an order. This helps track your orders and provide better support.",
+//       },
+//       {
+//         question: "How do I create an account?",
+//         answer: "You can sign up using your mobile number on our website.",
+//       },
+//       {
+//         question: "Can I save multiple addresses in my account?",
+//         answer: "Yes, you can save multiple delivery addresses and select one at checkout.",
+//       },
+//       {
+//         question: "Will my payment details be saved in my account?",
+//         answer: "Yes, but only if you choose to save them. Lewkout securely encrypts saved details for faster checkout, and you can remove them anytime from your account settings.",
+//       },
+//       {
+//         question: "How can I update my profile details?",
+//         answer: "You can edit your name, address, and other details in the “Profile” section of your account.",
+//       },
+//       {
+//         question: "Do I need to log in every time I place an order?",
+//         answer: "No, if you stay logged in, you don’t need to enter your details again.",
+//       },
+//       {
+//         question: "How can I place an order on Lewkout?",
+//         answer: "You can place an order on Lewkout by browsing our website, selecting your favorite outfit, choosing your preferred size and color, and proceeding to checkout. Once you complete the payment, your order will be confirmed.",
+//       },
+//       {
+//         question: "How do I know if my order is confirmed?",
+//         answer: "Once your order is placed successfully, you will receive a WhatsApp message with your order details. You can also check the order status in your account.",
+//       },
+//       {
+//         question: "Can I modify or cancel my order after placing it?",
+//         answer: "Once an order is placed, it is processed immediately to ensure fast delivery. Unfortunately, modifications or cancellations are not possible after confirmation.",
+//       },
+//       {
+//         question: "Can I place multiple orders at the same time?",
+//         answer: "Yes, you can place multiple orders. However, each order will be processed and delivered separately based on availability.",
+//       },
+//       {
+//         question: "Is there a minimum order value?",
+//         answer: `
+//           <ul>
+//             <li>No minimum order value to place an order.</li>
+//             <li>Free shipping on orders above ₹799.</li>
+//             <li>Orders below ₹799 will have a standard shipping charge.</li>
+//           </ul>
+//         `,
+//       },
+//       {
+//         question: "How can I track my order?",
+//         answer: `You can track your order from the "My Orders" section on our website. You will also receive tracking updates via WhatsApp.`,
+//       },
+//       {
+//         question: "Can I change my delivery address after placing an order?",
+//         answer: "No, once an order is placed, the delivery address cannot be changed. Please double-check your details before confirming the order.",
+//       },
+//     ]
+//   }
+//   ];
+  // },
   {
-    category: "MY ACCOUNT & MY ORDER",
+    category: "PAYMENT MODE",
     questions: [
       {
-        question: "Do I need to create an account to place an order?",
-        answer: "Yes, you need to sign up to place an order. This helps track your orders and provide better support.",
-      },
-      {
-        question: "How do I create an account?",
-        answer: "You can sign up using your mobile number on our website.",
-      },
-      {
-        question: "Can I save multiple addresses in my account?",
-        answer: "Yes, you can save multiple delivery addresses and select one at checkout.",
-      },
-      {
-        question: "Will my payment details be saved in my account?",
-        answer: "Yes, but only if you choose to save them. Lewkout securely encrypts saved details for faster checkout, and you can remove them anytime from your account settings.",
-      },
-      {
-        question: "How can I update my profile details?",
-        answer: "You can edit your name, address, and other details in the “Profile” section of your account.",
-      },
-      {
-        question: "Do I need to log in every time I place an order?",
-        answer: "No, if you stay logged in, you don’t need to enter your details again.",
-      },
-      {
-        question: "How can I place an order on Lewkout?",
-        answer: "You can place an order on Lewkout by browsing our website, selecting your favorite outfit, choosing your preferred size and color, and proceeding to checkout. Once you complete the payment, your order will be confirmed.",
-      },
-      {
-        question: "How do I know if my order is confirmed?",
-        answer: "Once your order is placed successfully, you will receive a WhatsApp message with your order details. You can also check the order status in your account.",
-      },
-      {
-        question: "Can I modify or cancel my order after placing it?",
-        answer: "Once an order is placed, it is processed immediately to ensure fast delivery. Unfortunately, modifications or cancellations are not possible after confirmation.",
-      },
-      {
-        question: "Can I place multiple orders at the same time?",
-        answer: "Yes, you can place multiple orders. However, each order will be processed and delivered separately based on availability.",
-      },
-      {
-        question: "Is there a minimum order value?",
+        question: "What payment methods do you accept?",
         answer: `
           <ul>
-            <li>No minimum order value to place an order.</li>
-            <li>Free shipping on orders above ₹799.</li>
-            <li>Orders below ₹799 will have a standard shipping charge.</li>
+            <li>UPI (Google Pay, PhonePe, Paytm)</li>
+            <li>Debit/Credit Cards</li>
+            <li>Net Banking</li>
           </ul>
         `,
       },
       {
-        question: "How can I track my order?",
-        answer: `You can track your order from the "My Orders" section on our website. You will also receive tracking updates via WhatsApp.`,
+        question: "Do you charge for shipping?",
+        answer: `
+          <ul>
+            <li>Orders above ₹799: Free shipping</li>
+            <li>Orders below ₹799: ₹49 shipping fee</li>
+          </ul>
+        `,
       },
       {
-        question: "Can I change my delivery address after placing an order?",
-        answer: "No, once an order is placed, the delivery address cannot be changed. Please double-check your details before confirming the order.",
+        question: "My payment failed, but the amount was deducted. What should I do?",
+        answer: "If the amount was deducted, it will be automatically refunded within 5-7 business days. If you don’t receive it, please contact our support team.",
       },
-    ]
-  }
-  
-  // },
-  // {
-  //   category: "PAYMENT MODE",
-  //   questions: [
-  //     {
-  //       question: "What payment methods do you accept?",
-  //       answer: `
-  //         <ul>
-  //           <li>UPI (Google Pay, PhonePe, Paytm)</li>
-  //           <li>Debit/Credit Cards</li>
-  //           <li>Net Banking</li>
-  //         </ul>
-  //       `,
-  //     },
-  //     {
-  //       question: "Do you charge for shipping?",
-  //       answer: `
-  //         <ul>
-  //           <li>Orders above ₹799: Free shipping</li>
-  //           <li>Orders below ₹799: ₹49 shipping fee</li>
-  //         </ul>
-  //       `,
-  //     },
-  //     {
-  //       question: "My payment failed, but the amount was deducted. What should I do?",
-  //       answer: "If the amount was deducted, it will be automatically refunded within 5-7 business days. If you don’t receive it, please contact our support team.",
-  //     },
-  //     {
-  //       question: "Do you offer EMI or Buy Now, Pay Later options?",
-  //       answer: "Currently, we do not offer EMI or BNPL options.",
-  //     },
-  //     {
-  //       question: "How do I apply a discount code?",
-  //       answer: "You can enter the discount code at checkout before making the payment.",
-  //     },
-  //     {
-  //       question: "My payment got deducted twice. What should I do?",
-  //       answer: "In case of double deduction, the extra amount will be refunded within 5-7 business days. Contact support if the refund is delayed.",
-  //     },
-  //     {
-  //       question: "Is my payment information secure?",
-  //       answer: "Yes, we use secure payment gateways to protect your information.",
-  //     },
-  //     {
-  //       question: "Can I change my payment method after placing an order?",
-  //       answer: "No, once an order is placed, the payment method cannot be changed.",
-  //     },
-  //     {
-  //       question: "What should I do if my payment fails?",
-  //       answer: "If your payment fails, please try again with a different payment method. If the issue persists, contact our support team for assistance.",
-  //     },
-  //   ],
-  // },
+      {
+        question: "Do you offer EMI or Buy Now, Pay Later options?",
+        answer: "Currently, we do not offer EMI or BNPL options.",
+      },
+      {
+        question: "How do I apply a discount code?",
+        answer: "You can enter the discount code at checkout before making the payment.",
+      },
+      {
+        question: "My payment got deducted twice. What should I do?",
+        answer: "In case of double deduction, the extra amount will be refunded within 5-7 business days. Contact support if the refund is delayed.",
+      },
+      {
+        question: "Is my payment information secure?",
+        answer: "Yes, we use secure payment gateways to protect your information.",
+      },
+      {
+        question: "Can I change my payment method after placing an order?",
+        answer: "No, once an order is placed, the payment method cannot be changed.",
+      },
+      {
+        question: "What should I do if my payment fails?",
+        answer: "If your payment fails, please try again with a different payment method. If the issue persists, contact our support team for assistance.",
+      },
+    ],
+  },
   // {
   //   category: "SHIPPING AND DELIVERY",
   //   questions: [
@@ -268,10 +268,10 @@ const faqData = [
   //     },
   //   ],
   // },
-];
+]
 
 
-const Faq = () => {
+const Paymentmode = () => {
   const [openCategory, setOpenCategory] = useState(null);
   const [openQuestion, setOpenQuestion] = useState(null);
 
@@ -385,17 +385,17 @@ const Faq = () => {
         ))}
       </div>
        <NavLink
-       to='/paymentmode'
-              className="fq-category-btn hvr navlink"
-              // onClick={() => toggleCategor y(catIndex)}
+       to='/faq'
+      className="fq-category-btn hvr navlink"
+            //   onClick={() => toggleCategory(catIndex)}
             >
-              PAYMENT MODE
-              <span>--</span>
+              MY ACCOUNT & MY ORDERS
+              <span>-- </span>
             </NavLink>
             <NavLink
             to='/shippingdelivery'
               className="fq-category-btn hvr navlink"
-              // onClick={() => toggleCategory(catIndex)}
+            //   onClick={() => toggleCategory(catIndex)}
             >
               SHIPPING AND DELIVERY
               <span>--</span>
@@ -403,7 +403,7 @@ const Faq = () => {
             <NavLink
             to='/returnexchange'
               className="fq-category-btn hvr navlink"
-              // onClick={() => toggleCategory(catIndex)}
+            //   onClick={() => toggleCategory(catIndex)}
             >
               RETURN, EXCHANGE AND REFUND
               <span>--</span>
@@ -412,4 +412,4 @@ const Faq = () => {
   );
 };
 
-export default Faq;
+export default Paymentmode;
