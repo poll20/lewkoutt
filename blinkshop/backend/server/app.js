@@ -947,7 +947,7 @@ const addIdsToSubCollections = async () => {
 
 addIdsToSubCollections();
 
-app.get("/productmodel",cacheMiddleware((req) => "products_all", 60),async(req,res)=>{
+app.get("/productmodel",cacheMiddleware((req) => `products_filtered:${req.query.section}:${req.query.subcategory}`, 60),async(req,res)=>{
 
   
    let operation=req.query.operation
@@ -1064,7 +1064,7 @@ app.get("/productmodel",cacheMiddleware((req) => "products_all", 60),async(req,r
 //   }
 // });
 
-app.get("/productmodell",cacheMiddleware((req) => `products_filtered:${req.query.section}:${req.query.subcategory}`, 60), async (req, res) => {
+app.get("/productmodell",cacheMiddleware((req) => "products_all", 60), async (req, res) => {
   const operation = req.query.operation;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
