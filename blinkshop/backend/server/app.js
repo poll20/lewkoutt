@@ -1,8 +1,25 @@
 require('dotenv').config();
 let express=require("express")
+const redis=require("redis")
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 let app= express()
+
+// ✅ Redis client connect with Upstash
+const clientt = redis.createClient({
+  url: process.env.REDIS_URL || "redis://localhost:3000",
+});
+
+clientt.on("error", (err) => console.error("❌ Redis Error:", err));
+clientt.on("connect", () => console.log("✅ Redis connected"));
+
+(async () => {
+  try {
+    await clientt.connect();
+  } catch (err) {
+    console.error("Redis Connect Failed:", err);
+  }
+})();
 app.use(cookieParser());
 // security middleware
 
@@ -56,7 +73,7 @@ const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
+app.use(cors());//te localhost m h
 // app.use(cors({ origin: '*' }));
 app.use(cors({
     origin: [
@@ -942,55 +959,125 @@ const addIdsToSubCollections = async () => {
 
 addIdsToSubCollections();
 
-app.get("/productmodel",async(req,res)=>{
+// app.get("/productmodel",async(req,res)=>{
 
   
-   let operation=req.query.operation
-  let section=req.query.section
-  let subcategory=req.query.subcategory
-  console.log("ope",operation)
-  console.log("sec",section)
+//    let operation=req.query.operation
+//   let section=req.query.section
+//   let subcategory=req.query.subcategory
+//   console.log("ope",operation)
+//   console.log("sec",section)
   
-  try{
-    if(operation=="all"){
-       //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata=await productsmodel.find().lean() 
-      console
-      res.json(categorydata)
-    }
-    else if (operation === "filtered") {
-      // Operation 2: Fetch documents filtered by 'tag'
-      const cat = section;
-      const subcat = subcategory;
+//   try{
+//     if(operation=="all"){
+//        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
+//       let categorydata=await productsmodel.find().lean() 
+//       console
+//       res.json(categorydata)
+//     }
+//     else if (operation === "filtered") {
+//       // Operation 2: Fetch documents filtered by 'tag'
+//       const cat = section;
+//       const subcat = subcategory;
      
+//       const categoryData = await productsmodel.find({}).lean();
+//       console.log("pm",categoryData)
+//       const finalData = categoryData.filter((item) => item.category == cat);
+//       const finalllData = finalData.map((item) => item.productdetails).flat();
+//       const finalsubData = categoryData.map((item) => item.productdetails).flat();
+//       const subdata=finalsubData.filter((e)=>(e.tag==section))
+//       console.log("fd",finalData)
+//       console.log("sd",subdata)
+//       if (finalllData.length!=0) {
+//         res.json(finalllData);
+//       } 
+//       else if(subdata!=0){
+//         res.json(subdata)
+//       }
+      
+      
+//       else {
+//         res.json({ message: "No data found" });
+//       }
+//     } else {
+//       res.status(400).json({ message: "Invalid operation type" });
+//     }
+//   } 
+//   catch (e) {
+//     console.error(e);
+//     res.status(500).json({ error: "An error occurred while fetching data" });
+//   }
+// })
+app.get("/productmodel", async (req, res) => {
+  let operation = req.query.operation;
+  let section = req.query.section;
+  let subcategory = req.query.subcategory;
+
+  console.log("ope", operation);
+  console.log("sec", section);
+
+  try {
+    if (operation === "all") {
+      const cacheKey = "products_all";
+
+      // ✅ 1. Redis cache check karo
+      const cachedData = await client.get(cacheKey);
+      if (cachedData) {
+        console.log("👉 Cache se data aya");
+        return res.json(JSON.parse(cachedData));
+      }
+
+      // ✅ 2. Agar cache me nahi hai to MongoDB se lo
+      let categorydata = await productsmodel.find().lean();
+
+      // ✅ 3. Redis me store karo (e.g. 60 sec ke liye)
+      await client.setEx(cacheKey, 60, JSON.stringify(categorydata));
+
+      console.log("👉 MongoDB se data aya");
+      return res.json(categorydata);
+    }
+
+    else if (operation === "filtered") {
+      const cacheKey = `products_filtered:${section}:${subcategory}`;
+
+      // ✅ 1. Cache check karo
+      const cachedData = await client.get(cacheKey);
+      if (cachedData) {
+        console.log("👉 Cache se filtered data aya");
+        return res.json(JSON.parse(cachedData));
+      }
+
+      // ✅ 2. DB se fetch
       const categoryData = await productsmodel.find({}).lean();
-      console.log("pm",categoryData)
-      const finalData = categoryData.filter((item) => item.category == cat);
+      const finalData = categoryData.filter((item) => item.category == section);
       const finalllData = finalData.map((item) => item.productdetails).flat();
       const finalsubData = categoryData.map((item) => item.productdetails).flat();
-      const subdata=finalsubData.filter((e)=>(e.tag==section))
-      console.log("fd",finalData)
-      console.log("sd",subdata)
-      if (finalllData.length!=0) {
-        res.json(finalllData);
-      } 
-      else if(subdata!=0){
-        res.json(subdata)
+      const subdata = finalsubData.filter((e) => e.tag == section);
+
+      let response;
+      if (finalllData.length != 0) {
+        response = finalllData;
+      } else if (subdata.length != 0) {
+        response = subdata;
+      } else {
+        response = { message: "No data found" };
       }
-      
-      
-      else {
-        res.json({ message: "No data found" });
-      }
-    } else {
+
+      // ✅ 3. Redis me cache karo
+      await client.setEx(cacheKey, 60, JSON.stringify(response));
+
+      console.log("👉 MongoDB se filtered data aya");
+      return res.json(response);
+    }
+
+    else {
       res.status(400).json({ message: "Invalid operation type" });
     }
-  } 
-  catch (e) {
+  } catch (e) {
     console.error(e);
     res.status(500).json({ error: "An error occurred while fetching data" });
   }
-})
+});
 
 app.get("/productmodell", async (req, res) => {
   const operation = req.query.operation;
