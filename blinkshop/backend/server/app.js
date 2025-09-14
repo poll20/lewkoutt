@@ -6,8 +6,8 @@ const cookieParser = require("cookie-parser");
 let app= express()
 
 // ✅ Redis client connect with Upstash
-const clientt = redis.createClient({
-  url: process.env.REDIS_URL || "redis://localhost:3000",
+const clientt = createClient({
+  url: process.env.REDIS_URL || "redis://localhost:6379", // ⚠️ port 3000 galat hai, Redis default 6379 hota hai
 });
 
 clientt.on("error", (err) => console.error("❌ Redis Error:", err));
@@ -20,6 +20,7 @@ clientt.on("connect", () => console.log("✅ Redis connected"));
     console.error("Redis Connect Failed:", err);
   }
 })();
+
 app.use(cookieParser());
 // security middleware
 
@@ -1021,7 +1022,7 @@ app.get("/productmodel", async (req, res) => {
       const cacheKey = "products_all";
 
       // ✅ 1. Redis cache check karo
-      const cachedData = await client.get(cacheKey);
+      const cachedData = await clientt.get(cacheKey);
       if (cachedData) {
         console.log("👉 Cache se data aya");
         return res.json(JSON.parse(cachedData));
@@ -1031,7 +1032,7 @@ app.get("/productmodel", async (req, res) => {
       let categorydata = await productsmodel.find().lean();
 
       // ✅ 3. Redis me store karo (e.g. 60 sec ke liye)
-      await client.setEx(cacheKey, 60, JSON.stringify(categorydata));
+      await clientt.setEx(cacheKey, 60, JSON.stringify(categorydata));
 
       console.log("👉 MongoDB se data aya");
       return res.json(categorydata);
@@ -1041,7 +1042,7 @@ app.get("/productmodel", async (req, res) => {
       const cacheKey = `products_filtered:${section}:${subcategory}`;
 
       // ✅ 1. Cache check karo
-      const cachedData = await client.get(cacheKey);
+      const cachedData = await clientt.get(cacheKey);
       if (cachedData) {
         console.log("👉 Cache se filtered data aya");
         return res.json(JSON.parse(cachedData));
@@ -1064,7 +1065,7 @@ app.get("/productmodel", async (req, res) => {
       }
 
       // ✅ 3. Redis me cache karo
-      await client.setEx(cacheKey, 60, JSON.stringify(response));
+      await clientt.setEx(cacheKey, 60, JSON.stringify(response));
 
       console.log("👉 MongoDB se filtered data aya");
       return res.json(response);
