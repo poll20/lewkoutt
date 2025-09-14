@@ -358,6 +358,8 @@ margin-top: 3%
   max-width: 500px;
   margin: 0 auto;
   font-family: sans-serif;
+    font-display:swap;
+
   background-color: white;
   border-radius: 8px;
   overflow: hidden;

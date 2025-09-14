@@ -27,6 +27,8 @@
   background: #fff;
   /* font-family: Arial, sans-serif; */
   font-family: 'Courier New', Courier, monospace;
+    font-display:swap;
+
   margin: 10px auto;
   display: flex;
   flex-direction: column;
@@ -429,6 +431,8 @@ padding:0;
       /* border: 2px solid red; */
       padding: 8px 12px;
       font-family: 'Montserrat', sans-serif;
+    font-display:swap;
+
       font-size: 0.9rem;
     }
   

@@ -10,6 +10,7 @@
     font-family: 'Poppins', sans-serif;
     text-align: center;
     padding: 40px 20px;
+    font-display:swap;
   }
   
   .gradient-text {
@@ -20,6 +21,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
+    font-display:swap;
+
   }
   
   .abtimage-container {

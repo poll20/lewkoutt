@@ -22,9 +22,13 @@ html, body, #root {
    
       h1{
         font-family: 'Playfair Display', serif;
+    font-display:swap;
+
       }
       button{
         font-family: 'Montserrat', sans-serif;
+    font-display:swap;
+
         
       }
       #popup-wrapper {

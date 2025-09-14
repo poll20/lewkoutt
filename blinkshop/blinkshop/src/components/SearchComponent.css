@@ -1,5 +1,7 @@
 .trending-container {
     font-family: Arial, sans-serif;
+    font-display:swap;
+
     padding: 16px;
     /* background-color: #fff; */
     background-color: white;
