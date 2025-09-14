@@ -1,12 +1,12 @@
 require('dotenv').config();
 let express=require("express")
-const redis=require("redis")
+let redis=require("redis")
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 let app= express()
 
 // ✅ Redis client connect with Upstash
-const clientt = createClient({
+const clientt = redis.createClient({
   url: process.env.REDIS_URL || "redis://localhost:6379", // ⚠️ port 3000 galat hai, Redis default 6379 hota hai
 });
 
