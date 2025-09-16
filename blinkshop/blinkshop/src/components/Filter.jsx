@@ -258,7 +258,7 @@ setapplybtndisplay(false)
                     </div>
                 </div>
                 <div className="myfilter-option">
-                    <h2 onClick={handleremoveallfilter} style={{color:"green",fontWeight:"bold"}}>Reset All</h2>
+                    <h2 onClick={handleremoveallfilter} className='' style={{color:"green",fontWeight:"bold", fontSize:"18px"}}>Reset All</h2>
                     {selectedFilter === "pricerange" ? (
                         <div className="filter-value price-ranges">
                             <span style={{color:'green'}}><MdCurrencyRupee/>{filters.pricerangemin}</span> - <span style={{color:'green'}}><MdCurrencyRupee/>{filters.pricerangemax}</span>

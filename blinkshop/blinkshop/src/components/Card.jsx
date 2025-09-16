@@ -19,6 +19,9 @@ import { slugify } from "./Slugify";
 const Card = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
     const[prdallsizes,setprdallsizes]=useState([])
+    // const [products, setProducts] = useState([]);
+const [page, setPage] = useState(1);
+const [hasMore, setHasMore] = useState(true);
     const[prdqqty,setprdqqty]=useState([])
     const [addtocartkeliyeid,setaddtocartkeliyeid]=useState("") 
     const[sizesshow,setsizesshow]=useState(false)
@@ -61,7 +64,7 @@ const Card = (props) => {
       "Price: Low to High",
       "Price: High to Low",
       "New Arrival",
-      "Best Seller",
+      // "Best Seller",
       "Discount",
     ];
 

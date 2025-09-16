@@ -167,11 +167,14 @@ const Carousel = ({ images = [], interval = 4000 }) => {
         className="carousel-slide"
       >
         <img
+       
+        
           src={getOptimizedUrl(current?.image)}
           alt={current?.category || "carousel image"}
           className="carousel-image"
           loading={currentIndex === 0 ? "eager" : "lazy"}
           fetchpriority={currentIndex === 0 ? "high" : "auto"}
+          
         />
       </NavLink>
 
