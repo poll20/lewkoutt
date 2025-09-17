@@ -11,18 +11,12 @@ import { CiHeart } from "react-icons/ci";
 // import { CiSearch } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import LoginButton from './Login';
-// import dress from "./image/dress.png"
-// import { GoHeart } from "react-icons/go";
-// import { FaRegUser } from "react-icons/fa6"; 
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { GoHome } from "react-icons/go";
-// import { BsShop } from "react-icons/bs";
+
 import { useBio } from './BioContext';
 // import { set } from 'mongoose';
 // import { useAuth } from './AuthContext';
 import { useFirebaseAuth } from './FirebaseContext';
-// import VibeSticker from './VibeSticker';
-// import LewkoutLogo from './LewkoutLogo';
+
 import lewkoutlogo from "../components/image/lewklogo.webp"
 const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -153,7 +147,7 @@ console.log("navbar m props.pdd value",props.pd)
   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
 </svg>
 </NavLink>
-          </div>
+          </div> 
 
 {/* <button type="button" class="btn btn-primary position-relative">
   Inbox
@@ -303,13 +297,13 @@ console.log("navbar m props.pdd value",props.pd)
             <NavLink className="navlink" to={'/faq'} onClick={closeslidecategorynav}>
             <li style={{ fontFamily: "'Poppins', sans-serif" }}>Customer Support</li>
             </NavLink>
-            <NavLink to='/loginn'>
+            <NavLink to='/profile'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} onClick={closeslidecategorynav}>Login</li>
             </NavLink>
             {/* <NavLink to='/mood'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} >Mood</li>
             </NavLink> */}
-            {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")}
+            {/* {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")} */}
           </ul>
         </div>
      

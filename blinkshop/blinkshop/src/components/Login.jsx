@@ -258,7 +258,7 @@ const{
 </NavLink>
      ) : 
      (
-      <CiUser size={30} onClick={() =>navigate("/loginn") }></CiUser>
+      <CiUser size={30} onClick={() =>navigate("/profile") }></CiUser>
      )
     //  (
     //    <CiUser size={30} onClick={() => loginWithRedirect({
