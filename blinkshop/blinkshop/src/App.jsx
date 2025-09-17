@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScollToTop";
 import { AuthProvider } from "./components/AuthContext";
 import { BioProvider, useBio } from "./components/BioContext";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 import "./App.css"
 // ✅ Normal Website Components
 import Home from "./components/Home";
@@ -100,6 +101,7 @@ import Returnexchange from "./components/ReturnExchange";
 // import Paymentmode from "./components/Paymentmode";
 // import ReturnExchange from "./components/ReturnExchange";
 // import ShippingDelivery from "./components/ShippingDelivery";
+// import ProtectedRoutes from './components/ProtectedRoutes';
 
 
 export default function App() {
@@ -171,8 +173,9 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
 // ✅ Separate Layout Component to Hide Navbar & Footer on Admin Routes
 function Layout({ showPopup }) {
   const location = useLocation();
+  
  const { setIsLoading,isLoading } = useLoading(); // ✅ add this inside the App component
-
+const {userdata}=useBio()
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
   const isref = location.pathname.startsWith("/refferal");
@@ -199,24 +202,24 @@ function Layout({ showPopup }) {
                 <Suspense fallback={<GlobalLoader />}>
             <Routes>
             
-              <Route path="/admin" element={<DahBoard />} />
-              <Route path="/admin/available-products" element={<AvailableProduct />} />
-              <Route path="/admin/category" element={<DashCategory />} />
-              <Route path="/admin/lowstock" element={<LowStock/>} />
-              <Route path="/admin/outofstock" element={<OutOfStock/>} />
-              <Route path="/admin/adddata" element={<AddData/>} />
-              <Route path="/admin/registeruser" element={<RegisterUser/>} />
-              <Route path="/admin/newarrival" element={<NewArrival/>} />
-              <Route path="/admin/userorder" element={<Ordersofusers/>} />
-              <Route path="/admin/returnmyorder" element={<ReturnDataTable/>} />
-              <Route path="/admin/moodmsg" element={<MoodMsgType/>} />
-              <Route path="/admin/moodmngr" element={<MoodMagManager/>} />
-              <Route path="/admin/coupon" element={<CouponForm/>} />
-              <Route path="/admin/useractivity/:id" element={<UserActivity/>} />
+              <Route path="/admin" element={ <ProtectedRoutes>  <DahBoard /> </ProtectedRoutes>} />
+              <Route path="/admin/available-products" element={<ProtectedRoutes> <AvailableProduct /> </ProtectedRoutes>} />
+              <Route path="/admin/category" element={<ProtectedRoutes> <DashCategory /> </ProtectedRoutes>} />
+              <Route path="/admin/lowstock" element={<ProtectedRoutes><LowStock/> </ProtectedRoutes>} />
+              <Route path="/admin/outofstock" element={<ProtectedRoutes><OutOfStock/> </ProtectedRoutes>} />
+              <Route path="/admin/adddata" element={<ProtectedRoutes> <AddData/> </ProtectedRoutes>} />
+              <Route path="/admin/registeruser" element={<ProtectedRoutes><RegisterUser/></ProtectedRoutes>} />
+              <Route path="/admin/newarrival" element={<ProtectedRoutes><NewArrival/></ProtectedRoutes>} />
+              <Route path="/admin/userorder" element={<ProtectedRoutes><Ordersofusers/> </ProtectedRoutes>} />
+              <Route path="/admin/returnmyorder" element={<ProtectedRoutes><ReturnDataTable/></ProtectedRoutes>} />
+              <Route path="/admin/moodmsg" element={<ProtectedRoutes><MoodMsgType/></ProtectedRoutes>} />
+              <Route path="/admin/moodmngr" element={<ProtectedRoutes><MoodMagManager/></ProtectedRoutes>} />
+              <Route path="/admin/coupon" element={<ProtectedRoutes><CouponForm/></ProtectedRoutes>} />
+              <Route path="/admin/useractivity/:id" element={<ProtectedRoutes><UserActivity/></ProtectedRoutes>} />
 
-              <Route path="/admin/slots" element={<SlotControl/>} />
+              <Route path="/admin/slots" element={<ProtectedRoutes><SlotControl/></ProtectedRoutes>} />
               {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
-              <Route path="/admin/bandle" element={<Bandle/>} />
+              <Route path="/admin/bandle" element={<ProtectedRoutes><Bandle/></ProtectedRoutes>} />
 
 
 

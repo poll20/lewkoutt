@@ -63,7 +63,7 @@ const [hasMore, setHasMore] = useState(true);
     const sortOptions = [
       "Price: Low to High",
       "Price: High to Low",
-      "New Arrival",
+      // "New Arrival",
       // "Best Seller",
       "Discount",
     ];

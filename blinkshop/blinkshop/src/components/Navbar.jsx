@@ -271,7 +271,7 @@ console.log("navbar m props.pdd value",props.pd)
       <div className="menu-container" ref={dropdownRef} >
       <div>
           <ul className='catlist' >
-           <NavLink to={`/productmodel/newarrivals`} onClick={closeslidecategorynav} className='navlink'> <li style={{ fontFamily: "'Poppins', sans-serif" }}>New Arrival</li></NavLink>
+           {/* <NavLink to={`/productmodel/newarrivals`} onClick={closeslidecategorynav} className='navlink'> <li style={{ fontFamily: "'Poppins', sans-serif" }}>New Arrival</li></NavLink> */}
            {/* <NavLink to={`/bestsalling/bestsale`} onClick={closeslidecategorynav} className='navlink'><li style={{ fontFamily: "'Poppins', sans-serif" }}>Best Selling</li></NavLink> */}
             <li style={{ fontFamily: "'Poppins', sans-serif" }}>
              <span onClick={toggleDropdown}>CATEGORIES</span>

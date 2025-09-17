@@ -1534,7 +1534,8 @@ const fetchTopSearched = async () => {
         getRecommendationsFromCart,
         recommendations,
         fetchTopSearched,
-        topproducts
+        topproducts,
+        userDetails
         
         
 
