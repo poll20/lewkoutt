@@ -189,7 +189,7 @@ let navigate=useNavigate()
         const { success, user, error } = await logout();
         if (success) {
         setTimeout(() => {
-            navigate("/profile")
+            navigate("/loginn")
         }, 200);
         } else {
         setError(error || "failed logout");

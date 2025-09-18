@@ -297,7 +297,7 @@ console.log("navbar m props.pdd value",props.pd)
             <NavLink className="navlink" to={'/faq'} onClick={closeslidecategorynav}>
             <li style={{ fontFamily: "'Poppins', sans-serif" }}>Customer Support</li>
             </NavLink>
-            <NavLink to='/profile'>
+            <NavLink to='/loginn'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} onClick={closeslidecategorynav}>Login</li>
             </NavLink>
             {/* <NavLink to='/mood'>

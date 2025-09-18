@@ -124,411 +124,146 @@ import { useState, useRef, useEffect } from "react";
     }, []);
 
     return (
-//         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-//         <div id="recaptcha-container"style={{ display: 'none' }}></div>
-//         <div className="max-w-md w-full bg-black rounded-2xl shadow-xl p-8 space-y-8" style={{backgroundColor:"white"}}>
-//             <div className="text-center"style={{backgroundColor:"white"}}>
-//             <div className="mb-4 inline-block p-3 rounded-full bg-indigo-100">
-//                 {showOTP ? <FaLock className="text-indigo-600 text-2xl" /> : <FaPhone />}
-//             </div>
-//             <h1 className="text-2xl font-bold text-gray-800">{showOTP ? "OTP Verification" : "Phone Verification"}</h1>
-//             <p className="mt-2 text-gray-600">
-//                 {showOTP ? "Please enter the 6-digit code sent to your device" : "Enter your phone number to receive OTP"}
-//             </p>
-//             </div>
-
-//             {!showOTP ? (
-//             <form onSubmit={handlePhoneSubmit} >
-//                 <div className="space-y-4" style={{backgroundColor:"white"}}>
-//                 <input
-//                     type="tel"
-//                     placeholder="Enter your phone number"
-//                     value={phoneNumber}
-//                     onChange={(e) => setPhoneNumber(e.target.value)}
-//                     //   onChange={(e) => setPhoneNumber(e.target.value)}
-//   style={{
-//     width: "100%",             // w-full
-//     padding: "12px 16px",      // px-4 py-3
-//     border: "2px solid #D1D5DB", // border-2 (gray-300 type)
-//     borderRadius: "8px",       // rounded-lg
-//     color: "#374151",          // text-gray-700
-//     outline: "none",           // focus:outline-none
-//     transition: "all 0.2s ease-in-out", // transition-all duration-200
-//   }}
-//   onFocus={(e) =>
-//     (e.target.style.border = "2px solid #6366F1") // focus:border-indigo-500
-//   }
-//   onBlur={(e) =>
-//     (e.target.style.border = "2px solid #D1D5DB") // वापस normal border
-//   }
-//                     // className="w-full px-4 py-3 border-2 rounded-lg text-gray-700 focus:border-indigo-500 focus:outline-none transition-all duration-200"
-//                 />
-//                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-//                 <button
-//                     type="submit"
-//                     style={{
-//                     width: "100%",
-//                     padding: "12px",
-//                     backgroundColor: "black",
-//                     color: "white",
-//                     borderRadius: "8px",
-//                     fontWeight: "bold",
-//                     boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-//                     cursor: loading ? "not-allowed" : "pointer",
-//                     opacity: loading ? 0.5 : 1,
-//                     transition: "background-color 0.2s",
-//                     }}
-//                 >
-//                     Send OTP
-//                 </button>
-//                 </div>
-//             </form>
-//             ) : (
-//             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", width: "100%", maxWidth: "400px", margin: "auto" }}>
-//                 <div style={{ display: "flex", width: "100%", gap: "8px",backgroundColor:"white"}}>
-//                 {otp.map((digit, index) => (
-//                     <input
-//                     key={index}
-//                     type="tel"
-//                     maxLength="1"
-//                     ref={(ref) => (inputRefs.current[index] = ref)}
-//                     value={digit}
-//                     onChange={(e) => handleChange(e.target, index)}
-//                     onKeyDown={(e) => handleKeyDown(e, index)}
-//                     style={{
-//                         flex: 1,
-//                         height: "50px",
-//                         border: "2px solid rgb(0, 0, 0)",
-//                         borderRadius: "8px",
-//                         textAlign: "center",
-//                         fontSize: "20px",
-//                         fontWeight: "bold",
-//                         outline: "none",
-//                         transition: "all 0.2s",
-//                     }}
-//                     disabled={loading}
-//                     />
-//                 ))}
-//                 </div>
-
-//                 {error && <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>{error}</p>}
-
-//                 <button
-//                 type="submit"
-//                 disabled={loading || otp.join("").length !== 6}
-//                 style={{
-//                     width: "100%",
-//                     padding: "12px",
-//                     backgroundColor: "black",
-//                     color: "white",
-//                     borderRadius: "8px",
-//                     fontWeight: "bold",
-//                     boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-//                     cursor: loading ? "not-allowed" : "pointer",
-//                     opacity: loading ? 0.5 : 1,
-//                     transition: "background-color 0.2s",
-//                 }}
-//                 >
-//                 Verify OTP
-//                 </button>
-
-//                 <div className="text-center">
-//                 <button
-//                     type="button"
-//                     onClick={handleResend}
-//                     disabled={!canResend}
-//                     style={{
-//                     color: canResend ? "blue" : "gray",
-//                     cursor: canResend ? "pointer" : "not-allowed",
-//                     fontSize: "14px",
-//                     textDecoration: "underline",
-//                     }}
-//                 >
-//                     {canResend ? "Resend OTP" : `Resend in ${timer}s`}
-//                 </button>
-//                 </div>
-//             </form>
-//             )}
-//         </div>
-//         {referralCode && (
-//         <div
-//           style={{
-//             backgroundColor: "#f0f0f0",
-//             padding: "10px",
-//             borderRadius: "5px",
-//             marginBottom: "15px",
-//           }}
-//         >
-//           <strong>Referral Code:</strong> {referralCode}
-//         </div>
-//       )}
-//         </div>
-<div
-  style={{
-    minHeight: "100vh", // min-h-screen
-    background: "linear-gradient(to bottom right, #EFF6FF, #E0E7FF)", // bg-gradient-to-br from-blue-50 to-indigo-100
-    display: "flex", // flex
-    alignItems: "center", // items-center
-    justifyContent: "center", // justify-center
-    padding: "16px", // p-4
-  }}
->
-  <div id="recaptcha-container" style={{ display: "none" }}></div>
-
-  <div
-    style={{
-      maxWidth: "28rem", // max-w-md
-      width: "100%", // w-full
-      backgroundColor: "white", // bg-black + override
-      borderRadius: "16px", // rounded-2xl
-      boxShadow: "0 4px 12px rgba(0,0,0,0.15)", // shadow-xl
-      padding: "32px", // p-8
-      display: "flex",
-      flexDirection: "column",
-      gap: "32px", // space-y-8
-    }}
-  >
-    <div
-      style={{
-        textAlign: "center", // text-center
-        backgroundColor: "white",
-      }}
-    >
-      <div
-        style={{
-          marginBottom: "16px", // mb-4
-          display: "inline-block", // inline-block
-          padding: "12px", // p-3
-          borderRadius: "50%", // rounded-full
-          backgroundColor: "#E0E7FF", // bg-indigo-100
-        }}
-      >
-        {showOTP ? (
-          <FaLock style={{ color: "#4F46E5", fontSize: "20px" }} /> // text-indigo-600 text-2xl
-        ) : (
-          <FaPhone style={{ color: "#4F46E5", fontSize: "20px" }} />
-        )}
-      </div>
-
-      <h1
-        style={{
-          fontSize: "24px", // text-2xl
-          fontWeight: "700", // font-bold
-          color: "#1F2937", // text-gray-800
-        }}
-      >
-        {showOTP ? "OTP Verification" : "Phone Verification"}
-      </h1>
-
-      <p
-        style={{
-          marginTop: "8px", // mt-2
-          color: "#4B5563", // text-gray-600
-        }}
-      >
-        {showOTP
-          ? "Please enter the 6-digit code sent to your device"
-          : "Enter your phone number to receive OTP"}
-      </p>
-    </div>
-
-    {!showOTP ? (
-      <form onSubmit={handlePhoneSubmit}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px", // space-y-4
-            backgroundColor: "white",
-          }}
-        >
-          <input
-            type="tel"
-            placeholder="Enter your phone number"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #D1D5DB",
-              borderRadius: "8px",
-              color: "#374151",
-              outline: "none",
-              transition: "all 0.2s ease-in-out",
-            }}
-            onFocus={(e) =>
-              (e.target.style.border = "2px solid #6366F1")
-            }
-            onBlur={(e) =>
-              (e.target.style.border = "2px solid #D1D5DB")
-            }
-          />
-          {error && (
-            <p style={{ color: "red", fontSize: "14px", textAlign: "center" }}>
-              {error}
+        <div style={{marginTop:"50px"}} className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div id="recaptcha-container"style={{ display: 'none' }}></div>
+        <div className="max-w-md w-full bg-black rounded-2xl shadow-xl p-8 space-y-8" style={{backgroundColor:"white"}}>
+            <div className="text-center"style={{backgroundColor:"white"}}>
+            <div className="mb-4 inline-block p-3 rounded-full bg-indigo-100">
+                {showOTP ? <FaLock className="text-indigo-600 text-2xl" /> : <FaPhone />}
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800">{showOTP ? "OTP Verification" : "Phone Verification"}</h1>
+            <p className="mt-2 text-gray-600">
+                {showOTP ? "Please enter the 6-digit code sent to your device" : "Enter your phone number to receive OTP"}
             </p>
-          )}
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "12px",
-              backgroundColor: "black",
-              color: "white",
-              borderRadius: "8px",
-              fontWeight: "bold",
-              boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-              cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.5 : 1,
-              transition: "background-color 0.2s",
-            }}
-          >
-            Send OTP
-          </button>
-        </div>
-      </form>
-    ) : (
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "16px",
-          width: "100%",
-          maxWidth: "400px",
-          margin: "auto",
-        }}
-      >
-        {/* <div
-          style={{
-            display: "flex",
-            width: "100%",
-            gap: "8px",
-            backgroundColor: "white",
-          }}
-        >
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              type="tel"
-              maxLength="1"
-              ref={(ref) => (inputRefs.current[index] = ref)}
-              value={digit}
-              onChange={(e) => handleChange(e.target, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              style={{
-                flex: 1,
-                height: "50px",
-                border: "2px solid #000",
-                borderRadius: "8px",
-                textAlign: "center",
-                fontSize: "20px",
-                fontWeight: "bold",
-                outline: "none",
-                transition: "all 0.2s",
-              }}
-              disabled={loading}
-            />
-          ))}
-        </div> */}
-        <div
+            </div>
+
+            {!showOTP ? (
+            <form onSubmit={handlePhoneSubmit} >
+                <div className="space-y-4" style={{backgroundColor:"white"}}>
+                <input
+                    type="tel"
+                    placeholder="Enter your phone number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    //   onChange={(e) => setPhoneNumber(e.target.value)}
   style={{
-    display: "flex",
-    justifyContent: "center",
-    gap: "10px",
-    width: "100%",
-    marginTop: "10px",
+    width: "100%",             // w-full
+    padding: "12px 16px",      // px-4 py-3
+    border: "2px solid #D1D5DB", // border-2 (gray-300 type)
+    borderRadius: "8px",       // rounded-lg
+    color: "#374151",          // text-gray-700
+    outline: "none",           // focus:outline-none
+    transition: "all 0.2s ease-in-out", // transition-all duration-200
   }}
->
-  {otp.map((digit, index) => (
-    <input
-      key={index}
-      type="text"
-      inputMode="numeric" // better for mobile keyboards
-      maxLength="1"
-      ref={(ref) => (inputRefs.current[index] = ref)}
-      value={digit}
-      onChange={(e) => handleChange(e.target, index)}
-      onKeyDown={(e) => handleKeyDown(e, index)}
-      style={{
-        width: "48px",
-        height: "48px",
-        border: "2px solid #D1D5DB",
-        borderRadius: "10px",
-        textAlign: "center",
-        fontSize: "20px",
-        fontWeight: "600",
-        outline: "none",
-        transition: "0.2s",
-      }}
-      onFocus={(e) => (e.target.style.border = "2px solid #6366F1")}
-      onBlur={(e) => (e.target.style.border = "2px solid #D1D5DB")}
-      disabled={loading}
-    />
-  ))}
-</div>
+  onFocus={(e) =>
+    (e.target.style.border = "2px solid #6366F1") // focus:border-indigo-500
+  }
+  onBlur={(e) =>
+    (e.target.style.border = "2px solid #D1D5DB") // वापस normal border
+  }
+                    // className="w-full px-4 py-3 border-2 rounded-lg text-gray-700 focus:border-indigo-500 focus:outline-none transition-all duration-200"
+                />
+                {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                <button
+                    type="submit"
+                    style={{
+                    width: "100%",
+                    padding: "12px",
+                    backgroundColor: "black",
+                    color: "white",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+                    cursor: loading ? "not-allowed" : "pointer",
+                    opacity: loading ? 0.5 : 1,
+                    transition: "background-color 0.2s",
+                    }}
+                >
+                    Send OTP
+                </button>
+                </div>
+            </form>
+            ) : (
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", width: "100%", maxWidth: "400px", margin: "auto" }}>
+                <div style={{ display: "flex", width: "100%", gap: "8px",backgroundColor:"white"}}>
+                {otp.map((digit, index) => (
+                    <input
+                    key={index}
+                    type="tel"
+                    maxLength="1"
+                    ref={(ref) => (inputRefs.current[index] = ref)}
+                    value={digit}
+                    onChange={(e) => handleChange(e.target, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                    style={{
+                        flex: 1,
+                        height: "50px",
+                        border: "2px solid rgb(0, 0, 0)",
+                        borderRadius: "8px",
+                        textAlign: "center",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        outline: "none",
+                        transition: "all 0.2s",
+                    }}
+                    disabled={loading}
+                    />
+                ))}
+                </div>
 
+                {error && <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>{error}</p>}
 
-        {error && (
-          <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>
-            {error}
-          </p>
-        )}
+                <button
+                type="submit"
+                disabled={loading || otp.join("").length !== 6}
+                style={{
+                    width: "100%",
+                    padding: "12px",
+                    backgroundColor: "black",
+                    color: "white",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+                    cursor: loading ? "not-allowed" : "pointer",
+                    opacity: loading ? 0.5 : 1,
+                    transition: "background-color 0.2s",
+                }}
+                >
+                Verify OTP
+                </button>
 
-        <button
-          type="submit"
-          disabled={loading || otp.join("").length !== 6}
+                <div className="text-center">
+                <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={!canResend}
+                    style={{
+                    color: canResend ? "blue" : "gray",
+                    cursor: canResend ? "pointer" : "not-allowed",
+                    fontSize: "14px",
+                    textDecoration: "underline",
+                    }}
+                >
+                    {canResend ? "Resend OTP" : `Resend in ${timer}s`}
+                </button>
+                </div>
+            </form>
+            )}
+        </div>
+        {referralCode && (
+        <div
           style={{
-            width: "100%",
-            padding: "12px",
-            backgroundColor: "black",
-            color: "white",
-            borderRadius: "8px",
-            fontWeight: "bold",
-            boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-            cursor: loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.5 : 1,
-            transition: "background-color 0.2s",
+            backgroundColor: "#f0f0f0",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "15px",
           }}
         >
-          Verify OTP
-        </button>
-
-        <div style={{ textAlign: "center" }}>
-          <button
-            type="button"
-            onClick={handleResend}
-            disabled={!canResend}
-            style={{
-              color: canResend ? "blue" : "gray",
-              cursor: canResend ? "pointer" : "not-allowed",
-              fontSize: "14px",
-              textDecoration: "underline",
-              background: "transparent",
-              border: "none",
-            }}
-          >
-            {canResend ? "Resend OTP" : `Resend in ${timer}s`}
-          </button>
+          <strong>Referral Code:</strong> {referralCode}
         </div>
-      </form>
-    )}
-  </div>
+      )}
+        </div>
 
-  {referralCode && (
-    <div
-      style={{
-        backgroundColor: "#f0f0f0",
-        padding: "10px",
-        borderRadius: "5px",
-        marginBottom: "15px",
-      }}
-    >
-      <strong>Referral Code:</strong> {referralCode}
-    </div>
-  )}
-</div>
 
     );
     };

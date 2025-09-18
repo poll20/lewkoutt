@@ -11,7 +11,7 @@ const admin = require("firebase-admin");
 //     privateKey: process.env.FB_PRIVATE_KEY.replace(/\\n/g, '\n'),
 //   }),
 // });
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+// const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
 // admin.initializeApp({
 //   credential: admin.credential.cert({
@@ -20,9 +20,9 @@ const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 //     privateKey: process.env.FB_PRIVATE_KEY.replace(/\\n/g, '\n'),
 //   }),
 // });
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
 // const verifyFirebaseToken = async (req, res, next) => {
 //   const token = req.headers.authorization?.split("Bearer ")[1];
 //   if (!token) return res.status(401).json({ message: "Unauthorized: No token" });
