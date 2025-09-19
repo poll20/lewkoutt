@@ -64,11 +64,11 @@ console.log("wishlist in coa",wishlistdata)
 
       {/* Details Section */}
       <div className="product-details" style={{maxHeight:'80px',paddingLeft:"8px",backgroundColor:"white"}}>
-        <span className="product-title" style={{textAlign:"start",fontFamily: "'Oswald', sans-serif",fontWeight:"400",fontSize:"15px"}}>{props.discription?.length>15?(props.discription?.slice(0,24)+`...`):(props.discription)}</span>
+        <span className="product-title" style={{textAlign:"start",fontFamily: "Oswald",fontWeight:"700",fontSize:"15px"}}>{props.discription?.length>15?(props.discription?.slice(0,24)+`...`):(props.discription)}</span>
         <div className="product-pricing">
-          <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{props.discountprice}</span>
-          <span className="original-price"style={{ fontFamily: "'Oswald', sans-serif" }}>₹{props.price}</span>
-          <span className="discount" style={{ fontFamily: "'Oswald', sans-serif" }}>{props.discount}% off</span>
+          <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{props.discountprice}</span>
+          <span className="original-price"style={{ fontFamily: "Oswald" }}>₹{props.price}</span>
+          <span className="discount" style={{ fontFamily: "Oswald" }}>{props.discount}% off</span>
           
         </div>
         {/* <div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'10px'}}>⚡Fast Delivery</div> */}

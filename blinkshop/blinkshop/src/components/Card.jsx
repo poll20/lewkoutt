@@ -576,11 +576,11 @@ if(searchvalue){
         {/* Details Section */}
         <div className="product-details" style={{backgroundColor:"white"}}>
           {/* fontFamily: "'Inter', sans-serif */}
-          <p className="product-title" style={{fontFamily: "'Oswald', sans-serif",fontWeight:"400",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,20)+`...`):(product.description)}</p>
+          <p className="product-title" style={{fontFamily: "Oswald",fontWeight:"700",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,20)+`...`):(product.description)}</p>
           <div className="product-pricing">
-            <span className="current-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.discountprice}</span>
-            <span className="original-price" style={{ fontFamily: "'Oswald', sans-serif" }}>₹{product?.price}</span>
-            <span className="discount"style={{ fontFamily: "'Oswald', sans-serif" }}>{product?.discount}% off</span>
+            <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
+            <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
+            <span className="discount"style={{ fontFamily: "Oswald" }}>{product?.discount}% off</span>
             
           </div>
           
