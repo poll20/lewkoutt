@@ -8,6 +8,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
 import { color } from 'framer-motion';
+import { trackEvent } from '../analytics/ga4';
 // import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
 
 // import { ToastContainer, toast } from 'react-toastify';

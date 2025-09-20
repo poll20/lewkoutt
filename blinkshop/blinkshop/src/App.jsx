@@ -1,4 +1,4 @@
-import { initGA } from "./analytics/ga4";
+import { initGA } from "./analytics/g4a";
 import usePageTracking from "./analytics/usePageTracking";
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import React, { useState, useEffect,Suspense  } from "react";
