@@ -1,3 +1,5 @@
+import { initGA } from "./analytics/ga4";
+import usePageTracking from "./analytics/usePageTracking";
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import React, { useState, useEffect,Suspense  } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
@@ -7,7 +9,9 @@ import ScrollToTop from "./components/ScollToTop";
 import { AuthProvider } from "./components/AuthContext";
 import { BioProvider, useBio } from "./components/BioContext";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+
 import "./App.css"
+
 // ✅ Normal Website Components
 import Home from "./components/Home";
 
@@ -106,7 +110,8 @@ import Returnexchange from "./components/ReturnExchange";
 
 export default function App() {
 
-
+ initGA();
+  usePageTracking();
   const [popupMessage, setPopupMessage] = useState("");
   
   
@@ -148,6 +153,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     
       <BioProvider  showPopup={showPopup} >
         <Router>
+            {usePageTracking()}  {/* ✅ Router ke andar call karo */} 
           <ScrollToTop />
           
   <div id="popup-wrapper">

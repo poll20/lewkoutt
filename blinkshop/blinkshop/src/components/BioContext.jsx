@@ -243,7 +243,13 @@ useEffect(() => {
   //   }
   // };
   const handleClick = async (prd, id) => {
-    
+      trackEvent({
+    category: "Wishlistr",
+    action: "Add to Wishlist",
+    label: prd.title,
+    value: prd.price,
+  });
+
     console.log("iredandid",prd,id)
     
     
@@ -543,6 +549,13 @@ finally{
   // };
 
   const handleAddToCart = async (prd, quantity, selectedSize) => {
+      trackEvent({
+    category: "Cart",
+    action: "Add to Cart",
+    label: prd.title,
+    value: prd.price,
+  });
+
     console.log("cartbundle,",prd)
     if(!user){
       setshowloginpage(true)

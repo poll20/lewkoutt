@@ -303,7 +303,7 @@ console.log("navbar m props.pdd value",props.pd)
             {/* <NavLink to='/mood'>
             <li style={{ fontFamily: "'Poppins', sans-serif" }} >Mood</li>
             </NavLink> */}
-            {/* {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")} */}
+            {userDetails || user?(<li style={{ fontFamily: "'Poppins', sans-serif" }}><NavLink to={`/${userDetails.role}`} >{userDetails.role}</NavLink></li>):("")}
           </ul>
         </div>
      
