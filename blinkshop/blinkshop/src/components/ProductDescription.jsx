@@ -720,7 +720,7 @@ import SlideUpModal from "./SlideupModel";
 import OtpLogin from "./OtpLogin";
 
 // Example: ProductDescription.js
-import { trackEvent, setUserProperties } from "../analytics/ga4";
+// import { trackEvent, setUserProperties } from "../analytics/ga4";
 const ProductDescription = (prop) => {
    
  const apiUrl = import.meta.env.VITE_API_URL;
@@ -845,20 +845,20 @@ const fetchProductFromBackend = async (clr) => {
   }
 };
 
- useEffect(() => {
-    setUserProperties({
-      user_id: userDetails?._id?._id || "guest",
-      user_type: userDetails?.role || "guest",
-      device_type: window.innerWidth <= 768 ? "mobile" : "desktop",
-    });
+//  useEffect(() => {
+//     setUserProperties({
+//       user_id: userDetails?._id?._id || "guest",
+//       user_type: userDetails?.role || "guest",
+//       device_type: window.innerWidth <= 768 ? "mobile" : "desktop",
+//     });
 
-    trackEvent({
-      category: "Product",
-      action: "View",
-      label: product.name,
-      value: product.price,
-    });
-  }, [product, userDetails]);
+//     trackEvent({
+//       category: "Product",
+//       action: "View",
+//       label: product.name,
+//       value: product.price,
+//     });
+//   }, [product, userDetails]);
 
 
 useEffect(() => {

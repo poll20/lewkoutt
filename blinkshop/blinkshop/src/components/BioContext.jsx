@@ -8,7 +8,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
 import { color } from 'framer-motion';
-import { trackEvent } from '../analytics/ga4';
+// import { trackEvent } from '../analytics/ga4';
 // import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
 
 // import { ToastContainer, toast } from 'react-toastify';
@@ -96,7 +96,7 @@ const backendURL = `${apiUrl}:3000`;
 // Empty dependency array to run this effect only on the first render
 useEffect(() => {
   if(user && userDetails._id){
-  
+  console.log("userdetails in bio",userDetails)
     const fetchCartItems = async () => {
       try {
         setIsLoading(true)
@@ -244,12 +244,12 @@ useEffect(() => {
   //   }
   // };
   const handleClick = async (prd, id) => {
-      trackEvent({
-    category: "Wishlistr",
-    action: "Add to Wishlist",
-    label: prd.title,
-    value: prd.price,
-  });
+  //     trackEvent({
+  //   category: "Wishlistr",
+  //   action: "Add to Wishlist",
+  //   label: prd.title,
+  //   value: prd.price,
+  // });
 
     console.log("iredandid",prd,id)
     
@@ -550,12 +550,12 @@ finally{
   // };
 
   const handleAddToCart = async (prd, quantity, selectedSize) => {
-      trackEvent({
-    category: "Cart",
-    action: "Add to Cart",
-    label: prd.title,
-    value: prd.price,
-  });
+  //     trackEvent({
+  //   category: "Cart",
+  //   action: "Add to Cart",
+  //   label: prd.title,
+  //   value: prd.price,
+  // });
 
     console.log("cartbundle,",prd)
     if(!user){

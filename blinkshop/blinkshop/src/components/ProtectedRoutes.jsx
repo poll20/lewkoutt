@@ -12,7 +12,7 @@ console.log("userdetails in protec", userDetails,user);
     return <Navigate to="/" replace />;
   }
 
-  if (userDetails.role !== "admin") {
+  if (userDetails?.role !== "admin") {
     // agar role admin nahi hai to homepage bhej do
     return <Navigate to="/" replace />;
   }

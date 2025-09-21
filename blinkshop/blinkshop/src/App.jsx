@@ -1,5 +1,5 @@
-import { initGA } from "./analytics/ga4";
-import usePageTracking from "./analytics/usePageTracking";
+// import { initGA } from "./analytics/ga4";
+// import usePageTracking from "./analytics/usePageTracking";
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import React, { useState, useEffect,Suspense  } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
@@ -77,7 +77,7 @@ import PopUpNotificationss from "./components/PopUpNotificationss";
 import GlobalLoader from "./components/GlobalLoader";
 import { FirebaseAuthProvider } from "./components/FirebaseContext";
 import TermsAndConditions from "./components/TermsAndConditions";
-import Moodcom from "./components/Moodcom";
+import Moodcom from "./components/Moodcom"; 
 import MoodMsgType from "./components/dashboardforadmin/MoodMsgType";
 import MoodMagManager from "./components/dashboardforadmin/MoodMsgManager";
 import UserActivity from "./components/dashboardforadmin/UserActivity";
@@ -110,8 +110,8 @@ import Returnexchange from "./components/ReturnExchange";
 
 export default function App() {
 
- initGA();
-  usePageTracking();
+//  initGA();
+//   usePageTracking();
   const [popupMessage, setPopupMessage] = useState("");
   
   
@@ -153,7 +153,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     
       <BioProvider  showPopup={showPopup} >
         <Router>
-            {usePageTracking()}  {/* ✅ Router ke andar call karo */} 
+            
           <ScrollToTop />
           
   <div id="popup-wrapper">
