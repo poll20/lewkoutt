@@ -185,20 +185,35 @@ const Faq = () => {
             border:"2px solid red",
             position: "absolute",
             top: "40px",
-            right: "-45px",
+            right: "-110px",
             background: "#fff",
             border: "1px solid #ddd",
             borderRadius: "8px",
             padding: "30px 15px",
             boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
             zIndex: 1000,
-            minWidth: "320px",
+            height: "200px",
+            minWidth:"95vw",
+                        display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
           }}
         >
-          <strong>Our Office:</strong>
-          <p style={{ margin: "5px 0 0" }}>
+         
+          <span  >
+             <strong>Our Office: </strong>
             117, Salasar Enclave Nandkishorepura, Mangyawas, Jaipur
-          </p>
+          </span>
+         
+          <span style={{}} >
+             <strong>Email: </strong>
+            team.lewkout@gmail.com
+          </span>
+         
+          <span style={{}} >
+             <strong>Phone: </strong> 
+            +91 7014996104
+          </span>
         </div>
       )}
     </div>

@@ -201,8 +201,8 @@ console.log("navbar m props.pdd value",props.pd)
 
       {/* Bottom Navbar for mobile screens */}
       
-      <nav className="navbar bottom-navbar" style={{border:"1px solid red",display:"flex",alignItems:"center",justifyContent:"center"}}>
-        <ul className="nav-links">
+      <nav className="navbar bottom-navbar" style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <ul className="nav-links" style={{display:"flex",alignItems:"center",justifyContent:"space-around",width:"100%"}}>
           <div>
           <NavLink to="/" className="homeeee">
           <li><svg style={{width:"30px",height:"30px"}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -224,12 +224,12 @@ console.log("navbar m props.pdd value",props.pd)
           </NavLink>
           </div>
           
-          <div  style={{borderRadius:"100%",backgroundColor:"pink"}}>
+          {/* <div  style={{borderRadius:"100%",backgroundColor:"pink"}}>
           <NavLink to="/rent/rent" className='homeeee'>
           <li  style={{color:"black",fontSize:"8px"}}>Coming</li>
           <li  style={{color:"black",fontSize:"8px"}}>Soon</li>
           </NavLink>
-          </div>
+          </div> */}
           
           <div >
           <NavLink to="/wishlist/wish" className="homeeee">
@@ -242,7 +242,7 @@ console.log("navbar m props.pdd value",props.pd)
           </NavLink>
           </div>
 
-          <div >
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",borderRadius:"50%",width:"40px",height:"40px"}}>
           
           <li><LoginButton/>
           <span onClick={() => {navigate("/profile"); // Click andar na jaye
