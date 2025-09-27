@@ -1547,7 +1547,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       state: address?.[0]?.state || "Rajasthan",
       isDefault: address?.[0]?.isDefault || false,
     };
-
+const merchantOrderId = randomUUID(); // unique order id
     const newOrder = new orderr({
       name: userDetails.name,
       userId: userDetails._id,
@@ -1589,7 +1589,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       env
     );
 
-    const merchantOrderId = randomUUID(); // unique order id
+    
     const redirectUrl = "https://www.lewkout.com//userorder"; // jaha user redirect hoga
 
     const metaInfo = MetaInfo.builder()
