@@ -42,10 +42,12 @@ const twilio = require("twilio");
 // let model=require("../database/collection.js")
 // let wishmodel=require("../database/collection.js")
 let bodyparser=require("body-parser")
+
 // let addtocart=require("../database/collection.js")
 let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel  }=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const viewdIncrementor = require("../helperfunc/viewdincrement.js"); // ✅ import helper
+
 const products = [
   
   { id: 8, name: "Shirt 1", section: "shirts", description: "A cool shirt", price: 19.99, image:"../../blinkshop/src/components/image/img1.jpg" },
@@ -88,9 +90,11 @@ app.use(bodyparser.json())
 //     next();
 //   }) 
 // require("../database/dbconn.js")
+const { getPhonePeToken } = require('./phonepe');
 const connectDB = require('../database/dbconn.js');
 const isAdmin = require('./adminCheck.js');
 const verifySessionCookie = require('./authMiddleWare.js');
+
 app.get("/",(req,res)=>{
     res.send("hello")
 })
@@ -1577,6 +1581,9 @@ const merchantOrderId = randomUUID(); // unique order id
     // -------------------------------
     // 2. PhonePe Checkout Integration
     // -------------------------------
+ const tokenData = await getPhonePeToken();
+    console.log("PhonePe token:", tokenData.access_token); // optional
+
     const clientId = process.env.CLIENT_ID;
     const clientSecret = process.env.CLIENT_SECRET;
     const clientVersion = process.env.CLIENT_VERSION;
@@ -1590,7 +1597,7 @@ const merchantOrderId = randomUUID(); // unique order id
     );
 
     
-    const redirectUrl = "https://www.lewkout.com//userorder"; // jaha user redirect hoga
+    const redirectUrl = "https://www.lewkout.com/userorder"; // jaha user redirect hoga
 
     const metaInfo = MetaInfo.builder()
       .udf1(userDetails._id.toString()) // optional data
