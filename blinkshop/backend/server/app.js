@@ -1,6 +1,5 @@
 require('dotenv').config();
 let express=require("express")
-
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 let app= express()
@@ -17,6 +16,8 @@ const axios = require("axios");
 const cron = require("node-cron")
 const jwt = require("jsonwebtoken");
 const admin = require("firebase-admin");
+const { StandardCheckoutClient, Env, MetaInfo, StandardCheckoutPayRequest } = require("pg-sdk-node");
+const { randomUUID } = require("crypto");
 // const http = require("http"); // ✅ Required for Socket.io abhi nhiii
 // const socketIo = require("socket.io"); // ✅ Import Socket.io
 const EventEmitter = require('events');
@@ -119,7 +120,8 @@ app.get("/events", (req, res) => {
 
 
 
-const client = twilio(process.env.ACCOUNTSID,process.env.AUTHTOKEN);
+// const client = twilio(process.env.ACCOUNTSID,process.env.AUTHTOKEN);
+
 
 app.get("/card", (req, res) => {
   const section = req.query.section; // Get the category from the query string
@@ -1379,19 +1381,19 @@ app.post("/newarrival", async (req, res) => {
 
 
 
-const sendWhatsAppMessage = async (order) => {
-  console.log("hello from whatsapp",order.products)
-    try {
-        const message = await client.messages.create({
-            from:`whatsapp:${process.env.TWILIONUMBER}`,
-            to:`whatsapp:${process.env.ADMINNUMBER}`,
-            body: `New Order Received! 📦\n\n👤 Customer: ${order.name}\n📍 Address: ${order.address}\n🛒 Product: ${order.products.map((e)=>(e.tag))}\n💰 Price: ${order.products.map((e)=>(e.discountprice))} Rs\n\n✅ Please process the order ASAP!`
-        });
-        console.log("WhatsApp Message Sent ✅", message.sid);
-    } catch (error) {
-        console.error("WhatsApp Message Error ❌", error);
-    }
-};
+// const sendWhatsAppMessage = async (order) => {
+//   console.log("hello from whatsapp",order.products)
+//     try {
+//         const message = await client.messages.create({
+//             from:`whatsapp:${process.env.TWILIONUMBER}`,
+//             to:`whatsapp:${process.env.ADMINNUMBER}`,
+//             body: `New Order Received! 📦\n\n👤 Customer: ${order.name}\n📍 Address: ${order.address}\n🛒 Product: ${order.products.map((e)=>(e.tag))}\n💰 Price: ${order.products.map((e)=>(e.discountprice))} Rs\n\n✅ Please process the order ASAP!`
+//         });
+//         console.log("WhatsApp Message Sent ✅", message.sid);
+//     } catch (error) {
+//         console.error("WhatsApp Message Error ❌", error);
+//     }
+// };
 
 
 
@@ -1473,27 +1475,25 @@ const sendWhatsAppMessage = async (order) => {
   }
 };
 
-
-
-
-app.post('/order', verifySessionCookie,async (req, res) => {
+app.post('/order', verifySessionCookie, async (req, res) => {
   try {
-    const { order, address, userDetails,distance, couponcode } = req.body;
+    const { order, address, userDetails, distance, couponcode } = req.body;
 
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
+    // -------------------------------
+    // 1. Order Save Logic (as you already did)
+    // -------------------------------
     const ordersArray = Array.isArray(order) ? order : [order];
-    console.log("orderaaarr", ordersArray,address);
-
     const products = [];
 
     for (const item of ordersArray) {
       const singleProduct = {
         productId: item.productid ? item.productid : item._id,
         tag: item.tag || "",
-        discription: item.description || "",
+        description: item.description || "",
         image: item.image || [],
         quantity: item.qty || 1,
         price: item.price || 0,
@@ -1504,28 +1504,21 @@ app.post('/order', verifySessionCookie,async (req, res) => {
         bundle: []
       };
 
-      // If bundle is present, add it inside this product
-      if (item.bundle && Array.isArray(item.bundle) && item.bundle.length > 0) {
-        for (const bundleItem of item.bundle) {
-          singleProduct.bundle.push({
-            productId: bundleItem.productId ,
-             title: bundleItem.title || "",
-            image: bundleItem.image || '',
-            color: bundleItem.color || '',
-            original: bundleItem.original || 0,
-            price:bundleItem.price||0,
-            sizes:bundleItem.sizes||'',
-            bundletotalamount:bundleItem.bundletotalamount||0
-
-
-          });
-            
-
-        
-        }
+      // Handle bundle products
+      if (item.bundle && Array.isArray(item.bundle)) {
+        singleProduct.bundle = item.bundle.map(bundleItem => ({
+          productId: bundleItem.productId,
+          title: bundleItem.title || "",
+          image: bundleItem.image || "",
+          color: bundleItem.color || "",
+          original: bundleItem.original || 0,
+          price: bundleItem.price || 0,
+          sizes: bundleItem.sizes || "",
+          bundletotalamount: bundleItem.bundletotalamount || 0
+        }));
       }
 
-      // 🔻 Subtract main product quantity from DB
+      // Subtract stock
       if (singleProduct.productId) {
         const product = await productsmodel.findById(singleProduct.productId);
         if (product) {
@@ -1533,42 +1526,41 @@ app.post('/order', verifySessionCookie,async (req, res) => {
             product.qty -= singleProduct.quantity;
             await product.save();
           } else {
-            return res.status(400).json({ error: `Not enough stock for product: ${product.title || product.name}` });
+            return res.status(400).json({
+              error: `Not enough stock for product: ${product.title || product.name}`
+            });
           }
         }
       }
 
-      // Add processed product to final products list
       products.push(singleProduct);
     }
 
     const addressd = {
-  pincode: address?.[0]?.pincode || "",
-  uname: address?.[0]?.uname || "",
-  building: address?.[0]?.building || "",
-  locality:address?.[0]?.locality || "",
-  address: userDetails.address?.[0]?.address || "",
-  phone: address?.[0]?.phone || [],
-  city: address?.[0]?.city || "Jaipur",
-  state: address?.[0]?.state || "Rajasthan",
-  isDefault: address?.[0]?.isDefault || false,
-};
-console.log("ordr process hua",addressd)
+      pincode: address?.[0]?.pincode || "",
+      uname: address?.[0]?.uname || "",
+      building: address?.[0]?.building || "",
+      locality: address?.[0]?.locality || "",
+      address: userDetails.address?.[0]?.address || "",
+      phone: address?.[0]?.phone || [],
+      city: address?.[0]?.city || "Jaipur",
+      state: address?.[0]?.state || "Rajasthan",
+      isDefault: address?.[0]?.isDefault || false,
+    };
 
     const newOrder = new orderr({
       name: userDetails.name,
       userId: userDetails._id,
       email: userDetails.email,
-      address:addressd,
+      address: addressd,
       phone: userDetails.address?.[0]?.phone?.[0] || "",
       products,
-      deliverydistance:distance
+      deliverydistance: distance,
+       merchantOrderId  // ✅ save this
     });
-console.log("neworder",newOrder)
+
     await newOrder.save();
     orderEvent.emit('new_order', { type: "new_order", order });
-
-    res.status(201).json({ message: "Order Placed & Admin Notified!" });
 
     if (couponcode?.length > 0) {
       applyCouponSuccess(userDetails._id, couponcode);
@@ -1582,12 +1574,241 @@ console.log("neworder",newOrder)
       );
     }, 0);
 
-    // addPointsOnPurchase(userDetails._id, orderprice);
+    // -------------------------------
+    // 2. PhonePe Checkout Integration
+    // -------------------------------
+    const clientId = process.env.CLIENT_ID;
+    const clientSecret = process.env.CLIENT_SECRET;
+    const clientVersion = process.env.CLIENT_VERSION;
+
+    const env = Env.PRODUCTION   ; // ✅ production mode
+    const client = StandardCheckoutClient.getInstance(
+      clientId,
+      clientSecret,
+      clientVersion,
+      env
+    );
+
+    const merchantOrderId = randomUUID(); // unique order id
+    const redirectUrl = "https://www.lewkout.com//userorder"; // jaha user redirect hoga
+
+    const metaInfo = MetaInfo.builder()
+      .udf1(userDetails._id.toString()) // optional data
+      .udf2(newOrder._id.toString())    // save mongo order id
+      .build();
+
+    const request = StandardCheckoutPayRequest.builder()
+      .merchantOrderId(merchantOrderId)
+      .amount(orderprice * 100) // paise me bhejna hoga (₹100 = 10000)
+      .redirectUrl(redirectUrl)
+      .metaInfo(metaInfo)
+      .build();
+
+    const responsePhonePe = await client.pay(request);
+
+
+ // -------------------------------
+    // 3. Auto-fetch Payment Status after few seconds (optional)
+    // -------------------------------
+    setTimeout(async () => {
+      try {
+        const statusResponse = await client.getOrderStatus(merchantOrderId);
+        const state = statusResponse.state; // SUCCESS / FAILED / PENDING
+
+        newOrder.status = state === "SUCCESS" ? "PAID" :
+                          state === "FAILED" ? "FAILED" : "PENDING";
+        await newOrder.save();
+      } catch (err) {
+        console.error("Error fetching PhonePe order status:", err);
+      }
+    }, 5000); // 5 seconds delay (optional)
+
+
+    // -------------------------------
+    // 4. Send Checkout URL to Frontend
+    // -------------------------------
+    res.status(201).json({
+      message: "Order Placed! Redirect to PhonePe for payment",
+      checkoutUrl: responsePhonePe.redirectUrl,
+      orderId: newOrder._id,
+      merchantOrderId
+    });
+
   } catch (error) {
     console.error("Order Error:", error);
     res.status(500).json({ error: "Order Failed" });
   }
 });
+
+
+
+// PHONEPE WEBHOOK ENDPOINT
+// ------------------------
+app.post('/phonepe-webhook', express.json(), async (req, res) => {
+  try {
+    // Authorization header sent by PhonePe
+    const authorization = req.headers['authorization'];
+    // Callback body as string
+    const responseBodyString = JSON.stringify(req.body);
+
+    // PhonePe client instance
+    const client = StandardCheckoutClient.getInstance(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.CLIENT_VERSION,
+      Env.PRODUCTION
+    );
+
+    // Validate callback
+    const callbackResponse = client.validateCallback(
+      process.env.WEBHOOK_USERNAME, // username configured in PhonePe dashboard
+      process.env.WEBHOOK_PASSWORD, // password configured in PhonePe dashboard
+      authorization,
+      responseBodyString
+    );
+
+    const { type, payload } = callbackResponse;
+    const originalOrderId = payload.originalMerchantOrderId; // your order ID
+    const state = payload.state; // COMPLETED / FAILED / PENDING
+
+    // -------------------------------
+    // Update payment status in MongoDB
+    // -------------------------------
+    let paymentStatus;
+    if (state === "COMPLETED" || state === "SUCCESS") {
+      paymentStatus = "PAID";
+    } else if (state === "FAILED") {
+      paymentStatus = "FAILED";
+    } else {
+      paymentStatus = "PENDING";
+    }
+
+    // await orderr.findByIdAndUpdate(originalOrderId, { paymentStatus });
+    await orderr.findOneAndUpdate({ merchantOrderId: originalOrderId }, { paymentStatus });
+
+    console.log(`Webhook received for order ${originalOrderId}: ${state} (${type})`);
+    
+    // Respond 200 OK to PhonePe
+    res.status(200).send('Webhook processed successfully');
+  } catch (error) {
+    console.error('Webhook validation error:', error);
+    res.status(500).send('Webhook error');
+  }
+});
+
+
+// app.post('/order', verifySessionCookie,async (req, res) => {
+//   try {
+//     const { order, address, userDetails,distance, couponcode } = req.body;
+
+//     if (!order || !address || !userDetails) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
+
+//     const ordersArray = Array.isArray(order) ? order : [order];
+//     console.log("orderaaarr", ordersArray,address);
+
+//     const products = [];
+
+//     for (const item of ordersArray) {
+//       const singleProduct = {
+//         productId: item.productid ? item.productid : item._id,
+//         tag: item.tag || "",
+//         discription: item.description || "",
+//         image: item.image || [],
+//         quantity: item.qty || 1,
+//         price: item.price || 0,
+//         discountprice: item.discountprice || 0,
+//         size: item.size || "",
+//         shopname: item.shopname || "",
+//         totalAmount: item.discountprice || 0,
+//         bundle: []
+//       };
+
+//       // If bundle is present, add it inside this product
+//       if (item.bundle && Array.isArray(item.bundle) && item.bundle.length > 0) {
+//         for (const bundleItem of item.bundle) {
+//           singleProduct.bundle.push({
+//             productId: bundleItem.productId ,
+//              title: bundleItem.title || "",
+//             image: bundleItem.image || '',
+//             color: bundleItem.color || '',
+//             original: bundleItem.original || 0,
+//             price:bundleItem.price||0,
+//             sizes:bundleItem.sizes||'',
+//             bundletotalamount:bundleItem.bundletotalamount||0
+
+
+//           });
+            
+
+        
+//         }
+//       }
+
+//       // 🔻 Subtract main product quantity from DB
+//       if (singleProduct.productId) {
+//         const product = await productsmodel.findById(singleProduct.productId);
+//         if (product) {
+//           if (product.qty >= singleProduct.quantity) {
+//             product.qty -= singleProduct.quantity;
+//             await product.save();
+//           } else {
+//             return res.status(400).json({ error: `Not enough stock for product: ${product.title || product.name}` });
+//           }
+//         }
+//       }
+
+//       // Add processed product to final products list
+//       products.push(singleProduct);
+//     }
+
+//     const addressd = {
+//   pincode: address?.[0]?.pincode || "",
+//   uname: address?.[0]?.uname || "",
+//   building: address?.[0]?.building || "",
+//   locality:address?.[0]?.locality || "",
+//   address: userDetails.address?.[0]?.address || "",
+//   phone: address?.[0]?.phone || [],
+//   city: address?.[0]?.city || "Jaipur",
+//   state: address?.[0]?.state || "Rajasthan",
+//   isDefault: address?.[0]?.isDefault || false,
+// };
+// console.log("ordr process hua",addressd)
+
+//     const newOrder = new orderr({
+//       name: userDetails.name,
+//       userId: userDetails._id,
+//       email: userDetails.email,
+//       address:addressd,
+//       phone: userDetails.address?.[0]?.phone?.[0] || "",
+//       products,
+//       deliverydistance:distance
+//     });
+// console.log("neworder",newOrder)
+//     await newOrder.save();
+//     orderEvent.emit('new_order', { type: "new_order", order });
+
+//     res.status(201).json({ message: "Order Placed & Admin Notified!" });
+
+//     if (couponcode?.length > 0) {
+//       applyCouponSuccess(userDetails._id, couponcode);
+//     }
+
+//     const orderprice = ordersArray.reduce((total, e) => {
+//       return total + (
+//         Array.isArray(e.discountprice)
+//           ? e.discountprice.reduce((sum, price) => sum + price, 0)
+//           : e.discountprice || 0
+//       );
+//     }, 0);
+
+//     // addPointsOnPurchase(userDetails._id, orderprice);
+//   } catch (error) {
+//     console.error("Order Error:", error);
+//     res.status(500).json({ error: "Order Failed" });
+//   }
+// });
 
 
 

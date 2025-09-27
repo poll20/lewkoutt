@@ -6,6 +6,7 @@ import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 // import { FaMapMarkerAlt } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { FaMapMarkerAlt } from "react-icons/fa";
+
 const faqData = [
   {
     category: "MY ACCOUNT & MY ORDER",
