@@ -225,7 +225,7 @@ try{
       , {
       credentials: 'include',
       headers: {
-        Authorization: `Bearer ${user.accessToken}`,
+        // Authorization: `Bearer ${user.accessToken}`,
         // "Content-Type": "application/json", // optional, if needed
       },
     }
