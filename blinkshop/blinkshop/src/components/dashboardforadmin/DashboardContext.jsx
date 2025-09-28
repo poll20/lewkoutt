@@ -375,7 +375,7 @@ useEffect(() => {
         if(userDetails)
         {
         try {
-           const payload = decision ? { decision } : {}; // sirf decision jab required ho
+          //  const payload = decision ? { decision } : {}; // sirf decision jab required ho
             const response = await fetch(`${apiUrl}/order/deliver/${orderId}`, {
                 method: "PUT",
                 credentials: 'include', 
@@ -385,8 +385,8 @@ useEffect(() => {
                 },
            
                 
-                // body: JSON.stringify({userDetails,decision}), // Convert object to JSON string
-                body: JSON.stringify(payload), // Convert object to JSON string
+                body: JSON.stringify({userDetails,decision}), // Convert object to JSON string
+                // body: JSON.stringify(payload), // Convert object to JSON string
 
                 
             });
