@@ -58,7 +58,9 @@ export const DashboardProvider = ({ children }) => {
             console.log("data m cate h kya ",data)
           let response = await fetch(`${apiUrl}/productmodel/${id}`, {
             method: "PATCH",
+            credentials: 'include', 
             headers: {
+              
               "Content-Type": "application/json",
                 // Authorization: `Bearer ${user.accessToken}`,
             },
@@ -89,6 +91,7 @@ export const DashboardProvider = ({ children }) => {
             if(data && Object.keys(data).length > 0){
           let response = await fetch(`${apiUrl}/editordeleteproduct/${id}`, {
             method: "PATCH",
+            credentials: 'include', 
             headers: {
               "Content-Type": "application/json",
                 // Authorization: `Bearer ${user.accessToken}`,
@@ -142,6 +145,7 @@ let deletefromexistingproduct=async(id)=>{
         if(id){
             let response = await fetch(`${apiUrl}/deleteproductfromcate/${id}`, {
                 method: "PATCH",
+                credentials: 'include', 
                 headers: {
                   "Content-Type": "application/json",
                     // Authorization: `Bearer ${user.accessToken}`,
@@ -172,6 +176,7 @@ let deletefromexistingproduct=async(id)=>{
           console.log("cateka data",data)
           let response = await fetch(`${apiUrl}/productmodel`, {
             method: "POST",
+            credentials: 'include', 
             headers: {
               "Content-Type": "application/json",
                 // Authorization: `Bearer ${user.accessToken}`,
@@ -341,6 +346,7 @@ useEffect(() => {
         try {
           const response = await fetch(`${apiUrl}/newarrival`, {
             method: "POST",
+            credentials: 'include', 
             headers: {
               "Content-Type": "application/json", // Sending JSON data
             },
@@ -370,6 +376,7 @@ useEffect(() => {
         try {
             const response = await fetch(`${apiUrl}/order/deliver/${orderId}`, {
                 method: "PUT",
+                credentials: 'include', 
                 headers: {
                   "Content-Type": "application/json", // Sending JSON data
                     // Authorization: `Bearer ${user.accessToken}`,
@@ -424,6 +431,7 @@ useEffect(() => {
 
             const response = await fetch(`${apiUrl}/user/update-role/${userId}`, {
                 method: "PUT",
+                credentials: 'include', 
                 headers: {
                     "Content-Type": "application/json",
                       // Authorization: `Bearer ${user.accessToken}`,
@@ -575,6 +583,7 @@ useEffect(()=>{
       try{
       let response=await fetch(`${apiUrl}/moodmsg`,{
         method:'POST',
+        credentials: 'include', 
         headers: {
           "Content-Type": "application/json",
             // Authorization: `Bearer ${user.accessToken}`,
@@ -601,6 +610,7 @@ const deleteMoodMsg = async (id) => {
   try {
     let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
       method: 'DELETE',
+      credentials: 'include', 
       headers:{
             //  Authorization: `Bearer ${user.accessToken}`,
       }
@@ -618,6 +628,7 @@ const updateMoodMsg = async (id, updatedData) => {
   try {
     let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
       method: 'PUT',
+      credentials: 'include', 
       headers: { "Content-Type": "application/json",
           // Authorization: `Bearer ${user.accessToken}`,
        },
@@ -703,11 +714,12 @@ const fetchUserOrders = async (userId) => {
           return;
       }
       let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`
-      //   ,{
-      //   headers: { 
-      //     Authorization: `Bearer ${user.accessToken}`,
-      //   },
-      // }
+        ,{
+          credentials: 'include', 
+        headers: { 
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      }
     );
       if (!res.ok) {
           throw new Error("Failed to fetch user orders");
@@ -738,6 +750,7 @@ const createCoupon = async (cpn) => {
   try {
     const response = await fetch(`${apiUrl}/create`, {
       method: "POST",
+      credentials: 'include', 
       headers: {
         "Content-Type": "application/json",
           // Authorization: `Bearer ${user.accessToken}`,
@@ -823,6 +836,7 @@ const createBundle = async (ids,val) => {
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/bundle`, {
       method: "PATCH",
+      credentials: 'include', 
       headers: {
         "Content-Type": "application/json",
           // Authorization: `Bearer ${user.accessToken}`,
@@ -873,6 +887,7 @@ const toggleSlot = async (label) => {
 
     const res = await fetch(`${apiUrl}/slot-status/toggle`, {
       method: "POST",
+      credentials: 'include', 
       headers: {
         "Content-Type": "application/json",
           // Authorization: `Bearer ${user.accessToken}`,
