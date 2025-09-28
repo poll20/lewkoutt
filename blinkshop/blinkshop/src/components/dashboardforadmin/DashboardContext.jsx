@@ -222,12 +222,13 @@ let deletefromexistingproduct=async(id)=>{
 const fetchuserorder= async()=>{    
 try{
     let res=await fetch(`${apiUrl}/orders`
-    //   , {
-    //   headers: {
-    //     Authorization: `Bearer ${user.accessToken}`,
-    //     // "Content-Type": "application/json", // optional, if needed
-    //   },
-    // }
+      , {
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        // "Content-Type": "application/json", // optional, if needed
+      },
+    }
   )
     if(!res.ok){
         throw new Error("Failed to fetch order");
