@@ -1874,92 +1874,181 @@ console.log("Order Products:", userOrders[0].products);
 });
 
 
-app.put('/order/deliver/:id',verifySessionCookie,isAdmin, async (req, res) => {
+// app.put('/order/deliver/:id',verifySessionCookie,isAdmin, async (req, res) => {
+//   try {
+//     const order = await orderr.findById(req.params.id);
+//    const decision = req.body.decision // ✅ clearer
+    
+//     if (!order) {
+//       return res.status(404).json({ error: "Order not found" });
+//     }
+
+//     if (order.status === "Pending") {
+//       order.status = "shipped";
+//       await order.save();
+
+//       orderEvent.emit("order_updated", { type: "order_updated", order });
+//       return res.json({ message: "Order marked as shipped!" });
+
+//     } else if (order.status === "shipped") {
+//       order.status = "delivered";
+//       order.deliveredAt = new Date();
+//       await order.save();
+
+//       orderEvent.emit("order_updated", { type: "order_updated", order });
+//       return res.json({ message: "Order marked as delivered!" });
+//     }
+    
+//     else if (order.status === "Returned Requested") {
+
+
+//   if ( decision === "Returned Approved") {
+//     order.status = "Returned Approved";
+//     await order.save();
+
+//     orderEvent.emit("order_updated", { type: "order_updated", order });
+//     return res.json({ message: "Order marked as returned and approved!" });
+
+//   } else if ( decision === "Returned Rejected") {
+//     order.status = "Returned Rejected";
+//     await order.save();
+
+//     orderEvent.emit("order_updated", { type: "order_updated", order });
+//     return res.json({ message: "Order return request rejected!" });
+
+//   } else {
+//     return res.status(400).json({ error: "Invalid decision for returned request" });
+//   }
+// }
+// else if (order.status === "Returned Approved") {
+//    order.status = "Pickup Scheduled";
+//     await order.save();
+//       orderEvent.emit("order_updated", { type: "order_updated", order });
+//       return res.json({ message: "Return Requested  marked as Pickup Sceduled" });
+// }
+
+// else if (order.status === "Pickup Scheduled") {
+//    order.status = "Picked Up";
+//     await order.save();
+//       orderEvent.emit("order_updated", { type: "order_updated", order });
+//       return res.json({ message: "Return Requested  marked as Picked Up" });
+// }
+// else if (order.status === "Picked Up") {
+//    order.status = "Refund Processed";
+//     await order.save();
+//       orderEvent.emit("order_updated", { type: "order_updated", order });
+//       return res.json({ message: "Return Requested  marked as Refund Processed" });
+// }
+// else if (order.status === "Refund Processed") {
+
+
+//   if ( decision === "Refund Approved") {
+//     order.status = "Refund Approved";
+//     await order.save();
+
+//     orderEvent.emit("order_updated", { type: "order_updated", order });
+//     return res.json({ message: "Order marked as Refund Approved" });
+
+//   } else if ( decision === "Refund Rejected") {
+//     order.status = "Refund Rejected";
+//     await order.save();
+
+//     orderEvent.emit("order_updated", { type: "order_updated", order });
+//     return res.json({ message: "Order return Refund Rejected" });
+
+//   } else {
+//     return res.status(400).json({ error: "Invalid decision for returned request" });
+//   }
+// }
+//     return res.status(400).json({ error: "Invalid status transition" });
+
+//   } catch (error) {
+//     console.error("Error updating order:", error);
+//     res.status(500).json({ error: "Server error" });
+//   }
+// });
+app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => {
   try {
     const order = await orderr.findById(req.params.id);
-   const decision = req.body.decision // ✅ clearer
-    
+    const decision = req.body.decision;
+
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    if (order.status === "Pending") {
+    // 👇 Normalize to lowercase for comparison
+    const currentStatus = order.status.toLowerCase();
+    const decisionNormalized = decision ? decision.toLowerCase() : "";
+
+    if (currentStatus === "pending") {
       order.status = "shipped";
       await order.save();
-
       orderEvent.emit("order_updated", { type: "order_updated", order });
       return res.json({ message: "Order marked as shipped!" });
 
-    } else if (order.status === "shipped") {
+    } else if (currentStatus === "shipped") {
       order.status = "delivered";
       order.deliveredAt = new Date();
       await order.save();
-
       orderEvent.emit("order_updated", { type: "order_updated", order });
       return res.json({ message: "Order marked as delivered!" });
     }
-    
-    else if (order.status === "Returned Requested") {
 
+    else if (currentStatus === "returned requested") {
+      if (decisionNormalized === "returned approved") {
+        order.status = "Returned Approved";
+        await order.save();
+        orderEvent.emit("order_updated", { type: "order_updated", order });
+        return res.json({ message: "Order marked as returned and approved!" });
 
-  if ( decision === "Returned Approved") {
-    order.status = "Returned Approved";
-    await order.save();
+      } else if (decisionNormalized === "returned rejected") {
+        order.status = "Returned Rejected";
+        await order.save();
+        orderEvent.emit("order_updated", { type: "order_updated", order });
+        return res.json({ message: "Order return request rejected!" });
+      } else {
+        return res.status(400).json({ error: "Invalid decision for returned request" });
+      }
+    }
 
-    orderEvent.emit("order_updated", { type: "order_updated", order });
-    return res.json({ message: "Order marked as returned and approved!" });
-
-  } else if ( decision === "Returned Rejected") {
-    order.status = "Returned Rejected";
-    await order.save();
-
-    orderEvent.emit("order_updated", { type: "order_updated", order });
-    return res.json({ message: "Order return request rejected!" });
-
-  } else {
-    return res.status(400).json({ error: "Invalid decision for returned request" });
-  }
-}
-else if (order.status === "Returned Approved") {
-   order.status = "Pickup Scheduled";
-    await order.save();
+    else if (currentStatus === "returned approved") {
+      order.status = "Pickup Scheduled";
+      await order.save();
       orderEvent.emit("order_updated", { type: "order_updated", order });
-      return res.json({ message: "Return Requested  marked as Pickup Sceduled" });
-}
+      return res.json({ message: "Return Requested marked as Pickup Scheduled" });
+    }
 
-else if (order.status === "Pickup Scheduled") {
-   order.status = "Picked Up";
-    await order.save();
+    else if (currentStatus === "pickup scheduled") {
+      order.status = "Picked Up";
+      await order.save();
       orderEvent.emit("order_updated", { type: "order_updated", order });
-      return res.json({ message: "Return Requested  marked as Picked Up" });
-}
-else if (order.status === "Picked Up") {
-   order.status = "Refund Processed";
-    await order.save();
+      return res.json({ message: "Return Requested marked as Picked Up" });
+    }
+
+    else if (currentStatus === "picked up") {
+      order.status = "Refund Processed";
+      await order.save();
       orderEvent.emit("order_updated", { type: "order_updated", order });
-      return res.json({ message: "Return Requested  marked as Refund Processed" });
-}
-else if (order.status === "Refund Processed") {
+      return res.json({ message: "Return Requested marked as Refund Processed" });
+    }
 
+    else if (currentStatus === "refund processed") {
+      if (decisionNormalized === "refund approved") {
+        order.status = "Refund Approved";
+        await order.save();
+        orderEvent.emit("order_updated", { type: "order_updated", order });
+        return res.json({ message: "Order marked as Refund Approved" });
 
-  if ( decision === "Refund Approved") {
-    order.status = "Refund Approved";
-    await order.save();
+      } else if (decisionNormalized === "refund rejected") {
+        order.status = "Refund Rejected";
+        await order.save();
+        orderEvent.emit("order_updated", { type: "order_updated", order });
+        return res.json({ message: "Order refund rejected!" });
+      } else {
+        return res.status(400).json({ error: "Invalid decision for refund request" });
+      }
+    }
 
-    orderEvent.emit("order_updated", { type: "order_updated", order });
-    return res.json({ message: "Order marked as Refund Approved" });
-
-  } else if ( decision === "Refund Rejected") {
-    order.status = "Refund Rejected";
-    await order.save();
-
-    orderEvent.emit("order_updated", { type: "order_updated", order });
-    return res.json({ message: "Order return Refund Rejected" });
-
-  } else {
-    return res.status(400).json({ error: "Invalid decision for returned request" });
-  }
-}
     return res.status(400).json({ error: "Invalid status transition" });
 
   } catch (error) {
