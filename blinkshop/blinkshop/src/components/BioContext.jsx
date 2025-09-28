@@ -1066,7 +1066,15 @@ if(user && userDetails){
     if(orderpost.ok){
       showPopup("Your Order Has Been Confirmed")
 
-      console.log("address edit")
+      console.log("checkurl",orderpost)
+       let data = await orderpost.json();
+        console.log("order ka data",data)
+          // 🔑 PhonePe Checkout URL redirect
+        if (data.checkoutUrl) {
+          window.location.href = data.checkoutUrl; // ✅ direct redirect to PhonePe
+        } else {
+          showPopup("Your Order Has Been Confirmed");
+        }
       
       // navigate("/orderconfirm")
     }
