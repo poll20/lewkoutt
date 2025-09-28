@@ -381,9 +381,9 @@ useEffect(() => {
                 credentials: 'include', 
                 headers: {
                   "Content-Type": "application/json", // Sending JSON data
-                    // Authorization: `Bearer ${user.accessToken}`,
+                  
                 },
-            //  Authorization: `Bearer ${user.accessToken}`,
+           
                 
                 // body: JSON.stringify({userDetails,decision}), // Convert object to JSON string
                 body: JSON.stringify(payload), // Convert object to JSON string
@@ -391,6 +391,7 @@ useEffect(() => {
                 
             });
             const data = await response.json();
+            console.log("Order marked as delivered:", data);
             alert(data.message);
         } catch (error) {
             console.error("Error:", error);
