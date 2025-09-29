@@ -985,15 +985,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
-// import img1 from "./image/img3.jpg";
+import img1 from "./image/img3.jpg";
 import { FaStar } from "react-icons/fa";
-// import { useAuth } from "./AuthContext";
+import { useAuth } from "./AuthContext";
 import { NavLink } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 
 const UserOrder = () => {
   const { userorder, submitRating, fetchRatings, rating } = useBio();
-  // const [userorderr, setuserorder] = useState([]);
+  const [userorderr, setuserorder] = useState([]);
   const { userDetails } = useFirebaseAuth();
 
   if (!userorder && !userDetails) {
@@ -1041,24 +1041,53 @@ const UserOrder = () => {
       //     }
       //   });
       // }
-      if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
-  order.products?.forEach(product => {
+//       if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
+//   order.products?.forEach(product => {
+//     const deliveredTime = new Date(order.deliveredAt);
+//     const now = new Date();
+//     const diffInMs = now - deliveredTime;
+
+//     // ✅ Agar Jaipur hai to 1 hour otherwise 2 days
+//     const isJaipur = order.address?.[0]?.city?.toLowerCase() === "jaipur";
+//     const allowedTimeInMs = isJaipur 
+//       ? 60 * 60 * 1000               // 1 hour
+//       : 2 * 24 * 60 * 60 * 1000;     // 2 days
+
+//     if (diffInMs < allowedTimeInMs) {
+//       const remainingMs = allowedTimeInMs - diffInMs;
+//       newTimers[product._id] = Math.max(0, Math.floor(remainingMs / 1000));
+//     }
+//   });
+// }
+if (
+  order.status &&
+  order.status.toLowerCase() === "delivered" &&  // ✅ case-insensitive check
+  order.deliveredAt
+) {
+  order.products?.forEach((product) => {
     const deliveredTime = new Date(order.deliveredAt);
     const now = new Date();
     const diffInMs = now - deliveredTime;
 
     // ✅ Agar Jaipur hai to 1 hour otherwise 2 days
-    const isJaipur = order.address?.[0]?.city?.toLowerCase() === "jaipur";
-    const allowedTimeInMs = isJaipur 
-      ? 60 * 60 * 1000               // 1 hour
-      : 2 * 24 * 60 * 60 * 1000;     // 2 days
+    const isJaipur =
+      order.address?.[0]?.city &&
+      order.address[0].city.toLowerCase() === "jaipur"; // ✅ case-insensitive
+
+    const allowedTimeInMs = isJaipur
+      ? 60 * 60 * 1000 // 1 hour
+      : 2 * 24 * 60 * 60 * 1000; // 2 days
 
     if (diffInMs < allowedTimeInMs) {
       const remainingMs = allowedTimeInMs - diffInMs;
-      newTimers[product._id] = Math.max(0, Math.floor(remainingMs / 1000));
+      newTimers[product._id] = Math.max(
+        0,
+        Math.floor(remainingMs / 1000)
+      );
     }
   });
 }
+
 
     });
     
