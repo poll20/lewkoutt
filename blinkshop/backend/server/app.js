@@ -1849,7 +1849,7 @@ app.get('/order/:id', async (req, res) => {
 });
 
 // 🔵 GET: Fetch orders by User ID
-app.get('/orders/user/:userId',verifySessionCookie, cacheMiddleware((req) => `orders_user_${req.params.userId}`, 60),async (req, res) => {
+app.get('/orders/user/:userId',verifySessionCookie,async (req, res) => {
   try {
       const { userId } = req.params;
 
