@@ -5,7 +5,7 @@ const client = require("./redisClient"); // Redis client
  * @param {function} keyGeneratorFn - function to generate cache key from req
  * @param {number} ttl - cache expiration time in seconds
  */
-function cacheMiddleware(keyGeneratorFn, ttl = 60) {
+function cacheMiddleware(keyGeneratorFn, ttl = 10) {
   return async function (req, res, next) {
     try {
       const cacheKey = keyGeneratorFn(req);
