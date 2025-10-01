@@ -1772,21 +1772,52 @@ app.post('/order', verifySessionCookie, async (req, res) => {
 // 🚀 PhonePe Webhook - Save Order only after payment success
 app.post('/phonepe-webhook', express.json(), async (req, res) => {
   try {
-    const { payload } = req.body;
-    const merchantOrderId = payload.originalMerchantOrderId;
-    const state = payload.state;
+    const authorization = req.headers['authorization'];
+    const responseBodyString = JSON.stringify(req.body);
 
+    // PhonePe client instance
+    const client = StandardCheckoutClient.getInstance(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.CLIENT_VERSION,
+      Env.PRODUCTION
+    );
+
+    // Validate callback
+    const callbackResponse = client.validateCallback(
+      process.env.WEBHOOK_USERNAME,
+      process.env.WEBHOOK_PASSWORD,
+      authorization,
+      responseBodyString
+    );
+
+    const { type, payload } = callbackResponse;
+    const merchantOrderId = payload.originalMerchantOrderId;
+    const state = payload.state; // COMPLETED / FAILED / PENDING
+
+    let paymentStatus;
     if (state === "COMPLETED" || state === "SUCCESS") {
-      // ✅ Pending order fetch karo
+      paymentStatus = "PAID";
+    } else if (state === "FAILED") {
+      paymentStatus = "FAILED";
+    } else {
+      paymentStatus = "PENDING";
+    }
+
+    console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
+
+    // 🔹 Only save order if payment successful
+    if (paymentStatus === "PAID") {
+      // Fetch pending order
       const pending = await pendingOrderModel.findOne({ merchantOrderId });
       if (!pending) {
         console.error("No pending order found for", merchantOrderId);
-        return res.status(404).send("Order not found");
+        return res.status(404).send("Pending order not found");
       }
 
       const { order, address, userDetails, distance, couponcode } = pending;
 
-      // 🔹 Process products
+      // Process products & deduct stock
       const products = [];
       const ordersArray = Array.isArray(order) ? order : [order];
 
@@ -1805,7 +1836,6 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
           bundle: item.bundle || []
         };
 
-        // Stock minus
         if (singleProduct.productId) {
           const product = await productsmodel.findById(singleProduct.productId);
           if (product && product.qty >= singleProduct.quantity) {
@@ -1816,6 +1846,9 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
 
         products.push(singleProduct);
       }
+
+      // Convert distance to number (remove "km" if present)
+      let numericDistance = parseFloat(distance.toString().replace("km", "").trim());
 
       const addressd = {
         pincode: address?.[0]?.pincode || "",
@@ -1829,6 +1862,7 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
         isDefault: address?.[0]?.isDefault || false,
       };
 
+      // Save order in DB
       const newOrder = new orderr({
         name: userDetails.name,
         userId: userDetails._id,
@@ -1836,27 +1870,34 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
         address: addressd,
         phone: userDetails.address?.[0]?.phone?.[0] || "",
         products,
-        deliverydistance: distance,
+        deliverydistance: numericDistance,
         merchantOrderId,
         status: "PAID"
       });
 
       await newOrder.save();
-      await pendingOrderModel.deleteOne({ _id: pending._id }); // ✅ remove temp order
 
+      // Apply coupon if available
       if (couponcode?.length > 0) {
         applyCouponSuccess(userDetails._id, couponcode);
       }
 
-      console.log(`✅ Order saved after payment for ${merchantOrderId}`);
+      // Delete pending order
+      await pendingOrderModel.deleteOne({ _id: pending._id });
+
+      console.log(`✅ Order saved in DB after payment for ${merchantOrderId}`);
+    } else {
+      // Update paymentStatus in order if already exists
+      await orderr.findOneAndUpdate({ merchantOrderId }, { paymentStatus });
     }
 
     res.status(200).send('Webhook processed successfully');
   } catch (error) {
-    console.error('Webhook error:', error);
+    console.error('Webhook validation error:', error);
     res.status(500).send('Webhook error');
   }
 });
+
 
 
 
