@@ -1298,6 +1298,7 @@ let orderreturn = async (reason, subreason, selectedOption, orderdata, uploadedU
 
     const orderpost = await fetch(`${apiUrl}/return`, {
       method: "POST",
+      credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(bodyToSend),
     });
