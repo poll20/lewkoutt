@@ -1704,6 +1704,7 @@ app.post("/newarrival", async (req, res) => {
 // });
 
 
+// 🚀 Place Order - initiate PhonePe
 app.post('/order', verifySessionCookie, async (req, res) => {
   try {
     const { order, address, userDetails, distance, couponcode } = req.body;
@@ -1714,7 +1715,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
 
     const ordersArray = Array.isArray(order) ? order : [order];
 
-    // 🔹 Calculate Order Price
+    // 🔹 Calculate total price
     const orderprice = ordersArray.reduce((total, e) => {
       return total + (
         Array.isArray(e.discountprice)
@@ -1723,10 +1724,10 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       );
     }, 0);
 
-    // 🔹 Generate merchant order ID
+    // 🔹 Generate unique merchantOrderId
     const merchantOrderId = randomUUID();
 
-    // 🔹 PhonePe Checkout Integration
+    // 🔹 PhonePe Checkout Client
     const client = StandardCheckoutClient.getInstance(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -1737,13 +1738,13 @@ app.post('/order', verifySessionCookie, async (req, res) => {
     const redirectUrl = "https://www.lewkout.com/userorder";
 
     const metaInfo = MetaInfo.builder()
-      .udf1(userDetails._id.toString()) // user ka ID
-      .udf2(JSON.stringify({ order, address, distance, couponcode })) // extra data
+      .udf1(userDetails._id.toString()) // ✅ userId only
+      .udf2(merchantOrderId)            // ✅ reference only (not full order)
       .build();
 
     const request = StandardCheckoutPayRequest.builder()
       .merchantOrderId(merchantOrderId)
-      .amount(orderprice * 100) // paise me bhejna
+      .amount(orderprice * 100) // in paise
       .redirectUrl(redirectUrl)
       .metaInfo(metaInfo)
       .build();
@@ -1762,31 +1763,79 @@ app.post('/order', verifySessionCookie, async (req, res) => {
     res.status(500).json({ error: "Order Failed" });
   }
 });
+// 🚀 PhonePe Webhook - Save Order only after payment success
 app.post('/phonepe-webhook', express.json(), async (req, res) => {
   try {
     const { type, payload } = req.body;
-    const originalOrderId = payload.originalMerchantOrderId;
+    const merchantOrderId = payload.originalMerchantOrderId;
     const state = payload.state; // SUCCESS / FAILED / PENDING
+    const userId = payload.meta.udf1;
 
     if (state === "COMPLETED" || state === "SUCCESS") {
-      // 🔹 Meta se data nikalo
-      const metaData = JSON.parse(payload.meta.udf2); 
-      const { order, address, userDetails, distance, couponcode } = metaData;
+      // ✅ Ab order DB me save karo
+      const { order, address, distance, couponcode, userDetails } = /* 
+        👉 Yeh data tum frontend se alag "PendingOrder" collection me save karo 
+        aur yaha retrieve karo.
+      */ {};
 
-      // 🔹 Abhi DB me order save karo (stock minus yahi pe hoga)
+      // 🔹 Prepare products
+      const products = [];
+      for (const item of order) {
+        const singleProduct = {
+          productId: item.productid ? item.productid : item._id,
+          tag: item.tag || "",
+          description: item.description || "",
+          image: item.image || [],
+          quantity: item.qty || 1,
+          price: item.price || 0,
+          discountprice: item.discountprice || 0,
+          size: item.size || "",
+          shopname: item.shopname || "",
+          totalAmount: item.discountprice || 0,
+          bundle: item.bundle || []
+        };
+
+        // Stock minus
+        if (singleProduct.productId) {
+          const product = await productsmodel.findById(singleProduct.productId);
+          if (product && product.qty >= singleProduct.quantity) {
+            product.qty -= singleProduct.quantity;
+            await product.save();
+          }
+        }
+
+        products.push(singleProduct);
+      }
+
+      const addressd = {
+        pincode: address?.[0]?.pincode || "",
+        uname: address?.[0]?.uname || "",
+        building: address?.[0]?.building || "",
+        locality: address?.[0]?.locality || "",
+        address: userDetails.address?.[0]?.address || "",
+        phone: address?.[0]?.phone || [],
+        city: address?.[0]?.city || "Jaipur",
+        state: address?.[0]?.state || "Rajasthan",
+        isDefault: address?.[0]?.isDefault || false,
+      };
+
       const newOrder = new orderr({
         name: userDetails.name,
-        userId: userDetails._id,
+        userId,
         email: userDetails.email,
-        address: address[0],
+        address: addressd,
         phone: userDetails.address?.[0]?.phone?.[0] || "",
-        products: order,
+        products,
         deliverydistance: distance,
-        merchantOrderId: originalOrderId,
+        merchantOrderId,
         status: "PAID"
       });
 
       await newOrder.save();
+
+      if (couponcode?.length > 0) {
+        applyCouponSuccess(userId, couponcode);
+      }
     }
 
     res.status(200).send('Webhook processed successfully');
