@@ -241,7 +241,7 @@ const PendingOrderSchema = new mongoose.Schema({
   order: { type: Array, required: true },       // products array
   address: { type: Array, required: true },     // user address
   userDetails: { type: Object, required: true },// user info (name, email, _id)
-  distance: { type: Number, default: 0 },
+  distance: { type: String, default: "" },
   couponcode: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now, expires: 3600 } // auto-delete after 1 hr
 });
