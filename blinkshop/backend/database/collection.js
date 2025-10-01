@@ -235,6 +235,18 @@ const orders = mongoose.Schema({
   returnDate: Date,
 }, { timestamps: true });
 
+
+const PendingOrderSchema = new mongoose.Schema({
+  merchantOrderId: { type: String, required: true, unique: true },
+  order: { type: Array, required: true },       // products array
+  address: { type: Array, required: true },     // user address
+  userDetails: { type: Object, required: true },// user info (name, email, _id)
+  distance: { type: Number, default: 0 },
+  couponcode: { type: String, default: "" },
+  createdAt: { type: Date, default: Date.now, expires: 3600 } // auto-delete after 1 hr
+});
+
+
 let rent=mongoose.Schema({
     category:String,
     image:String,
@@ -703,6 +715,8 @@ let moodmodel=mongoose.model("moodmessage",moodMessageSchema)
 let cpn=mongoose.model("coupon",couponSchema)
 let cpnusage=mongoose.model("couponusage",couponUsageSchema)
 let slotmodel= mongoose.model('SlotStatus', slotStatusSchema);
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel}
+const pendingOrderModel = mongoose.model("PendingOrder", PendingOrderSchema);
+
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel,pendingOrderModel}
 
 

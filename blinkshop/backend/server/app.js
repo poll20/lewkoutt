@@ -44,7 +44,7 @@ const twilio = require("twilio");
 let bodyparser=require("body-parser")
 
 // let addtocart=require("../database/collection.js")
-let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel  }=require("../database/collection.js")
+let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel,pendingOrderModel  }=require("../database/collection.js")
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const viewdIncrementor = require("../helperfunc/viewdincrement.js"); // ✅ import helper
 
@@ -1713,9 +1713,19 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const ordersArray = Array.isArray(order) ? order : [order];
+    const merchantOrderId = randomUUID();
 
-    // 🔹 Calculate total price
+    // ✅ Save raw order data temporarily
+    await pendingOrderModel.create({
+      merchantOrderId,
+      order,
+      address,
+      userDetails,
+      distance,
+      couponcode
+    });
+
+    const ordersArray = Array.isArray(order) ? order : [order];
     const orderprice = ordersArray.reduce((total, e) => {
       return total + (
         Array.isArray(e.discountprice)
@@ -1724,10 +1734,6 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       );
     }, 0);
 
-    // 🔹 Generate unique merchantOrderId
-    const merchantOrderId = randomUUID();
-
-    // 🔹 PhonePe Checkout Client
     const client = StandardCheckoutClient.getInstance(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -1738,20 +1744,19 @@ app.post('/order', verifySessionCookie, async (req, res) => {
     const redirectUrl = "https://www.lewkout.com/userorder";
 
     const metaInfo = MetaInfo.builder()
-      .udf1(userDetails._id.toString()) // ✅ userId only
-      .udf2(merchantOrderId)            // ✅ reference only (not full order)
+      .udf1(userDetails._id.toString())
+      .udf2(merchantOrderId) // bas reference bhejna hai
       .build();
 
     const request = StandardCheckoutPayRequest.builder()
       .merchantOrderId(merchantOrderId)
-      .amount(orderprice * 100) // in paise
+      .amount(orderprice * 100)
       .redirectUrl(redirectUrl)
       .metaInfo(metaInfo)
       .build();
 
     const responsePhonePe = await client.pay(request);
 
-    // 🔹 Send Checkout URL to frontend
     res.status(201).json({
       message: "Redirect to PhonePe for payment",
       checkoutUrl: responsePhonePe.redirectUrl,
@@ -1763,24 +1768,29 @@ app.post('/order', verifySessionCookie, async (req, res) => {
     res.status(500).json({ error: "Order Failed" });
   }
 });
+
 // 🚀 PhonePe Webhook - Save Order only after payment success
 app.post('/phonepe-webhook', express.json(), async (req, res) => {
   try {
-    const { type, payload } = req.body;
+    const { payload } = req.body;
     const merchantOrderId = payload.originalMerchantOrderId;
-    const state = payload.state; // SUCCESS / FAILED / PENDING
-    const userId = payload.meta.udf1;
+    const state = payload.state;
 
     if (state === "COMPLETED" || state === "SUCCESS") {
-      // ✅ Ab order DB me save karo
-      const { order, address, distance, couponcode, userDetails } = /* 
-        👉 Yeh data tum frontend se alag "PendingOrder" collection me save karo 
-        aur yaha retrieve karo.
-      */ {};
+      // ✅ Pending order fetch karo
+      const pending = await pendingOrderModel.findOne({ merchantOrderId });
+      if (!pending) {
+        console.error("No pending order found for", merchantOrderId);
+        return res.status(404).send("Order not found");
+      }
 
-      // 🔹 Prepare products
+      const { order, address, userDetails, distance, couponcode } = pending;
+
+      // 🔹 Process products
       const products = [];
-      for (const item of order) {
+      const ordersArray = Array.isArray(order) ? order : [order];
+
+      for (const item of ordersArray) {
         const singleProduct = {
           productId: item.productid ? item.productid : item._id,
           tag: item.tag || "",
@@ -1821,7 +1831,7 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
 
       const newOrder = new orderr({
         name: userDetails.name,
-        userId,
+        userId: userDetails._id,
         email: userDetails.email,
         address: addressd,
         phone: userDetails.address?.[0]?.phone?.[0] || "",
@@ -1832,10 +1842,13 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
       });
 
       await newOrder.save();
+      await pendingOrderModel.deleteOne({ _id: pending._id }); // ✅ remove temp order
 
       if (couponcode?.length > 0) {
-        applyCouponSuccess(userId, couponcode);
+        applyCouponSuccess(userDetails._id, couponcode);
       }
+
+      console.log(`✅ Order saved after payment for ${merchantOrderId}`);
     }
 
     res.status(200).send('Webhook processed successfully');
@@ -1844,6 +1857,7 @@ app.post('/phonepe-webhook', express.json(), async (req, res) => {
     res.status(500).send('Webhook error');
   }
 });
+
 
 
 
