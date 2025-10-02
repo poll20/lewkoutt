@@ -2126,6 +2126,21 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
       if (decisionNormalized === "refund approved") {
         order.status = "Refund Approved";
         await order.save();
+        // 🔥 Initiate Refund with PhonePe
+        const refundId = randomUUID();
+        const request = RefundRequest.builder()
+          .amount(order.amount * 100) // paise me
+          .merchantRefundId(refundId)
+          .originalMerchantOrderId(order.merchantOrderId) // jo checkout me diya tha
+          .build();
+
+        const response = await client.refund(request);
+
+        console.log("Refund API Response:", response);
+
+        order.refundId = response.refundId;
+        order.refundState = response.state;
+        await order.save();
         orderEvent.emit("order_updated", { type: "order_updated", order });
         return res.json({ message: "Order marked as Refund Approved" });
 
@@ -2478,152 +2493,25 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 
 
 
-// app.post("/return",verifySessionCookie, async (req, res) => {
-//   try {
-//     let { reason, subreason, selectedOption, orderdata, uploadedUrls, address } = req.body;
-
-//     console.log("✅ Incoming Data:");
-//     console.log("➡ reason:", reason);
-//     console.log("➡ subreason:", subreason);
-//     console.log("➡ selectedOption:", selectedOption);
-//     console.log("➡ orderdata:", Array.isArray(orderdata) ? `✅ Array (${orderdata.length})` : "❌ Not array", orderdata);
-//     console.log("➡ uploadedUrls:", Array.isArray(uploadedUrls) ? `✅ Array (${uploadedUrls.length})` : "❌ Not array", uploadedUrls);
-//     console.log("➡ address:", Array.isArray(address) ? `✅ Array (${address.length})` : "❌ Not array", address);
-
-//     // 🔒 Safe Validation
-//     if (!reason) return res.status(400).json({ error: "Missing reason" });
-//     if (!subreason) return res.status(400).json({ error: "Missing subreason" });
-//     if (!selectedOption) return res.status(400).json({ error: "Missing selectedOption" });
-//     if (!Array.isArray(orderdata) || orderdata.length === 0) return res.status(400).json({ error: "Invalid or empty orderdata" });
-//     if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 6) return res.status(400).json({ error: "Need at least 6 images" });
-//     if (!Array.isArray(address) || address.length === 0) return res.status(400).json({ error: "Address is required" });
-
-//     const addressd = {
-//       uname: address?.[0]?.uname || "",
-//       pincode: address?.[0]?.pincode || "",
-//       building: address?.[0]?.building || "",
-//       locality: address?.[0]?.locality || "",
-//       address: address?.[0]?.address || "",
-//       phone: address?.[0]?.phone || [],
-//       city: address?.[0]?.city || "Jaipur",
-//       state: address?.[0]?.state || "Rajasthan",
-//       isDefault: address?.[0]?.isDefault || false,
-//     };
-
-//     const returnData = orderdata.map(e => ({
-//       orderid: e._id,
-//       reason,
-//       subreason,
-//       selectedOption,
-//       imageofreturn: uploadedUrls,
-//       addressofreturn: addressd,
-//     }));
-
-//     console.log("✅ Final returnData to save:", returnData);
-
-//     let savedReturns = await returnmodel.create(returnData);
-//     console.log("✅ Return Saved:", savedReturns);
-//     orderEvent.emit('order_return', { type: "order_return", orderdata });
-
-//     return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
-
-//   } catch (error) {
-//     console.error("❌ Error in return request:", error);
-//     return res.status(500).json({ error: "Internal Server Error", details: error.message });
-//   }
-// });
-
-
-// cron.schedule("*/5 * * * *", async () => {
-//   console.log("🔄 Checking for orders eligible for cashback...");
-
-//   try {
-//     // Find all returned orders with 'wallet' option but cashback not processed
-//     const returns = await returnmodel.find({ selectedOption: "Wallet" });
-
-//     for (const ret of returns) {
-//       const order = await orderr.findOne({ _id: ret.orderid, status: "returned" });
-
-//       if (order) {
-//         // ✅ Sum totalAmount from all products
-//         const totalAmount = order.products?.reduce((sum, product) => sum + (product.totalAmount || 0), 0);
-
-//         if (totalAmount <= 0) {
-//           console.error(`❌ Order ID: ${order._id} has invalid totalAmount:`, totalAmount);
-//           continue; // Skip this order if totalAmount is invalid
-//         }
-
-//         console.log(`✅ Processing cashback of ₹${totalAmount} for Order ID: ${order._id}`);
-
-//         await addcashbacktowallet(order.userId, totalAmount);
-
-//         // ✅ Update order status to prevent duplicate cashback
-//         order.status = "cashback-processed";
-//         await order.save();
-//       }
-//     }
-//   } catch (error) {
-//     console.error("❌ Error in cashback cron job:", error);
-//   }
-// });
-
-
-
-
-
-
-// app.get("/return", async (req, res) => {
-//   try {
-//     // Fetch all return records from the Return collection
-//     const returns = await returnmodel.find().lean();
-
-//     if (!returns || returns.length === 0) {
-//       return res.status(404).json({ message: "No return records found." });
-//     }
-
-//     // Process each return record
-//     for (const ret of returns) {
-//       // Find the order where _id matches ret.orderid and status is 'delivered'
-//       const order = await orderr.findOne({ _id: ret.orderid, status: "delivered" });
-
-//       if (order) {
-//         // Update order with return details
-//         order.reason = ret.reason;
-//         order.subreason = ret.subreason;
-//         order.selectedOption = ret.selectedOption;
-//         order.returnDate = ret.returnDate; // Assuming Date or ISO string
-//         order.status = "Returned Requested";
-
-//         // Save updated order
-//         await order.save();
-//       }
-//     }
-
-//     // 🔹 Return all orders again after update
-//     const updatedOrders = await orderr.find({ status: "Returned Requested" });
-
-//     res.status(200).json({
-//       message: "Orders updated with return details.",
-//       updatedOrders,
-//     });
-//   } catch (error) {
-//     console.error("Error updating orders with return details:", error);
-//     res.status(500).json({ message: "Server error.", error: error.message });
-//   }
-// });
-
-
-app.post("/return", verifySessionCookie, async (req, res) => {
+app.post("/return",verifySessionCookie, async (req, res) => {
   try {
     let { reason, subreason, selectedOption, orderdata, uploadedUrls, address } = req.body;
 
-    if (!reason || !subreason || !selectedOption || !Array.isArray(orderdata) || orderdata.length === 0) {
-      return res.status(400).json({ error: "Invalid request" });
-    }
+    console.log("✅ Incoming Data:");
+    console.log("➡ reason:", reason);
+    console.log("➡ subreason:", subreason);
+    console.log("➡ selectedOption:", selectedOption);
+    console.log("➡ orderdata:", Array.isArray(orderdata) ? `✅ Array (${orderdata.length})` : "❌ Not array", orderdata);
+    console.log("➡ uploadedUrls:", Array.isArray(uploadedUrls) ? `✅ Array (${uploadedUrls.length})` : "❌ Not array", uploadedUrls);
+    console.log("➡ address:", Array.isArray(address) ? `✅ Array (${address.length})` : "❌ Not array", address);
 
-    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 6) {
-      return res.status(400).json({ error: "Need at least 6 images" });
-    }
+    // 🔒 Safe Validation
+    if (!reason) return res.status(400).json({ error: "Missing reason" });
+    if (!subreason) return res.status(400).json({ error: "Missing subreason" });
+    if (!selectedOption) return res.status(400).json({ error: "Missing selectedOption" });
+    if (!Array.isArray(orderdata) || orderdata.length === 0) return res.status(400).json({ error: "Invalid or empty orderdata" });
+    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 6) return res.status(400).json({ error: "Need at least 6 images" });
+    if (!Array.isArray(address) || address.length === 0) return res.status(400).json({ error: "Address is required" });
 
     const addressd = {
       uname: address?.[0]?.uname || "",
@@ -2646,39 +2534,11 @@ app.post("/return", verifySessionCookie, async (req, res) => {
       addressofreturn: addressd,
     }));
 
+    console.log("✅ Final returnData to save:", returnData);
+
     let savedReturns = await returnmodel.create(returnData);
-
-    // ✅ If selectedOption = Bank → initiate PhonePe refund
-    if (selectedOption === "Bank") {
-      for (const e of orderdata) {
-        const order = await orderr.findById(e._id);
-        if (!order) continue;
-
-        const totalAmount = order.products?.reduce((sum, product) => sum + (product.totalAmount || 0), 0);
-        if (totalAmount <= 0) continue;
-
-        const refundId = randomUUID();
-        const request = RefundRequest.builder()
-          .amount(totalAmount * 100) // paisa
-          .merchantRefundId(refundId)
-          .originalMerchantOrderId(order.merchantOrderId) // ✅ PhonePe se save kiya hua ID chahiye
-          .build();
-
-        try {
-          const response = await client.refund(request);
-          console.log("✅ PhonePe Refund Response:", response);
-
-          order.status = "refund-initiated";
-          order.refundId = refundId;
-          order.refundStatus = response.state;
-          await order.save();
-        } catch (err) {
-          console.error("❌ PhonePe Refund Error:", err.message);
-        }
-      }
-    }
-
-    orderEvent.emit("order_return", { type: "order_return", orderdata });
+    console.log("✅ Return Saved:", savedReturns);
+    orderEvent.emit('order_return', { type: "order_return", orderdata });
 
     return res.status(201).json({ message: "Return request submitted!", data: savedReturns });
 
@@ -2687,6 +2547,7 @@ app.post("/return", verifySessionCookie, async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 });
+
 
 cron.schedule("*/5 * * * *", async () => {
   console.log("🔄 Checking for orders eligible for cashback...");
@@ -2724,15 +2585,45 @@ cron.schedule("*/5 * * * *", async () => {
 
 
 
-// 🔹 Refund Status Check API
-app.get("/refund-status/:refundId", async (req, res) => {
+
+
+app.get("/return", async (req, res) => {
   try {
-    const refundId = req.params.refundId;
-    const response = await client.getRefundStatus(refundId);
-    res.json(response);
+    // Fetch all return records from the Return collection
+    const returns = await returnmodel.find().lean();
+
+    if (!returns || returns.length === 0) {
+      return res.status(404).json({ message: "No return records found." });
+    }
+
+    // Process each return record
+    for (const ret of returns) {
+      // Find the order where _id matches ret.orderid and status is 'delivered'
+      const order = await orderr.findOne({ _id: ret.orderid, status: "delivered" });
+
+      if (order) {
+        // Update order with return details
+        order.reason = ret.reason;
+        order.subreason = ret.subreason;
+        order.selectedOption = ret.selectedOption;
+        order.returnDate = ret.returnDate; // Assuming Date or ISO string
+        order.status = "Returned Requested";
+
+        // Save updated order
+        await order.save();
+      }
+    }
+
+    // 🔹 Return all orders again after update
+    const updatedOrders = await orderr.find({ status: "Returned Requested" });
+
+    res.status(200).json({
+      message: "Orders updated with return details.",
+      updatedOrders,
+    });
   } catch (error) {
-    console.error("❌ Error checking refund status:", error.message);
-    res.status(500).json({ error: "Failed to fetch refund status" });
+    console.error("Error updating orders with return details:", error);
+    res.status(500).json({ message: "Server error.", error: error.message });
   }
 });
 
