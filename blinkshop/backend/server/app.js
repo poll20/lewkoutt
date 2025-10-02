@@ -1794,7 +1794,9 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     );
 
     const { type, payload } = callbackResponse;
-    const merchantOrderId = payload.originalMerchantOrderId;
+    const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
+
+console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
     const state = payload.state; // COMPLETED / FAILED / PENDING
 
     console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
