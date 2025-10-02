@@ -1738,7 +1738,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       process.env.CLIENT_VERSION,
-      Env.SANDBOX // 🔥 SANDBOX for testing, PRODUCTION for live
+      Env.PRODUCTION  // 🔥 SANDBOX for testing, PRODUCTION for live
     );
 
     const redirectUrl = "https://www.lewkout.com/userorder";
@@ -1783,7 +1783,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       process.env.CLIENT_VERSION,
-      Env.SANDBOX // 🔥 SANDBOX for testing, PRODUCTION for live
+      Env.PRODUCTION// 🔥 SANDBOX for testing, PRODUCTION for live
     );
 
     // Validate callback
@@ -2159,6 +2159,62 @@ console.log("return res mony",request)
   } catch (error) {
     console.error("Error updating order:", error);
     res.status(500).json({ error: "Server error" });
+  }
+});
+// REFUND WEBHOOK (PhonePe → Server)
+app.post("/refund/phonepe/webhook", express.json(), async (req, res) => {
+  console.log("📩 Refund Webhook Body:", req.body);
+
+  try {
+    const authorization = req.headers["authorization"];
+    const responseBodyString = JSON.stringify(req.body);
+
+    const client = StandardCheckoutClient.getInstance(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.CLIENT_VERSION,
+      Env.PRODUCTION
+    );
+
+    const callbackResponse = client.validateCallback(
+      process.env.WEBHOOK_USERNAME, // "lewkout"
+      process.env.WEBHOOK_PASSWORD, // jo dashboard me dala hai
+      authorization,
+      responseBodyString
+    );
+
+    const { payload } = callbackResponse;
+    const refundId = payload.merchantRefundId;
+    const originalOrderId = payload.originalMerchantOrderId;
+    const refundState = payload.state; // ACCEPTED / COMPLETED / FAILED
+
+    console.log(`📩 Refund webhook: refundId=${refundId}, order=${originalOrderId}, state=${refundState}`);
+
+    const order = await orderr.findOne({ merchantOrderId: originalOrderId });
+    if (!order) {
+      console.error("❌ Order not found for refund webhook:", originalOrderId);
+      return res.status(404).send("Order not found");
+    }
+
+    order.refundId = refundId;
+    order.refundState = refundState;
+
+    if (refundState === "COMPLETED") {
+      order.status = "Refund Completed";
+    } else if (refundState === "FAILED") {
+      order.status = "Refund Failed";
+    } else {
+      order.status = "Refund Pending";
+    }
+
+    await order.save();
+    orderEvent.emit("order_updated", { type: "order_updated", order });
+
+    console.log(`✅ Refund updated for order ${originalOrderId}: ${refundState}`);
+    res.status(200).send("Refund webhook processed successfully");
+  } catch (error) {
+    console.error("❌ Refund Webhook error:", error);
+    res.status(500).send("Refund webhook error");
   }
 });
 
