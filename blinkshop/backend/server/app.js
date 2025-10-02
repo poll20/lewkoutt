@@ -1769,6 +1769,7 @@ console.log("PhonePe response:", responsePhonePe);
   }
 });
 
+// PHONEPE WEBHOOK ENDPOINT
 app.post("/phonepe/webhook", express.json(), async (req, res) => {
   console.log("📩 Raw webhook body:", req.body);
   console.log("📩 Headers:", req.headers);
@@ -1777,7 +1778,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     const authorization = req.headers["authorization"];
     const responseBodyString = JSON.stringify(req.body);
 
-    // ✅ PhonePe client instance
+    // PhonePe client instance
     const client = StandardCheckoutClient.getInstance(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -1785,33 +1786,33 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
       Env.PRODUCTION
     );
 
-    // ✅ Validate callback
+    // Validate callback
     const callbackResponse = client.validateCallback(
-      process.env.WEBHOOK_USERNAME,  // dashboard username
-      process.env.WEBHOOK_PASSWORD,  // dashboard password
+      process.env.WEBHOOK_USERNAME, // dashboard username
+      process.env.WEBHOOK_PASSWORD, // dashboard password
       authorization,
       responseBodyString
     );
 
     const { type, payload } = callbackResponse;
-    const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
 
-console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
+    // Use udf2 (merchantOrderId we sent) if available, otherwise fallback to payload.merchantOrderId
+    const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
     const state = payload.state; // COMPLETED / FAILED / PENDING
 
     console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
 
     // Determine payment status
- // Normalize state for case-insensitive check
-const normalizedState = state.toUpperCase();
-if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
-else if (normalizedState === "FAILED") paymentStatus = "FAILED";
-else paymentStatus = "PENDING";
-    // ✅ Only process if payment is successful
+    let paymentStatus;
+    const normalizedState = state.toUpperCase();
+    if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
+    else if (normalizedState === "FAILED") paymentStatus = "FAILED";
+    else paymentStatus = "PENDING";
+
     if (paymentStatus === "PAID") {
-      // Log merchantOrderId when fetching pending order
-const pending = await pendingOrderModel.findOne({ merchantOrderId });
-console.log("Pending order fetched:", pending);
+      // Fetch pending order from DB
+      const pending = await pendingOrderModel.findOne({ merchantOrderId });
+      console.log("Pending order fetched:", pending);
 
       if (!pending) {
         console.error("No pending order found for", merchantOrderId);
@@ -1838,18 +1839,23 @@ console.log("Pending order fetched:", pending);
           bundle: item.bundle || [],
         };
 
+        // Deduct stock safely
         if (singleProduct.productId) {
           const product = await productsmodel.findById(singleProduct.productId);
-          if (product && product.qty >= singleProduct.quantity) {
-            product.qty -= singleProduct.quantity;
-            await product.save();
+          if (product) {
+            if (product.qty >= singleProduct.quantity) {
+              product.qty -= singleProduct.quantity;
+              await product.save();
+            } else {
+              console.warn(`Stock insufficient for product ${product._id}`);
+            }
           }
         }
         products.push(singleProduct);
       }
 
       // Convert distance to number
-      const numericDistance = parseFloat(distance.toString().replace("km", "").trim());
+      const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
 
       const addressd = {
         pincode: address?.[0]?.pincode || "",
@@ -1863,7 +1869,7 @@ console.log("Pending order fetched:", pending);
         isDefault: address?.[0]?.isDefault || false,
       };
 
-      // Save order in DB
+      // Save final order in DB
       const newOrder = new orderr({
         name: userDetails.name,
         userId: userDetails._id,
@@ -1897,6 +1903,7 @@ console.log("Pending order fetched:", pending);
     res.status(500).send("Webhook error");
   }
 });
+
 
 
 
