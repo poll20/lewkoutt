@@ -1741,7 +1741,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       Env.PRODUCTION
     );
 
-    const redirectUrl = "https://www.lewkout.com/api/phonepe/webhook";
+    const redirectUrl = "https://www.lewkout.com/userorder";
 
     const metaInfo = MetaInfo.builder()
       .udf1(userDetails._id.toString())
