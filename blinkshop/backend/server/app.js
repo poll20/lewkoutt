@@ -1772,6 +1772,8 @@ app.post('/order', verifySessionCookie, async (req, res) => {
 // 🚀 PhonePe Webhook - Save Order only after payment success
 app.post('/phonepe-webhook', express.json(), async (req, res) => {
   try {
+console.log("📩 Raw webhook body:", req.body);
+  console.log("📩 Headers:", req.headers);
     const authorization = req.headers['authorization'];
     const responseBodyString = JSON.stringify(req.body);
 
