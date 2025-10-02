@@ -1741,7 +1741,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       Env.PRODUCTION
     );
 
-    const redirectUrl = "https://www.lewkout.com/userorder";
+    const redirectUrl = "https://www.lewkout.com/api/phonepe/webhook";
 
     const metaInfo = MetaInfo.builder()
       .udf1(userDetails._id.toString())
@@ -1771,6 +1771,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
 
 // 🚀 PhonePe Webhook - Save Order only after payment success
 app.post('/api/phonepe/webhook', express.json(), async (req, res) => {
+  console.log("📩 Raw webhook body:", req.body);
   try {
 console.log("📩 Raw webhook body:", req.body);
   console.log("📩 Headers:", req.headers);
