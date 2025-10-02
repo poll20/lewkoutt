@@ -1756,7 +1756,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       .build();
 
     const responsePhonePe = await client.pay(request);
-
+console.log("PhonePe response:", responsePhonePe);
     res.status(201).json({
       message: "Redirect to PhonePe for payment",
       checkoutUrl: responsePhonePe.redirectUrl,
@@ -1769,7 +1769,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
   }
 });
 
-app.post("https://www.lewkout.com/api/phonepe/webhook", express.json(), async (req, res) => {
+app.post("/phonepe/webhook", express.json(), async (req, res) => {
   console.log("📩 Raw webhook body:", req.body);
   console.log("📩 Headers:", req.headers);
 
@@ -1800,14 +1800,17 @@ app.post("https://www.lewkout.com/api/phonepe/webhook", express.json(), async (r
     console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
 
     // Determine payment status
-    let paymentStatus;
-    if (state === "COMPLETED" || state === "SUCCESS") paymentStatus = "PAID";
-    else if (state === "FAILED") paymentStatus = "FAILED";
-    else paymentStatus = "PENDING";
-
+ // Normalize state for case-insensitive check
+const normalizedState = state.toUpperCase();
+if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
+else if (normalizedState === "FAILED") paymentStatus = "FAILED";
+else paymentStatus = "PENDING";
     // ✅ Only process if payment is successful
     if (paymentStatus === "PAID") {
-      const pending = await pendingOrderModel.findOne({ merchantOrderId });
+      // Log merchantOrderId when fetching pending order
+const pending = await pendingOrderModel.findOne({ merchantOrderId });
+console.log("Pending order fetched:", pending);
+
       if (!pending) {
         console.error("No pending order found for", merchantOrderId);
         return res.status(404).send("Pending order not found");
