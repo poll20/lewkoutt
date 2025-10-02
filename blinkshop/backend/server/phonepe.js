@@ -49,7 +49,7 @@ async function getPhonePeToken() {
 
   try {
     const response = await axios.post(
-      "https://api.phonepe.com/apis/identity-manager/v1/oauth/token",
+      "	https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token",
       requestBody,
       { headers: requestHeaders }
     );
