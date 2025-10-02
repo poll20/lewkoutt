@@ -1811,6 +1811,8 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
 
     if (paymentStatus === "PAID") {
       // Fetch pending order from DB
+      //     await newOrder.save();
+//     orderEvent.emit('new_order', { type: "new_order", order });
       const pending = await pendingOrderModel.findOne({ merchantOrderId });
       console.log("Pending order fetched:", pending);
 
@@ -1881,7 +1883,8 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
         merchantOrderId,
         status: "pending",
       });
-      await newOrder.save();
+          await newOrder.save();
+    orderEvent.emit('new_order', { type: "new_order", order });
 
       // Apply coupon if available
       if (couponcode?.length > 0) {
