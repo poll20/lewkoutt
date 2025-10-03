@@ -2287,6 +2287,8 @@ console.log("Using CLIENT_VERSION:", process.env.CLIENT_VERSION);
           .originalMerchantOrderId(order.merchantOrderId)
           .build();
 console.log("Original Merchant Order ID:", order.merchantOrderId);
+console.log("Request:", request);
+
         let response;
 try {
   response = await client.refund(request);
