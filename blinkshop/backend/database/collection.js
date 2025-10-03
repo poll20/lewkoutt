@@ -294,7 +294,7 @@ const orders = new mongoose.Schema({
   returnDate: Date,
 }, { timestamps: true });
 
-const Order = mongoose.model("Order", orderSchema);
+
 
 
 const PendingOrderSchema = new mongoose.Schema({
