@@ -2590,7 +2590,7 @@ app.post("/return",verifySessionCookie, async (req, res) => {
     if (!subreason) return res.status(400).json({ error: "Missing subreason" });
     if (!selectedOption) return res.status(400).json({ error: "Missing selectedOption" });
     if (!Array.isArray(orderdata) || orderdata.length === 0) return res.status(400).json({ error: "Invalid or empty orderdata" });
-    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 6) return res.status(400).json({ error: "Need at least 6 images" });
+    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 2) return res.status(400).json({ error: "Need at least 6 images" });
     if (!Array.isArray(address) || address.length === 0) return res.status(400).json({ error: "Address is required" });
 
     const addressd = {

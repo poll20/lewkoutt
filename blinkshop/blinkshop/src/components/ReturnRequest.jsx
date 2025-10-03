@@ -88,8 +88,8 @@ const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
       return;
     }
 
-    if (step === 2 && uploadedUrls.length < 3) {
-      alert("Please upload at least 6 photos.");
+    if (step === 2 && uploadedUrls.length < 2) {
+      alert("Please upload at least 2 photos.");
       return;
     }
 
@@ -98,8 +98,8 @@ const [refundModeConfirmed, setRefundModeConfirmed] = useState(false);
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files);
-    if (uploadedUrls.length + files.length > 3) {
-      alert("You can upload up to 6 photos only.");
+    if (uploadedUrls.length + files.length > 2) {
+      alert("You can upload up to 2 photos only.");
       return;
     }
 
