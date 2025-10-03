@@ -2130,39 +2130,29 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
         order.status = "Refund Approved";
         await order.save();
          // 🔥 Refund payload
-      const refundId = randomUUID();
-      const payload = {
-        merchantId: process.env.CLIENT_ID,
-        merchantRefundId: refundId,
-        originalMerchantOrderId: order.merchantOrderId,
-        amount: order.products[0].discountprice * 100, // paise me
-        callbackUrl: process.env.REFUND_CALLBACK_URL, // ✅ webhook URL
-      };
+      // ✅ SDK client init
+    const client = StandardCheckoutClient.getInstance(
+      process.env.CLIENT_ID,      // PhonePe se mila clientId
+      process.env.CLIENT_SECRET,  // PhonePe se mila clientSecret
+      process.env.CLIENT_VERSION, // PhonePe SDK version (jaise "2023-01-01")
+      Env.PRODUCTION              // Env.SANDBOX use karo test ke liye
+    );
 
-      // 🔐 Payload encode + checksum
-      const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString("base64");
-      const checksum = crypto
-        .createHash("sha256")
-        .update(payloadBase64 + "/pg/v1/refund" + process.env.CLIENT_SECRET)
-        .digest("hex") + "###" + process.env.CLIENT_ID;
+    // ✅ Refund payload
+    const refundId = randomUUID();
+    const request = RefundRequest.builder()
+      .amount(order.products[0].discountprice * 100) // paisa me, aur <= order amount
+      .merchantRefundId(refundId) // unique refund ID
+      .originalMerchantOrderId(order.merchantOrderId) // order create karte waqt ka merchantOrderId
+      .build();
 
-      // 🚀 API call
-      const response = await axios.post(
-        "https://api.phonepe.com/apis/pg/v1/refund",
-        { request: payloadBase64 },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-VERIFY": checksum,
-            "X-MERCHANT-ID": process.env.CLIENT_ID,
-          },
-        }
-      );
+    // 🚀 Refund initiate
+    const response = await client.refund(request);
+    console.log("Refund Response:", response);
 
-      console.log("Refund API Response:", response.data);
-
-      order.refundId = refundId;
-      order.refundState = response.data.data.state; // SUCCESS / FAILED / PENDING
+    // ✅ Save refund details in DB
+    order.refundId = refundId;
+    order.refundState = response.state; // ACCEPTED / COMPLETED / FAILED
         await order.save();
         orderEvent.emit("order_updated", { type: "order_updated", order });
         return res.json({ message: "Order marked as Refund Approved" });
