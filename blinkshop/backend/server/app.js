@@ -2126,33 +2126,33 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
     }
 
     else if (currentStatus === "refund processed") {
-      if (decisionNormalized === "refund approved") {
+      if (decisionNormalized === "Refund Approved") {
         order.status = "Refund Approved";
         await order.save();
          // 🔥 Refund payload
       // ✅ SDK client init
-    const client = StandardCheckoutClient.getInstance(
-      process.env.CLIENT_ID,      // PhonePe se mila clientId
-      process.env.CLIENT_SECRET,  // PhonePe se mila clientSecret
-      process.env.CLIENT_VERSION, // PhonePe SDK version (jaise "2023-01-01")
-      Env.PRODUCTION              // Env.SANDBOX use karo test ke liye
-    );
+   // 🔥 SDK Refund
+        const client = StandardCheckoutClient.getInstance(
+          process.env.CLIENT_ID,
+          process.env.CLIENT_SECRET,
+          process.env.CLIENT_VERSION,
+          Env.PRODUCTION  // Sandbox for testing, PRODUCTION for live
+        );
 
-    // ✅ Refund payload
-    const refundId = randomUUID();
-    const request = RefundRequest.builder()
-      .amount(order.products[0].discountprice * 100) // paisa me, aur <= order amount
-      .merchantRefundId(refundId) // unique refund ID
-      .originalMerchantOrderId(order.merchantOrderId) // order create karte waqt ka merchantOrderId
-      .build();
+        const refundId = randomUUID();
 
-    // 🚀 Refund initiate
-    const response = await client.refund(request);
-    console.log("Refund Response:", response);
+        const request = RefundRequest.builder()
+          .amount(order.products[0].discountprice * 100)  // paisa me
+          .merchantRefundId(refundId)
+          .originalMerchantOrderId(order.merchantOrderId)
+          .build();
 
-    // ✅ Save refund details in DB
-    order.refundId = refundId;
-    order.refundState = response.state; // ACCEPTED / COMPLETED / FAILED
+        const response = await client.refund(request);
+        console.log("Refund Response:", response);
+
+        // ✅ Save refund details
+        order.refundId = refundId;
+        order.refundState = response.state; // ACCEPTED / COMPLETED / FAILED
         await order.save();
         orderEvent.emit("order_updated", { type: "order_updated", order });
         return res.json({ message: "Order marked as Refund Approved" });
@@ -2176,8 +2176,6 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
 });
 // REFUND WEBHOOK (PhonePe → Server)
 app.post("/refund/phonepe/webhook", express.json(), async (req, res) => {
-  console.log("📩 Refund Webhook Body:", req.body);
-
   try {
     const authorization = req.headers["authorization"];
     const responseBodyString = JSON.stringify(req.body);
@@ -2186,12 +2184,12 @@ app.post("/refund/phonepe/webhook", express.json(), async (req, res) => {
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       process.env.CLIENT_VERSION,
-      Env.PRODUCTION
+      Env.PRODUCTION// 🔥 SANDBOX for testing, PRODUCTION for live
     );
 
     const callbackResponse = client.validateCallback(
-      process.env.WEBHOOK_USERNAME, // "lewkout"
-      process.env.WEBHOOK_PASSWORD, // jo dashboard me dala hai
+      process.env.WEBHOOK_USERNAME,
+      process.env.WEBHOOK_PASSWORD,
       authorization,
       responseBodyString
     );
@@ -2201,35 +2199,28 @@ app.post("/refund/phonepe/webhook", express.json(), async (req, res) => {
     const originalOrderId = payload.originalMerchantOrderId;
     const refundState = payload.state; // ACCEPTED / COMPLETED / FAILED
 
-    console.log(`📩 Refund webhook: refundId=${refundId}, order=${originalOrderId}, state=${refundState}`);
-
     const order = await orderr.findOne({ merchantOrderId: originalOrderId });
-    if (!order) {
-      console.error("❌ Order not found for refund webhook:", originalOrderId);
-      return res.status(404).send("Order not found");
-    }
+    if (!order) return res.status(404).send("Order not found");
 
     order.refundId = refundId;
     order.refundState = refundState;
 
-    if (refundState === "COMPLETED") {
-      order.status = "Refund Completed";
-    } else if (refundState === "FAILED") {
-      order.status = "Refund Failed";
-    } else {
-      order.status = "Refund Pending";
-    }
+    if (refundState === "COMPLETED") order.status = "Refund Completed";
+    else if (refundState === "FAILED") order.status = "Refund Failed";
+    else order.status = "Refund Pending";
 
     await order.save();
     orderEvent.emit("order_updated", { type: "order_updated", order });
 
     console.log(`✅ Refund updated for order ${originalOrderId}: ${refundState}`);
     res.status(200).send("Refund webhook processed successfully");
+
   } catch (error) {
     console.error("❌ Refund Webhook error:", error);
     res.status(500).send("Refund webhook error");
   }
 });
+
 
 
 setInterval(async () => {
