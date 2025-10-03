@@ -1770,203 +1770,6 @@ console.log("PhonePe response:", responsePhonePe);
 });
 
 // PHONEPE WEBHOOK ENDPOINT
-// app.post("/phonepe/webhook", express.json(), async (req, res) => {
-//   console.log("📩 Raw webhook body:", req.body);
-//   console.log("📩 Headers:", req.headers);
-
-//   try {
-//     const authorization = req.headers["authorization"];
-//     const responseBodyString = JSON.stringify(req.body);
-
-//     // PhonePe client instance
-//     const client = StandardCheckoutClient.getInstance(
-//       process.env.CLIENT_ID,
-//       process.env.CLIENT_SECRET,
-//       process.env.CLIENT_VERSION,
-//       Env.PRODUCTION// 🔥 SANDBOX for testing, PRODUCTION for live
-//     );
-
-//     // Validate callback
-//     const callbackResponse = client.validateCallback(
-//       process.env.WEBHOOK_USERNAME, // dashboard username
-//       process.env.WEBHOOK_PASSWORD, // dashboard password
-//       authorization,
-//       responseBodyString
-//     );
-
-//     const { type, payload } = callbackResponse;
-
-//     // Use udf2 (merchantOrderId we sent) if available, otherwise fallback to payload.merchantOrderId
-//     const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
-//     const state = payload.state; // COMPLETED / FAILED / PENDING
-
-//     console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
-
-//     // Determine payment status
-//     let paymentStatus;
-//     const normalizedState = state.toUpperCase();
-//     if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
-//     else if (normalizedState === "FAILED") paymentStatus = "FAILED";
-//     else paymentStatus = "PENDING";
-
-// //     if (paymentStatus === "PAID") {
-// //       // Fetch pending order from DB
-// //       //     await newOrder.save();
-// // //     orderEvent.emit('new_order', { type: "new_order", order });
-// //       const pending = await pendingOrderModel.findOne({ merchantOrderId });
-// //       console.log("Pending order fetched:", pending);
-
-// //       if (!pending) {
-// //         console.error("No pending order found for", merchantOrderId);
-// //         return res.status(404).send("Pending order not found");
-// //       }
-
-// //       const { order, address, userDetails, distance, couponcode } = pending;
-// //       const products = [];
-
-// //       // Process products & deduct stock
-// //       const ordersArray = Array.isArray(order) ? order : [order];
-// //       for (const item of ordersArray) {
-// //         const singleProduct = {
-// //           productId: item.productid || item._id,
-// //           tag: item.tag || "",
-// //           description: item.description || "",
-// //           image: item.image || [],
-// //           quantity: item.qty || 1,
-// //           price: item.price || 0,
-// //           discountprice: item.discountprice || 0,
-// //           size: item.size || "",
-// //           shopname: item.shopname || "",
-// //           totalAmount: item.discountprice || 0,
-// //           bundle: item.bundle || [],
-// //         };
-
-// //         // Deduct stock safely
-// //         if (singleProduct.productId) {
-// //           const product = await productsmodel.findById(singleProduct.productId);
-// //           if (product) {
-// //             if (product.qty >= singleProduct.quantity) {
-// //               product.qty -= singleProduct.quantity;
-// //               await product.save();
-// //             } else {
-// //               console.warn(`Stock insufficient for product ${product._id}`);
-// //             }
-// //           }
-// //         }
-// //         products.push(singleProduct);
-// //       }
-
-// //       // Convert distance to number
-// //       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
-
-// //       const addressd = {
-// //         pincode: address?.[0]?.pincode || "",
-// //         uname: address?.[0]?.uname || "",
-// //         building: address?.[0]?.building || "",
-// //         locality: address?.[0]?.locality || "",
-// //         address: userDetails.address?.[0]?.address || "",
-// //         phone: address?.[0]?.phone || [],
-// //         city: address?.[0]?.city || "Jaipur",
-// //         state: address?.[0]?.state || "Rajasthan",
-// //         isDefault: address?.[0]?.isDefault || false,
-// //       };
-
-// //       // Save final order in DB
-// //       const newOrder = new orderr({
-// //         name: userDetails.name,
-// //         userId: userDetails._id,
-// //         email: userDetails.email,
-// //         address: addressd,
-// //         phone: userDetails.address?.[0]?.phone?.[0] || "",
-// //         products,
-// //         deliverydistance: numericDistance,
-// //         merchantOrderId,
-// //         status: "pending",
-// //       });
-// //           await newOrder.save();
-// //     orderEvent.emit('new_order', { type: "new_order", order });
-
-// //       // Apply coupon if available
-// //       if (couponcode?.length > 0) {
-// //         await applyCouponSuccess(userDetails._id, couponcode);
-// //       }
-
-// //       // Delete pending order
-// //       await pendingOrderModel.deleteOne({ _id: pending._id });
-
-// //       console.log(`✅ Order saved in DB after payment for ${merchantOrderId}`);
-//     // } 
-//     if (paymentStatus === "PAID") {
-//   const pending = await pendingOrderModel.findOne({ merchantOrderId });
-//   if (!pending) return res.status(404).send("Pending order not found");
-
-//   const { order, address, userDetails, distance, couponcode } = pending;
-
-//   const ordersArray = Array.isArray(order) ? order : [order];
-
-//   for (const item of ordersArray) {
-//     const singleProduct = {
-//       userId: userDetails._id,
-//       merchantOrderId,
-//       productId: item.productid || item._id,
-//       quantity: item.qty || 1,
-//       price: item.price || 0,
-//       discountprice: item.discountprice || 0,
-//       size: item.size || "",
-//       status: "pending",
-//       returnStatus: "not_requested",
-//       address: {
-//         pincode: address?.[0]?.pincode || "",
-//         uname: address?.[0]?.uname || "",
-//         building: address?.[0]?.building || "",
-//         locality: address?.[0]?.locality || "",
-//         address: userDetails.address?.[0]?.address || "",
-//         phone: address?.[0]?.phone || "",
-//         city: address?.[0]?.city || "Jaipur",
-//         state: address?.[0]?.state || "Rajasthan",
-//       },
-//       orderedAt: new Date(),
-//     };
-
-//     // ✅ Save each product as a new order document
-//     const newOrder = new orderr(singleProduct);
-//     await newOrder.save();
-
-//     // 🔥 Deduct stock
-//     if (singleProduct.productId) {
-//       const product = await productsmodel.findById(singleProduct.productId);
-//       if (product && product.qty >= singleProduct.quantity) {
-//         product.qty -= singleProduct.quantity;
-//         await product.save();
-//       }
-//     }
-//   }
-
-//   // ✅ Apply coupon only once (not for each product)
-//   if (couponcode?.length > 0) {
-//     await applyCouponSuccess(userDetails._id, couponcode);
-//   }
-
-//   // ✅ Delete pending order
-//   await pendingOrderModel.deleteOne({ _id: pending._id });
-
-//   console.log(`✅ Orders saved individually for ${merchantOrderId}`);
-// }
-
-//     else {
-//       // Update existing order if payment failed or pending
-//       await orderr.findOneAndUpdate({ merchantOrderId }, { paymentStatus });
-//     }
-
-//     res.status(200).send("Webhook processed successfully");
-//   } catch (error) {
-//     console.error("Webhook validation error:", error);
-//     res.status(500).send("Webhook error");
-//   }
-// });
-
-
-// PHONEPE WEBHOOK ENDPOINT
 app.post("/phonepe/webhook", express.json(), async (req, res) => {
   console.log("📩 Raw webhook body:", req.body);
   console.log("📩 Headers:", req.headers);
@@ -1975,29 +1778,31 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     const authorization = req.headers["authorization"];
     const responseBodyString = JSON.stringify(req.body);
 
+    // PhonePe client instance
     const client = StandardCheckoutClient.getInstance(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       process.env.CLIENT_VERSION,
-      Env.PRODUCTION // 🔥 SANDBOX for testing, PRODUCTION for live
+      Env.PRODUCTION// 🔥 SANDBOX for testing, PRODUCTION for live
     );
 
-    // ✅ Validate callback
+    // Validate callback
     const callbackResponse = client.validateCallback(
-      process.env.WEBHOOK_USERNAME,
-      process.env.WEBHOOK_PASSWORD,
+      process.env.WEBHOOK_USERNAME, // dashboard username
+      process.env.WEBHOOK_PASSWORD, // dashboard password
       authorization,
       responseBodyString
     );
 
     const { type, payload } = callbackResponse;
 
+    // Use udf2 (merchantOrderId we sent) if available, otherwise fallback to payload.merchantOrderId
     const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
     const state = payload.state; // COMPLETED / FAILED / PENDING
 
     console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
 
-    // ✅ Normalize payment status
+    // Determine payment status
     let paymentStatus;
     const normalizedState = state.toUpperCase();
     if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
@@ -2005,23 +1810,24 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     else paymentStatus = "PENDING";
 
     if (paymentStatus === "PAID") {
-      // ✅ Fetch pending order
+      // Fetch pending order from DB
+      //     await newOrder.save();
+//     orderEvent.emit('new_order', { type: "new_order", order });
       const pending = await pendingOrderModel.findOne({ merchantOrderId });
+      console.log("Pending order fetched:", pending);
+
       if (!pending) {
         console.error("No pending order found for", merchantOrderId);
         return res.status(404).send("Pending order not found");
       }
 
       const { order, address, userDetails, distance, couponcode } = pending;
+      const products = [];
+
+      // Process products & deduct stock
       const ordersArray = Array.isArray(order) ? order : [order];
-
-      // ✅ Save each product as a new Order doc
       for (const item of ordersArray) {
-        const singleOrder = {
-          name: userDetails.name,
-          userId: userDetails._id,
-          email: userDetails.email,
-
+        const singleProduct = {
           productId: item.productid || item._id,
           tag: item.tag || "",
           description: item.description || "",
@@ -2033,53 +1839,65 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
           shopname: item.shopname || "",
           totalAmount: item.discountprice || 0,
           bundle: item.bundle || [],
-
-          deliverydistance: distance || "",
-          status: "pending",
-          merchantOrderId, // 👈 same for all
-
-          address: {
-            pincode: address?.[0]?.pincode || "",
-            uname: address?.[0]?.uname || "",
-            building: address?.[0]?.building || "",
-            locality: address?.[0]?.locality || "",
-            address: userDetails.address?.[0]?.address || "",
-            phone: address?.[0]?.phone || "",
-            city: address?.[0]?.city || "Jaipur",
-            state: address?.[0]?.state || "Rajasthan",
-          },
-
-          orderedAt: new Date(),
         };
 
-        const newOrder = new orderr(singleOrder);
-        await newOrder.save();
-
-        // ✅ Deduct stock per product
-        if (singleOrder.productId) {
-          const product = await productsmodel.findById(singleOrder.productId);
-          if (product && product.qty >= singleOrder.quantity) {
-            product.qty -= singleOrder.quantity;
-            await product.save();
+        // Deduct stock safely
+        if (singleProduct.productId) {
+          const product = await productsmodel.findById(singleProduct.productId);
+          if (product) {
+            if (product.qty >= singleProduct.quantity) {
+              product.qty -= singleProduct.quantity;
+              await product.save();
+            } else {
+              console.warn(`Stock insufficient for product ${product._id}`);
+            }
           }
         }
+        products.push(singleProduct);
       }
 
-      // ✅ Apply coupon (only once)
+      // Convert distance to number
+      const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
+
+      const addressd = {
+        pincode: address?.[0]?.pincode || "",
+        uname: address?.[0]?.uname || "",
+        building: address?.[0]?.building || "",
+        locality: address?.[0]?.locality || "",
+        address: userDetails.address?.[0]?.address || "",
+        phone: address?.[0]?.phone || [],
+        city: address?.[0]?.city || "Jaipur",
+        state: address?.[0]?.state || "Rajasthan",
+        isDefault: address?.[0]?.isDefault || false,
+      };
+
+      // Save final order in DB
+      const newOrder = new orderr({
+        name: userDetails.name,
+        userId: userDetails._id,
+        email: userDetails.email,
+        address: addressd,
+        phone: userDetails.address?.[0]?.phone?.[0] || "",
+        products,
+        deliverydistance: numericDistance,
+        merchantOrderId,
+        status: "pending",
+      });
+          await newOrder.save();
+    orderEvent.emit('new_order', { type: "new_order", order });
+
+      // Apply coupon if available
       if (couponcode?.length > 0) {
         await applyCouponSuccess(userDetails._id, couponcode);
       }
 
-      // ✅ Delete pending order
+      // Delete pending order
       await pendingOrderModel.deleteOne({ _id: pending._id });
 
-      console.log(`✅ Orders saved individually for ${merchantOrderId}`);
+      console.log(`✅ Order saved in DB after payment for ${merchantOrderId}`);
     } else {
-      // payment failed or pending
-      await orderr.updateMany(
-        { merchantOrderId },
-        { $set: { status: paymentStatus.toLowerCase() } }
-      );
+      // Update existing order if payment failed or pending
+      await orderr.findOneAndUpdate({ merchantOrderId }, { paymentStatus });
     }
 
     res.status(200).send("Webhook processed successfully");
