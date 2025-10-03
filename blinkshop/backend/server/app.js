@@ -2130,19 +2130,28 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
         order.status = "Refund Approved";
         await order.save();
         // 🔥 Initiate Refund with PhonePe
-        const refundId = randomUUID();
-        const request = RefundRequest.builder()
-          .amount(order.amount * 100) // paise me
-          .merchantRefundId(refundId)
-          .originalMerchantOrderId(order.merchantOrderId) // jo checkout me diya tha
-          .build();
-console.log("return res mony",request)
-        const response = await client.refund(request);
+    const refundId = randomUUID();
 
-        console.log("Refund API Response:", response);
+    const client = StandardCheckoutClient.getInstance(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.CLIENT_VERSION,
+      Env.PRODUCTION
+    );
 
-        order.refundId = response.refundId;
-        order.refundState = response.state;
+    const request = RefundRequest.builder()
+      .amount(order.totalPrice * 100) // ✅ paise me
+      .merchantRefundId(refundId)
+      .originalMerchantOrderId(order.merchantOrderId) // ✅ jo checkout me diya tha
+      .build();
+
+    console.log("return res money", request);
+
+    const response = await client.refund(request);
+    console.log("Refund API Response:", response);
+
+    order.refundId = response.refundId;
+    order.refundState = response.state;
         await order.save();
         orderEvent.emit("order_updated", { type: "order_updated", order });
         return res.json({ message: "Order marked as Refund Approved" });
