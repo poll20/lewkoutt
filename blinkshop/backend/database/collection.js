@@ -190,50 +190,111 @@ let users =mongoose.Schema({
 //   },
 // },{ timestamps: true })
 
-const orders = mongoose.Schema({
-  name: String,
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  email: String,
-  address: [addressSchema],
-  products: [
-    {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
-      tag: String,
-      discription: String,
-      image: [String],
-      quantity: Number,
-      price: Number,
-      discountprice: Number,
-      size: String,
-      shopname: String,
-      totalAmount: Number,
+// const orders = mongoose.Schema({
+//   name: String,
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+//   email: String,
+//   address: [addressSchema],
+//   products: [
+//     {
+//       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+//       tag: String,
+//       discription: String,
+//       image: [String],
+//       quantity: Number,
+//       price: Number,
+//       discountprice: Number,
+//       size: String,
+//       shopname: String,
+//       totalAmount: Number,
 
-       bundle:[{
-       productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
-      title:{type:String},
-      image:{type:String},
-      color:{type:String},
-      original:{type:Number},
-      price:{type:Number},
-      sizes:{type:String},
-      bundletotalamount:{type:Number}
+//        bundle:[{
+//        productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
+//       title:{type:String},
+//       image:{type:String},
+//       color:{type:String},
+//       original:{type:Number},
+//       price:{type:Number},
+//       sizes:{type:String},
+//       bundletotalamount:{type:Number}
       
 
-    }]
+//     }]
     
-    }
+//     }
+//   ],
+//   deliverydistance:{type:String},
+//   status: { type: String, default: "Pending" },
+//     merchantOrderId: { type: String, required: true, unique: true },
+//   orderedAt: { type: Date, default: Date.now },
+//   deliveredAt: { type: Date, default: Date.now },
+//   reason: String,
+//   subreason: String,
+//   selectedOption: String,
+//   imageofreturn:{type:[String]},
+//   returnDate: Date,
+// }, { timestamps: true });
+
+const orderSchema = new mongoose.Schema({
+  name: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
+  email: String,
+  address: {
+    pincode: String,
+    uname: String,
+    building: String,
+    locality: String,
+    address: String,
+    phone: String,
+    city: String,
+    state: String,
+  },
+
+  // 👇 each product is a separate document now
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
+  tag: String,
+  description: String,
+  image: [String],
+  quantity: { type: Number, default: 1 },
+  price: Number,
+  discountprice: Number,
+  size: String,
+  shopname: String,
+  totalAmount: Number,
+
+  // bundle info (optional)
+  bundle: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+      title: String,
+      image: String,
+      color: String,
+      original: Number,
+      price: Number,
+      sizes: String,
+      bundletotalamount: Number,
+    },
   ],
-  deliverydistance:{type:String},
+
+  deliverydistance: String,
   status: { type: String, default: "Pending" },
-    merchantOrderId: { type: String, required: true, unique:false },
+
+  // 👇 Same merchantOrderId for all products of same checkout
+  merchantOrderId: { type: String, required: true, index: true }, // not unique
+
   orderedAt: { type: Date, default: Date.now },
-  deliveredAt: { type: Date, default: Date.now },
+  deliveredAt: Date,
+
+  // return fields
   reason: String,
   subreason: String,
   selectedOption: String,
-  imageofreturn:{type:[String]},
+  imageofreturn: [String],
+  returnStatus: { type: String, default: "not_requested" },
   returnDate: Date,
 }, { timestamps: true });
+
+const Order = mongoose.model("Order", orderSchema);
 
 
 const PendingOrderSchema = new mongoose.Schema({
