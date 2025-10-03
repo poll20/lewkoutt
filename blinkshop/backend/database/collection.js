@@ -235,7 +235,7 @@ let users =mongoose.Schema({
 //   returnDate: Date,
 // }, { timestamps: true });
 
-const orderSchema = new mongoose.Schema({
+const orders = new mongoose.Schema({
   name: String,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
   email: String,
