@@ -1809,93 +1809,151 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     else if (normalizedState === "FAILED") paymentStatus = "FAILED";
     else paymentStatus = "PENDING";
 
-    if (paymentStatus === "PAID") {
-      // Fetch pending order from DB
-      //     await newOrder.save();
+//     if (paymentStatus === "PAID") {
+//       // Fetch pending order from DB
+//       //     await newOrder.save();
+// //     orderEvent.emit('new_order', { type: "new_order", order });
+//       const pending = await pendingOrderModel.findOne({ merchantOrderId });
+//       console.log("Pending order fetched:", pending);
+
+//       if (!pending) {
+//         console.error("No pending order found for", merchantOrderId);
+//         return res.status(404).send("Pending order not found");
+//       }
+
+//       const { order, address, userDetails, distance, couponcode } = pending;
+//       const products = [];
+
+//       // Process products & deduct stock
+//       const ordersArray = Array.isArray(order) ? order : [order];
+//       for (const item of ordersArray) {
+//         const singleProduct = {
+//           productId: item.productid || item._id,
+//           tag: item.tag || "",
+//           description: item.description || "",
+//           image: item.image || [],
+//           quantity: item.qty || 1,
+//           price: item.price || 0,
+//           discountprice: item.discountprice || 0,
+//           size: item.size || "",
+//           shopname: item.shopname || "",
+//           totalAmount: item.discountprice || 0,
+//           bundle: item.bundle || [],
+//         };
+
+//         // Deduct stock safely
+//         if (singleProduct.productId) {
+//           const product = await productsmodel.findById(singleProduct.productId);
+//           if (product) {
+//             if (product.qty >= singleProduct.quantity) {
+//               product.qty -= singleProduct.quantity;
+//               await product.save();
+//             } else {
+//               console.warn(`Stock insufficient for product ${product._id}`);
+//             }
+//           }
+//         }
+//         products.push(singleProduct);
+//       }
+
+//       // Convert distance to number
+//       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
+
+//       const addressd = {
+//         pincode: address?.[0]?.pincode || "",
+//         uname: address?.[0]?.uname || "",
+//         building: address?.[0]?.building || "",
+//         locality: address?.[0]?.locality || "",
+//         address: userDetails.address?.[0]?.address || "",
+//         phone: address?.[0]?.phone || [],
+//         city: address?.[0]?.city || "Jaipur",
+//         state: address?.[0]?.state || "Rajasthan",
+//         isDefault: address?.[0]?.isDefault || false,
+//       };
+
+//       // Save final order in DB
+//       const newOrder = new orderr({
+//         name: userDetails.name,
+//         userId: userDetails._id,
+//         email: userDetails.email,
+//         address: addressd,
+//         phone: userDetails.address?.[0]?.phone?.[0] || "",
+//         products,
+//         deliverydistance: numericDistance,
+//         merchantOrderId,
+//         status: "pending",
+//       });
+//           await newOrder.save();
 //     orderEvent.emit('new_order', { type: "new_order", order });
-      const pending = await pendingOrderModel.findOne({ merchantOrderId });
-      console.log("Pending order fetched:", pending);
 
-      if (!pending) {
-        console.error("No pending order found for", merchantOrderId);
-        return res.status(404).send("Pending order not found");
-      }
+//       // Apply coupon if available
+//       if (couponcode?.length > 0) {
+//         await applyCouponSuccess(userDetails._id, couponcode);
+//       }
 
-      const { order, address, userDetails, distance, couponcode } = pending;
-      const products = [];
+//       // Delete pending order
+//       await pendingOrderModel.deleteOne({ _id: pending._id });
 
-      // Process products & deduct stock
-      const ordersArray = Array.isArray(order) ? order : [order];
-      for (const item of ordersArray) {
-        const singleProduct = {
-          productId: item.productid || item._id,
-          tag: item.tag || "",
-          description: item.description || "",
-          image: item.image || [],
-          quantity: item.qty || 1,
-          price: item.price || 0,
-          discountprice: item.discountprice || 0,
-          size: item.size || "",
-          shopname: item.shopname || "",
-          totalAmount: item.discountprice || 0,
-          bundle: item.bundle || [],
-        };
+//       console.log(`✅ Order saved in DB after payment for ${merchantOrderId}`);
+    // } 
+    if (paymentStatus === "PAID") {
+  const pending = await pendingOrderModel.findOne({ merchantOrderId });
+  if (!pending) return res.status(404).send("Pending order not found");
 
-        // Deduct stock safely
-        if (singleProduct.productId) {
-          const product = await productsmodel.findById(singleProduct.productId);
-          if (product) {
-            if (product.qty >= singleProduct.quantity) {
-              product.qty -= singleProduct.quantity;
-              await product.save();
-            } else {
-              console.warn(`Stock insufficient for product ${product._id}`);
-            }
-          }
-        }
-        products.push(singleProduct);
-      }
+  const { order, address, userDetails, distance, couponcode } = pending;
 
-      // Convert distance to number
-      const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
+  const ordersArray = Array.isArray(order) ? order : [order];
 
-      const addressd = {
+  for (const item of ordersArray) {
+    const singleProduct = {
+      userId: userDetails._id,
+      merchantOrderId,
+      productId: item.productid || item._id,
+      quantity: item.qty || 1,
+      price: item.price || 0,
+      discountprice: item.discountprice || 0,
+      size: item.size || "",
+      status: "pending",
+      returnStatus: "not_requested",
+      address: {
         pincode: address?.[0]?.pincode || "",
         uname: address?.[0]?.uname || "",
         building: address?.[0]?.building || "",
         locality: address?.[0]?.locality || "",
         address: userDetails.address?.[0]?.address || "",
-        phone: address?.[0]?.phone || [],
+        phone: address?.[0]?.phone || "",
         city: address?.[0]?.city || "Jaipur",
         state: address?.[0]?.state || "Rajasthan",
-        isDefault: address?.[0]?.isDefault || false,
-      };
+      },
+      orderedAt: new Date(),
+    };
 
-      // Save final order in DB
-      const newOrder = new orderr({
-        name: userDetails.name,
-        userId: userDetails._id,
-        email: userDetails.email,
-        address: addressd,
-        phone: userDetails.address?.[0]?.phone?.[0] || "",
-        products,
-        deliverydistance: numericDistance,
-        merchantOrderId,
-        status: "pending",
-      });
-          await newOrder.save();
-    orderEvent.emit('new_order', { type: "new_order", order });
+    // ✅ Save each product as a new order document
+    const newOrder = new orderr(singleProduct);
+    await newOrder.save();
 
-      // Apply coupon if available
-      if (couponcode?.length > 0) {
-        await applyCouponSuccess(userDetails._id, couponcode);
+    // 🔥 Deduct stock
+    if (singleProduct.productId) {
+      const product = await productsmodel.findById(singleProduct.productId);
+      if (product && product.qty >= singleProduct.quantity) {
+        product.qty -= singleProduct.quantity;
+        await product.save();
       }
+    }
+  }
 
-      // Delete pending order
-      await pendingOrderModel.deleteOne({ _id: pending._id });
+  // ✅ Apply coupon only once (not for each product)
+  if (couponcode?.length > 0) {
+    await applyCouponSuccess(userDetails._id, couponcode);
+  }
 
-      console.log(`✅ Order saved in DB after payment for ${merchantOrderId}`);
-    } else {
+  // ✅ Delete pending order
+  await pendingOrderModel.deleteOne({ _id: pending._id });
+
+  console.log(`✅ Orders saved individually for ${merchantOrderId}`);
+}
+
+    else {
       // Update existing order if payment failed or pending
       await orderr.findOneAndUpdate({ merchantOrderId }, { paymentStatus });
     }
