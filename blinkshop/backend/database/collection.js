@@ -225,7 +225,7 @@ const orders = mongoose.Schema({
   ],
   deliverydistance:{type:String},
   status: { type: String, default: "Pending" },
-    merchantOrderId: { type: String, required: true, unique: true },
+    merchantOrderId: { type: String, required: true, unique:false },
   orderedAt: { type: Date, default: Date.now },
   deliveredAt: { type: Date, default: Date.now },
   reason: String,
