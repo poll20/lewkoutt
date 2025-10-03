@@ -2140,7 +2140,7 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
     );
 
     const request = RefundRequest.builder()
-      .amount(order.totalPrice * 100) // ✅ paise me
+      .amount(order?.products[0]?.discountprice * 100) // ✅ paise me
       .merchantRefundId(refundId)
       .originalMerchantOrderId(order.merchantOrderId) // ✅ jo checkout me diya tha
       .build();
