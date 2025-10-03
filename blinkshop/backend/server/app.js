@@ -2139,6 +2139,10 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
           process.env.CLIENT_VERSION,
           Env.PRODUCTION  // Sandbox for testing, PRODUCTION for live
         );
+        console.log("Using CLIENT_ID:", process.env.CLIENT_ID);
+console.log("Using CLIENT_SECRET:", process.env.CLIENT_SECRET ? "exists" : "missing");
+console.log("Using CLIENT_VERSION:", process.env.CLIENT_VERSION);
+console.log("Environment:", env);
 
         const refundId = randomUUID();
 
@@ -2147,7 +2151,7 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
           .merchantRefundId(refundId)
           .originalMerchantOrderId(order.merchantOrderId)
           .build();
-
+console.log("Original Merchant Order ID:", order.merchantOrderId);
         let response;
 try {
   response = await client.refund(request);
