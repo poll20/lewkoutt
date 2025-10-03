@@ -2131,7 +2131,8 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
         await order.save();
          // 🔥 Refund payload
       // ✅ SDK client init
-   // 🔥 SDK Refund
+   // 🔥 SDK Refund\
+   try{
         const client = StandardCheckoutClient.getInstance(
           process.env.CLIENT_ID,
           process.env.CLIENT_SECRET,
@@ -2147,16 +2148,31 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
           .originalMerchantOrderId(order.merchantOrderId)
           .build();
 
-        const response = await client.refund(request);
-        console.log("Refund Response:", response);
-
+        let response;
+try {
+  response = await client.refund(request);
+  console.log("Refund Response:", response);
+} catch (err) {
+  console.error("Refund SDK error:", err);
+  return res.status(500).json({ error: "Refund failed", details: err.message });
+}
         // ✅ Save refund details
         order.refundId = refundId;
         order.refundState = response.state; // ACCEPTED / COMPLETED / FAILED
         await order.save();
         orderEvent.emit("order_updated", { type: "order_updated", order });
         return res.json({ message: "Order marked as Refund Approved" });
+   }
+   catch(err){  
+   // 🔥 Detailed logging for debugging
+      console.error("Refund SDK error:", err);
 
+      // Return meaningful error without crashing
+      return res.status(500).json({
+        error: "Refund failed due to authorization or SDK issue",
+        details: err.message || err
+      });
+   }
       } else if (decisionNormalized === "refund rejected") {
         order.status = "Refund Rejected";
         await order.save();
