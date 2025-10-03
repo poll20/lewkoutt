@@ -2126,7 +2126,7 @@ app.put('/order/deliver/:id', verifySessionCookie, isAdmin, async (req, res) => 
     }
 
     else if (currentStatus === "refund processed") {
-      if (decisionNormalized === "Refund Approved") {
+      if (decisionNormalized === "refund approved") {
         order.status = "Refund Approved";
         await order.save();
          // 🔥 Refund payload
