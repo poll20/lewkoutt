@@ -595,7 +595,13 @@ const WalletTransactionSchema = new mongoose.Schema({
 
   type: { 
     type: String, 
-    enum: ["points", "cashback"], 
+    enum: [
+      "points", 
+      "cashback" ,
+      "wallet-refund",
+      "wallet-partial-refund",
+      "withdraw",
+      "purchase"], 
     required: true 
   }, // 🔥 "points" ya "cashback" hi allow hoga
 
