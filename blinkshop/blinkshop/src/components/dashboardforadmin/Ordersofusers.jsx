@@ -111,8 +111,20 @@ const Ordersofusers = () => {
             <tr>
               <th>Order ID</th>
               <th>User ID</th>
+              <th>walletUsed</th>
+
+              <th>pgUsed</th>
+
+              <th>refundToWallet</th>
+
+              <th>refundToPG</th>
+              <th>totalOrderAmount</th>
+              <th>merchantOrderId</th>
+
+              
+
               <th>Name</th>
-              <th>Email</th>
+              {/* <th>Email</th> */}
               <th>Phone</th>
               <th>Address</th>
               <th>Products</th>
@@ -133,8 +145,16 @@ const Ordersofusers = () => {
                   <tr>
                     <td>{order?._id}</td>
                     <td>{order?.userId}</td>
+                     <td>{order?.walletUsed}</td>
+                      <td>{order?.pgUsed}</td>
+                       <td>{order?.refundToWallet}</td>
+                        <td>{order?.refundToPG}</td>
+                        <td>{order?.totalOrderAmount}</td>
+                        <td>{order?.merchantOrderId}</td>
+
+
                     <td>{order?.address[0]?.uname}</td>
-                    <td>{order?.email}</td>
+                    {/* <td>{order?.email}</td> */}
                     <td>{order?.address[0]?.phone [0]}</td>
                     <td>{fullAddress}</td>
                     <td>
