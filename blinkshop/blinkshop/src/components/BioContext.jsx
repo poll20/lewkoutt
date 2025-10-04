@@ -65,6 +65,7 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef(null);
     const [navigateFn, setNavigateFn] = useState(null);
+    const [sortOption, setSortOption] = useState("");
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -1560,7 +1561,8 @@ const fetchTopSearched = async () => {
         recommendations,
         fetchTopSearched,
         topproducts,
-        userDetails
+        userDetails,
+        sortOption, setSortOption
         
         
 

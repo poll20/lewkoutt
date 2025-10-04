@@ -35,7 +35,7 @@ const [hasMore, setHasMore] = useState(true);
     console.log("rentpoint",rent)
   console.log("wish",wish)
     // console.log("storeee",store)
-    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly,showloginpage,setshowloginpage} = useBio();
+    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly,showloginpage,setshowloginpage,sortOption, setSortOption} = useBio();
  const [params] = useSearchParams();
   const query = params.get("q");
     const a = useMemo(() => {
@@ -141,7 +141,7 @@ const [hasMore, setHasMore] = useState(true);
         const filteredData = applyFilters(products);
         setProducts(filteredData);
       }
-    }, [selectedSortOption, selectedSizes, filters,originalproducts]);
+    }, [selectedSortOption, selectedSizes,sortOption, filters,originalproducts]);
     
     
     const applyFilters = (data) => {  
@@ -201,6 +201,15 @@ const [hasMore, setHasMore] = useState(true);
         );
       }
     console.log("selectedsize",selectedSizes)
+
+
+     // ✅ Apply sorting from Filter.js
+    if (sortOption === "Price: Low to High") {
+      filteredData = [...filteredData].sort((a, b) => a.price - b.price);
+    } else if (sortOption === "Price: High to Low") {
+      filteredData = [...filteredData].sort((a, b) => b.price - a.price);
+    }
+
       // Filter by size
 
       filteredProducts.forEach((product, index) => {
@@ -233,7 +242,7 @@ if (filters.pricerangemin || filters.pricerangemax) {
 }
 
       // Apply sorting
-      switch (selectedSortOption) {
+      switch (sortOption) {
         case "Price: Low to High":
           filteredProducts.sort((a, b) => a.discountprice - b.discountprice);
           console.log("lh",filteredProducts)
