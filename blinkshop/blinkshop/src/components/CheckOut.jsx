@@ -674,7 +674,7 @@ const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();
       disabled={!timeslotlelo}
       onClick={() => {
         if (timeslotlelo) {
-          orderplaced(purchaseproduct, deleveryaddress);
+          orderplaced(purchaseproduct, deleveryaddress,mywalletAmount);
         }
       }}
     >
@@ -685,7 +685,7 @@ const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();
   <button
     className="pay-now-btn-checkoutbuy"
     onClick={() => {
-      orderplaced(purchaseproduct, deleveryaddress);
+      orderplaced(purchaseproduct, deleveryaddress,mywalletAmount);
     }}
   >
     Pay Now

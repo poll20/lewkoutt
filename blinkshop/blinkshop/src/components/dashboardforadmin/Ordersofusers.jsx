@@ -115,6 +115,12 @@ const Ordersofusers = () => {
               <th>Email</th>
               <th>Phone</th>
               <th>Address</th>
+               <th>walletUsed</th>
+
+              <th>pgUsed</th>
+              <th>refundToWallet</th>
+
+              <th>refundToPG</th>
               <th>Products</th>
                <th>Product image</th>
               <th>Total Price</th>
@@ -136,6 +142,14 @@ const Ordersofusers = () => {
                     <td>{order?.address[0]?.uname}</td>
                     <td>{order?.email}</td>
                     <td>{order?.address[0]?.phone [0]}</td>
+                    <td>{order?.walletUsed}</td>
+
+                    <td>{order?.pgUsed}</td>
+
+                    <td>{order?.refundToWallet}</td>
+
+                    <td>{order?.refundToPG}</td>
+
                     <td>{fullAddress}</td>
                     <td>
                       {order.products.map((product, index) => (

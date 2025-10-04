@@ -190,6 +190,52 @@ let users =mongoose.Schema({
 //   },
 // },{ timestamps: true })
 
+// const orders = mongoose.Schema({
+//   name: String,
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+//   email: String,
+//   address: [addressSchema],
+//   products: [
+//     {
+//       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+//       tag: String,
+//       discription: String,
+//       image: [String],
+//       quantity: Number,
+//       price: Number,
+//       discountprice: Number,
+//       size: String,
+//       shopname: String,
+//       totalAmount: Number,
+
+//        bundle:[{
+//        productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
+//       title:{type:String},
+//       image:{type:String},
+//       color:{type:String},
+//       original:{type:Number},
+//       price:{type:Number},
+//       sizes:{type:String},
+//       bundletotalamount:{type:Number}
+      
+
+//     }]
+    
+//     }
+//   ],
+//   deliverydistance:{type:String},
+//   status: { type: String, default: "Pending" },
+//     merchantOrderId: { type: String, required: true},
+//   orderedAt: { type: Date, default: Date.now },
+//   deliveredAt: { type: Date, default: Date.now },
+//   reason: String,
+//   subreason: String,
+//   selectedOption: String,
+//   imageofreturn:{type:[String]},
+//   returnDate: Date,
+// }, { timestamps: true });
+
+
 const orders = mongoose.Schema({
   name: String,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
@@ -199,7 +245,7 @@ const orders = mongoose.Schema({
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
       tag: String,
-      discription: String,
+      description: String,
       image: [String],
       quantity: Number,
       price: Number,
@@ -207,32 +253,38 @@ const orders = mongoose.Schema({
       size: String,
       shopname: String,
       totalAmount: Number,
-
-       bundle:[{
-       productId:{ type: mongoose.Schema.Types.ObjectId, ref: "product" },
-      title:{type:String},
-      image:{type:String},
-      color:{type:String},
-      original:{type:Number},
-      price:{type:Number},
-      sizes:{type:String},
-      bundletotalamount:{type:Number}
-      
-
-    }]
-    
+      bundle: [{
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+        title: String,
+        image: String,
+        color: String,
+        original: Number,
+        price: Number,
+        sizes: String,
+        bundletotalamount: Number
+      }]
     }
   ],
-  deliverydistance:{type:String},
+
+  deliverydistance: { type: String },
   status: { type: String, default: "Pending" },
-    merchantOrderId: { type: String, required: true},
+  merchantOrderId: { type: String, required: true },
   orderedAt: { type: Date, default: Date.now },
   deliveredAt: { type: Date, default: Date.now },
   reason: String,
   subreason: String,
   selectedOption: String,
-  imageofreturn:{type:[String]},
+  imageofreturn: { type: [String] },
   returnDate: Date,
+
+  /* 🟩 Add these new fields */
+  totalOrderAmount: { type: Number, default: 0 },     // e.g. 2000
+  walletUsed: { type: Number, default: 0 },           // e.g. 1200
+  pgUsed: { type: Number, default: 0 },               // e.g. 800
+  refundToWallet: { type: Number, default: 0 },       // total refunded to wallet
+  refundToPG: { type: Number, default: 0 },           // total refunded to PG
+  paymentGatewayTxnId: String,                        // PG transaction reference
+  paymentStatus: { type: String, default: "Pending" },// Pending / Paid / Refunded
 }, { timestamps: true });
 
 

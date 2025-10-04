@@ -1047,10 +1047,12 @@ let handlechooseaddress=(add)=>{
 }
 
 
-let orderplaced=async(order,address)=>{
+let orderplaced=async(order,address,walletUsed)=>{
   console.log("userdetailsss",userDetails)
  console.log("orederrr",order)
  console.log("addre",address)
+ console.log("addre",walletUsed)
+
 if(user && userDetails){
   try{
     setIsLoading(true)
@@ -1060,7 +1062,7 @@ if(user && userDetails){
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
-      body: JSON.stringify({order,address,userDetails,distance}), 
+      body: JSON.stringify({order,address,userDetails,distance,walletUsed}), 
 
     })
     if(orderpost.ok){

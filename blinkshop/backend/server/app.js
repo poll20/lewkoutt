@@ -1430,33 +1430,60 @@ app.post("/newarrival", async (req, res) => {
     // console.log(`✅ User ${userId} earned ${pointsEarned?(pointsEarned):(purchaseAmount)} points (₹${valueInRupees?(valueInRupees):()})`);
   }
 
-  async function addcashbacktowallet(userId, purchaseAmount,type) {
-console.log("🚀 Adding cashback to wallet:", userId, purchaseAmount);
+//   async function addcashbacktowallet(userId, purchaseAmount,type) {
+// console.log("🚀 Adding cashback to wallet:", userId, purchaseAmount);
 
-    console.log("user ki idd",userId)
-    console.log("khredi ki vlaue",purchaseAmount)
+//     console.log("user ki idd",userId)
+//     console.log("khredi ki vlaue",purchaseAmount)
       
   
-    // ✅ Update User Wallet
-    await userr.updateOne(
-        { _id: userId },
-        { $inc: { "wallet.cashback":purchaseAmount } }
-    );
+//     // ✅ Update User Wallet
+//     await userr.updateOne(
+//         { _id: userId },
+//         { $inc: { "wallet.cashback":purchaseAmount } }
+//     );
 
-    // ✅ Add Wallet Transaction History
-    await wallettrans.create({
-        userId,
-        type: "cashback",
-        amount: purchaseAmount,
-        valueInRupees:purchaseAmount,
-        description: `Earned from return of ₹${purchaseAmount}`,
-        date: new Date()
-    });
+//     // ✅ Add Wallet Transaction History
+//     await wallettrans.create({
+//         userId,
+//         type: "cashback",
+//         amount: purchaseAmount,
+//         valueInRupees:purchaseAmount,
+//         description: `Earned from return of ₹${purchaseAmount}`,
+//         date: new Date()
+//     });
   
  
 
-    // console.log(`✅ User ${userId} earned ${pointsEarned?(pointsEarned):(purchaseAmount)} points (₹${valueInRupees?(valueInRupees):()})`);
-  }
+//     // console.log(`✅ User ${userId} earned ${pointsEarned?(pointsEarned):(purchaseAmount)} points (₹${valueInRupees?(valueInRupees):()})`);
+//   }
+
+
+
+
+async function addcashbacktowallet(userId, amount, type = "cashback") {
+  console.log("🚀 Adding cashback to wallet:", userId, amount, type);
+
+  await userr.updateOne(
+    { _id: userId },
+    { $inc: { "wallet.cashback": amount } }
+  );
+
+  await wallettrans.create({
+    userId,
+    type,
+    amount,
+    valueInRupees: amount,
+    description:
+      type === "wallet-refund"
+        ? `Refund (Lewkout Wallet): ₹${amount}`
+        : type === "wallet-partial-refund"
+        ? `Partial refund (Back to Source - Wallet): ₹${amount}`
+        : `Cashback: ₹${amount}`,
+    date: new Date(),
+  });
+}
+
 
   const applyCouponSuccess = async (userId, couponCode) => {
   try {
@@ -1771,6 +1798,8 @@ console.log("PhonePe response:", responsePhonePe);
 });
 
 // // PHONEPE WEBHOOK ENDPOINT
+
+// PHONEPE WEBHOOK ENDPOINT
 // app.post("/phonepe/webhook", express.json(), async (req, res) => {
 //   console.log("📩 Raw webhook body:", req.body);
 //   console.log("📩 Headers:", req.headers);
@@ -1784,7 +1813,7 @@ console.log("PhonePe response:", responsePhonePe);
 //       process.env.CLIENT_ID,
 //       process.env.CLIENT_SECRET,
 //       process.env.CLIENT_VERSION,
-//       Env.PRODUCTION// 🔥 SANDBOX for testing, PRODUCTION for live
+//       Env.PRODUCTION // SANDBOX for testing, PRODUCTION for live
 //     );
 
 //     // Validate callback
@@ -1812,8 +1841,6 @@ console.log("PhonePe response:", responsePhonePe);
 
 //     if (paymentStatus === "PAID") {
 //       // Fetch pending order from DB
-//       //     await newOrder.save();
-// //     orderEvent.emit('new_order', { type: "new_order", order });
 //       const pending = await pendingOrderModel.findOne({ merchantOrderId });
 //       console.log("Pending order fetched:", pending);
 
@@ -1823,10 +1850,24 @@ console.log("PhonePe response:", responsePhonePe);
 //       }
 
 //       const { order, address, userDetails, distance, couponcode } = pending;
-//       const products = [];
-
-//       // Process products & deduct stock
 //       const ordersArray = Array.isArray(order) ? order : [order];
+
+//       // Convert distance to number
+//       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
+
+//       const addressd = {
+//         pincode: address?.[0]?.pincode || "",
+//         uname: address?.[0]?.uname || "",
+//         building: address?.[0]?.building || "",
+//         locality: address?.[0]?.locality || "",
+//         address: userDetails.address?.[0]?.address || "",
+//         phone: address?.[0]?.phone || [],
+//         city: address?.[0]?.city || "Jaipur",
+//         state: address?.[0]?.state || "Rajasthan",
+//         isDefault: address?.[0]?.isDefault || false,
+//       };
+
+//       // 🔹 Loop over each product & save as separate order document
 //       for (const item of ordersArray) {
 //         const singleProduct = {
 //           productId: item.productid || item._id,
@@ -1854,38 +1895,23 @@ console.log("PhonePe response:", responsePhonePe);
 //             }
 //           }
 //         }
-//         products.push(singleProduct);
+
+//         // Save each product as a separate order doc
+//         const newOrder = new orderr({
+//           name: userDetails.name,
+//           userId: userDetails._id,
+//           email: userDetails.email,
+//           address: addressd,
+//           phone: userDetails.address?.[0]?.phone?.[0] || "",
+//           products: [singleProduct], // only one product per doc
+//           deliverydistance: numericDistance,
+//           merchantOrderId,           // same for all products
+//           status: "pending",
+//         });
+
+//         await newOrder.save();
+//         orderEvent.emit('new_order', { type: "new_order", order: newOrder });
 //       }
-
-//       // Convert distance to number
-//       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
-
-//       const addressd = {
-//         pincode: address?.[0]?.pincode || "",
-//         uname: address?.[0]?.uname || "",
-//         building: address?.[0]?.building || "",
-//         locality: address?.[0]?.locality || "",
-//         address: userDetails.address?.[0]?.address || "",
-//         phone: address?.[0]?.phone || [],
-//         city: address?.[0]?.city || "Jaipur",
-//         state: address?.[0]?.state || "Rajasthan",
-//         isDefault: address?.[0]?.isDefault || false,
-//       };
-
-//       // Save final order in DB
-//       const newOrder = new orderr({
-//         name: userDetails.name,
-//         userId: userDetails._id,
-//         email: userDetails.email,
-//         address: addressd,
-//         phone: userDetails.address?.[0]?.phone?.[0] || "",
-//         products,
-//         deliverydistance: numericDistance,
-//         merchantOrderId,
-//         status: "pending",
-//       });
-//           await newOrder.save();
-//     orderEvent.emit('new_order', { type: "new_order", order });
 
 //       // Apply coupon if available
 //       if (couponcode?.length > 0) {
@@ -1895,10 +1921,11 @@ console.log("PhonePe response:", responsePhonePe);
 //       // Delete pending order
 //       await pendingOrderModel.deleteOne({ _id: pending._id });
 
-//       console.log(`✅ Order saved in DB after payment for ${merchantOrderId}`);
+//       console.log(`✅ All products saved in DB for merchantOrderId: ${merchantOrderId}`);
 //     } else {
 //       // Update existing order if payment failed or pending
-//       await orderr.findOneAndUpdate({ merchantOrderId }, { paymentStatus });
+//       await orderr.updateMany({ merchantOrderId }, { paymentStatus });
+//       console.log(`⚠️ Payment not completed for merchantOrderId: ${merchantOrderId}`);
 //     }
 
 //     res.status(200).send("Webhook processed successfully");
@@ -1907,141 +1934,6 @@ console.log("PhonePe response:", responsePhonePe);
 //     res.status(500).send("Webhook error");
 //   }
 // });
-// PHONEPE WEBHOOK ENDPOINT
-app.post("/phonepe/webhook", express.json(), async (req, res) => {
-  console.log("📩 Raw webhook body:", req.body);
-  console.log("📩 Headers:", req.headers);
-
-  try {
-    const authorization = req.headers["authorization"];
-    const responseBodyString = JSON.stringify(req.body);
-
-    // PhonePe client instance
-    const client = StandardCheckoutClient.getInstance(
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET,
-      process.env.CLIENT_VERSION,
-      Env.PRODUCTION // SANDBOX for testing, PRODUCTION for live
-    );
-
-    // Validate callback
-    const callbackResponse = client.validateCallback(
-      process.env.WEBHOOK_USERNAME, // dashboard username
-      process.env.WEBHOOK_PASSWORD, // dashboard password
-      authorization,
-      responseBodyString
-    );
-
-    const { type, payload } = callbackResponse;
-
-    // Use udf2 (merchantOrderId we sent) if available, otherwise fallback to payload.merchantOrderId
-    const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
-    const state = payload.state; // COMPLETED / FAILED / PENDING
-
-    console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
-
-    // Determine payment status
-    let paymentStatus;
-    const normalizedState = state.toUpperCase();
-    if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
-    else if (normalizedState === "FAILED") paymentStatus = "FAILED";
-    else paymentStatus = "PENDING";
-
-    if (paymentStatus === "PAID") {
-      // Fetch pending order from DB
-      const pending = await pendingOrderModel.findOne({ merchantOrderId });
-      console.log("Pending order fetched:", pending);
-
-      if (!pending) {
-        console.error("No pending order found for", merchantOrderId);
-        return res.status(404).send("Pending order not found");
-      }
-
-      const { order, address, userDetails, distance, couponcode } = pending;
-      const ordersArray = Array.isArray(order) ? order : [order];
-
-      // Convert distance to number
-      const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
-
-      const addressd = {
-        pincode: address?.[0]?.pincode || "",
-        uname: address?.[0]?.uname || "",
-        building: address?.[0]?.building || "",
-        locality: address?.[0]?.locality || "",
-        address: userDetails.address?.[0]?.address || "",
-        phone: address?.[0]?.phone || [],
-        city: address?.[0]?.city || "Jaipur",
-        state: address?.[0]?.state || "Rajasthan",
-        isDefault: address?.[0]?.isDefault || false,
-      };
-
-      // 🔹 Loop over each product & save as separate order document
-      for (const item of ordersArray) {
-        const singleProduct = {
-          productId: item.productid || item._id,
-          tag: item.tag || "",
-          description: item.description || "",
-          image: item.image || [],
-          quantity: item.qty || 1,
-          price: item.price || 0,
-          discountprice: item.discountprice || 0,
-          size: item.size || "",
-          shopname: item.shopname || "",
-          totalAmount: item.discountprice || 0,
-          bundle: item.bundle || [],
-        };
-
-        // Deduct stock safely
-        if (singleProduct.productId) {
-          const product = await productsmodel.findById(singleProduct.productId);
-          if (product) {
-            if (product.qty >= singleProduct.quantity) {
-              product.qty -= singleProduct.quantity;
-              await product.save();
-            } else {
-              console.warn(`Stock insufficient for product ${product._id}`);
-            }
-          }
-        }
-
-        // Save each product as a separate order doc
-        const newOrder = new orderr({
-          name: userDetails.name,
-          userId: userDetails._id,
-          email: userDetails.email,
-          address: addressd,
-          phone: userDetails.address?.[0]?.phone?.[0] || "",
-          products: [singleProduct], // only one product per doc
-          deliverydistance: numericDistance,
-          merchantOrderId,           // same for all products
-          status: "pending",
-        });
-
-        await newOrder.save();
-        orderEvent.emit('new_order', { type: "new_order", order: newOrder });
-      }
-
-      // Apply coupon if available
-      if (couponcode?.length > 0) {
-        await applyCouponSuccess(userDetails._id, couponcode);
-      }
-
-      // Delete pending order
-      await pendingOrderModel.deleteOne({ _id: pending._id });
-
-      console.log(`✅ All products saved in DB for merchantOrderId: ${merchantOrderId}`);
-    } else {
-      // Update existing order if payment failed or pending
-      await orderr.updateMany({ merchantOrderId }, { paymentStatus });
-      console.log(`⚠️ Payment not completed for merchantOrderId: ${merchantOrderId}`);
-    }
-
-    res.status(200).send("Webhook processed successfully");
-  } catch (error) {
-    console.error("Webhook validation error:", error);
-    res.status(500).send("Webhook error");
-  }
-});
 
 
 
@@ -2076,6 +1968,147 @@ app.get('/order/:id', async (req, res) => {
       res.status(500).json({ error: "Failed to fetch order" });
   }
 });
+
+app.post("/phonepe/webhook", express.json(), async (req, res) => {
+  console.log("📩 Raw webhook body:", req.body);
+  console.log("📩 Headers:", req.headers);
+
+  try {
+    const authorization = req.headers["authorization"];
+    const responseBodyString = JSON.stringify(req.body);
+
+    const client = StandardCheckoutClient.getInstance(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.CLIENT_VERSION,
+      Env.PRODUCTION
+    );
+
+    const callbackResponse = client.validateCallback(
+      process.env.WEBHOOK_USERNAME,
+      process.env.WEBHOOK_PASSWORD,
+      authorization,
+      responseBodyString
+    );
+
+    const { type, payload } = callbackResponse;
+
+    const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
+    const state = payload.state;
+
+    console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
+
+    let paymentStatus;
+    const normalizedState = state.toUpperCase();
+    if (normalizedState === "COMPLETED" || normalizedState === "SUCCESS") paymentStatus = "PAID";
+    else if (normalizedState === "FAILED") paymentStatus = "FAILED";
+    else paymentStatus = "PENDING";
+
+    if (paymentStatus === "PAID") {
+      const pending = await pendingOrderModel.findOne({ merchantOrderId });
+      console.log("Pending order fetched:", pending);
+
+      if (!pending) {
+        console.error("No pending order found for", merchantOrderId);
+        return res.status(404).send("Pending order not found");
+      }
+
+      const { order, address, userDetails, distance, couponcode } = pending;
+      const ordersArray = Array.isArray(order) ? order : [order];
+      const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
+
+      const addressd = {
+        pincode: address?.[0]?.pincode || "",
+        uname: address?.[0]?.uname || "",
+        building: address?.[0]?.building || "",
+        locality: address?.[0]?.locality || "",
+        address: userDetails.address?.[0]?.address || "",
+        phone: address?.[0]?.phone || [],
+        city: address?.[0]?.city || "Jaipur",
+        state: address?.[0]?.state || "Rajasthan",
+        isDefault: address?.[0]?.isDefault || false,
+      };
+
+      // Calculate total order amount (sum of all products)
+      const totalOrderAmount = ordersArray.reduce((sum, item) => {
+        return sum + (item.discountprice || 0);
+      }, 0);
+
+      // (Optional) If you later add wallet usage in checkout
+      const walletUsed = pending.walletUsed || 0;
+      const pgUsed = totalOrderAmount - walletUsed;
+
+      for (const item of ordersArray) {
+        const singleProduct = {
+          productId: item.productid || item._id,
+          tag: item.tag || "",
+          description: item.description || "",
+          image: item.image || [],
+          quantity: item.qty || 1,
+          price: item.price || 0,
+          discountprice: item.discountprice || 0,
+          size: item.size || "",
+          shopname: item.shopname || "",
+          totalAmount: item.discountprice || 0,
+          bundle: item.bundle || [],
+        };
+
+        // Deduct stock
+        if (singleProduct.productId) {
+          const product = await productsmodel.findById(singleProduct.productId);
+          if (product) {
+            if (product.qty >= singleProduct.quantity) {
+              product.qty -= singleProduct.quantity;
+              await product.save();
+            } else {
+              console.warn(`Stock insufficient for product ${product._id}`);
+            }
+          }
+        }
+
+        // ✅ Save order with full payment tracking
+        const newOrder = new orderr({
+          name: userDetails.name,
+          userId: userDetails._id,
+          email: userDetails.email,
+          address: addressd,
+          phone: userDetails.address?.[0]?.phone?.[0] || "",
+          products: [singleProduct],
+          deliverydistance: numericDistance,
+          merchantOrderId,
+          status: "Pending",
+          paymentStatus: "Paid",
+          totalOrderAmount,
+          walletUsed,
+          pgUsed,
+          refundToWallet: 0,
+          refundToPG: 0,
+          paymentGatewayTxnId: payload.transactionId || "",
+        });
+
+        await newOrder.save();
+        orderEvent.emit('new_order', { type: "new_order", order: newOrder });
+      }
+
+      // Apply coupon
+      if (couponcode?.length > 0) {
+        await applyCouponSuccess(userDetails._id, couponcode);
+      }
+
+      await pendingOrderModel.deleteOne({ _id: pending._id });
+      console.log(`✅ All products saved in DB for merchantOrderId: ${merchantOrderId}`);
+    } else {
+      await orderr.updateMany({ merchantOrderId }, { paymentStatus });
+      console.log(`⚠️ Payment not completed for merchantOrderId: ${merchantOrderId}`);
+    }
+
+    res.status(200).send("Webhook processed successfully");
+  } catch (error) {
+    console.error("Webhook validation error:", error);
+    res.status(500).send("Webhook error");
+  }
+});
+
 
 // 🔵 GET: Fetch orders by User ID
 app.get('/orders/user/:userId',verifySessionCookie,async (req, res) => {
@@ -2767,39 +2800,130 @@ app.post("/return",verifySessionCookie, async (req, res) => {
 });
 
 
+// cron.schedule("*/5 * * * *", async () => {
+//   console.log("🔄 Checking for orders eligible for cashback...");
+
+//   try {
+//     // Find all returned orders with 'wallet' option but cashback not processed
+//     const returns = await returnmodel.find({ selectedOption: "Lewkout Wallet" });
+// console.log("returns found:", returns.length);
+//     for (const ret of returns) {
+//       const order = await orderr.findOne({ _id: ret.orderid, status: "Refund Approved" });
+
+//       if (order) {
+//         // ✅ Sum totalAmount from all products
+//         const totalAmount = order.products?.reduce((sum, product) => sum + (product.totalAmount || 0), 0);
+
+//         if (totalAmount <= 0) {
+//           console.error(`❌ Order ID: ${order._id} has invalid totalAmount:`, totalAmount);
+//           continue; // Skip this order if totalAmount is invalid
+//         }
+
+//         console.log(`✅ Processing cashback of ₹${totalAmount} for Order ID: ${order._id}`);
+
+//         await addcashbacktowallet(order.userId, totalAmount);
+
+//         // ✅ Update order status to prevent duplicate cashback
+//         order.status = "cashback-processed";
+//         await order.save();
+//       }
+//     }
+//   } catch (error) {
+//     console.error("❌ Error in cashback cron job:", error);
+//   }
+// });
+
+
 cron.schedule("*/5 * * * *", async () => {
-  console.log("🔄 Checking for orders eligible for cashback...");
+  console.log("🔄 Checking for orders eligible for cashback/refund...");
 
   try {
-    // Find all returned orders with 'wallet' option but cashback not processed
-    const returns = await returnmodel.find({ selectedOption: "Lewkout Wallet" });
-console.log("returns found:", returns.length);
+    // 1️⃣ Get all returns where refund not processed yet
+    const returns = await returnmodel.find({
+      $or: [
+        { selectedOption: "Lewkout Wallet" },
+        { selectedOption: "Back to Source" }
+      ]
+    });
+
+    console.log("🟡 Returns found:", returns.length);
+
     for (const ret of returns) {
-      const order = await orderr.findOne({ _id: ret.orderid, status: "Refund Approved" });
+      const order = await orderr.findOne({
+        _id: ret.orderid,
+        status: "Refund Approved"
+      });
 
-      if (order) {
-        // ✅ Sum totalAmount from all products
-        const totalAmount = order.products?.reduce((sum, product) => sum + (product.totalAmount || 0), 0);
+      if (!order) continue;
 
-        if (totalAmount <= 0) {
-          console.error(`❌ Order ID: ${order._id} has invalid totalAmount:`, totalAmount);
-          continue; // Skip this order if totalAmount is invalid
-        }
+      // ✅ Calculate total refunded amount for this order
+      const totalAmount =
+        order.products?.reduce(
+          (sum, product) => sum + (product.totalAmount || 0),
+          0
+        ) || 0;
 
-        console.log(`✅ Processing cashback of ₹${totalAmount} for Order ID: ${order._id}`);
+      if (totalAmount <= 0) {
+        console.warn(`⚠️ Invalid totalAmount for order ${order._id}`);
+        continue;
+      }
 
-        await addcashbacktowallet(order.userId, totalAmount);
+      console.log(
+        `🧾 Processing refund for order ${order._id} | Mode: ${ret.selectedOption}`
+      );
 
-        // ✅ Update order status to prevent duplicate cashback
+      // 🟢 Case 1: Refund to Lewkout Wallet (full wallet refund)
+      if (ret.selectedOption === "Lewkout Wallet") {
+        console.log(`💰 Full ₹${totalAmount} refund to wallet`);
+        await addcashbacktowallet(order.userId, totalAmount, "wallet-refund");
+
         order.status = "cashback-processed";
         await order.save();
+        continue;
+      }
+
+      // 🔵 Case 2: Back to Source (wallet + PG split)
+      if (ret.selectedOption === "Back to Source") {
+        const totalOrderAmount = order.totalOrderAmount || totalAmount;
+        const walletUsed = order.walletUsed || 0;
+        const pgUsed = order.pgUsed || 0;
+
+        // 🧮 Calculate ratios
+        const walletRatio =
+          totalOrderAmount > 0 ? walletUsed / totalOrderAmount : 0;
+        const pgRatio =
+          totalOrderAmount > 0 ? pgUsed / totalOrderAmount : 0;
+
+        // 🧮 Proportionate refund calculation
+        const refundToWallet = Number((totalAmount * walletRatio).toFixed(2));
+        const refundToPG = Number((totalAmount * pgRatio).toFixed(2));
+
+        console.log(`💸 Refund split:
+          Wallet Ratio: ${walletRatio.toFixed(2)} | PG Ratio: ${pgRatio.toFixed(2)}
+          → Wallet refund: ₹${refundToWallet}
+          → PG refund: ₹${refundToPG}
+        `);
+
+        // Add only wallet part (PG refund will go via gateway)
+        if (refundToWallet > 0) {
+          await addcashbacktowallet(order.userId, refundToWallet, "wallet-partial-refund");
+        }
+
+        // Update tracking fields
+        order.refundToWallet = (order.refundToWallet || 0) + refundToWallet;
+        order.refundToPG = (order.refundToPG || 0) + refundToPG;
+        order.status = "cashback-processed";
+        await order.save();
+
+        console.log(`✅ Refund processed for order ${order._id}`);
       }
     }
+
+    console.log("✅ All refunds processed successfully");
   } catch (error) {
-    console.error("❌ Error in cashback cron job:", error);
+    console.error("❌ Error in cashback/refund cron job:", error);
   }
 });
-
 
 
 
