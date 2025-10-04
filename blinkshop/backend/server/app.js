@@ -2771,7 +2771,7 @@ cron.schedule("*/5 * * * *", async () => {
 
   try {
     // Find all returned orders with 'wallet' option but cashback not processed
-    const returns = await returnmodel.find({ selectedOption: "Wallet" });
+    const returns = await returnmodel.find({ selectedOption: "Lewkout Wallet" });
 
     for (const ret of returns) {
       const order = await orderr.findOne({ _id: ret.orderid, status: "returned" });
