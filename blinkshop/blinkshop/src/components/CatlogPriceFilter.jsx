@@ -134,7 +134,9 @@ const CatlogPriceFilter = () => {
           onTouchStart={startDrag}
           onTouchEnd={stopDrag}
           className="min-vall"
-          style={{border:"none"}}
+                            style={{border:"none",margin:"5px",padding:"0"}}
+
+
         />
         <input
           type="range"
@@ -147,7 +149,7 @@ const CatlogPriceFilter = () => {
           onTouchStart={startDrag}
           onTouchEnd={stopDrag}
           className="max-vall"
-          style={{border:"none"}}
+          style={{border:"none",margin:"5px",padding:"10px"}}
         />
         {isDragging && <div className="min-tooltip">{minVal}</div>}
         {isDragging && <div className="max-tooltip">{maxVal}</div>}

@@ -241,7 +241,7 @@ let navigate=useNavigate()
       <div className="profile-balance">
         <NavLink to="/wallet"  className="balance-item navlink">
           <FaWallet />
-          <p>Wallet Balance<br /><span>₹0</span></p>
+          <p>Wallet Balance<br /><span></span></p>
         </NavLink>
       
         {/* <div className="balance-item">
@@ -278,7 +278,7 @@ let navigate=useNavigate()
         </NavLink>
         <NavLink className="menu-item navlink" to={'/privacy-policy'}>
           <BiHelpCircle/>
-          <p>Privicy Policy</p>
+          <p>Privacy Policy</p>
           <IoIosArrowForward />
         </NavLink>
         {/* <NavLink className="menu-item navlink">

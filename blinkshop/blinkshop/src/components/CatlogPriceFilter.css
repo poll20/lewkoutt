@@ -13,7 +13,7 @@
     position: relative;
     width: 100%;
     height: 5px;
-    margin: 30px 0;
+    /* margin: 30px 0; */
     background-color: #8a8a8a;
     border-radius: 5px;
   }
@@ -22,7 +22,7 @@
     /* border: 2px solid pink; */
     height: 100%;
     position: absolute;
-    background-color: #b6fcaf;
+    background-color: rgb(146, 144, 144);
     left: 0;
     right: 100%;
     border-radius: 5px;
@@ -43,8 +43,8 @@
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    /* border: 3px solid #fff; */
-    background: #0bff54;
+    border: 3px solid black;
+    background: rgb(101, 101, 101);
     transform: translateY(-5%);
     pointer-events: auto;
     appearance: none;

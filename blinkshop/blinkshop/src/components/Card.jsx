@@ -14,6 +14,7 @@ import { useLoading } from "./LoadingContext";
 import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
 import { slugify } from "./Slugify";
+import CatlogPriceFilter from "./CatlogPriceFilter";
   
   // import FaChevronDown from "react-icons/fa";
 const Card = (props) => {
@@ -63,14 +64,16 @@ const [hasMore, setHasMore] = useState(true);
     const sortOptions = [
       "Price: Low to High",
       "Price: High to Low",
+      "Price Range",
+      "Sizes"
       // "New Arrival",
       // "Best Seller",
-      "Discount",
+      // "Discount",
     ];
 
     const sizeOptions = {
-      "Top Wear": ["s", "m", "l", "xl", "xl", "xxl","xxl"],
-      "Bottom Wear": ["24", "26", "28", "30", "32", "34"],
+      "Top Wear": ["S", "M", "L"],
+      // "Bottom Wear": ["24", "26", "28", "30", "32", "34"],
     };
 
     const handleSizeSelection = (category, size) => {
@@ -131,7 +134,7 @@ const [hasMore, setHasMore] = useState(true);
         const filteredData = applyFilters(products); // Apply sorting
         setProducts(filteredData);
       }
-      setShowSortPanel(false);
+      // setShowSortPanel(false);
     };
     useEffect(() => {
       if (products.length > 0) {
@@ -221,6 +224,14 @@ const [hasMore, setHasMore] = useState(true);
         console.log("chleedddddddddo",filteredProducts)
       }
     
+// Filter by price range
+if (filters.pricerangemin || filters.pricerangemax) {
+  filteredProducts = filteredProducts.filter(product =>
+    product.discountprice >= (filters.pricerangemin || 0) &&
+    product.discountprice <= (filters.pricerangemax || Infinity)
+  );
+}
+
       // Apply sorting
       switch (selectedSortOption) {
         case "Price: Low to High":
@@ -485,26 +496,173 @@ if(searchvalue){
           </div>
 
           {showSortPanel && (
-            <div className="bottom-panel" style={{padding:"15px"}}>
-              <div style={{display:"flex",justifyContent:"space-between"}}>
-              <h4>Sort Options</h4>
-              <span><RxCross1 size={20} onClick={()=>{setShowSortPanel(false)}}/></span>
-              </div>
-              <div style={{overflowY:"scroll"}}>
-              {sortOptions.map((option, index) => (
-                <div
+            // <div className="bottom-panel" style={{padding:"15px"}}>
+            //   <div style={{display:"flex",justifyContent:"space-between"}}>
+            //   <h4>Sort Options</h4>
+            //   <span><RxCross1 size={20} onClick={()=>{setShowSortPanel(false)}}/></span>
+            //   </div>
+            //   <div style={{overflowY:"scroll"}}>
+            //   {sortOptions.map((option, index) => (
+            //     <div
                 
-                  key={index}
-                  className={`panel-option-btn ${
-                    selectedSortOption === option ? "selected" : ""
-                  }`}
-                  onClick={() => handleSortSelection(option)}
-                >
-                  <p>{option}</p>
-                </div>
-              ))}
-              </div>
-            </div>
+            //       key={index}
+            //       className={`panel-option-btn ${
+            //         selectedSortOption === option ? "selected" : ""
+            //       }`}
+            //       onClick={() => handleSortSelection(option)}
+            //     >
+            //       <p>{option}{
+            //         option==="Price Range"?(<CatlogPriceFilter/>):('')
+            //       }</p>
+                  
+            //     </div>
+            //   ))}
+            //   </div>
+            // </div>
+            <div
+  className="bottom-panel"
+  style={{
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    backgroundColor: "#fff",
+    borderTopLeftRadius: "15px",
+    borderTopRightRadius: "15px",
+    boxShadow: "0 -4px 10px rgba(0,0,0,0.1)",
+    padding: "15px",
+    transition: "height 0.3s ease",
+    zIndex: 1000,
+    minHeight: "50vh",
+    overflowY: "auto",
+  }}
+>
+  {/* Header */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "10px",
+    }}
+  >
+    <h4
+      style={{
+        fontSize: "16px",
+        fontWeight: "bold",
+        margin: 0,
+        color: "#333",
+      }}
+    >
+      Sort Options
+    </h4>
+    <span
+      style={{
+        cursor: "pointer",
+        color: "#666",
+        transition: "color 0.3s ease",
+      }}
+      onMouseEnter={(e) => (e.target.style.color = "#000")}
+      onMouseLeave={(e) => (e.target.style.color = "#666")}
+      onClick={() => setShowSortPanel(false)}
+    >
+      <RxCross1 size={22} />
+    </span>
+  </div>
+
+  {/* Options */}
+  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+    {sortOptions.map((option, index) => (
+      <div
+        key={index}
+        onClick={() => handleSortSelection(option)}
+        style={{
+          border:
+            selectedSortOption === option
+              ? "1px solid #F15A29"
+              : "1px solid #ddd",
+          borderRadius: "10px",
+          padding: "10px",
+          cursor: "pointer",
+          transition: "all 0.2s ease",
+          backgroundColor:
+            selectedSortOption === option ? "#FFF5F2" : "transparent",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontSize: "14px",
+            color: selectedSortOption === option ? "#F15A29" : "#333",
+            fontWeight: selectedSortOption === option ? "600" : "400",
+          }}
+        >
+          {option}
+        </p>
+ {/* Filter just below text — no gap */}
+        {option === "Price Range" ? (
+          <div
+            style={{
+              marginTop: "14px",
+              
+              borderRadius: "8px",
+              display: "flex",
+              justifyContent: "flex-start", // 👈 aligned to left
+              alignContent: "start",
+              // alignItems: "center",
+             paddingRight: "40%",
+          
+              backgroundColor: "#fff",
+
+            }}
+          >
+            <CatlogPriceFilter />
+          </div>
+        ) : null}
+
+
+        {option === "Sizes" ? (
+  Object.keys(sizeOptions).map((category) => (
+    <div key={category} className="size-pnll">
+      <h5 style={{ padding: "10px 0", fontSize: "14px", fontWeight: "600" }}>
+        {category}
+      </h5>
+
+      {sizeOptions[category].map((size, index) => (
+        <button
+          key={index}
+          style={{
+            margin: "3px",
+            padding: "6px 10px",
+            borderRadius: "5px",
+            border: selectedSizes[category].includes(size)
+              ? "1px solid #F15A29"
+              : "1px solid #ccc",
+            backgroundColor: selectedSizes[category].includes(size)
+              ? "#FFF5F2"
+              : "#fff",
+            color: selectedSizes[category].includes(size) ? "#F15A29" : "#333",
+            fontSize: "12px",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+          className={`size-btn ${
+            selectedSizes[category].includes(size) ? "selected" : ""
+          }`}
+          onClick={() => handleSizeSelection(category, size)}
+        >
+          {size}
+        </button>
+      ))}
+    </div>
+  ))
+) : null}
+
+      </div>
+    ))}
+  </div>
+</div>
+
           )}
 
           {showSizePanel && (
