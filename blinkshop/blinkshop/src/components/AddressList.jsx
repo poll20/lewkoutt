@@ -188,7 +188,7 @@ useEffect(() => {
            {
                 loc!="return"?( <NavLink to='/maps' className="navlink">
           <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Address</button>
-          </NavLink>):(<span>For return pickup from a new location, please first add the address in your ‘My Account-Address’ section. Pickup is available only from saved addresses.</span>)
+          </NavLink>):(<span style={{fontSize:"8px"}}>Select or Edit the address from where you'd like your return to be picked up.</span>)
               }
          
 
@@ -196,12 +196,13 @@ useEffect(() => {
         ) : (
           <>
             <div className="address-header" style={{borderBottom:"1px solid gray"}}>
-              <h2 style={{fontWeight:"bold",fontSize:"18px"}}>Select Address</h2>
-              {
+               {
                 loc!="return"?(<NavLink to='/maps' className="navlink">
               <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29",marginBottom:"10px"}}>+ Add Address</button>
-              </NavLink>):(<span>For return pickup from a new location, please first add the address in your ‘My Account-Address’ section. Pickup is available only from saved addresses.</span>)
+              </NavLink>):(<span style={{fontSize:"8px"}}>Select or Edit the address from where you'd like your return to be picked up.</span>)
               }
+              <h2 style={{fontWeight:"bold",fontSize:"18px"}}>Select Address</h2>
+             
               
             </div>
     

@@ -727,7 +727,7 @@ if(addresssetkro){
               borderRadius: "12px",
               maxWidth: "500px",
               width: "100%",
-              maxHeight: "80vh",
+              Height: "80vh",
               overflow: "hidden",
               boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
             }}>
