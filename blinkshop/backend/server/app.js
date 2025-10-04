@@ -64,7 +64,7 @@ const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
+app.use(cors());//te localhost m h
 // app.use(cors({ origin: '*' }));
 app.use(cors({
     origin: [
@@ -1431,6 +1431,7 @@ app.post("/newarrival", async (req, res) => {
   }
 
   async function addcashbacktowallet(userId, purchaseAmount,type) {
+console.log("🚀 Adding cashback to wallet:", userId, purchaseAmount);
 
     console.log("user ki idd",userId)
     console.log("khredi ki vlaue",purchaseAmount)
@@ -2772,9 +2773,9 @@ cron.schedule("*/5 * * * *", async () => {
   try {
     // Find all returned orders with 'wallet' option but cashback not processed
     const returns = await returnmodel.find({ selectedOption: "Lewkout Wallet" });
-
+console.log("returns found:", returns.length);
     for (const ret of returns) {
-      const order = await orderr.findOne({ _id: ret.orderid, status: "returned" });
+      const order = await orderr.findOne({ _id: ret.orderid, status: "Refund Approved" });
 
       if (order) {
         // ✅ Sum totalAmount from all products

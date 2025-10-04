@@ -714,12 +714,13 @@ if(addresssetkro){
             top: "0",
             left: "0",
             width: "100vw",
-            height: "100vh",
+            height: "80vh",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             zIndex: 9999,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+             overflowY:"scroll",
             padding: "16px"
           }}>
             <div style={{
@@ -728,7 +729,7 @@ if(addresssetkro){
               maxWidth: "500px",
               width: "100%",
               Height: "80vh",
-              overflow: "hidden",
+              overflowY:"scroll",
               boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
             }}>
               <AddressList 
