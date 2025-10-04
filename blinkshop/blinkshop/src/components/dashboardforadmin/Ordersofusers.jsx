@@ -142,6 +142,7 @@ const Ordersofusers = () => {
                     <td>{order?.address[0]?.uname}</td>
                     <td>{order?.email}</td>
                     <td>{order?.address[0]?.phone [0]}</td>
+                    <td>{fullAddress}</td>
                     <td>{order?.walletUsed}</td>
 
                     <td>{order?.pgUsed}</td>
@@ -150,7 +151,7 @@ const Ordersofusers = () => {
 
                     <td>{order?.refundToPG}</td>
 
-                    <td>{fullAddress}</td>
+                    
                     <td>
                       {order.products.map((product, index) => (
                         <div key={index}>
