@@ -923,16 +923,6 @@ const Checkout = () => {
       setyppicode(true);
     }
   }, [coupons, totalDiscountPrice, karocode]);
-  // 🟢 Auto apply wallet money (10% of order total)
-useEffect(() => {
-  if (userDetails?.wallet?.cashback) {
-    const availableWallet = userDetails.wallet.cashback;
-    const tenPercentOfOrder = totalDiscountPrice * 0.1;
-    const walletToApply = Math.min(availableWallet, tenPercentOfOrder);
-    setMywalletAmount(walletToApply);
-  }
-}, [totalDiscountPrice, userDetails]);
-
 
   const toggleSheet = () => setShowSheet(!showSheet);
 
@@ -951,8 +941,8 @@ useEffect(() => {
       <NavLink to='/address/chek' className="navlink">
         <div className="address-section-checkoutbuy">
           <span>
-            {deleveryaddress?.length > 0
-              ? `${deleveryaddress[0]?.building}/${deleveryaddress[0]?.locality}, ${deleveryaddress[0]?.city}`
+            {deleveryaddress.length > 0
+              ? `${deleveryaddress[0].building}/${deleveryaddress[0].locality}, ${deleveryaddress[0].city}`
               : "No address available"}
           </span>
         </div>
@@ -976,11 +966,11 @@ useEffect(() => {
       </div>
 
       {/* Payment Options Section */}
-      {/* <div style={{ background: '#fff', padding: '16px', fontFamily: 'sans-serif', maxWidth: '480px', margin: 'auto', borderRadius: '10px' }}>
+      <div style={{ background: '#fff', padding: '16px', fontFamily: 'sans-serif', maxWidth: '480px', margin: 'auto', borderRadius: '10px' }}>
         <div style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '8px' }}>Payment Options</div>
         <div style={{ color: 'purple', fontSize: '14px', marginBottom: '16px' }}>Additional 5% discount upto 20 on Prepaid Orders</div>
 
-      
+        {/* UPI */}
         <div style={{ border: '1px solid #ddd', borderRadius: '12px', padding: '16px', marginBottom: '16px', position: 'relative' }}>
           <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#00c389', color: 'white', fontSize: '12px', padding: '2px 10px', borderRadius: '12px' }}>Get 5% discount</div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -988,7 +978,7 @@ useEffect(() => {
             <div style={{ fontWeight: 'bold' }}>₹{payableAmount}.0</div>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {/* Order Details */}
       <div className="order-details-checkoutbuy">
@@ -1013,7 +1003,7 @@ useEffect(() => {
         ) : null}
 
         {/* Wallet */}
-        {/* <div className="order-row-checkoutbuy relative">
+        <div className="order-row-checkoutbuy relative">
           <span>Wallet Money</span>
           <span>₹{walletToUse}</span>
           <div className="relative">
@@ -1032,21 +1022,7 @@ useEffect(() => {
               </div>
             )}
           </div>
-        </div> */}
-        {/* 💰 Wallet Section (Auto-applied 10%) */}
-
-  <div className="order-row-checkoutbuy">
-    <span className="">
-      Wallet
-    </span>
-   
-  
-   <span className="text-green-600 font-semibold text-[16px]">
-      ₹{mywalletAmount.toFixed(2)}
-    </span>
-</div>
-
-        
+        </div>
 
         <div className="order-row-checkoutbuy payable-row-checkoutbuy">
           <span>Payable amount</span>
