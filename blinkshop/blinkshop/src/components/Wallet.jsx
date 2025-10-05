@@ -146,7 +146,7 @@ const Wallet = ({ cashback, points }) => {
   const { userDetails } = useFirebaseAuth();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+const apiUrl = import.meta.env.VITE_API_URL;
   // ✅ Fetch wallet transactions when page loads
   useEffect(() => {
     const fetchWalletTransactions = async () => {
@@ -154,7 +154,7 @@ const Wallet = ({ cashback, points }) => {
 
       try {
         const res = await fetch(
-          `http://localhost:5000/api/wallet/getuserwallet/${userDetails._id}`
+          `${apiUrl}/getuserwallet/${userDetails?._id}`
         );
         if (!res.ok) throw new Error("Failed to fetch transactions");
 
