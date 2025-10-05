@@ -1562,7 +1562,8 @@ const fetchTopSearched = async () => {
         fetchTopSearched,
         topproducts,
         userDetails,
-        sortOption, setSortOption
+        sortOption, 
+        setSortOption
         
         
 

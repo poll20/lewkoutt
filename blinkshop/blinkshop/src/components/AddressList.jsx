@@ -213,8 +213,20 @@ useEffect(() => {
     paddingBottom: "10px",
     marginBottom: "10px",
   }}
+
 >
+   
   {loc !== "return" ? (
+    <>
+<h2
+    style={{
+      fontWeight: "bold",
+      fontSize: "14px",
+      margin: 0,
+    }}
+  >
+    Select Address
+  </h2>
     <NavLink to="/maps" className="navlink">
       <button
         className="add-addressss-buttonnnn"
@@ -235,11 +247,12 @@ useEffect(() => {
         + Add Address
       </button>
     </NavLink>
+    </>
   ) : (
     <span
       style={{
         display: "block",
-        fontSize: "12px",
+        fontSize: "17px",
         marginBottom: "6px",
       }}
     >
@@ -248,15 +261,7 @@ useEffect(() => {
     </span>
   )}
 
-  <h2
-    style={{
-      fontWeight: "bold",
-      fontSize: "14px",
-      margin: 0,
-    }}
-  >
-    Select Address
-  </h2>
+ 
 </div>
 
 
@@ -385,14 +390,17 @@ useEffect(() => {
     </div>
 
     <div className="address-actions">
-      <button
+      {
+        loc!="return"?( <button
         style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}
 
         className="delete-button"
         onClick={() => deleteoreditaddress(addr._id, "delete", addr)}
       >
         Delete
-      </button>
+      </button>):('')
+      }
+     
 
       {editingAddressId === addr._id ? (
         <button

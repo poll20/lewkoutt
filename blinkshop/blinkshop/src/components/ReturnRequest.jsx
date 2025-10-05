@@ -708,13 +708,13 @@ if(addresssetkro){
         )}
 
         {/* Address Selection Modal */}
-        {showmeaddress && (
+        {/* {showmeaddress && (
           <div style={{
             position: "fixed",
             top: "0",
             left: "0",
             width: "100vw",
-            height: "60vh",
+            height: "100vh",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             zIndex: 9999,
             display: "flex",
@@ -728,7 +728,7 @@ if(addresssetkro){
               borderRadius: "12px",
               maxWidth: "500px",
               width: "100%",
-              Height: "60vh",
+              Height: "80vh",
               overflowY:"scroll",
               boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
             }}>
@@ -738,7 +738,63 @@ if(addresssetkro){
               />
             </div>
           </div>
-        )}
+        )} */}
+        {showmeaddress && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(255, 255, 255, 0.9)", // white overlay
+      zIndex: 9999,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "16px",
+    }}
+  >
+    {/* Centered Modal Box */}
+    <div
+      style={{
+        position: "relative",
+        backgroundColor: "white",
+        borderRadius: "12px",
+        maxWidth: "500px",
+        width: "100%",
+        maxHeight: "80vh",
+        overflowY: "auto",
+        boxShadow:
+          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      }}
+    >
+      {/* Cross Button */}
+      <button
+        onClick={() => setshowmeaddress(false)}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "none",
+          border: "none",
+          fontSize: "22px",
+          cursor: "pointer",
+          color: "#555",
+          fontWeight: "bold",
+        }}
+      >
+        ✕
+      </button>
+
+      {/* Address List */}
+      <div style={{ padding: "16px" }}>
+        <AddressList loc="return" onClose={() => setshowmeaddress(false)} />
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );

@@ -204,11 +204,13 @@ const [hasMore, setHasMore] = useState(true);
 
 
      // ✅ Apply sorting from Filter.js
-    if (sortOption === "Price: Low to High") {
-      filteredData = [...filteredData].sort((a, b) => a.price - b.price);
-    } else if (sortOption === "Price: High to Low") {
-      filteredData = [...filteredData].sort((a, b) => b.price - a.price);
-    }
+ // ✅ Apply sorting from Filter.js
+if (filters.sortBy === "Price: Low to High") {
+  filteredProducts.sort((a, b) => a.discountprice - b.discountprice);
+} else if (filters.sortBy === "Price: High to Low") {
+  filteredProducts.sort((a, b) => b.discountprice - a.discountprice);
+}
+
 
       // Filter by size
 

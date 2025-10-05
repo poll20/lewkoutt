@@ -362,11 +362,11 @@ if(!addtocartdatas){
         <span style={{color:"green",fontWeight:"bold"}}>-{totalprice-discounttotal}</span>
         
       </div>
-        <div style={styles.row}>
+        {/* <div style={styles.row}>
         <span>Coupon Discount</span>
         <span style={{color:"green",fontWeight:"bold"}}>-{totalprice-discounttotal}</span>
         
-      </div>
+      </div> */}
 
       {/* <div style={styles.row}>
         <div>
