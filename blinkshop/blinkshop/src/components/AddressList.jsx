@@ -195,7 +195,7 @@ useEffect(() => {
           </div>
         ) : (
           <>
-            {/* <div className="address-header" style={{borderBottom:"1px solid gray"}}>
+            <div className="address-header" style={{borderBottom:"1px solid gray"}}>
                {
                 loc!="return"?(<NavLink to='/maps' className="navlink">
               <button className="add-addressss-buttonnnn" onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29",marginBottom:"10px"}}>+ Add Address</button>
@@ -205,66 +205,7 @@ useEffect(() => {
              
               
             </div>
-     */}
-<div
-  className="address-header"
-  style={{
-    borderBottom: "1px solid gray",
-    paddingBottom: "10px",
-    marginBottom: "10px",
-  }}
-
->
-   
-  {loc !== "return" ? (
-    <>
-<h2
-    style={{
-      fontWeight: "bold",
-      fontSize: "14px",
-      margin: 0,
-    }}
-  >
-    Select Address
-  </h2>
-    <NavLink to="/maps" className="navlink">
-      <button
-        className="add-addressss-buttonnnn"
-        onClick={() => {
-          addressinputcontainer(true, "addaddress");
-        }}
-        style={{
-          backgroundColor: "#F15A29",
-          marginBottom: "10px",
-          fontSize: "12px",
-          padding: "6px 10px",
-          borderRadius: "4px",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        + Add Address
-      </button>
-    </NavLink>
-    </>
-  ) : (
-    <span
-      style={{
-        display: "block",
-        fontSize: "17px",
-        marginBottom: "6px",
-      }}
-    >
-      Select or edit the address from where you'd like your return to be picked
-      up.
-    </span>
-  )}
-
- 
-</div>
-
-
+    
             {/* Address loop */}
             {/* {
               userprf?.address?.map((addr, index) => (
@@ -390,17 +331,14 @@ useEffect(() => {
     </div>
 
     <div className="address-actions">
-      {
-        loc!="return"?( <button
+      <button
         style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}
 
         className="delete-button"
         onClick={() => deleteoreditaddress(addr._id, "delete", addr)}
       >
         Delete
-      </button>):('')
-      }
-     
+      </button>
 
       {editingAddressId === addr._id ? (
         <button
