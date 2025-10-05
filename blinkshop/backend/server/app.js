@@ -1469,19 +1469,34 @@ async function addcashbacktowallet(userId, amount, type = "cashback") {
     { $inc: { "wallet.cashback": amount } }
   );
 
+  // await wallettrans.create({
+  //   userId,
+  //   type,
+  //   amount,
+  //   valueInRupees: amount,
+  //   description:
+  //     type === "wallet-refund"
+  //       ? `Refund (Lewkout Wallet): ₹${amount}`
+  //       : type === "wallet-partial-refund"
+  //       ? `Partial refund (Back to Source - Wallet): ₹${amount}`
+  //       : `Cashback: ₹${amount}`,
+  //   date: new Date(),
+  // });
   await wallettrans.create({
-    userId,
-    type,
-    amount,
-    valueInRupees: amount,
-    description:
-      type === "wallet-refund"
-        ? `Refund (Lewkout Wallet): ₹${amount}`
-        : type === "wallet-partial-refund"
-        ? `Partial refund (Back to Source - Wallet): ₹${amount}`
-        : `Cashback: ₹${amount}`,
-    date: new Date(),
-  });
+  userId,
+  type,
+  amount,
+  valueInRupees: amount,
+  description:
+    type === "wallet-refund"
+      ? `Refund (Lewkout Wallet): ₹${amount}`
+      : type === "wallet-partial-refund"
+      ? `Partial refund (Back to Source - Wallet): ₹${amount}`
+      : type === "purchase"
+      ? `Purchased amount: ₹${amount}`
+      : `Cashback: ₹${amount}`,
+  date: new Date(),
+});
 }
 
 
@@ -1659,6 +1674,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       // Remove pending order
       await pendingOrderModel.deleteOne({ _id: pendingOrder._id });
 
+      await  addcashbacktowallet(userDetails._id, walletUsed, "purchase");
       return res.status(201).json({
         message: "Order placed successfully without payment",
         merchantOrderId
@@ -2007,6 +2023,8 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
       await orderr.updateMany({ merchantOrderId }, { paymentStatus });
       console.log(`⚠️ Payment not completed for merchantOrderId: ${merchantOrderId}`);
     }
+      await  addcashbacktowallet(userDetails._id, walletUsed, "purchase");
+
 
     res.status(200).send("Webhook processed successfully");
   } catch (error) {
@@ -3499,6 +3517,33 @@ app.get("/slots", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch slots" });
   }
 });
+
+
+
+// ✅ Get user-specific wallet transactions
+app.get("/getuserwallet/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Fetch wallet transactions for the user
+    const transactions = await wallettrans.find({ userId })
+      .sort({ date: -1 }); // latest first
+
+    if (!transactions.length) {
+      return res.status(404).json({ message: "No transactions found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      count: transactions.length,
+      transactions,
+    });
+  } catch (error) {
+    console.error("Error fetching wallet transactions:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 
 // ✅ TOGGLE slot disable/enable
 app.post("/slot-status/toggle",isAdmin,verifySessionCookie,async (req, res) => {
