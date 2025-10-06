@@ -64,7 +64,7 @@ console.log("wishlist in coa",wishlistdata)
 
       {/* Details Section */}
       <div className="product-details" style={{maxHeight:'80px',paddingLeft:"8px",backgroundColor:"white"}}>
-        <span className="product-title" style={{textAlign:"start",fontFamily: "Oswald",fontWeight:"700",fontSize:"15px"}}>{props.discription?.length>15?(props.discription?.slice(0,18)+`...`):(props.discription)}</span>
+        <span className="product-title" style={{textAlign:"start",fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{props.discription?.length>15?(props.discription?.slice(0,18)+`...`):(props.discription)}</span>
         <div className="product-pricing">
           <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{props.discountprice}</span>
           <span className="original-price"style={{ fontFamily: "Oswald" }}>₹{props.price}</span>
