@@ -209,7 +209,7 @@ console.log("navbar m props.pdd value",props.pd)
   <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
 </svg>
 </li>
-          <li >Home</li>
+          <li>Home</li>
           
           </NavLink>
          
@@ -273,7 +273,7 @@ console.log("navbar m props.pdd value",props.pd)
       <div className={`dropdown ${issOpen ? "slide-down" : "slide-up"}`}>
         <ul className="categories" style={{borderBottom:"1px solid black"}}>
           {distinctcat.map((category,id) => (
-            <li key={id} className="category-item" style={{borderBottom:"1px solid white"}}>
+            <li key={id} className="category-item" style={{ fontFamily: "'Poppins', sans-serif",fontSize:"14px" ,borderBottom:"1px solid white"}}>
               
              <span onClick={() => handleSubMenu(category)}>{category}</span>
               
@@ -284,8 +284,8 @@ console.log("navbar m props.pdd value",props.pd)
                 }`}
               >
                 {tags.map((subCategory,id) => (
-                  <li key={id} className="subcategory-item"  style={{backgroundColor:"white",textAlign:"start"}}>
-                    <NavLink to={`/productmodel/${subCategory}`} onClick={closeslidecategorynav}>{subCategory}</NavLink>
+                  <li key={id} className="subcategory-item"  style={{backgroundColor:"white",textAlign:"start",fontFamily: "'Poppins', sans-serif" }}>
+                    <NavLink to={`/productmodel/${subCategory}`} onClick={closeslidecategorynav} >{subCategory}</NavLink>
                   </li>
                 ))}
               </ul>

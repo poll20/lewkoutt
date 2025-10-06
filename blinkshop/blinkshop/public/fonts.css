@@ -1,16 +1,20 @@
-/* ===============================
+/* /* ===============================
    Playfair Display
 ================================= */
 @font-face {
   font-family: 'Playfair Display';
-  src: url('/fonts/PlayfairDisplay/PlayfairDisplay-Regular.woff2') format('woff2');
+  src: url('/fonts/PlayfairDisplay/PlayfairDisplay-Regular.woff2') format('woff2'),
+       url('/fonts/PlayfairDisplay/PlayfairDisplay-Regular.woff') format('woff'),
+       url('/fonts/PlayfairDisplay/PlayfairDisplay-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Playfair Display';
-  src: url('/fonts/PlayfairDisplay/PlayfairDisplay-Bold.woff2') format('woff2');
+  src: url('/fonts/PlayfairDisplay/PlayfairDisplay-Bold.woff2') format('woff2'),
+       url('/fonts/PlayfairDisplay/PlayfairDisplay-Bold.woff') format('woff'),
+       url('/fonts/PlayfairDisplay/PlayfairDisplay-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -21,21 +25,27 @@
 ================================= */
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/Inter/Inter-Regular.woff2') format('woff2');
+  src: url('/fonts/Inter/Inter-Regular.woff2') format('woff2'),
+       url('/fonts/Inter/Inter-Regular.woff') format('woff'),
+       url('/fonts/Inter/Inter-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/Inter/Inter-Medium.woff2') format('woff2');
+  src: url('/fonts/Inter/Inter-Medium.woff2') format('woff2'),
+       url('/fonts/Inter/Inter-Medium.woff') format('woff'),
+       url('/fonts/Inter/Inter-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/Inter/Inter-Bold.woff2') format('woff2');
+  src: url('/fonts/Inter/Inter-Bold.woff2') format('woff2'),
+       url('/fonts/Inter/Inter-Bold.woff') format('woff'),
+       url('/fonts/Inter/Inter-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -46,21 +56,27 @@
 ================================= */
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/Montserrat/Montserrat-Regular.woff2') format('woff2');
+  src: url('/fonts/Montserrat/Montserrat-Regular.woff2') format('woff2'),
+       url('/fonts/Montserrat/Montserrat-Regular.woff') format('woff'),
+       url('/fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/Montserrat/Montserrat-Medium.woff2') format('woff2');
+  src: url('/fonts/Montserrat/Montserrat-Medium.woff2') format('woff2'),
+       url('/fonts/Montserrat/Montserrat-Medium.woff') format('woff'),
+       url('/fonts/Montserrat/Montserrat-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Montserrat';
-  src: url('/fonts/Montserrat/Montserrat-Bold.woff2') format('woff2');
+  src: url('/fonts/Montserrat/Montserrat-Bold.woff2') format('woff2'),
+       url('/fonts/Montserrat/Montserrat-Bold.woff') format('woff'),
+       url('/fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -71,21 +87,27 @@
 ================================= */
 @font-face {
   font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Regular.woff2') format('woff2');
+  src: url('/fonts/Poppins/Poppins-Regular.woff2') format('woff2'),
+       url('/fonts/Poppins/Poppins-Regular.woff') format('woff'),
+       url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Medium.woff2') format('woff2');
+  src: url('/fonts/Poppins/Poppins-Medium.woff2') format('woff2'),
+       url('/fonts/Poppins/Poppins-Medium.woff') format('woff'),
+       url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Bold.woff2') format('woff2');
+  src: url('/fonts/Poppins/Poppins-Bold.woff2') format('woff2'),
+       url('/fonts/Poppins/Poppins-Bold.woff') format('woff'),
+       url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -96,21 +118,27 @@
 ================================= */
 @font-face {
   font-family: 'Oswald';
-  src: url('/fonts/Oswald/Oswald-Regular.woff2') format('woff2');
+  src: url('/fonts/Oswald/Oswald-Regular.woff2') format('woff2'),
+       url('/fonts/Oswald/Oswald-Regular.woff') format('woff'),
+       url('/fonts/Oswald/Oswald-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Oswald';
-  src: url('/fonts/Oswald/Oswald-Medium.woff2') format('woff2');
+  src: url('/fonts/Oswald/Oswald-Medium.woff2') format('woff2'),
+       url('/fonts/Oswald/Oswald-Medium.woff') format('woff'),
+       url('/fonts/Oswald/Oswald-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Oswald';
-  src: url('/fonts/Oswald/Oswald-Bold.woff2') format('woff2');
+  src: url('/fonts/Oswald/Oswald-Bold.woff2') format('woff2'),
+       url('/fonts/Oswald/Oswald-Bold.woff') format('woff'),
+       url('/fonts/Oswald/Oswald-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -121,21 +149,27 @@
 ================================= */
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/Roboto/Roboto-Regular.woff2') format('woff2');
+  src: url('/fonts/Roboto/Roboto-Regular.woff2') format('woff2'),
+       url('/fonts/Roboto/Roboto-Regular.woff') format('woff'),
+       url('/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/Roboto/Roboto-Medium.woff2') format('woff2');
+  src: url('/fonts/Roboto/Roboto-Medium.woff2') format('woff2'),
+       url('/fonts/Roboto/Roboto-Medium.woff') format('woff'),
+       url('/fonts/Roboto/Roboto-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Roboto';
-  src: url('/fonts/Roboto/Roboto-Bold.woff2') format('woff2');
+  src: url('/fonts/Roboto/Roboto-Bold.woff2') format('woff2'),
+       url('/fonts/Roboto/Roboto-Bold.woff') format('woff'),
+       url('/fonts/Roboto/Roboto-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -146,21 +180,27 @@
 ================================= */
 @font-face {
   font-family: 'Work Sans';
-  src: url('/fonts/WorkSans/WorkSans-Regular.woff2') format('woff2');
+  src: url('/fonts/WorkSans/WorkSans-Regular.woff2') format('woff2'),
+       url('/fonts/WorkSans/WorkSans-Regular.woff') format('woff'),
+       url('/fonts/WorkSans/WorkSans-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Work Sans';
-  src: url('/fonts/WorkSans/WorkSans-Medium.woff2') format('woff2');
+  src: url('/fonts/WorkSans/WorkSans-Medium.woff2') format('woff2'),
+       url('/fonts/WorkSans/WorkSans-Medium.woff') format('woff'),
+       url('/fonts/WorkSans/WorkSans-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Work Sans';
-  src: url('/fonts/WorkSans/WorkSans-Bold.woff2') format('woff2');
+  src: url('/fonts/WorkSans/WorkSans-Bold.woff2') format('woff2'),
+       url('/fonts/WorkSans/WorkSans-Bold.woff') format('woff'),
+       url('/fonts/WorkSans/WorkSans-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -171,21 +211,27 @@
 ================================= */
 @font-face {
   font-family: 'Nunito';
-  src: url('/fonts/Nunito/Nunito-Regular.woff2') format('woff2');
+  src: url('/fonts/Nunito/Nunito-Regular.woff2') format('woff2'),
+       url('/fonts/Nunito/Nunito-Regular.woff') format('woff'),
+       url('/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Nunito';
-  src: url('/fonts/Nunito/Nunito-SemiBold.woff2') format('woff2');
+  src: url('/fonts/Nunito/Nunito-SemiBold.woff2') format('woff2'),
+       url('/fonts/Nunito/Nunito-SemiBold.woff') format('woff'),
+       url('/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Nunito';
-  src: url('/fonts/Nunito/Nunito-Bold.woff2') format('woff2');
+  src: url('/fonts/Nunito/Nunito-Bold.woff2') format('woff2'),
+       url('/fonts/Nunito/Nunito-Bold.woff') format('woff'),
+       url('/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -196,7 +242,9 @@
 ================================= */
 @font-face {
   font-family: 'Baloo 2';
-  src: url('/fonts/Baloo2/Baloo2-Regular.woff2') format('woff2');
+  src: url('/fonts/Baloo2/Baloo2-Regular.woff2') format('woff2'),
+       url('/fonts/Baloo2/Baloo2-Regular.woff') format('woff'),
+       url('/fonts/Baloo2/Baloo2-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -207,14 +255,18 @@
 ================================= */
 @font-face {
   font-family: 'Lato';
-  src: url('/fonts/Lato/Lato-Regular.woff2') format('woff2');
+  src: url('/fonts/Lato/Lato-Regular.woff2') format('woff2'),
+       url('/fonts/Lato/Lato-Regular.woff') format('woff'),
+       url('/fonts/Lato/Lato-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Lato';
-  src: url('/fonts/Lato/Lato-Bold.woff2') format('woff2');
+  src: url('/fonts/Lato/Lato-Bold.woff2') format('woff2'),
+       url('/fonts/Lato/Lato-Bold.woff') format('woff'),
+       url('/fonts/Lato/Lato-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
