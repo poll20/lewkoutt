@@ -188,7 +188,7 @@ useEffect(() => {
 
            {
                 loc!="return"?( <NavLink to='/maps' className="navlink">
-          <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"#F15A29"}}>+ Add Address</button>
+          <button className="add-addressss-buttonnnn"onClick={()=>{addressinputcontainer(true,"addaddress")}} style={{backgroundColor:"black"}}>+ Add Address</button>
           </NavLink>):(<span style={{fontSize:"8px"}}>Select or Edit the address from where you'd like your return to be picked up.</span>)
               }
          
@@ -525,10 +525,17 @@ useEffect(() => {
       </div>
     </div> */}
     
-    <div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
+    
+
+
+       {
+        sec=="upp"?(<div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
         {loc!="return"?(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"black",color:"white",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>):(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtoreturncom()}} >Return Address</button>)}
-       </div>
+       </div>):
+        ('')
+       }
       </div>
+      
   );
 
 };

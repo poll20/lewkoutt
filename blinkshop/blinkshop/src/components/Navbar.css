@@ -35,6 +35,10 @@ body {
   
 }
 
+.menu-link-name{
+  font-size:12px;
+}
+
 .nav-links {
   width: 30%;
   /* border: 1px solid red; */

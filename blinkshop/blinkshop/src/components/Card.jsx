@@ -754,14 +754,14 @@ if(searchvalue){
           </div>
           
         {/* {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)}  */}
-        {!wish?(''):( <button className="delivery-info" style={{padding:"10px" ,  background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"23px",backgroundColor:"#F15A29", display:"flex",alignItems:"center",justifyContent:"center"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Bag</button>)} 
+        {!wish?(''):( <button className="delivery-info" style={{padding:"10px" ,  background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"23px",backgroundColor:"black", display:"flex",alignItems:"center",justifyContent:"center"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Bag</button>)} 
 
         </div>
       </div>
             ))
           ) : (
             
-              !wish?(<p>No products available.</p>):( <div style={{width:"90vw",padding:"0",margin:"0"}}><EmptyCart endpoint={window.location.pathname.substring(1)} /></div>)
+              !wish?(<p></p>):( <div style={{width:"90vw",padding:"0",margin:"0"}}><EmptyCart endpoint={window.location.pathname.substring(1)} /></div>)
             
             
           )}

@@ -912,7 +912,7 @@ useEffect(() => {
   };
 
   if (!product || product.length==0) {
-    return <p>Loading...</p>;
+    return <p></p>;
   }
 
   const sizes=product?.sizes?.map((e)=>(e.size)) 
@@ -1405,11 +1405,13 @@ if(getbundeldata){
         </div>
     
     <div  ref={targetRef} style={{border:"1px solid gray",display:"flex",alignItems:"center",flexDirection:"column"}}>
-     <div style={{display:"flex",width:"100%",alignItems:'center',gap:'10px'}}>  
-      <p style={{fontSize:"20px",paddingLeft:"10px"}}>Similer To</p>
-      <p style={{color:"green",marginTop:"3px"}}>{product.title}</p>
+     <div style={{display:"flex",width:"90%",alignItems:'center',flexDirection:"column",alignItems:"start",marginTop:"7px"}}>  
+      <span style={{fontSize:"15px",fontFamily: 'Nunito,sans-serif',fontWeight:"bold"}}>Similar To</span>
+      <span style={{ fontFamily: "Oswald",color: '#888',fontSize:"0.9rem"}}>{product.title}</span>
       </div>
+      <div>
     <Card  category={cate}/>
+    </div>
     </div>
     
     {showloginpage==true?(

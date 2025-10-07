@@ -513,21 +513,21 @@ useEffect(() => {
         }
     };
     
-useEffect(()=>{
-    const getShopDailySales = async () => {
+// useEffect(()=>{
+//     const getShopDailySales = async () => {
 
-        if(user || userDetails)
-        try {
-            let response = await fetch(`${apiUrl}/sales/daily/${userDetails.shopname}`);
-            let data = await response.json();
-            console.log("✅ Shopkeeper Sales Data:", data);
-            setshopkepersale(data)
-        } catch (error) {
-            console.error("❌ Error fetching sales:", error);
-        }
-    }
-    getShopDailySales()
-},[user,userDetails])
+//         if(user || userDetails)
+//         try {
+//             let response = await fetch(`${apiUrl}/sales/daily/${userDetails.shopname}`);
+//             let data = await response.json();
+//             console.log("✅ Shopkeeper Sales Data:", data);
+//             setshopkepersale(data)
+//         } catch (error) {
+//             console.error("❌ Error fetching sales:", error);
+//         }
+//     }
+//     getShopDailySales()
+// },[user,userDetails])
     
     const updateOrdersWithReturnDetails = async () => {
       try {
