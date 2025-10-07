@@ -1111,7 +1111,7 @@ if(getbundeldata){
                   borderRadius: '8px',
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  border: currentImageIndex === index ? '2px solid #667eea' : '2px solid transparent',
+                  border: currentImageIndex === index ? '2px solid black' : '2px solid transparent',
                   opacity: currentImageIndex === index ? 1 : 0.7
                 }}
               >
@@ -1134,7 +1134,7 @@ if(getbundeldata){
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
           <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder",}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
-          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"5px",color:"white",padding:"2px 5px",borderRadius:"90px",background:"rgb(241, 90, 41",fontSize:"11px"}}>{product.discount}% off</span></span>
+          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"5px",color:"white",padding:"2px 5px",borderRadius:"90px",background:"rgb(90, 186, 89,1)",fontSize:"11px",color:"white",fontWeight:"bold"}}>{product.discount}% off</span></span>
           <span
       style={{
         display: 'flex',
@@ -1247,9 +1247,9 @@ if(getbundeldata){
   )}
 </div>
 
-          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white"}}>
-            <div className="sizes" style={{display:"flex",alignItems:"center",justifyContent:"start",gap:"5px",padding:"5px",borderRadius:"10px"}}>
-<label>Size</label>
+          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
+            <div className="sizes" style={{display:"flex",alignItems:"center",justifyContent:"start",gap:"5px",paddingTop:"5px",borderRadius:"10px"}}>
+<label>Size:</label>
               {sizes.map((size) => (
                 <button
                 style={{borderRadius:"30px",width:"50px"}}

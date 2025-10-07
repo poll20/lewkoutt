@@ -330,7 +330,7 @@ if(!addtocartdatas){
          {/* <span>break up</span> */}
          </div>
        
-        <button className="buy-buttonss" style={{width:"140px",backgroundColor:"black"}} onClick={()=>{sendtocheckout()}} >Select Address</button>
+        <button className="buy-buttonss" style={{width:"140px",backgroundColor:"black",padding:"13px"}} onClick={()=>{sendtocheckout()}} >Select Address</button>
        </div>
        
        <div className="bottom-sheet" style={{ display:popupProductId?('flex'):('none'),flexDirection:"column", alignItems:"center",justifyContent:"space-between", borderRadius:'0'}}>

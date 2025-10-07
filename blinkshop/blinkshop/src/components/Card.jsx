@@ -680,6 +680,7 @@ if(searchvalue){
             <div className="bottom-panel" style={{padding:"10px"}}>
               <div style={{display:"flex",justifyContent:"space-between"}}>
               <h4>Size Options</h4>
+              
               <span><RxCross1 size={20} onClick={()=>{setShowSizePanel(false)}}/></span>
               </div>
               {Object.keys(sizeOptions).map((category) => (
@@ -749,9 +750,11 @@ if(searchvalue){
           <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
-            <span className="discount"style={{ fontFamily: "Oswald" }}>{product?.discount}% off</span>
+            <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(131, 241, 131)" }}>{product?.discount}% off</span>
+            
             
           </div>
+        
           
         {/* {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)}  */}
         {!wish?(''):( <button className="delivery-info" style={{padding:"10px" ,  background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"23px",backgroundColor:"black", display:"flex",alignItems:"center",justifyContent:"center"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Bag</button>)} 

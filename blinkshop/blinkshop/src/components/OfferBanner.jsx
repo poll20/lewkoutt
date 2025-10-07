@@ -11,7 +11,7 @@ export default function OfferBanner() {
         backgroundColor: "#000",
         padding: "0",
         marginTop:"60px",
-        background: "linear-gradient(to right,rgb(0, 0, 0), #ee0979)", // gradient
+         background: "linear-gradient(to right, #ffffff, #f3f3f3, #ececec)", // gradient
         // border:"2px solid red"
       }}
     >
@@ -23,14 +23,14 @@ export default function OfferBanner() {
           ease: "linear",
         }}
         style={{
-          color: "#fff",
+          color: "black",
           fontSize: "18px",
-          fontWeight: "200",
+          fontWeight: "600",
           fontFamily:" 'Playfair Display',serif;",
           whiteSpace: "nowrap",
         }}
       >
-        Lewkout Offer 50% Off on Every Purchase
+        🕒 Delivery In⚡60 Mins
       </motion.div>
     </div>
   );

@@ -181,7 +181,7 @@ useEffect(() => {
 }, [isAddressPanelOpen, showaddresspanel]);
   return (
     
-      <div className="address-container" style={{backgroundColor:"white"}}>
+      <div className="address-container" style={{backgroundColor:"white",border:"2px solid red",height:"90vh"}}>
         {userprf?.address?.length === 0 ? (
           <div style={{display:'flex',alignItems:'center',justifyContent:"space-between",backgroundColor:"white"}}>
           <h2>Address</h2>
@@ -266,36 +266,7 @@ useEffect(() => {
 </div>
 
 
-            {/* Address loop */}
-            {/* {
-              userprf?.address?.map((addr, index) => (
-                <div className="address-card" key={`${addr._id}`}>
-                  <div className="custom-checkbox">
-                    <input
-                      type="radio"
-                      name="address"
-                      value={addr._id}
-                      onClick={() => setSelectedAddress(addr._id)}
-                    />
-                  </div>
-                  <div className="address-info">
-                    <p className="address-name">
-                      {userprf.name}{" "}
-                    </p>
-                    <p className="address-details">Address: {addr.building} / {addr.locality} , {addr.city} , {addr.state}</p>
-                    <p className="address-details">Pincode: {addr.pincode}</p>
-                    <p className="address-phone">Phone: {addr.phone}</p>
-                    <p className="address-tip">
-                      <span>ℹ️</span> For better reach, include an alternate number
-                    </p>
-                  </div>
-                  <div className="address-actions">
-                    <button className="delete-button" onClick={()=>{deleteoreditaddress(addr._id ,"delete",addr)}}>Delete</button>
-                    <button className="edit-button" onClick={()=>{setshowadresspanel("edit");setaction(addr._id)}}>Edit</button>
-                  </div>
-                </div>
-              ))
-            } */}
+           
               <h2 style={{fontWeight:"bold",fontSize:"16px"}}>Saved Address</h2>
 
             { userprf?.address?.map((addr) => (
@@ -372,7 +343,7 @@ useEffect(() => {
           />
       
       
-          <button onClick={()=>{setEditingAddressId(null);}} style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}>back</button>
+        {/* <button onClick={()=>{setEditingAddressId(null);}} style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}>back</button> */}
         </>
       ) : (
         <>
@@ -400,6 +371,13 @@ useEffect(() => {
       >
         Delete
       </button>):('')
+      }
+      {
+        editingAddressId === addr._id ?(
+        <button onClick={()=>{setEditingAddressId(null);}} style={{border:"1px solid black",borderRadius:"5px",color:"black",padding:"5px 10px",textDecoration:'none'}}>back</button>
+
+
+        ):('')
       }
      
 
@@ -529,7 +507,7 @@ useEffect(() => {
 
 
        {
-        sec=="upp"?(<div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
+        sec!="upp"?(<div className="bottom-sheet" style={{ display:chooseaddress.length>0?('flex'):('none'),alignItems:"center",justifyContent:"center", borderRadius:'0',border:"none"}}>
         {loc!="return"?(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"black",color:"white",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtocheckout()}} >Checkout</button>):(<button className="buy-buttonss" style={{width:"390px",backgroundColor:"white",color:"black",border:"2px solid black",fontWeight:"500"}} onClick={()=>{sendtoreturncom()}} >Return Address</button>)}
        </div>):
         ('')
