@@ -42,9 +42,9 @@ const AboutUs = () => {
         </div> */}
 
         <div className="footer-links" style={{marginBottom:"13px"}}>
-          <a href="#">Terms & Conditions</a> •
-          <a href="#">Privacy Policy</a> •
-          <a href="#">Refund policy</a>
+          <NavLink to="/terms-and-conditions">Terms & Conditions</NavLink> •
+          <NavLink to="/privacy-policy">Privacy Policy</NavLink> •
+          <NavLink to="/return-exchange-refund">Refund policy</NavLink>
         </div>
       </div>
     

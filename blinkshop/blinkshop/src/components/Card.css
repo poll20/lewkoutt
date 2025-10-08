@@ -383,7 +383,7 @@ padding:0;
   @media screen and (max-width: 768px) {
     .filter-containerrr {
       /* border: 2px solid red; */
-      padding:15px;
+      padding:10px;
         background: rgb(255, 255, 255);
         border-bottom: 1px solid #ddd;
         position: relative;

@@ -108,9 +108,9 @@ if(!addtocartdatas){
   return (
     <>
     
-      <div className="header" >
+      <div className="header" style={{display:"flex",alignItems:"center",justifyContent:"start"}} >
         <IoIosArrowRoundBack size={30} onClick={() => navigate(-1)} />
-        <h2 style={{ marginBottom: "5px" }}>Shopping Bag</h2>
+        <span style={{ fontFamily:"Oswald", fontSize:"15px",fontWeight:"bold" }}>My Bag</span>
       </div>
 
       <div className="order-container-addtocart"style={{backgroundColor:'white'}}>
@@ -310,7 +310,9 @@ if(!addtocartdatas){
     )
   ))
 ) : (
+  <div style={{marginTop:"50px"}}>
   <EmptyCart endpoint={window.location.pathname.substring(1)} />
+  </div>
 )}
 
         <div className="bottom-sheet"  style={{

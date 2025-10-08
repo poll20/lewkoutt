@@ -12,7 +12,16 @@ const EmptyCart = (props) => {
 
   return (
     <div className="empty-cart-container" >
-     {props.endpoint=="cart"?( <FaShoppingCart className="cart-icon" />):(<video autoPlay loop muted playsInline  preload="auto" style={{width:"250px",height:"250px"}}>
+     {props.endpoint=="cart"?( <iframe
+        src="https://lottie.host/embed/185d91dd-b0a3-4311-98b6-31498f60b79d/Y7ocFegicm.lottie"
+        style={{
+          width: "180px",
+          height: "180px",
+          border: "none",
+          marginBottom: "20px",
+        }}
+        title="No Orders Animation"
+      ></iframe>):(<video autoPlay loop muted playsInline  preload="auto" style={{width:"250px",height:"250px"}}>
   <source src={animation} type="video/mp4"  />
 </video>)}
       <h style={{color:"black"}}>As empty as your ex's promise </h>

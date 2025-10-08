@@ -15,7 +15,7 @@ import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
 import { slugify } from "./Slugify";
 import CatlogPriceFilter from "./CatlogPriceFilter";
-  
+  import { BsFilterLeft } from "react-icons/bs";
   // import FaChevronDown from "react-icons/fa";
 const Card = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -448,9 +448,9 @@ if(searchvalue){
       <>
       {
         !wish?(<div className={!props.category?("filter-containerrr"):("hidefiltersec")} style={{borderBottom:"1px solid gray",backgroundColor:' white'}}>
-          <div className="filter-row" style={{display:"flex",alignItems:"center",justifyContent:"space-evenly"}}>
+          <div className="filter-row" style={{display:"flex",alignItems:"start",justifyContent:"start"}}>
           
-            <div className="filter-btn" onClick={() => togglePanel("sort")}>
+            {/* <div className="filter-btn" onClick={() => togglePanel("sort")}>
             
               {selectedSortOption ? (
                 <div className="selected-filter">
@@ -469,7 +469,7 @@ if(searchvalue){
                 <span>Sort By <IoIosArrowDown/></span>
                 
               )}
-            </div>
+            </div> */}
 
             {/* <div className="filter-btn" onClick={() => togglePanel("size")}>
               {Object.entries(selectedSizes)
@@ -501,7 +501,7 @@ if(searchvalue){
 
 
             <div className="filter-btn">
-            <NavLink className='navlink' to={`/filter`}><span>{filters.pricerangemax!=3000 || filters.pricerangemin!=300 || filters.sizes.length!=0 || filters.color.length!=0 || filters.categories.length!=0  ?( <span style={{color:"red",fontWeight:"bolder"}}><span style={{color:"black",fontWeight:"normal"}}>Filter</span> *</span>):(<span>Filter</span>)}</span> <IoIosArrowDown /></NavLink> 
+            <NavLink className='navlink' to={`/filter`}style={{display:"flex",alignItems:"center",gap:"5px"}} ><BsFilterLeft size={20}/><span>{filters.pricerangemax!=3000 || filters.pricerangemin!=300 || filters.sizes.length!=0 || filters.color.length!=0 || filters.categories.length!=0  ?( <span style={{color:"red",fontWeight:"bolder"}}><span style={{color:"black",fontFamily: "Oswald",fontSize:"15px"}}>Filter</span> *</span>):(<span style={{color:"black",fontFamily: "Oswald",fontSize:"15px",fontWeight:"bold"}}>Filter and sort</span>)}</span> </NavLink> 
             </div>
             
           </div>

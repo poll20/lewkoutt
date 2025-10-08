@@ -177,6 +177,7 @@ const verifyOTP = async (otp, refcode) => {
     try {
       const response = await fetch(`${apiUrl}/useredit`, {
         method: 'PATCH',
+        credentials:'include',
         headers: {
           'Content-Type': 'application/json',
         },

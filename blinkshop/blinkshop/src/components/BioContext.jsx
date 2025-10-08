@@ -1006,8 +1006,8 @@ finally{
 }
 
 else{
-  console.log("useridf",user._id)
-  console.log("useridf",addr)
+  console.log("userid",user._id)
+  console.log("userid",addr)
   try {
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {

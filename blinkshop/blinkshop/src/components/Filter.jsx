@@ -880,6 +880,7 @@ export default function Filter() {
       discount: [],
       sortBy: "",
     });
+    navigate(-1);
   };
 
   return (
@@ -926,10 +927,11 @@ export default function Filter() {
                 cursor: "pointer",
                 color: "#666",
                 transition: "color 0.3s ease",
+                border:"2px solid red"
               }}
               onMouseEnter={(e) => (e.target.style.color = "#000")}
               onMouseLeave={(e) => (e.target.style.color = "#666")}
-              onClick={() => setShowPanel(false)}
+              onClick={() => {setShowPanel(false),navigate(-1)}}
             >
               <RxCross1 size={22} />
             </span>
@@ -1084,7 +1086,7 @@ export default function Filter() {
                 padding: "10px",
                 borderRadius: "8px",
                 border: "none",
-                backgroundColor: "#F15A29",
+                backgroundColor: "black",
                 color: "#fff",
                 fontWeight: "600",
               }}
