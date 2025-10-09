@@ -2961,7 +2961,7 @@ app.put("/moodmsg/:id",verifySessionCookie,isAdmin, async (req, res) => {
   }
 });
 
-app.post("/create", verifySessionCookie,isAdmin,async (req, res) => {
+app.post("/create",verifySessionCookie,isAdmin, async (req, res) => {
   try {
     const newCoupon = new cpn(req.body);
     await newCoupon.save();

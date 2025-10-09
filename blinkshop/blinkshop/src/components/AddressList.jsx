@@ -616,17 +616,19 @@ const AddressList = ({ loc }) => {
 
   if (!userprf) return <h2>Loading...</h2>;
 
-  const containerStyle = {
-    marginTop:"60px",
-    backgroundColor: "#fff",
-    padding: "15px",
-    minHeight: "100vh",
-    fontFamily: "Poppins, sans-serif",
-    boxSizing: "border-box",
-     overflowY: "auto",        // 👈 ye add kar
-  WebkitOverflowScrolling: "touch", // 👈 smooth scrolling for mobile
+const containerStyle = {
+  marginTop: "60px",
+  backgroundColor: "#fff",
+  padding: "15px",
+  height: "calc(100vh - 60px)", // 👈 total visible area me fit ho
+  overflowY: "auto",             // 👈 scroll enable
+  WebkitOverflowScrolling: "touch",
   scrollBehavior: "smooth",
-  };
+  fontFamily: "Poppins, sans-serif",
+  boxSizing: "border-box",
+  paddingBottom: "80px",         // 👈 fixed button ke liye space niche
+};
+
 
   const headerStyle = {
     borderBottom: "1px solid #ddd",
