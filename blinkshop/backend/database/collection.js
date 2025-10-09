@@ -678,7 +678,7 @@ const couponSchema = new mongoose.Schema({
   }],
   couponType: {
     type: String,
-    enum: ["General", "User-Specific", "Crampy Cutie", "First Order"],
+    enum: ["General", "User-Specific", "Crampy Cutie", "First Order","First 3 Order"],
     default: "General",
   },
   isActive: {
@@ -698,7 +698,7 @@ const couponSchema = new mongoose.Schema({
   },
   userGender: {
     type: String, // Optional targeting
-    enum: ["Male", "Female", "Other"],
+    enum: ["Male", "Female", "Other","All"],
   },
 }, { timestamps: true });
 

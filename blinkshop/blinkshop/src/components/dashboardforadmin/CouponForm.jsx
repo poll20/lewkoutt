@@ -894,9 +894,10 @@
 
 import React, { useState } from "react";
 import { useDashboard } from "./DashboardContext";
-
+import { useBio } from "../BioContext";
 const CouponForm = () => {
-  const { createCoupon } = useDashboard();
+  const { createCoupon,productdata } = useDashboard();
+  const { productdataonlydetail } = useBio();
 
   const [formData, setFormData] = useState({
     code: "",
@@ -1132,7 +1133,7 @@ const CouponForm = () => {
               />
             </div>
 
-            <div style={fieldGroupStyle}>
+            {/* <div style={fieldGroupStyle}>
               <label style={labelStyle}>Coupon Type</label>
               <input
                 name="couponType"
@@ -1140,7 +1141,25 @@ const CouponForm = () => {
                 onChange={handleChange}
                 style={inputStyle}
               />
-            </div>
+            </div> */}
+            <div style={fieldGroupStyle}>
+  <label style={labelStyle}>Coupon Type *</label>
+  <select
+    name="couponType"
+    value={formData.couponType}
+    onChange={handleChange}
+    style={selectStyle}
+    required
+  >
+    <option value="">Select Type</option>
+    <option value="General">General</option>
+    <option value="User-Specific">User-Specific</option>
+    <option value="Crampy Cutie">Crampy Cutie</option>
+    <option value="First Order">First Order</option>
+    <option value="Lewk60">First 3 Order</option>
+  </select>
+</div>
+
           </div>
 
           <label style={labelStyle}>Description</label>
@@ -1225,8 +1244,9 @@ const CouponForm = () => {
         </div>
 
         {/* CATEGORY & PRODUCT */}
-        <div style={sectionStyle}>
-          <h3>Product & Category Targeting</h3>
+        {/* <div style={sectionStyle}>
+          <h3>Product & Category Targeting i</h3>
+          <span style={{color:"red"}}>if you leave these field empty coupon will apply to all the products</span>
 
           <label style={labelStyle}>Categories</label>
           <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
@@ -1267,7 +1287,63 @@ const CouponForm = () => {
               </span>
             ))}
           </div>
-        </div>
+        </div> */
+        }
+        <div style={sectionStyle}>
+  <h3>Product & Category Targeting</h3>
+  <span style={{ color: "red" }}>
+    If you leave this field empty, coupon will apply to all products
+  </span>
+
+  <label style={labelStyle}>Categories</label>
+
+  <div style={{ ...chipListStyle, flexWrap: "wrap", maxHeight: "200px", overflowY: "auto" }}>
+    {productdata.length > 0 ? (
+      productdata.map((item, idx) => {
+        const categoryName = item.category;
+        const isSelected = formData.categories.includes(categoryName);
+
+        return (
+          <label
+            key={idx}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={() => {
+                setFormData((prev) => ({
+                  ...prev,
+                  categories: isSelected
+                    ? prev.categories.filter((c) => c !== categoryName)
+                    : [...prev.categories, categoryName],
+                }));
+              }}
+            />
+            {categoryName}
+          </label>
+        );
+      })
+    ) : (
+      <p style={{ color: "gray" }}>No categories found</p>
+    )}
+  </div>
+
+  {/* Display selected categories as chips */}
+  <div style={chipListStyle}>
+    {formData.categories.map((cat, idx) => (
+      <span key={idx} style={chipStyle}>
+        {cat}
+      </span>
+    ))}
+  </div>
+</div>
+
 
         {/* CHECKBOX OPTIONS */}
         <div style={sectionStyle}>
