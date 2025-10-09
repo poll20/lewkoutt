@@ -519,9 +519,42 @@
 // };
 
 // export default AddressList;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useBio } from "./BioContext";
+import "./AddressList.css";
+
 import { useFirebaseAuth } from "./FirebaseContext";
 
 const AddressList = ({ loc }) => {
@@ -590,6 +623,9 @@ const AddressList = ({ loc }) => {
     minHeight: "100vh",
     fontFamily: "Poppins, sans-serif",
     boxSizing: "border-box",
+     overflowY: "auto",        // 👈 ye add kar
+  WebkitOverflowScrolling: "touch", // 👈 smooth scrolling for mobile
+  scrollBehavior: "smooth",
   };
 
   const headerStyle = {
