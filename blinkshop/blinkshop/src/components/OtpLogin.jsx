@@ -138,7 +138,7 @@ import { useState, useRef, useEffect } from "react";
             </div>
 
             {!showOTP ? (
-            <form onSubmit={handlePhoneSubmit} >
+            <form onSubmit={handlePhoneSubmit}>
                 <div className="space-y-4" style={{backgroundColor:"white"}}>
                 <input
                     type="tel"
