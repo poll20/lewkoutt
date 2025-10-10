@@ -2999,7 +2999,13 @@ app.get('/get-coupons', async (req, res) => {
       const now = new Date();
 
       // ❌ 1. Expired?
-      if (now > coupon.expiryDate || now < coupon.startDate) continue;
+      // if (now > coupon.expiryDate || now < coupon.startDate) continue;
+      const nowDate = new Date().setHours(0, 0, 0, 0);
+const startDate = new Date(coupon.startDate).setHours(0, 0, 0, 0);
+const expiryDate = new Date(coupon.expiryDate).setHours(0, 0, 0, 0);
+
+if (nowDate > expiryDate || nowDate < startDate) continue;
+
 
       // ❌ 2. Global usageLimit cross?
       if (coupon.usageLimit && coupon.totalUsed >= coupon.usageLimit) continue;

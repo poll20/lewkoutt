@@ -20,7 +20,7 @@ const CtegoriesLayout = () => {
     textAlign: "start",
     fontFamily: "'Great Vibes', cursive",
     fontWeight: 800,
-    color: "rgb(131, 241, 131)",
+    color: "blck",
   }}>{e.category.slice(0,1).toUpperCase()+ e.category.slice(1)}</span></h1>
       {/* Parent Card */}
       <div className="parent-card" style={{borderRadius:'20px'}}>
