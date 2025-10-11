@@ -864,7 +864,7 @@ const containerStyle = {
             zIndex: 1000,
           }}
         >
-          {loc !== "return" ? (
+          {loc != "return" ? (
             <button
               style={{
                 width: "90%",

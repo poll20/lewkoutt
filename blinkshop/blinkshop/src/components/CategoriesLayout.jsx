@@ -16,12 +16,13 @@ const CtegoriesLayout = () => {
     {
       productdata?.map((e,idx)=>(
         <div key={idx} className="horizontal-card-layout">
-      <h1 style={{textAlign:"start"}} ><span  style={{
+      <span  style={{
     textAlign: "start",
+    fontSize: "30px",
     fontFamily: "'Great Vibes', cursive",
     fontWeight: 800,
     color: "blck",
-  }}>{e.category.slice(0,1).toUpperCase()+ e.category.slice(1)}</span></h1>
+  }}>{e.category.slice(0,1).toUpperCase()+ e.category.slice(1)}</span>
       {/* Parent Card */}
       <div className="parent-card" style={{borderRadius:'20px'}}>
         <NavLink to={`/productmodel/${e.category}`}>

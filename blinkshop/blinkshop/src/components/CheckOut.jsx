@@ -1066,7 +1066,7 @@ useEffect(() => {
             className="pay-now-btn-checkoutbuy"
             disabled={!timeslotlelo}
             onClick={() => {
-              if (timeslotlelo) orderplaced(purchaseproduct, deleveryaddress, walletToUse);
+              if (timeslotlelo) orderplaced(purchaseproduct, deleveryaddress, walletToUse,payableAmount);
             }}
           >
             Pay Now
@@ -1075,7 +1075,7 @@ useEffect(() => {
       ) : (
         <button
           className="pay-now-btn-checkoutbuy"
-          onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse)}
+          onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse,payableAmount)}
         >
           Pay Now
         </button>

@@ -35,7 +35,7 @@ const [hasMore, setHasMore] = useState(true);
     console.log("rentpoint",rent)
   console.log("wish",wish)
     // console.log("storeee",store)
-    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly,showloginpage,setshowloginpage,sortOption, setSortOption} = useBio();
+    const { bestsellingdata, wearsdata, rentdata,filters,wishlistdata,handleClick,productdata,newarrival,productdataonlydetail,handleAddToCart,searchvalue,removewishlistonly,showloginpage,setshowloginpage,sortOption, setSortOption,fetchCoupons,coupons} = useBio();
  const [params] = useSearchParams();
   const query = params.get("q");
     const a = useMemo(() => {
@@ -143,7 +143,21 @@ const [hasMore, setHasMore] = useState(true);
       }
     }, [selectedSortOption, selectedSizes,sortOption, filters,originalproducts]);
     
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        console.log("🍿 Checking if product has category and tag (delayed):",productdataonlydetail);
     
+          console.log("📢 Calling fetchCoupons with:", productdataonlydetail?.cate, productdataonlydetail.tag);
+          fetchCoupons("all","all");
+        // console.log("copuen",coupons)
+      }, 200);
+    
+      return () => clearTimeout(timer);
+    }, [productdataonlydetail]);
+
+    if(coupons){  
+      console.log("coupons in card",coupons)
+    }
     const applyFilters = (data) => {  
       console.log("lolo",data)
       let filteredProducts = [...data];
@@ -413,6 +427,8 @@ if(query){
       );
     } else if (store && productdataonlydetail.length > 0) {
       const filteredData = applyFilters(productdataonlydetail);
+      console.log("ajani",wishlistdata,coupons)
+
       setProducts(productdataonlydetail);
       setoriginalProducts(productdataonlydetail)
     } else if (rent && rentdata.length > 0) {
@@ -421,7 +437,7 @@ if(query){
       setoriginalProducts(rentdata)
     } else if (wish && wishlistdata.length > 0) {
       // const filteredData = applyFilters(wishlistdata);
-      console.log("ajani",wishlistdata)
+      console.log("ajani",wishlistdata,coupons)
       setProducts(wishlistdata);
     }
     else if (bestsale && a.length > 0) {
@@ -746,14 +762,26 @@ if(searchvalue){
         {/* Details Section */}
         <div className="product-details" style={{backgroundColor:"white"}}>
           {/* fontFamily: "'Inter', sans-serif */}
-          <p className="product-title" style={{fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,17)+`...`):(product.description)}</p>
-          <div className="product-pricing">
+          <span className="product-title" style={{fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,17)+`...`):(product.description)}</span>
+          {
+            coupons.length==0?( <div className="product-pricing">
             <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
             <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(131, 241, 131)" }}>{product?.discount}% off</span>
             
             
-          </div>
+          </div>):( 
+            <div className="product-pricing" style={{display:"flex",flexDirection:"column",alignItems:"start",justifyContent: 'start',gap:"0px"}}>
+            <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
+
+            <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span>
+            {/* <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span> */}
+            {/* <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(131, 241, 131)" }}>{product?.discount}% off</span> */}
+            
+            
+          </div>)
+          }
+         
         
           
         {/* {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)}  */}

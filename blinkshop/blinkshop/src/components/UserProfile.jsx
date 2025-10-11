@@ -218,20 +218,20 @@ let navigate=useNavigate()
         <button className="profile-add-button"onClick={() => setShowOverlayForm(true)}>Add</button>
       </div> */}
       <div className="profile-header">
-  <div className="profile-info">
-    <AiOutlineUser className="profile-icon" />
+  <div className="profile-info" >
+    <AiOutlineUser className="profile-icon" color='white' style={{background:"gray"}}/>
     <div className="profile-details">
       <p>{userDetails.email}<br />{userDetails.phonenumber}</p>
     </div>
   </div>
   {
     (!userDetails.name || !userDetails.email) ? (
-      <button className="profile-add-button" onClick={() => {
+      <button className="profile-add-button" style={{color:"black"}} onClick={() => {
         setFormData({ name: '', email: '', dob: '' });
         setShowOverlayForm(true);
-      }}>Add</button>
+      }}>+Add</button>
     ) : (
-      <button className="profile-add-button" onClick={() => {
+      <button className="profile-add-button"style={{color:"black"}} onClick={() => {
         setFormData({ name: userDetails.name, email: userDetails.email, dob: userDetails.dob || '' });
         setShowOverlayForm(true);
       }}>Edit</button>

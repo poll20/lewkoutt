@@ -266,7 +266,10 @@ const CouponCard = ({ coupon, prdrate }) => {
     <div style={containerStyle}>
       <FaTag style={iconStyle} />
       <div style={offerTextStyle}>
-        Get This For INR <span style={{color:"green"}}>{(prdrate - (prdrate * coupon.discountValue) / 100).toFixed(2)}</span>
+        {/* Get This For INR <span style={{color:"green"}}>{(prdrate - (prdrate * coupon.discountValue) / 100).toFixed(2)}</span> */}
+        Get This For INR <span style={{color:"green"}}>{
+        prdrate - coupon.discountValue}</span>
+
       </div>
       <div style={subTextStyle}>
         Flat {coupon.discountValue}% Off On Your Purchase

@@ -1590,13 +1590,14 @@ async function addcashbacktowallet(userId, amount, type = "cashback") {
 // });
 app.post('/order', verifySessionCookie, async (req, res) => {
   try {
-    const { order, address, userDetails, distance, couponcode, walletUsed = 0 } = req.body;
+    const { order, address, userDetails, distance, couponcode, walletUsed = 0,payableAmount} = req.body;
 
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
     const merchantOrderId = randomUUID();
+
 
     // Save raw order temporarily
     const pendingOrder = await pendingOrderModel.create({
@@ -1618,7 +1619,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       );
     }, 0);
 
-    const payableAmount = totalOrderAmount - walletUsed;
+    // const payableAmount = totalOrderAmount - walletUsed;
 
     if (payableAmount <= 0) {
       // ✅ Directly save orders as PAID without calling PhonePe
@@ -2985,6 +2986,10 @@ app.get('/get-coupons', async (req, res) => {
     if (!category || !productname) {
       return res.status(400).json({ error: "Missing required parameters" });
     }
+if(category=="all"){
+  const allCoupons = await cpn.find({});
+    return res.json(allCoupons);
+}
 
     const userOrders = await orderr.find({ userId });
     const isFirstOrder = userOrders.length === 0;

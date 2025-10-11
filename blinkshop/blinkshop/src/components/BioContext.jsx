@@ -1048,7 +1048,7 @@ let handlechooseaddress=(add)=>{
 }
 
 
-let orderplaced=async(order,address,walletUsed)=>{
+let orderplaced=async(order,address,walletUsed,payableAmount)=>{
   console.log("userdetailsss",userDetails)
  console.log("orederrr",order)
  console.log("addre",address)
@@ -1063,7 +1063,7 @@ if(user && userDetails){
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
-      body: JSON.stringify({order,address,userDetails,distance,walletUsed}), 
+      body: JSON.stringify({order,address,userDetails,distance,walletUsed,payableAmount}), 
 
     })
     if(orderpost.ok){
@@ -1327,7 +1327,7 @@ const fetchCoupons = async (cate, title) => {
   try {
     setIsLoading(true);
 
-    const userId = "6847e7d4bdfe738efe36503c"
+    const userId = userDetails?._id || "guest"; // Default to "guest" if userId is not available
     console.log("userikid",userId)
     // if (!userId || !cate || !title) {
     //   console.log("🚫 Missing params for fetchCoupons:", { userId, cate, title });
@@ -1339,7 +1339,7 @@ const fetchCoupons = async (cate, title) => {
     }
     const queryParams = new URLSearchParams({
       userId: userId,
-      category: cate,
+      category: cate ,
       productname: title,
     });
 

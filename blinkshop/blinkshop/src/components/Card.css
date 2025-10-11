@@ -79,8 +79,8 @@
 
 /* Product Details Section */
 .product-details {
-  
-  padding: 12px;
+  /* border:2px solid red; */
+  padding: 6px; /*pehle 12px thi */
   height: 20%;
   display: flex;
   flex-direction: column;
@@ -88,10 +88,11 @@
 }
 
 .product-title {
+  /* border:1px solid red; */
   font-size: 1rem;
   font-weight: bold;
   color: #333;
-  margin-bottom: 6px;
+  margin-bottom: 1px;
 }
 
 .product-pricing {
@@ -489,6 +490,7 @@ padding:0;
   display: flex;
   align-items: center;
   gap: 6px;
+  
   
   
 }
