@@ -682,7 +682,7 @@ const containerStyle = {
   };
 
   return (
-    <div style={containerStyle}>
+    <>    <div style={containerStyle}>
       {userprf?.address?.length === 0 ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h2 style={{ fontSize: "16px", fontWeight: "bold" }}>Address</h2>
@@ -848,7 +848,9 @@ const containerStyle = {
         </NavLink>
       )}
 
-      {sec !== "upp" && chooseaddress.length > 0 && (
+      
+    </div>
+    {sec !== "upp" && chooseaddress.length > 0 && (
         <div
           style={{
             position: "fixed",
@@ -897,7 +899,8 @@ const containerStyle = {
           )}
         </div>
       )}
-    </div>
+      </>
+
   );
 };
 

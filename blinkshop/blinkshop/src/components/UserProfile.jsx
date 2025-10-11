@@ -142,6 +142,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { IoLogoDropbox} from "react-icons/io";
 import { IoHome } from "react-icons/io5";
 import { FaShop } from "react-icons/fa6";
+import { FaPhoneAlt } from "react-icons/fa";
 // import { FaBox } from "react-icons/fa";
 import { BiHelpCircle } from "react-icons/bi";
 // import { RiLogoutBoxLine } from "react-icons/ri";
@@ -149,7 +150,7 @@ import { NavLink } from 'react-router-dom';
 // import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from './FirebaseContext';
-
+import { MdPrivacyTip } from "react-icons/md";
 const UserProfile = () => {
   const [userprf,setuserprf]=useState([])
   // let {logout}=useAuth()
@@ -272,12 +273,13 @@ let navigate=useNavigate()
           <IoIosArrowForward />
         </NavLink>
         <NavLink className="menu-item navlink" to={'/faq'}>
-          <BiHelpCircle/>
+          <FaPhoneAlt />
+
           <p>Help & Support</p>
           <IoIosArrowForward />
         </NavLink>
         <NavLink className="menu-item navlink" to={'/privacy-policy'}>
-          <BiHelpCircle/>
+          <MdPrivacyTip />
           <p>Privacy Policy</p>
           <IoIosArrowForward />
         </NavLink>

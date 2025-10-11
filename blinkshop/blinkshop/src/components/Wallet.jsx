@@ -211,7 +211,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
     <div style={walletContainerStyle}>
       <h2 style={{ marginBottom: "20px" }}>Newme Wallet</h2>
       <p style={{ fontSize: "24px", fontWeight: "600", marginBottom: "20px" }}>
-        ₹{userDetails.wallet.cashback || 0} Lewkout Wallet
+        ₹{userDetails?.wallet?.cashback || 0} Lewkout Wallet
       </p>
 
       <div style={sectionStyle}>
@@ -222,7 +222,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
         ) : transactions.length === 0 ? (
           <p>No transactions found 🪙</p>
         ) : (
-          transactions.map((tx) => (
+          transactions?.map((tx) => (
             <div
               key={tx._id}
               style={rewardCardStyle(

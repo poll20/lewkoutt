@@ -3,9 +3,28 @@ import "./CategoriesLayout.css";
 import { NavLink } from "react-router-dom";
 import Cardforall from "./Cardforall";
 import { useBio } from "./BioContext";
+import { useEffect } from "react";
+
 const CtegoriesLayout = () => {
-  const {productdata}=useBio()
-  if(!productdata){
+  const {productdata,fetchCoupons,coupons,productdataonlydetail}=useBio()
+
+useEffect(() => {
+      const timer = setTimeout(() => {
+        console.log("🍿 Checking if product has category and tag (delayed):",productdataonlydetail);
+    
+          console.log("📢 Calling fetchCoupons with:", productdataonlydetail?.cate, productdataonlydetail.tag);
+          fetchCoupons("all","all");
+        // console.log("copuen",coupons)
+      }, 200);
+    
+      return () => clearTimeout(timer);
+    }, [productdata]);
+
+    if(coupons){
+      console.log("Coupons in CategoriesLayout:", coupons);
+    }
+  if(!productdata || !coupons){
+    
     return 
   }
   
@@ -44,7 +63,7 @@ const CtegoriesLayout = () => {
             e.productdetails.slice(1, 8).map((e,i)=>(
          
           <div key={i} className="cate-card-done">
-            <Cardforall id={e} discription={e.description} price={e.price} discountprice={e.discountprice} image={e.image[0]} discount={e.discount} defaultcolor={e.defaultColor}/>
+            <Cardforall id={e} discription={e.description} price={e.price} discountprice={e.discountprice} image={e.image[0]} discount={e.discount} defaultcolor={e.defaultColor} coupons={coupons}/>
           </div>
           ))
           

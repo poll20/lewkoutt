@@ -184,7 +184,7 @@ function Layout({ showPopup }) {
 const {userdata}=useBio()
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
-  const address = location.pathname.startsWith("/address");
+  const address = location.pathname.startsWith("/address/");
 
   const isref = location.pathname.startsWith("/refferal");
   const mood = location.pathname.startsWith("/mood");

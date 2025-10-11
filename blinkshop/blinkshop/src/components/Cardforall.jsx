@@ -10,7 +10,7 @@ import { slugify } from './Slugify';
 export default function Cardforall(props) {
 
   const [showToast, setShowToast] = useState(false);
-  let {handleClick,wishlistdata}=useBio()
+  let {handleClick,wishlistdata,fetchCoupons,coupons,productdataonlydetail}=useBio()
   console.log("propd",props)
   // console.log(handleClicks
 if(!wishlistdata){
@@ -18,6 +18,7 @@ if(!wishlistdata){
   // Utils file ya component ke andar ek slugify fn bna lo
 
 }
+
 
 
 console.log("wishlist in coa",wishlistdata)
@@ -65,12 +66,24 @@ console.log("wishlist in coa",wishlistdata)
       {/* Details Section */}
       <div className="product-details" style={{maxHeight:'80px',paddingLeft:"8px",backgroundColor:"white"}}>
         <span className="product-title" style={{textAlign:"start",fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{props.discription?.length>15?(props.discription?.slice(0,18)+`...`):(props.discription)}</span>
-        <div className="product-pricing">
+        {
+          props.coupons.length==0?( <div className="product-pricing">
           <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{props.discountprice}</span>
           <span className="original-price"style={{ fontFamily: "Oswald" }}>₹{props.price}</span>
           <span className="discount" style={{ fontFamily: "Oswald", color: "rgb(131, 241, 131)" }}>{props.discount}% off</span>
           
-        </div>
+        </div>):( <div className="product-pricing" style={{display:"flex",flexDirection:"column",alignItems:"start",justifyContent: 'start',gap:"0px"}}>
+          <div style={{display:"flex",gap:"5px"}}>
+          <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{props.discountprice}</span>
+          <span className="original-price"style={{ fontFamily: "Oswald" }}>₹{props.price}</span>
+          <span className="discount" style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}>{props.discount}% off</span>
+          </div>
+          <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{props?.discountprice - props?.coupons[0]?.discountValue}</span>
+          
+          
+        </div>)
+        }
+       
         {/* <div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'10px'}}>⚡Fast Delivery</div> */}
       </div>
       {/* {showToast && (

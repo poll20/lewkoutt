@@ -93,7 +93,7 @@ body {
 
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color:gray;
   font-size: 13px;
   font-weight: 500;
   /* padding: 10px;
@@ -103,7 +103,7 @@ body {
 
 .nav-links a:hover {
   /* background-color: #070707; */
-  color: brown;
+  color:black;
 }
 
 /* Top Navbar */

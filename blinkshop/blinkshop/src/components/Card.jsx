@@ -772,8 +772,12 @@ if(searchvalue){
             
           </div>):( 
             <div className="product-pricing" style={{display:"flex",flexDirection:"column",alignItems:"start",justifyContent: 'start',gap:"0px"}}>
-            <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
+              <div style={{display:"flex",flexDirection:"row",alignItems:"center",gap:"5px"}}> 
+            <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
 
+            <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
+            <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>{product?.discount}% off</span>
+</div>
             <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span>
             {/* <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span> */}
             {/* <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(131, 241, 131)" }}>{product?.discount}% off</span> */}
@@ -785,7 +789,7 @@ if(searchvalue){
         
           
         {/* {!wish?(<div className="delivery-info" style={{fontSize:'.7rem',marginBottom:'20px'}}>⚡Delivery in 60 min</div>):( <button className="delivery-info" style={{paddingBottom:"10px",textAlign:'center',background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"20px",backgroundColor:"#F15A29"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Cart</button>)}  */}
-        {!wish?(''):( <button className="delivery-info" style={{padding:"10px" ,  background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:"23px",backgroundColor:"black", display:"flex",alignItems:"center",justifyContent:"center"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Bag</button>)} 
+        {!wish?(''):( <button className="delivery-info" style={{padding:"10px" ,  background:"black",color:"white",border:"none",borderRadius:"5px",marginBottom:coupons.length==0?("23px"):("30px"),backgroundColor:"black", display:"flex",alignItems:"center",justifyContent:"center"}}  onClick={()=>{setShowSize(product.itemid)}}>Add to Bag</button>)} 
 
         </div>
       </div>
