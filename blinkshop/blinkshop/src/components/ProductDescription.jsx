@@ -865,16 +865,34 @@ useEffect(() => {
   fetchProductFromBackend(coloring);
 }, [id]);
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    console.log("🍿 Checking if product has category and tag (delayed):", product);
-    if (product?.cate && product?.tag) {
-      console.log("📢 Calling fetchCoupons with:", product.cate, product.tag);
-      fetchCoupons(loading,product.cate, product.tag);
-    }
-  }, 200);
+// useEffect(() => {
+//   const timer = setTimeout(() => {
+//     console.log("🍿 Checking if product has category and tag (delayed):", product);
+//     if (product?.cate && product?.tag) {
+//       console.log("📢 Calling fetchCoupons with:", product.cate, product.tag);
+//       fetchCoupons(loading,product.cate, product.tag);
+//     }
+//   }, 200);
 
-  return () => clearTimeout(timer);
+//   return () => clearTimeout(timer);
+// }, [product]);
+
+useEffect(() => {
+  if (product?.cate && product?.tag) {
+    // fetchCoupons ko async bana ke loading handle karein
+    const fetchAndSetCoupons = async () => {
+      try {
+        setIsLoading(true); // optional, agar loading spinner chahiye
+        await fetchCoupons(false, product.cate, product.tag); // false ya product-specific flag
+      } catch (err) {
+        console.error("Error fetching coupons:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAndSetCoupons();
+  }
 }, [product]);
 
 useEffect(() => {
