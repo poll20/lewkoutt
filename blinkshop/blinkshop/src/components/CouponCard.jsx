@@ -273,18 +273,18 @@ const CouponCard = ({ coupon, prdrate }) => {
       <div style={offerTextStyle}>
   Get This For INR{" "}
   <span style={{ color: "green" }}>
-    {coupon.discountType === "fixed"
-      ? prdrate - coupon.discountValue
-      : (prdrate - (prdrate * coupon.discountValue) / 100).toFixed(2)}
+    {coupon?.discountType === "fixed"
+      ? prdrate - coupon?.discountValue
+      : (prdrate - (prdrate * coupon?.discountValue) / 100).toFixed(0)}
   </span>
 </div>
 
       <div style={subTextStyle}>
-        Flat {coupon.discountValue}% Off On Your Purchase
+        Flat {coupon?.discountValue}% Off On Your Purchase
       </div>
 
        <div style={codeContainer}>
-        {coupon.code}
+        {coupon?.code}
         <span onClick={handleCopy} style={copyBtnStyle}>
           {copied ? "Copied" : "Copy"}
         </span>

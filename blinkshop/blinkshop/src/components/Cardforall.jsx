@@ -78,8 +78,19 @@ console.log("wishlist in coa",wishlistdata)
           <span className="original-price"style={{ fontFamily: "Oswald" }}>₹{props.price}</span>
           <span className="discount" style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}>{props.discount}% off</span>
           </div>
-          <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{props?.discountprice - props?.coupons[0]?.discountValue}</span>
-          
+          {/* <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{props?.discountprice - props?.coupons[0]?.discountValue}</span> */}
+          <span
+  className="current-price"
+  style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}
+>
+  Get it For ₹
+  {props?.coupons[0]?.discountType === "fixed"
+    ? (props?.discountprice - props?.coupons[0]?.discountValue).toFixed(0)
+    : (props?.discountprice -
+        (props?.discountprice * props?.coupons[0]?.discountValue) / 100
+      ).toFixed(2)}
+</span>
+
           
         </div>)
         }
