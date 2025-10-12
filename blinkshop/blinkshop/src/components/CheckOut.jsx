@@ -1216,8 +1216,18 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const [showSheet, setShowSheet] = useState(false);
-  const [firstcpn, setfirstcpn] = useState([]);
-  const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
+  // const [firstcpn, setfirstcpn] = useState([]);
+  // const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
+  // ✅ Coupon state (localStorage synced)
+const [firstcpn, setfirstcpn] = useState(() => {
+  const storedCoupon = JSON.parse(localStorage.getItem("firstcpn"));
+  return storedCoupon || [];
+});
+
+const [amountafteraddcoupon, setamountafteraddcoupon] = useState(() => {
+  const storedAmount = JSON.parse(localStorage.getItem("amountafteraddcoupon"));
+  return storedAmount || 0;
+});
   const [yppicode, setyppicode] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(
     localStorage.getItem("selectedPayment") || "UPI"
@@ -1269,6 +1279,10 @@ const Checkout = () => {
   const totalDiscountPrice = purchaseproduct.reduce((sum, item) => sum + (item.discountprice || item.price || 0), 0);
   const totalPrice = purchaseproduct.reduce((sum, item) => sum + (item.price || 0), 0);
 
+
+
+
+
   // Fetch coupons
   useEffect(() => {
     if (purchaseproduct[0]?.cate && purchaseproduct[0]?.tag) {
@@ -1277,23 +1291,54 @@ const Checkout = () => {
   }, [purchaseproduct]);
 
   // Apply coupon logic
-  useEffect(() => {
-    let couponToApply;
-    if (!karocode?.length) {
-      couponToApply = coupons?.find(c => c.couponType === "First Order");
-    } else {
-      couponToApply = coupons?.find(c => c.code === karocode);
-    }
+  // useEffect(() => {
+  //   let couponToApply;
+  //   if (!karocode?.length) {
+  //     couponToApply = coupons?.find(c => c.couponType === "First Order");
+  //   } else {
+  //     couponToApply = coupons?.find(c => c.code === karocode);
+  //   }
 
-    setfirstcpn(couponToApply || []);
-    if (couponToApply) {
-      const discounted = couponToApply.discountType === "Percentage"
-        ? (totalDiscountPrice * couponToApply.discountValue) / 100
-        : couponToApply.discountValue;
-      setamountafteraddcoupon(discounted);
-      setyppicode(true);
-    }
-  }, [coupons, totalDiscountPrice, karocode]);
+  //   setfirstcpn(couponToApply || []);
+  //   if (couponToApply) {
+  //     const discounted = couponToApply.discountType === "Percentage"
+  //       ? (totalDiscountPrice * couponToApply.discountValue) / 100
+  //       : couponToApply.discountValue;
+  //     setamountafteraddcoupon(discounted);
+  //     setyppicode(true);
+  //   }
+  // }, [coupons, totalDiscountPrice, karocode]);
+  // / Apply coupon logic
+useEffect(() => {
+  let couponToApply;
+
+  if (!karocode?.length) {
+    couponToApply = coupons?.find(c => c.couponType === "First Order");
+  } else {
+    couponToApply = coupons?.find(c => c.code === karocode);
+  }
+
+  if (couponToApply) {
+    const discounted = couponToApply.discountType === "Percentage"
+      ? (totalDiscountPrice * couponToApply.discountValue) / 100
+      : couponToApply.discountValue;
+
+    setfirstcpn(couponToApply);
+    setamountafteraddcoupon(discounted);
+    
+    // ✅ Save in localStorage
+    localStorage.setItem("firstcpn", JSON.stringify(couponToApply));
+    localStorage.setItem("amountafteraddcoupon", JSON.stringify(discounted));
+
+    setyppicode(true);
+  } else {
+    // Reset if no coupon
+    setfirstcpn([]);
+    setamountafteraddcoupon(0);
+    localStorage.removeItem("firstcpn");
+    localStorage.removeItem("amountafteraddcoupon");
+  }
+}, [coupons, totalDiscountPrice, karocode]);
 
   const amountAfterCoupon = totalDiscountPrice - (amountafteraddcoupon || 0);
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
