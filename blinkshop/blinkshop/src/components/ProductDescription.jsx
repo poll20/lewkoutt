@@ -870,7 +870,7 @@ useEffect(() => {
     console.log("🍿 Checking if product has category and tag (delayed):", product);
     if (product?.cate && product?.tag) {
       console.log("📢 Calling fetchCoupons with:", product.cate, product.tag);
-      fetchCoupons(product.cate, product.tag);
+      fetchCoupons(loading,product.cate, product.tag);
     }
   }, 200);
 
@@ -1133,8 +1133,8 @@ if(getbundeldata){
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
-          <span className="product-description" style={{fontFamily: 'Nunito,sans-serif',fontSize:"24px",color:"black",marginTop:"5px",fontWeight:"bolder",}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
-          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}><FaIndianRupeeSign/><span  > {product.discountprice} </span> <span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span style={{marginLeft:"5px",color:"white",padding:"2px 5px",borderRadius:"90px",background:"rgb(90, 186, 89,1)",fontSize:"11px",color:"white",fontWeight:"bold"}}>{product.discount}% off</span></span>
+          <span className="product-description" style={{fontFamily: "Oswald",fontSize:"24px",color:"black",marginTop:"5px",}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
+          <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span  > <FaIndianRupeeSign/>{product.discountprice} </span> <span style={{marginLeft:"5px",color:"white",padding:"2px 5px",borderRadius:"90px",background:"rgb(90, 186, 89,1)",fontSize:"11px",color:"white",fontWeight:"bold"}}>{product.discount}% off</span></span>
           <span
       style={{
         display: 'flex',
@@ -1162,7 +1162,7 @@ if(getbundeldata){
           
          <div className="webkitscroll" style={{ display: "flex", flexDirection: "row", alignItems: "start", justifyContent: "start",overflowX:"scroll",marginTop:"8px" }}>
       <div style={{ display: "flex", gap: "8px" }}>
-        {visibleCoupons.map(coupon => (
+        {visibleCoupons?.map(coupon => (
           <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
         ))}
         {hasMore && (

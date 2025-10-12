@@ -765,18 +765,22 @@ if(searchvalue){
           <span className="product-title" style={{fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,17)+`...`):(product.description)}</span>
           {
             coupons.length==0?( <div className="product-pricing">
-            <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
             <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
-            <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(131, 241, 131)" }}>{product?.discount}% off</span>
+
+            <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
+            {/* <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span> */}
+            <span className="discount"style={{ fontFamily: "Oswald",color: "red" }}>{product?.discount}% off</span>
             
             
           </div>):( 
             <div className="product-pricing" style={{display:"flex",flexDirection:"column",alignItems:"start",justifyContent: 'start',gap:"0px"}}>
               <div style={{display:"flex",flexDirection:"row",alignItems:"center",gap:"5px"}}> 
+            <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
+
             <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
 
-            <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
-            <span className="discount"style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>{product?.discount}% off</span>
+            {/* <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span> */}
+            <span className="discount"style={{ fontFamily: "Oswald",color: "red" }}>{product?.discount}% off</span>
 </div>
 
             <span

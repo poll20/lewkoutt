@@ -140,6 +140,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useFirebaseAuth } from "./FirebaseContext";
+import { NavLink } from "react-router-dom";
 
 const Wallet = ({ cashback, points }) => {
   const [activeTab, setActiveTab] = useState("cashback");
@@ -175,6 +176,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
   }
 
   const walletContainerStyle = {
+    
     padding: "20px",
     fontFamily: "'Arial', sans-serif",
     backgroundColor: "#f8f9fa",
@@ -210,9 +212,14 @@ const apiUrl = import.meta.env.VITE_API_URL;
   return (
     <div style={walletContainerStyle}>
       <h2 style={{ marginBottom: "20px" }}>Newme Wallet</h2>
-      <p style={{ fontSize: "24px", fontWeight: "600", marginBottom: "20px" }}>
-        ₹{userDetails?.wallet?.cashback || 0} Lewkout Wallet
-      </p>
+      <div style={{display:"flex",flexDirection:"column"}}>
+      <span style={{ fontSize: "16px", fontWeight: "400"}}>
+        Lewkout Wallet
+      </span>
+      <span style={{ fontSize: "16px", fontWeight: "400", marginBottom: "20px"}}>
+        ₹{userDetails?.wallet?.cashback || 0} 
+      </span>
+      </div>
 
       <div style={sectionStyle}>
         <h3>Wallet Transactions</h3>
@@ -243,6 +250,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
         )}
       </div>
 
+<NavLink to="/store/store" style={{textDecoration:"none"}}>
+
       <button
         style={{
           width: "100%",
@@ -259,6 +268,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
       >
         Shop now
       </button>
+      </NavLink>
     </div>
   );
 };

@@ -103,7 +103,7 @@ useEffect(() => {
         setIsLoading(true)
         let response = await fetch(`${apiUrl}/cart/${userDetails?._id}`, 
           {
-          // credentials: 'include', // important: allow cookies to be set
+          credentials: 'include', // important: allow cookies to be set
         }
       );
         let data = await response.json();
@@ -990,7 +990,7 @@ console.log("sara add mil jaye",addresid,action,user,addr)
     //   console.log("Previous Address State", prev); // Debug check
     //   return prev.filter(a => a._id !== addresid);
     // });
-    showPopup("Adress Deleted")
+    showPopup("Address Deleted")
   }
   else{
     console.log("issue")
@@ -1441,7 +1441,7 @@ const getRecommendationsFromCart = async () => {
 
   try {
     setIsLoading(true);
-    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails?._id}`);
+    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails._id}`);
     const data = await res.json();
     console.log("mixx cart", data);
     setRecommendations(data.products || []);

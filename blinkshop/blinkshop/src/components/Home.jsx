@@ -77,7 +77,7 @@ import CategoriesLayout from "./CategoriesLayout"
 import OfferBanner from "./OfferBanner"
 import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
-
+import lben from "../components/image/lben.webp"
 // ✅ Lazy imports
 // const Carousel = React.lazy(() => import("./Carasoul"));
 // const CustomerLove = React.lazy(() => import("./CustomerLove"));
@@ -99,6 +99,7 @@ export default function Home() {
       <Suspense fallback={<p>Loading Home Content...</p>}>
         <OfferBanner />
         <Carousel images={productdata} />
+        <img src={lben} style={{width:"100%",height:"100px",marginTop:"10px"}}></img>
         <CategoriesLayout />
         {/* <CustomerLove /> */}
 

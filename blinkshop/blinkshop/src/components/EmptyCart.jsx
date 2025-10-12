@@ -25,7 +25,7 @@ const EmptyCart = (props) => {
   <source src={animation} type="video/mp4"  />
 </video>)}
       <h style={{color:"black"}}>As empty as your ex's promise </h>
-      <p style={{marginTop:"8px"}}>Add products to your wishlist, review them anytime and easily move to cart.</p>
+      <p style={{marginTop:"8px"}}>Add products to your bag, review them anytime and easily move to cart.</p>
       <button onClick={handleShopNow} className="shop-now-button">
         Continue Shopping
       </button>

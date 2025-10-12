@@ -23,6 +23,8 @@ export default function OfferBanner() {
           ease: "linear",
         }}
         style={{
+          display: "flex",
+          gap: "50px",
           color: "black",
           fontSize: "18px",
           fontWeight: "600",
@@ -30,7 +32,13 @@ export default function OfferBanner() {
           whiteSpace: "nowrap",
         }}
       >
-        🕒 Delivery In⚡60 Mins
+        
+        <span>
+        🕒 Delivery In⚡60 Mins 
+        </span>
+        <span>
+        25% OFF ON FIRST 3 ORDERS 🛍️
+        </span>
       </motion.div>
     </div>
   );

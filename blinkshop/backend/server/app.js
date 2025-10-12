@@ -2986,13 +2986,20 @@ app.get('/get-coupons', async (req, res) => {
     if (!category || !productname) {
       return res.status(400).json({ error: "Missing required parameters" });
     }
+
+
 if(category=="all"){
   const allCoupons = await cpn.find({});
     return res.json(allCoupons);
 }
 
+// inside your loop
+
+
     const userOrders = await orderr.find({ userId });
     const isFirstOrder = userOrders.length === 0;
+    const isFirst3Order = userOrders.length <= 3;
+
     console.log("🧪 isFirstOrder:", isFirstOrder);
 
     const allCoupons = await cpn.find({});
@@ -3027,6 +3034,11 @@ if (nowDate > expiryDate || nowDate < startDate) continue;
       // 1. FIRST ORDER
       if (type === "First Order") {
         if (isFirstOrder) filtered.push(coupon);
+        continue;
+      }
+
+       if (type === "First 3 Order") {
+        if (isFirst3Order) filtered.push(coupon);
         continue;
       }
 

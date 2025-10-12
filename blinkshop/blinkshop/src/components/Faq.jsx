@@ -167,58 +167,7 @@ const Faq = () => {
             <div style={labelStyle}>Email</div>
           </div> */}
         </a>
-        <div>
-           {/* <FaMapMarkerAlt /> */}
-           <div style={{ position: "relative", display: "inline-block"}} ref={popupRef}>
-      {/* Icon with label */}
-      <div
-        onClick={handleToggle}
-        style={{ cursor: "pointer", display: "flex", alignItems: "center", flexDirection:"column", paddingTop:"5px" }}
-      >
-       <FaMapMarkerAlt size={24} color="rgb(51, 51, 51)" />
-        <div style={{...labelStyle, paddingTop:"10px"}}>Address</div>
-      </div>
-
-      {/* Popup */}
-      {showPopup && (
-        <div
-          style={{
-            border:"2px solid red",
-            position: "absolute",
-            top: "40px",
-            right: "-110px",
-            background: "#fff",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "30px 15px",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
-            zIndex: 1000,
-            height: "200px",
-            minWidth:"95vw",
-                        display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-          }}
-        >
-         
-          <span  >
-             <strong>Our Office: </strong>
-            117, Salasar Enclave Nandkishorepura, Mangyawas, Jaipur
-          </span>
-         
-          <span style={{}} >
-             <strong>Email: </strong>
-            team.lewkout@gmail.com
-          </span>
-         
-          <span style={{}} >
-             <strong>Phone: </strong> 
-            +91 7014996104
-          </span>
-        </div>
-      )}
-    </div>
-          </div>
+       
       </div>
 
       {/* FAQ Section */}
