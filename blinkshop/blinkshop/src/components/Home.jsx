@@ -77,7 +77,7 @@ import CategoriesLayout from "./CategoriesLayout"
 import OfferBanner from "./OfferBanner"
 import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
-import lben from "../components/image/lben.webp"
+import lben from "../components/image/lewkbner.webp"
 // ✅ Lazy imports
 // const Carousel = React.lazy(() => import("./Carasoul"));
 // const CustomerLove = React.lazy(() => import("./CustomerLove"));

@@ -783,7 +783,7 @@ if(searchvalue){
             <span className="discount"style={{ fontFamily: "Oswald",color: "red" }}>{product?.discount}% off</span>
 </div>
 
-            <span
+            {/* <span
   className="current-price"
   style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}
 >
@@ -793,7 +793,20 @@ if(searchvalue){
     : (product?.discountprice -
         (product?.discountprice * coupons[0]?.discountValue) / 100
       ).toFixed(2)}
+</span> */}
+<span
+  className="current-price"
+  style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}
+>
+  Get it For ₹
+  {coupons[0]?.discountType === "fixed"
+    ? Math.floor(product?.discountprice - coupons[0]?.discountValue)
+    : Math.floor(
+        product?.discountprice -
+        (product?.discountprice * coupons[0]?.discountValue) / 100
+      )}
 </span>
+
 
             {/* <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span> */}
             {/* <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span> */}

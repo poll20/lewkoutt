@@ -83,7 +83,7 @@ console.log("wishlist in coa",wishlistdata)
           <span className="discount" style={{ fontFamily: "Oswald", color: "red" }}>{props.discount}% off</span>
           </div>
           {/* <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{props?.discountprice - props?.coupons[0]?.discountValue}</span> */}
-          <span
+          {/* <span
   className="current-price"
   style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}
 >
@@ -93,7 +93,20 @@ console.log("wishlist in coa",wishlistdata)
     : (props?.discountprice -
         (props?.discountprice * props?.coupons[0]?.discountValue) / 100
       ).toFixed(2)}
+</span> */}
+<span
+  className="current-price"
+  style={{ fontFamily: "Oswald", color: "rgb(52 195 52)" }}
+>
+  Get it For ₹
+  {props?.coupons[0]?.discountType === "fixed"
+    ? Math.floor(props?.discountprice - props?.coupons[0]?.discountValue)
+    : Math.floor(
+        props?.discountprice -
+        (props?.discountprice * props?.coupons[0]?.discountValue) / 100
+      )}
 </span>
+
 
           
         </div>)
