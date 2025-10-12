@@ -220,52 +220,74 @@
 import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
 
-const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
+// const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
+//   const [visible, setVisible] = useState(false);
+//   const [appliedCode, setAppliedCode] = useState(() => {
+//     return localStorage.getItem("appliedCoupon") || "";
+//   });
+
+//   const { setkarocode } = useBio();
+
+//   useEffect(() => {
+//     setVisible(true);
+
+//     // Auto-apply first valid coupon if no appliedCode
+//     if (!appliedCode) {
+//       const validFirst = coupon.find((c) => totalDiscountPrice >= c.minOrderAmount);
+//       if (validFirst) {
+//         setAppliedCode(validFirst.code);
+//         localStorage.setItem("appliedCoupon", validFirst.code);
+//         setkarocode(validFirst.code);
+//       }
+//     } else {
+//       setkarocode(appliedCode);
+//     }
+//   }, [coupon, totalDiscountPrice, appliedCode]);
+
+//   const calculateDiscount = (coupon) => {
+//     if (coupon.discountType === "Percentage") {
+//       return Math.round((totalDiscountPrice * coupon.discountValue) / 100);
+//     }
+//     return coupon.discountValue;
+//   };
+
+//   const isValidCoupon = (coupon) => {
+//     return totalDiscountPrice >= coupon.minOrderAmount;
+//   };
+
+//   const handleApplyRemove = (c) => {
+//     if (appliedCode === c.code) {
+//       setAppliedCode("");
+//       localStorage.removeItem("appliedCoupon");
+//       setkarocode("");
+//     } else if (isValidCoupon(c)) {
+//       setAppliedCode(c.code);
+//       localStorage.setItem("appliedCoupon", c.code);
+//       setkarocode(c.code);
+//     }
+const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice, handleCouponApply }) => {
   const [visible, setVisible] = useState(false);
   const [appliedCode, setAppliedCode] = useState(() => {
-    return localStorage.getItem("appliedCoupon") || "";
+    return localStorage.getItem("karocode") || "";
   });
-
-  const { setkarocode } = useBio();
 
   useEffect(() => {
     setVisible(true);
-
-    // Auto-apply first valid coupon if no appliedCode
-    if (!appliedCode) {
-      const validFirst = coupon.find((c) => totalDiscountPrice >= c.minOrderAmount);
-      if (validFirst) {
-        setAppliedCode(validFirst.code);
-        localStorage.setItem("appliedCoupon", validFirst.code);
-        setkarocode(validFirst.code);
-      }
-    } else {
-      setkarocode(appliedCode);
-    }
-  }, [coupon, totalDiscountPrice, appliedCode]);
-
-  const calculateDiscount = (coupon) => {
-    if (coupon.discountType === "Percentage") {
-      return Math.round((totalDiscountPrice * coupon.discountValue) / 100);
-    }
-    return coupon.discountValue;
-  };
-
-  const isValidCoupon = (coupon) => {
-    return totalDiscountPrice >= coupon.minOrderAmount;
-  };
+    if (appliedCode) handleCouponApply(appliedCode);
+  }, [appliedCode]);
 
   const handleApplyRemove = (c) => {
     if (appliedCode === c.code) {
       setAppliedCode("");
-      localStorage.removeItem("appliedCoupon");
-      setkarocode("");
-    } else if (isValidCoupon(c)) {
+      localStorage.removeItem("karocode");
+      handleCouponApply("");
+    } else if (totalDiscountPrice >= c.minOrderAmount) {
       setAppliedCode(c.code);
-      localStorage.setItem("appliedCoupon", c.code);
-      setkarocode(c.code);
+      localStorage.setItem("karocode", c.code);
+      handleCouponApply(c.code);
     }
   };
+
 
   return (
     <div

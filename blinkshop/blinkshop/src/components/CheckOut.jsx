@@ -1228,6 +1228,14 @@ const [amountafteraddcoupon, setamountafteraddcoupon] = useState(() => {
   const storedAmount = JSON.parse(localStorage.getItem("amountafteraddcoupon"));
   return storedAmount || 0;
 });
+
+
+// Add at top
+const [karocodeLocal, setKarocodeLocal] = useState(() => {
+  return localStorage.getItem("karocode") || karocode || "";
+});
+
+
   const [yppicode, setyppicode] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(
     localStorage.getItem("selectedPayment") || "UPI"
@@ -1309,13 +1317,14 @@ const [amountafteraddcoupon, setamountafteraddcoupon] = useState(() => {
   //   }
   // }, [coupons, totalDiscountPrice, karocode]);
   // / Apply coupon logic
+//  Replace all karocode references in useEffect with karocodeLocal
 useEffect(() => {
   let couponToApply;
 
-  if (!karocode?.length) {
+  if (!karocodeLocal?.length) {
     couponToApply = coupons?.find(c => c.couponType === "First Order");
   } else {
-    couponToApply = coupons?.find(c => c.code === karocode);
+    couponToApply = coupons?.find(c => c.code === karocodeLocal);
   }
 
   if (couponToApply) {
@@ -1326,19 +1335,19 @@ useEffect(() => {
     setfirstcpn(couponToApply);
     setamountafteraddcoupon(discounted);
     
-    // ✅ Save in localStorage
     localStorage.setItem("firstcpn", JSON.stringify(couponToApply));
     localStorage.setItem("amountafteraddcoupon", JSON.stringify(discounted));
+    localStorage.setItem("karocode", couponToApply.code);
 
     setyppicode(true);
   } else {
-    // Reset if no coupon
     setfirstcpn([]);
     setamountafteraddcoupon(0);
     localStorage.removeItem("firstcpn");
     localStorage.removeItem("amountafteraddcoupon");
+    localStorage.removeItem("karocode");
   }
-}, [coupons, totalDiscountPrice, karocode]);
+}, [coupons, totalDiscountPrice, karocodeLocal]);
 
   const amountAfterCoupon = totalDiscountPrice - (amountafteraddcoupon || 0);
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
