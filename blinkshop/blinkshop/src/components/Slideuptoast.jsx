@@ -406,7 +406,7 @@
 import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
 
-const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
+const  SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
   const [visible, setVisible] = useState(false);
   const [appliedCode, setAppliedCode] = useState("");
   console.log("appcd",appliedCode)

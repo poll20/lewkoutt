@@ -103,7 +103,7 @@ useEffect(() => {
         setIsLoading(true)
         let response = await fetch(`${apiUrl}/cart/${userDetails?._id}`, 
           {
-          credentials: 'include', // important: allow cookies to be set
+          // credentials: 'include', // important: allow cookies to be set
         }
       );
         let data = await response.json();
@@ -1441,7 +1441,7 @@ const getRecommendationsFromCart = async () => {
 
   try {
     setIsLoading(true);
-    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails._id}`);
+    const res = await fetch(`${apiUrl}/cart/recommendations/${userDetails?._id}`);
     const data = await res.json();
     console.log("mixx cart", data);
     setRecommendations(data.products || []);

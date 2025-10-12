@@ -237,8 +237,8 @@ const handleDateChange = (e) => {
   <button
     style={{
       marginBottom: "0.75rem", // mb-3
-      backgroundColor: "#16a34a", // bg-green-600
-      color: "black",
+      backgroundColor: "black", // bg-green-600
+      color: "white",
       paddingTop: "0.5rem", // py-2
       paddingBottom: "0.5rem",
       paddingLeft: "1rem", // px-4
@@ -323,8 +323,8 @@ const handleDateChange = (e) => {
   <button
     style={{
       marginTop: "1rem", // mt-4
-      backgroundColor: "#2563eb", // bg-blue-600
-      color: "#ffffff",
+      backgroundColor: "black", // bg-blue-600
+      color: "white",
       paddingTop: "0.5rem",
       paddingBottom: "0.5rem",
       paddingLeft: "1rem",

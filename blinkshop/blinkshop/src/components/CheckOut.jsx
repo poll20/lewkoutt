@@ -844,7 +844,7 @@ const Checkout = () => {
   const [firstcpn, setfirstcpn] = useState([]);
   const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
   const [yppicode, setyppicode] = useState(false);
-
+const [showmethecpnval,setshowmethecpnval]=useState(0)
   const [selectedPayment, setSelectedPayment] = useState(
     localStorage.getItem("selectedPayment") || "UPI"
   );
@@ -903,6 +903,7 @@ const Checkout = () => {
   // Apply coupon logic
   useEffect(() => {
     let couponToApply;
+    // setshowmethecpnval(couponToApply.discountValue)
     if (!karocode?.length) {
       couponToApply = coupons?.find(c => c.couponType === "First Order");
     } else {
@@ -916,13 +917,18 @@ const Checkout = () => {
       if (couponToApply.discountType === "Percentage") {
         const discountAmount = (totalDiscountPrice * couponToApply.discountValue) / 100;
         discounted = discountAmount;
+        console.log("final amount kya h ", couponToApply.discountValue);
+    // setshowmethecpnval(couponToApply.discountValue)
+
       } else {
         discounted = couponToApply.discountValue;
+        console.log("final amount kya h ", couponToApply.discountValue);
+
       }
       setamountafteraddcoupon(discounted);
       setyppicode(true);
     }
-  }, [coupons, totalDiscountPrice, karocode]);
+  }, [coupons, totalDiscountPrice, karocode,showmethecpnval]);
   // 🟢 Auto apply wallet money (10% of order total)
 useEffect(() => {
   if (userDetails?.wallet?.cashback) {
@@ -965,7 +971,7 @@ useEffect(() => {
       </div>
 
       {/* Coupons */}
-      <div className="coupons-section-checkoutbuy" onClick={() => setShowToast(true)}>
+      <div className="coupons-section-checkoutbuy" onClick={() => setyppicode(true)}>
         <span style={{ fontWeight: "600" }}>
           {firstcpn?.code ? `${firstcpn?.code} Applied` : 'Apply Coupon'}
         </span>
@@ -1005,10 +1011,16 @@ useEffect(() => {
           <span>Discounted Price</span>
           <span>₹{totalDiscountPrice}.0</span>
         </div>
-        {firstcpn?.code || karocode ? (
+        
+         
+        
+        
+       
+        
+        {amountafteraddcoupon ? (
           <div className="order-row-checkoutbuy">
-            <span>Amount After Coupon Applied</span>
-            <span>₹{amountAfterCoupon}.0</span>
+            <span>Coupon Applied</span>
+            <span>₹{amountafteraddcoupon }.0</span>
           </div>
         ) : null}
 
