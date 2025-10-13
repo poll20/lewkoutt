@@ -500,25 +500,46 @@ useEffect(() => {
 
 
 // ✅ Cleanup localStorage when user leaves the page
+// ✅ Cleanup localStorage ONLY when user leaves Checkout (not on reload)
+// useEffect(() => {
+//   return () => {
+//     // Current path
+//     const currentPath = location.pathname;
+
+//     // Agar user "checkout" page se hat gaya aur "address" page par nahi gaya
+//     // (jaise home, cart, orders, etc.), tabhi cleanup karna
+//     if (!currentPath.includes("/checkout") && !currentPath.includes("/address")) {
+//       localStorage.removeItem("purchaseproduct");
+//       localStorage.removeItem("firstcpn");
+//       localStorage.removeItem("amountafteraddcoupon");
+//     }
+//   };
+// }, [location.pathname]);
 useEffect(() => {
   const handleBeforeUnload = () => {
-    // Sirf tabhi clear kare jab actual checkout data exist kare
-    if (localStorage.getItem("purchaseproduct") || localStorage.getItem("firstcpn")) {
-      localStorage.removeItem("purchaseproduct");
-      localStorage.removeItem("firstcpn");
-      localStorage.removeItem("amountafteraddcoupon");
-    }
+    // Agar user page band kare ya site se nikal jaaye
+    localStorage.removeItem("purchaseproduct");
+    localStorage.removeItem("firstcpn");
+    localStorage.removeItem("amountafteraddcoupon");
   };
 
-  // ✅ Page unload (tab close, refresh, back navigation)
-  window.addEventListener("beforeunload", handleBeforeUnload);
+  // ✅ Sirf tabhi add karo jab user checkout par hai
+  if (location.pathname.includes("/checkout")) {
+    window.addEventListener("pagehide", handleBeforeUnload);
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        handleBeforeUnload();
+      }
+    });
+  }
 
-  // ✅ React route navigation cleanup
+  // ✅ Clean up listeners
   return () => {
-    handleBeforeUnload(); // when user leaves route
-    window.removeEventListener("beforeunload", handleBeforeUnload);
+    window.removeEventListener("pagehide", handleBeforeUnload);
+    window.removeEventListener("visibilitychange", handleBeforeUnload);
   };
-}, []);
+}, [location.pathname]);
+
 
 
   return (
