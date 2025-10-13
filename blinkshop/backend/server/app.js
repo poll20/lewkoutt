@@ -526,7 +526,7 @@ app.get("/wear",async(req,res)=>{
 //   }
 // });
 
-app.post("/user/register", async (req, res) => {
+app.post("/user/register",verifySessionCookie, async (req, res) => {
   try {
     const { idToken, refcode } = req.body;
     if (!idToken) {
