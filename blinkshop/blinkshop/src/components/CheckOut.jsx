@@ -975,10 +975,6 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 
 import TimeSlots from "./TimeSlots";
-import paytm from "./image/paytm.png";
-import phonepay from "./image/phonepay.png";
-import gpay from "./image/gpay.webp";
-import upi from "./image/upi.jpeg";
 import CouponCard from "./CouponCard";
 import Slideuptoast from "./Slideuptoast";
 import BundleProduct from "./BundleProduct";
@@ -995,22 +991,49 @@ const Checkout = () => {
   // Coupon state
   const [firstcpn, setfirstcpn] = useState([]);
   const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
-
   const [yppicode, setyppicode] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState("UPI");
 
-  // Cart state
-  const [purchaseproduct, setpurchaseproduct] = useState(buydata || []);
+  // Cart & address state from localStorage or context
+  const [purchaseproduct, setpurchaseproduct] = useState(
+    () => JSON.parse(localStorage.getItem("checkoutCart")) || buydata || []
+  );
 
-  // Delivery address state
-  const [deleveryaddress, setdeleveryadress] = useState(addresssetkro || []);
+  const [deleveryaddress, setdeleveryadress] = useState(
+    () => JSON.parse(localStorage.getItem("checkoutAddress")) || addresssetkro || []
+  );
 
-  // Wallet
-  const [mywalletAmount, setMywalletAmount] = useState(walletkapesa || 0);
+  const [mywalletAmount, setMywalletAmount] = useState(
+    () => JSON.parse(localStorage.getItem("checkoutWallet")) || walletkapesa || 0
+  );
+
+  // Persist to localStorage
+  useEffect(() => {
+    localStorage.setItem("checkoutCart", JSON.stringify(purchaseproduct));
+  }, [purchaseproduct]);
+
+  useEffect(() => {
+    localStorage.setItem("checkoutAddress", JSON.stringify(deleveryaddress));
+  }, [deleveryaddress]);
+
+  useEffect(() => {
+    localStorage.setItem("checkoutWallet", JSON.stringify(mywalletAmount));
+  }, [mywalletAmount]);
+
+  // Clear checkout data on unmount (user leaves page)
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("checkoutCart");
+      localStorage.removeItem("checkoutAddress");
+      localStorage.removeItem("checkoutWallet");
+    };
+  }, []);
+
+  // Wallet calculation
   useEffect(() => {
     if (userDetails?.wallet?.cashback) {
       const availableWallet = userDetails.wallet.cashback;
-      const tenPercentOfOrder = purchaseproduct.reduce((sum, item) => sum + (item.discountprice || item.price || 0), 0) * 0.1;
+      const tenPercentOfOrder =
+        purchaseproduct.reduce((sum, item) => sum + (item.discountprice || item.price || 0), 0) * 0.1;
       const walletToApply = Math.min(availableWallet, tenPercentOfOrder);
       setMywalletAmount(walletToApply);
     }
@@ -1189,4 +1212,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-
