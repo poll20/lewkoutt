@@ -147,7 +147,7 @@ const {setkarocode}=useBio()
                 }}
               >
                 <span style={{ fontWeight: "bold" }}>{c.code}</span>
-                <span
+                {/* <span
                   onClick={() => {
                     if (isApplied) {
                       // setkarocode("")
@@ -167,7 +167,27 @@ const {setkarocode}=useBio()
                   }}
                 >
                   {isApplied ? "Remove" : "Apply"}
-                </span>
+                </span> */}
+                <span
+  onClick={() => {
+    if (isApplied) {
+      setAppliedCode("");
+      setkarocode(""); // ✅ Remove from BioContext
+      localStorage.removeItem("firstcpn");
+      localStorage.removeItem("amountafteraddcoupon");
+    } else if (valid) {
+      setAppliedCode(c.code);
+      setkarocode(c.code);
+    }
+  }}
+  style={{
+    color: isApplied ? "red" : "#1a73e8",
+    cursor: valid ? "pointer" : "not-allowed",
+    fontWeight: "500",
+  }}
+>
+  {isApplied ? "Remove" : "Apply"}
+</span>
               </div>
 
               <div

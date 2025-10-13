@@ -927,7 +927,7 @@ export default function Filter() {
                 cursor: "pointer",
                 color: "#666",
                 transition: "color 0.3s ease",
-                border:"2px solid red"
+                
               }}
               onMouseEnter={(e) => (e.target.style.color = "#000")}
               onMouseLeave={(e) => (e.target.style.color = "#666")}
