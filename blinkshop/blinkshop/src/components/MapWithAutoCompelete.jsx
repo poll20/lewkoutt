@@ -249,7 +249,7 @@ useEffect(() => {
       //   componentRestrictions: { country: "in" },
       // });
   const autocomplete = new window.google.maps.places.Autocomplete(input, {
-  types: ["address"], // sirf addresses allow karega
+  // types: ["address"], // sirf addresses allow karega
   componentRestrictions: { country: "in" } // optional (India ke liye)
 });
 // autocomplete.setFields(["address_components", "formatted_address", "geometry"]);
@@ -261,20 +261,41 @@ autocomplete.setFields([
   "address_components"
 ]);
 
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (place.geometry && place.geometry.location) {
-          const loc = place.geometry.location;
-          mapInstance.current.setCenter(loc);
-          mapInstance.current.setZoom(16);
-          markerRef.current.setPosition(loc);
+      // autocomplete.addListener("place_changed", () => {
+      //   const place = autocomplete.getPlace();
+      //   if (place.geometry && place.geometry.location) {
+      //     const loc = place.geometry.location;
+      //     mapInstance.current.setCenter(loc);
+      //     mapInstance.current.setZoom(16);
+      //     markerRef.current.setPosition(loc);
 
-          const pincodeValue = extractPincode(place.address_components);
-          setSelectedAddresss(place.formatted_address);
-          setPincode(pincodeValue);
-          setShowPhoneInput(true);
-        }
-      });
+      //     const pincodeValue = extractPincode(place.address_components);
+      //     setSelectedAddresss(place.formatted_address);
+      //     setPincode(pincodeValue);
+      //     setShowPhoneInput(true);
+      //   }
+      // });
+      autocomplete.addListener("place_changed", () => {
+  const place = autocomplete.getPlace();
+  if (!place.geometry) return;
+
+  const loc = place.geometry.location;
+  mapInstance.current.setCenter(loc);
+  mapInstance.current.setZoom(16);
+  markerRef.current.setPosition(loc);
+
+  setSelectedAddress(place.formatted_address);
+  setPincode(
+    place.address_components.find(c => c.types.includes("postal_code"))?.long_name || ""
+  );
+  setCity(
+    place.address_components.find(c => c.types.includes("administrative_area_level_2"))?.long_name || ""
+  );
+  setState(
+    place.address_components.find(c => c.types.includes("administrative_area_level_1"))?.long_name || ""
+  );
+  setShowPhoneInput(true);
+});
 
       markerRef.current.addListener("dragend", () => {
         const pos = markerRef.current.getPosition();
