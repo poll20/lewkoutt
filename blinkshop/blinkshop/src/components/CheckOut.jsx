@@ -1007,6 +1007,15 @@ const Checkout = () => {
   );
 
   // Persist to localStorage
+
+useEffect(() => {
+  if (addresssetkro?.length) {
+    setdeleveryadress(addresssetkro);
+    localStorage.setItem("checkoutAddress", JSON.stringify(addresssetkro));
+  }
+}, [addresssetkro]);
+
+
   useEffect(() => {
     localStorage.setItem("checkoutCart", JSON.stringify(purchaseproduct));
   }, [purchaseproduct]);
@@ -1020,13 +1029,18 @@ const Checkout = () => {
   }, [mywalletAmount]);
 
   // Clear checkout data on unmount (user leaves page)
-  useEffect(() => {
-    return () => {
+  // Clear checkout data on unmount (except when going to address page)
+useEffect(() => {
+  return () => {
+    if (location.pathname !== "/address/chek") {
       localStorage.removeItem("checkoutCart");
       localStorage.removeItem("checkoutAddress");
       localStorage.removeItem("checkoutWallet");
-    };
-  }, []);
+      localStorage.removeItem("checkoutCoupon"); // if you store coupon too
+    }
+  };
+}, [location.pathname]);
+
 
   // Wallet calculation
   useEffect(() => {
