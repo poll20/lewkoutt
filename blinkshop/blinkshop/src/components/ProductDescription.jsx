@@ -967,7 +967,7 @@ console.log("kop",data,siz,qtys)
 navigate("/address/prd")
     }
     else{
-      prop.showPopup("Please Selete a Size")
+      setshowloginpage(true)
     }
   }
   else{
