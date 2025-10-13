@@ -498,6 +498,29 @@ useEffect(() => {
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
   const payableAmount = amountAfterCoupon - walletToUse;
 
+
+// ✅ Cleanup localStorage when user leaves the page
+useEffect(() => {
+  const handleBeforeUnload = () => {
+    // Sirf tabhi clear kare jab actual checkout data exist kare
+    if (localStorage.getItem("purchaseproduct") || localStorage.getItem("firstcpn")) {
+      localStorage.removeItem("purchaseproduct");
+      localStorage.removeItem("firstcpn");
+      localStorage.removeItem("amountafteraddcoupon");
+    }
+  };
+
+  // ✅ Page unload (tab close, refresh, back navigation)
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  // ✅ React route navigation cleanup
+  return () => {
+    handleBeforeUnload(); // when user leaves route
+    window.removeEventListener("beforeunload", handleBeforeUnload);
+  };
+}, []);
+
+
   return (
     <div className="checkout-container-checkoutbuy">
       <h2 className="checkout-title-checkoutbuy">Checkout</h2>

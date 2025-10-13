@@ -163,6 +163,15 @@ const [formData, setFormData] = useState({
   dob: '',
 });
 let navigate=useNavigate()
+
+useEffect(()=>{ 
+    
+    if(!user && !userDetails){
+    // setuserprf(userDetails)
+    navigate('/loginn')
+
+  }},[user,userDetails])
+
   useEffect(()=>{ 
     
     if(user && userDetails){

@@ -971,7 +971,7 @@ navigate("/address/prd")
     }
   }
   else{
-    alert("please login in")
+    setshowloginpage(true)
   }
 }
 
@@ -1432,13 +1432,13 @@ if(getbundeldata){
     </div>
     </div>
     
-    {showloginpage==true?(
+    {/* {showloginpage==true?(
       <div>
         <SlideUpModal show={showloginpage} onClose={() => setshowloginpage(false)}>
           <OtpLogin/>
         </SlideUpModal>
       </div>
-    ):('')}
+    ):('')} */}
     
     </>
   );
