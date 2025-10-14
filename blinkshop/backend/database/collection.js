@@ -241,6 +241,7 @@ const orders = mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   email: String,
   address: [addressSchema],
+  timeslot:String,
   products: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },

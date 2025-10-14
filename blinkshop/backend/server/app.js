@@ -1590,7 +1590,7 @@ async function addcashbacktowallet(userId, amount, type = "cashback") {
 // });
 app.post('/order', verifySessionCookie, async (req, res) => {
   try {
-    const { order, address, userDetails, distance, couponcode, walletUsed = 0,payableAmount} = req.body;
+    const { order, address,timeslot, userDetails, distance, couponcode, walletUsed = 0,payableAmount} = req.body;
 
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
@@ -1604,6 +1604,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
       merchantOrderId,
       order,
       address,
+      timeslot,
       userDetails,
       distance,
       couponcode,
@@ -1652,6 +1653,7 @@ app.post('/order', verifySessionCookie, async (req, res) => {
           userId: userDetails._id,
           email: userDetails.email,
           address: address[0] || {},
+          timeslot:timeslot,
           phone: address?.[0]?.phone?.[0] || "",
           products: [singleProduct],
           deliverydistance: parseFloat(distance?.toString().replace("km","") || 0),

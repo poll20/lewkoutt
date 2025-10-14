@@ -39,39 +39,129 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   }, []);
 
   // ✅ Initialize invisible reCAPTCHA only once
-  const initRecaptcha = () => {
-    if (!hasRecaptchaInitialized.current && !window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "invisible",
-        callback: () => console.log("✅ reCAPTCHA verified"),
-      });
+  // const initRecaptcha = () => {
+  //   if (!hasRecaptchaInitialized.current && !window.recaptchaVerifier) {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+  //       size: "invisible",
+  //       callback: () => console.log("✅ reCAPTCHA verified"),
+  //     });
 
-      window.recaptchaVerifier.render().then(() => {
-        console.log("✅ reCAPTCHA rendered successfully");
-        hasRecaptchaInitialized.current = true;
-      });
+  //     window.recaptchaVerifier.render().then(() => {
+  //       console.log("✅ reCAPTCHA rendered successfully");
+  //       hasRecaptchaInitialized.current = true;
+  //     });
+  //   }
+  // };
+
+  // // ✅ Send OTP
+  // const sendOTP = async (phoneNumber) => {
+  //   setLoading(true);
+  //   try {
+  //     initRecaptcha();
+  //     const appVerifier = window.recaptchaVerifier;
+  //     await appVerifier.render(); // Just in case
+  //     const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
+  //     setConfirmationResult(result);
+  //     console.log("📤 OTP sent to:", phoneNumber);
+  //     return { success: true };
+  //   } catch (err) {
+  //     console.error("❌ Error sending OTP:", err);
+  //     return { success: false, error: err.message };
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+//✅ Initialize invisible reCAPTCHA only once with better cleanup
+const initRecaptcha = () => {
+  try {
+    // Clear existing verifier if any
+    if (window.recaptchaVerifier) {
+      try {
+        window.recaptchaVerifier.clear();
+      } catch (e) {
+        console.warn("Could not clear existing verifier:", e);
+      }
+      window.recaptchaVerifier = null;
     }
-  };
 
-  // ✅ Send OTP
-  const sendOTP = async (phoneNumber) => {
-    setLoading(true);
-    try {
+    // Create new verifier
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+      size: "invisible",
+      callback: () => {
+        console.log("✅ reCAPTCHA verified");
+      },
+      'expired-callback': () => {
+        console.warn("⚠️ reCAPTCHA expired");
+        // Reset verifier on expiry
+        if (window.recaptchaVerifier) {
+          window.recaptchaVerifier.clear();
+          window.recaptchaVerifier = null;
+          hasRecaptchaInitialized.current = false;
+        }
+      }
+    });
+
+    hasRecaptchaInitialized.current = true;
+    console.log("✅ reCAPTCHA initialized");
+  } catch (error) {
+    console.error("❌ reCAPTCHA init error:", error);
+    hasRecaptchaInitialized.current = false;
+    throw error;
+  }
+};
+
+// ✅ Send OTP with better error handling
+const sendOTP = async (phoneNumber) => {
+  setLoading(true);
+  setError(null);
+  
+  try {
+    // Initialize reCAPTCHA if needed
+    if (!window.recaptchaVerifier || !hasRecaptchaInitialized.current) {
       initRecaptcha();
-      const appVerifier = window.recaptchaVerifier;
-      await appVerifier.render(); // Just in case
-      const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
-      setConfirmationResult(result);
-      console.log("📤 OTP sent to:", phoneNumber);
-      return { success: true };
-    } catch (err) {
-      console.error("❌ Error sending OTP:", err);
-      return { success: false, error: err.message };
-    } finally {
-      setLoading(false);
     }
-  };
 
+    const appVerifier = window.recaptchaVerifier;
+    
+    // Send OTP
+    const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
+    setConfirmationResult(result);
+    console.log("📤 OTP sent to:", phoneNumber);
+    return { success: true };
+    
+  } catch (err) {
+    console.error("❌ Error sending OTP:", err);
+    
+    // Better error messages
+    let errorMessage = "Failed to send OTP. Please try again.";
+    
+    if (err.code === 'auth/too-many-requests') {
+      errorMessage = "Too many attempts. Please try again after some time.";
+    } else if (err.code === 'auth/invalid-phone-number') {
+      errorMessage = "Invalid phone number format.";
+    } else if (err.code === 'auth/quota-exceeded') {
+      errorMessage = "SMS quota exceeded. Please try again later.";
+    } else if (err.message.includes('reCAPTCHA')) {
+      errorMessage = "Verification failed. Please refresh and try again.";
+      // Reset reCAPTCHA on error
+      if (window.recaptchaVerifier) {
+        try {
+          window.recaptchaVerifier.clear();
+        } catch (e) {
+          console.warn("Could not clear verifier:", e);
+        }
+        window.recaptchaVerifier = null;
+        hasRecaptchaInitialized.current = false;
+      }
+    }
+    
+    setError(errorMessage);
+    return { success: false, error: errorMessage };
+    
+  } finally {
+    setLoading(false);
+  }
+};
   // // ✅ Verify OTP
   // const verifyOTP = async (otp,refcode) => {
   //   setLoading(true);
@@ -142,7 +232,8 @@ const verifyOTP = async (otp, refcode) => {
     return { success: false, error: err.message };
   } finally {
     setLoading(false);
-    setTimeout(() => window.location.reload(), 300);
+    // setTimeout(() => window.location.reload(), 300);
+    
   }
 };
 
@@ -244,9 +335,9 @@ const logout = async () => {
       hasRecaptchaInitialized.current = false; // 👈 force re-init
       console.log("👋 Logged out successfully");
   
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 300);
   
       return { success: true };
   

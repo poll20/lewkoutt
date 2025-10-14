@@ -1173,7 +1173,7 @@ useEffect(() => {
             className="pay-now-btn-checkoutbuy"
             disabled={!timeslotlelo}
             onClick={() => {
-              if (timeslotlelo) orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount);
+              if (timeslotlelo) orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount,timeslotlelo);
             }}
           >
             Pay Now

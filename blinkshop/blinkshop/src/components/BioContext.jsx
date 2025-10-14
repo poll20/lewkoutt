@@ -1048,7 +1048,7 @@ let handlechooseaddress=(add)=>{
 }
 
 
-let orderplaced=async(order,address,walletUsed,payableAmount)=>{
+let orderplaced=async(order,address,walletUsed,payableAmount,slot)=>{
   console.log("userdetailsss",userDetails)
  console.log("orederrr",order)
  console.log("addre",address)

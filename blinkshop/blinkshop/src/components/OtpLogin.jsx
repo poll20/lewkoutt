@@ -53,21 +53,53 @@ import { useState, useRef, useEffect } from "react";
         }
     }, [timer, canResend]);
 
-    const handlePhoneSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        if (phoneNumber.length < 10) {
-        setError("Please enter a valid phone number");
-        return;
-        }
+    // const handlePhoneSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError("");
+    //     if (phoneNumber.length < 10) {
+    //     setError("Please enter a valid phone number");
+    //     return;
+    //     }
 
-        const { success, error } = await sendOTP(phoneNumber);
-        if (success) {
-        setShowOTP(true);
-        } else {
-        setError(error || "Failed to send OTP. Please try again.");
-        }
-    };
+    //     const { success, error } = await sendOTP(phoneNumber);
+    //     if (success) {
+    //     setShowOTP(true);
+    //     } else {
+    //     setError(error || "Failed to send OTP. Please try again.");
+    //     }
+    // };
+    const handlePhoneSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  
+  if (phoneNumber.length < 10) {
+    setError("Please enter a valid phone number");
+    return;
+  }
+
+  // Retry logic
+  let attempts = 0;
+  const maxAttempts = 2;
+  
+  while (attempts < maxAttempts) {
+    const { success, error } = await sendOTP(phoneNumber);
+    
+    if (success) {
+      setShowOTP(true);
+      return;
+    }
+    
+    attempts++;
+    
+    if (attempts < maxAttempts && error?.includes("reCAPTCHA")) {
+      console.log(`Retrying... Attempt ${attempts + 1}`);
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+    } else {
+      setError(error || "Failed to send OTP. Please try again.");
+      return;
+    }
+  }
+};
 
     const handleChange = (element, index) => {
         if (isNaN(element.value)) return;
@@ -125,7 +157,14 @@ import { useState, useRef, useEffect } from "react";
 
     return (
         <div style={{marginTop:"50px"}} className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div id="recaptcha-container"style={{ display: 'none' }}></div>
+        <div 
+  id="recaptcha-container" 
+  style={{ 
+    visibility: 'hidden',  // Use visibility instead of display: none
+    position: 'absolute',
+    top: '-9999px'
+  }}
+></div>
         <div className="max-w-md w-full bg-black rounded-2xl shadow-xl p-8 space-y-8" style={{backgroundColor:"white"}}>
             <div className="text-center"style={{backgroundColor:"white"}}>
             <div className="mb-4 inline-block p-3 rounded-full bg-indigo-100">
