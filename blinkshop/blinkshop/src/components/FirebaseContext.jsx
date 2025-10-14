@@ -232,8 +232,7 @@ const verifyOTP = async (otp, refcode) => {
     return { success: false, error: err.message };
   } finally {
     setLoading(false);
-    // setTimeout(() => window.location.reload(), 300);
-    
+    setTimeout(() => window.location.reload(), 300);
   }
 };
 
