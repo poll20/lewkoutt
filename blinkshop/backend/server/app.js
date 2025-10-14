@@ -700,8 +700,8 @@ app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { pincode,uname, phone,  building, locality,city,state,saveas, isDefault } = req.body;
-    console.log("sab kuch",pincode, phone, building, locality,saveas, isDefault)
+    const { pincode,uname, phone,  building, locality,city,state,saveas,location, isDefault } = req.body;
+    console.log("sab kuch",pincode, phone, building, locality,saveas,location, isDefault)
 
     if (phone) {
       console.log("phone received:", phone);
@@ -718,6 +718,7 @@ app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
         city,
         state,
         saveas,
+        location,
         isDefault: isDefault || false,
       });
       
@@ -1938,7 +1939,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
         return res.status(404).send("Pending order not found");
       }
 
-      const { order, address, userDetails, distance, couponcode } = pending;
+      const { order, address,timeslot ,userDetails, distance, couponcode } = pending;
       const ordersArray = Array.isArray(order) ? order : [order];
       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
 
@@ -1974,7 +1975,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
           discountprice: item.discountprice || 0,
           size: item.size || "",
           shopname: item.shopname || "",
-          totalAmount: item.discountprice || 0,
+          totalAmount: pgUsed || 0,
           bundle: item.bundle || [],
         };
 
@@ -1997,6 +1998,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
           userId: userDetails._id,
           email: userDetails.email,
           address: addressd,
+          timeslot:timeslot,
           phone: userDetails.address?.[0]?.phone?.[0] || "",
           products: [singleProduct],
           deliverydistance: numericDistance,

@@ -98,6 +98,7 @@ const addressSchema = new mongoose.Schema({
   city: { type: String, required:true},
   state: { type: String, required:true},
   saveas:{type:String},
+  location:{type:String},
   isDefault: { type: Boolean, default: false },
 });
 

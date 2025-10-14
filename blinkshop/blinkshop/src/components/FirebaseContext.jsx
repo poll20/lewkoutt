@@ -71,7 +71,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   //     setLoading(false);
   //   }
   // };
-//✅ Initialize invisible reCAPTCHA only once with better cleanup
+// ✅ Initialize invisible reCAPTCHA only once with better cleanup
 const initRecaptcha = () => {
   try {
     // Clear existing verifier if any
@@ -162,6 +162,7 @@ const sendOTP = async (phoneNumber) => {
     setLoading(false);
   }
 };
+
   // // ✅ Verify OTP
   // const verifyOTP = async (otp,refcode) => {
   //   setLoading(true);
@@ -334,9 +335,9 @@ const logout = async () => {
       hasRecaptchaInitialized.current = false; // 👈 force re-init
       console.log("👋 Logged out successfully");
   
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 300);
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
   
       return { success: true };
   

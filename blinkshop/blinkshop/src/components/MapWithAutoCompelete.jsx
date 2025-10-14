@@ -87,7 +87,9 @@ const saveAddress =async  (panel) => {
     city,
     state,
     saveas:selectedTag,
+    location,
     isDefault,
+    
   }
   if(panel=="addaddress")
   {
