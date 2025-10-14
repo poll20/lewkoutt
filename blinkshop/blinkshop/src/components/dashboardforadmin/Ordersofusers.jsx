@@ -159,7 +159,7 @@ const Ordersofusers = () => {
                     {/* <td>{order?.email}</td> */}
                     <td>{order?.address[0]?.phone [0]}</td>
                     <td>{fullAddress}</td>
-                    <td>{location}</td>
+                    <td>{order?.address[0]?.location || ''}</td>
 
                     <td>
                       {order.products.map((product, index) => (
@@ -299,7 +299,7 @@ const Ordersofusers = () => {
                           allowFullScreen
                           referrerPolicy="no-referrer-when-downgrade"
                           src={`https://www.google.com/maps?q=${encodeURIComponent(
-                            location
+                            order?.address[0]?.location||fullAddress
                           )}&output=embed`}
                         ></iframe>
                       </td>

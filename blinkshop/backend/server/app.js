@@ -1592,7 +1592,8 @@ async function addcashbacktowallet(userId, amount, type = "cashback") {
 app.post('/order', verifySessionCookie, async (req, res) => {
   try {
     const { order, address,timeslot, userDetails, distance, couponcode, walletUsed = 0,payableAmount} = req.body;
-
+console.log("wallet used",walletUsed)
+    console.log("payableAmount",payableAmount )
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -1939,7 +1940,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
         return res.status(404).send("Pending order not found");
       }
 
-      const { order, address,timeslot ,userDetails, distance, couponcode } = pending;
+      const { order, address,timeslot ,userDetails, distance, couponcode,payableAmount } = pending;
       const ordersArray = Array.isArray(order) ? order : [order];
       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
 
@@ -1975,7 +1976,8 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
           discountprice: item.discountprice || 0,
           size: item.size || "",
           shopname: item.shopname || "",
-          totalAmount: pgUsed || 0,
+          totalAmount: payableAmount / 100,
+
           bundle: item.bundle || [],
         };
 

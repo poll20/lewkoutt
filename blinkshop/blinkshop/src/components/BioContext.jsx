@@ -1053,6 +1053,10 @@ let orderplaced=async(order,address,walletUsed,payableAmount,slot)=>{
  console.log("orederrr",order)
  console.log("addre",address)
  console.log("addre",walletUsed)
+ console.log("addre",payableAmount)
+
+ console.log("addre",walletUsed)
+
 
 if(user && userDetails){
   try{
