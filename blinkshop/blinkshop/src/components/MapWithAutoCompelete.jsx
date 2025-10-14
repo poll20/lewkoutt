@@ -87,7 +87,7 @@ const saveAddress =async  (panel) => {
     city,
     state,
     saveas:selectedTag,
-    selectedAddresss,
+    location:selectedAddresss,
     isDefault,
     
   }
