@@ -1077,7 +1077,7 @@ useEffect(() => {
       localStorage.removeItem("checkoutCart");
       localStorage.removeItem("checkoutAddress");
       localStorage.removeItem("checkoutWallet");
-      // localStorage.removeItem("checkoutCoupon"); // if you store coupon too
+      localStorage.removeItem("checkoutCoupon"); // if you store coupon too
     }
   };
 }, [location.pathname]);
@@ -1119,7 +1119,7 @@ useEffect(() => {
     }
 
     if (couponToApply) {
-      const discounted = couponToApply.discountType === "Percentage"
+      const discounted = couponToApply?.discountType === "Percentage"
         ? (totalDiscountPrice * couponToApply.discountValue) / 100
         : couponToApply.discountValue;
 
