@@ -1591,7 +1591,7 @@ async function addcashbacktowallet(userId, amount, type = "cashback") {
 // });
 app.post('/order', verifySessionCookie, async (req, res) => {
   try {
-    const { order, address,timeslot, userDetails, distance, couponcode, walletUsed = 0,payableAmount} = req.body;
+    const { order, address, userDetails, distance, couponcode, walletUsed = 0,payableAmount,timeslot} = req.body;
 console.log("wallet used",walletUsed)
     console.log("payableAmount",payableAmount )
     if (!order || !address || !userDetails) {
@@ -1954,6 +1954,8 @@ const payableAmount=payload.payableAmount
         phone: address?.[0]?.phone || [],
         city: address?.[0]?.city || "Jaipur",
         state: address?.[0]?.state || "Rajasthan",
+        saveas: address?.[0]?.saveas || "",
+        location:address?.[0]?.location||"",
         isDefault: address?.[0]?.isDefault || false,
       };
 
