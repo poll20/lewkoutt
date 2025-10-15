@@ -421,12 +421,21 @@ const {setkarocode}=useBio()
     }
   }, [coupon, totalDiscountPrice]);
 
+  // const calculateDiscount = (coupon) => {
+  //   if (coupon.discountType === "Percentage") {
+  //     return Math.round((totalDiscountPrice * coupon.discountValue) / 100);
+  //   }
+  //   return coupon.discountValue;
+  // };
   const calculateDiscount = (coupon) => {
-    if (coupon.discountType === "Percentage") {
-      return Math.round((totalDiscountPrice * coupon.discountValue) / 100);
-    }
-    return coupon.discountValue;
-  };
+  if (!coupon) return 0; // prevent crash if coupon is undefined
+
+  if (coupon?.discountType === "Percentage") {
+    return Math.round((totalDiscountPrice * coupon?.discountValue) / 100);
+  }
+  return coupon.discountValue || 0;
+};
+
 
   const isValidCoupon = (coupon) => {
     return totalDiscountPrice >= coupon.minOrderAmount;
