@@ -343,7 +343,6 @@
 
 //3
 
-
 import React, { useState, useEffect } from "react";
 import { useDashboard } from "./DashboardContext";
 
@@ -352,47 +351,23 @@ const ReturnDataTable = () => {
   const [openMapId, setOpenMapId] = useState(null);
   const [zoomedImage, setZoomedImage] = useState(null);
 
-  const toggleZoom = (src) => {
-    setZoomedImage(zoomedImage === src ? null : src);
-  };
+  const toggleZoom = (src) => setZoomedImage(zoomedImage === src ? null : src);
 
-  // ✅ Address formatter
   const formatAddress = (address) => {
-    if (!address) return "";
-    if (Array.isArray(address)) {
-      return address
-        .map(
-          (a) =>
-            `${a?.building || ""}, ${a?.locality || ""}, ${a?.city || ""}, ${a?.state || ""}, ${a?.pincode || ""}`
-        )
-        .join(" | ");
-    } else {
-      return `${address?.building || ""}, ${address?.locality || ""}, ${address?.city || ""}, ${address?.state || ""}, ${address?.pincode || ""}`;
-    }
+    if (!address) return "N/A";
+    const addr = Array.isArray(address) ? address[0] : address;
+    return `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`;
   };
 
-  // ✅ Safe phone getter
   const getPhone = (address) => {
     if (!address) return "N/A";
     const addr = Array.isArray(address) ? address[0] : address;
-    if (!addr?.phone) return "N/A";
-    return Array.isArray(addr.phone) ? addr.phone[0] : addr.phone;
+    return Array.isArray(addr?.phone) && addr.phone.length > 0 ? addr.phone[0] : "N/A";
   };
 
-  // ✅ Load Google Maps dynamically
   const loadGoogleMaps = () => {
     if (window.google && window.google.maps) return Promise.resolve();
-
     return new Promise((resolve, reject) => {
-      const existingScript = document.querySelector(
-        `script[src^="https://maps.googleapis.com/maps/api/js"]`
-      );
-      if (existingScript) {
-        existingScript.addEventListener("load", resolve);
-        existingScript.addEventListener("error", reject);
-        return;
-      }
-
       const script = document.createElement("script");
       script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`;
       script.async = true;
@@ -403,10 +378,8 @@ const ReturnDataTable = () => {
     });
   };
 
-  // ✅ Initialize map when openMapId changes
   useEffect(() => {
     if (!openMapId) return;
-
     const initMap = async () => {
       await loadGoogleMaps();
       const currentItem = returndata.find((item) => item._id === openMapId);
@@ -419,138 +392,101 @@ const ReturnDataTable = () => {
         ? currentItem.addressofreturn[0]
         : currentItem.addressofreturn;
 
-      const lat = addr?.lat;
-      const lng = addr?.lng;
+      if (!addr?.lat || !addr?.lng) return;
 
-      if (lat && lng) {
-        const center = new window.google.maps.LatLng(lat, lng);
-        const map = new window.google.maps.Map(mapContainer, { zoom: 15, center });
-        new window.google.maps.Marker({
-          position: center,
-          map,
-          title: addr?.location || formatAddress(currentItem.addressofreturn),
-          animation: window.google.maps.Animation.DROP,
-        });
-      }
+      const center = new window.google.maps.LatLng(addr.lat, addr.lng);
+      const map = new window.google.maps.Map(mapContainer, { zoom: 15, center });
+
+      new window.google.maps.Marker({
+        position: center,
+        map,
+        title: formatAddress(currentItem.addressofreturn),
+      });
     };
 
     initMap();
   }, [openMapId, returndata]);
 
-  // ✅ Empty data check
-  if (!returndata || returndata.length === 0) {
+  if (!returndata || returndata.length === 0)
     return <p className="text-center mt-4">No return data available.</p>;
-  }
 
-  // ✅ Table rendering
   return (
     <div className="p-4">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full border border-gray-300 divide-y divide-gray-200">
+          <thead className="bg-gray-100">
             <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>User ID</th>
-              <th>Transection ID</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Phone</th>
-              <th>Products</th>
-              <th>Images</th>
-              <th>Status</th>
-              <th>Ordered At</th>
-              <th>Delivered At</th>
-              <th>Created At</th>
-              <th>Reason</th>
-              <th>Subreason</th>
-              <th>Selected Option</th>
-              <th>Return Date</th>
-              <th>Updated At</th>
-              <th>Map</th>
+              <th className="border px-2 py-1">ID</th>
+              <th className="border px-2 py-1">Name</th>
+              <th className="border px-2 py-1">User ID</th>
+              <th className="border px-2 py-1">Transection ID</th>
+              <th className="border px-2 py-1">Email</th>
+              <th className="border px-2 py-1">Address</th>
+              <th className="border px-2 py-1">Phone</th>
+              <th className="border px-2 py-1">Products</th>
+              <th className="border px-2 py-1">Images</th>
+              <th className="border px-2 py-1">Status</th>
+              <th className="border px-2 py-1">Ordered At</th>
+              <th className="border px-2 py-1">Delivered At</th>
+              <th className="border px-2 py-1">Created At</th>
+              <th className="border px-2 py-1">Reason</th>
+              <th className="border px-2 py-1">Subreason</th>
+              <th className="border px-2 py-1">Selected Option</th>
+              <th className="border px-2 py-1">Return Date</th>
+              <th className="border px-2 py-1">Updated At</th>
+              <th className="border px-2 py-1">Map</th>
             </tr>
           </thead>
-
           <tbody>
             {returndata.map((item) => (
               <React.Fragment key={item._id}>
-                <tr>
-                  <td>{item._id}</td>
-                  <td>{item.name}</td>
-                  <td>{item.userId}</td>
-                  <td>{item.transectionId}</td>
-                  <td>{item.email}</td>
-
-                  {/* ✅ Address */}
-                  <td>{formatAddress(item.addressofreturn)}</td>
-
-                  {/* ✅ Phone */}
-                  <td>{getPhone(item.addressofreturn)}</td>
-
-                  {/* ✅ Products */}
-                  <td>
-                    {Array.isArray(item.products) &&
-                      item.products.map((prod, idx) => (
-                        <div key={idx}>
-                          {prod.tag} | {prod.price} | {prod.quantity} | {prod.size}
-                        </div>
-                      ))}
+                <tr className="hover:bg-gray-50">
+                  <td className="border px-2 py-1">{item._id}</td>
+                  <td className="border px-2 py-1">{item.name || item.addressofreturn?.[0]?.uname || "N/A"}</td>
+                  <td className="border px-2 py-1">{item.userId}</td>
+                  <td className="border px-2 py-1">{item.transectionId}</td>
+                  <td className="border px-2 py-1">{item.email || "N/A"}</td>
+                  <td className="border px-2 py-1">{formatAddress(item.addressofreturn)}</td>
+                  <td className="border px-2 py-1">{getPhone(item.addressofreturn)}</td>
+                  <td className="border px-2 py-1">
+                    {item.products?.map((p, i) => (
+                      <div key={i}>{`${p.tag} | ${p.price} | ${p.quantity} | ${p.size}`}</div>
+                    ))}
                   </td>
-
-                  {/* ✅ Images */}
-                  <td>
-                    {item.imageofreturn?.map((img, idx) => (
+                  <td className="border px-2 py-1 flex">
+                    {item.imageofreturn?.map((img, i) => (
                       <img
-                        key={idx}
+                        key={i}
                         src={img}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          cursor: "pointer",
-                          objectFit: "cover",
-                          marginRight: "5px",
-                          borderRadius: "8px",
-                        }}
+                        className="w-24 h-24 object-cover mr-2 rounded cursor-pointer"
                         onClick={() => toggleZoom(img)}
                         alt=""
                       />
                     ))}
                   </td>
-
-                  <td>{item.status}</td>
-                  <td>{item.orderedAt && new Date(item.orderedAt).toLocaleString()}</td>
-                  <td>{item.deliveredAt && new Date(item.deliveredAt).toLocaleString()}</td>
-                  <td>{item.createdAt && new Date(item.createdAt).toLocaleString()}</td>
-                  <td>{item.reason}</td>
-                  <td>{item.subreason}</td>
-                  <td>{item.selectedOption}</td>
-                  <td>{item.returnDate && new Date(item.returnDate).toLocaleString()}</td>
-                  <td>{item.updatedAt && new Date(item.updatedAt).toLocaleString()}</td>
-
-                  {/* ✅ Map Button */}
-                  <td>
+                  <td className="border px-2 py-1">{item.status}</td>
+                  <td className="border px-2 py-1">{item.orderedAt && new Date(item.orderedAt).toLocaleString()}</td>
+                  <td className="border px-2 py-1">{item.deliveredAt && new Date(item.deliveredAt).toLocaleString()}</td>
+                  <td className="border px-2 py-1">{item.createdAt && new Date(item.createdAt).toLocaleString()}</td>
+                  <td className="border px-2 py-1">{item.reason}</td>
+                  <td className="border px-2 py-1">{item.subreason}</td>
+                  <td className="border px-2 py-1">{item.selectedOption}</td>
+                  <td className="border px-2 py-1">{item.returnDate && new Date(item.returnDate).toLocaleString()}</td>
+                  <td className="border px-2 py-1">{item.updatedAt && new Date(item.updatedAt).toLocaleString()}</td>
+                  <td className="border px-2 py-1">
                     <button
                       className="bg-blue-500 text-white px-2 py-1 rounded text-xs"
                       onClick={() => setOpenMapId(openMapId === item._id ? null : item._id)}
                     >
-                      {openMapId === item._id ? "Hide Map" : "View on Map"}
+                      {openMapId === item._id ? "Hide Map" : "View Map"}
                     </button>
                   </td>
                 </tr>
 
-                {/* ✅ Map Row */}
                 {openMapId === item._id && (
                   <tr>
                     <td colSpan="19">
-                      <div
-                        id={`map-${item._id}`}
-                        style={{
-                          width: "100%",
-                          height: "300px",
-                          borderRadius: "10px",
-                          marginTop: "10px",
-                        }}
-                      ></div>
+                      <div id={`map-${item._id}`} className="w-full h-72 mt-2 rounded" />
                     </td>
                   </tr>
                 )}
@@ -559,22 +495,12 @@ const ReturnDataTable = () => {
           </tbody>
         </table>
 
-        {/* ✅ Image Zoom Overlay */}
         {zoomedImage && (
           <div
             className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50"
             onClick={() => setZoomedImage(null)}
           >
-            <img
-              src={zoomedImage}
-              alt="Zoomed"
-              style={{
-                maxWidth: "90%",
-                maxHeight: "90%",
-                borderRadius: "10px",
-                boxShadow: "0 0 15px rgba(255,255,255,0.3)",
-              }}
-            />
+            <img src={zoomedImage} className="max-w-[90%] max-h-[90%] rounded shadow-lg" alt="Zoom" />
           </div>
         )}
       </div>
