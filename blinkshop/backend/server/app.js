@@ -1596,6 +1596,8 @@ app.post('/order', verifySessionCookie, async (req, res) => {
     const { order, address, userDetails, distance, couponcode, walletUsed = 0,payableAmount,timeslot} = req.body;
 console.log("wallet used",walletUsed)
     console.log("payableAmount",payableAmount )
+    console.log("timingslot",timeslot )
+
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
     }
