@@ -265,9 +265,6 @@
 // };
 
 // export default Ordersofusers;
-
-
-
 import React, { useState, useEffect } from "react";
 import "./Ordersofusers.css";
 import { useDashboard } from "./DashboardContext";
@@ -276,6 +273,7 @@ const Ordersofusers = () => {
   const { userorder, markAsDelivered } = useDashboard();
   const [openMapId, setOpenMapId] = useState(null);
   const [zoomedImage, setZoomedImage] = useState(null);
+  const [latLngMap, setLatLngMap] = useState({}); // store lat/lng for each order
 
   const toggleZoom = (src) => {
     setZoomedImage(zoomedImage === src ? null : src);
@@ -289,7 +287,7 @@ const Ordersofusers = () => {
     return `${building || ""} ${locality || ""} ${pincode || ""} ${city || ""} ${state || ""}`;
   };
 
-  // ✅ Load Google Maps API dynamically
+  // Load Google Maps API dynamically
   const loadGoogleMaps = () => {
     if (window.google && window.google.maps) return Promise.resolve();
 
@@ -315,7 +313,7 @@ const Ordersofusers = () => {
     });
   };
 
-  // ✅ When "View Map" is clicked, load map + red marker
+  // When "View Map" is clicked, load map + get lat/lng
   useEffect(() => {
     if (!openMapId) return;
 
@@ -336,13 +334,20 @@ const Ordersofusers = () => {
           const mapContainer = document.getElementById(`map-${openMapId}`);
           if (!mapContainer) return;
 
+          const latLng = results[0].geometry.location;
+          // store lat/lng in state
+          setLatLngMap((prev) => ({
+            ...prev,
+            [openMapId]: { lat: latLng.lat(), lng: latLng.lng() },
+          }));
+
           const map = new window.google.maps.Map(mapContainer, {
             zoom: 15,
-            center: results[0].geometry.location,
+            center: latLng,
           });
 
           new window.google.maps.Marker({
-            position: results[0].geometry.location,
+            position: latLng,
             map,
             title: location,
             animation: window.google.maps.Animation.DROP,
@@ -375,7 +380,9 @@ const Ordersofusers = () => {
               <th>Name</th>
               <th>Phone</th>
               <th>Address</th>
-              <th>location</th>
+              <th>Location</th>
+              <th>Lat</th>
+              <th>Lng</th>
               <th>Products</th>
               <th>Product image</th>
               <th>Total Price</th>
@@ -388,6 +395,7 @@ const Ordersofusers = () => {
           <tbody>
             {userorder.map((order) => {
               const fullAddress = formatAddress(order.address);
+              const latLng = latLngMap[order._id] || { lat: "", lng: "" };
 
               return (
                 <React.Fragment key={order._id}>
@@ -404,6 +412,8 @@ const Ordersofusers = () => {
                     <td>{order?.address[0]?.phone[0]}</td>
                     <td>{fullAddress}</td>
                     <td>{order?.address[0]?.location || ""}</td>
+                    <td>{latLng.lat}</td>
+                    <td>{latLng.lng}</td>
 
                     <td>
                       {order.products.map((product, index) => (
@@ -436,9 +446,7 @@ const Ordersofusers = () => {
                       ₹{order.products.reduce((acc, p) => acc + p.totalAmount, 0)}
                     </td>
 
-                    <td
-                      className={`user-ke-orders-status ${order.status.toLowerCase()}`}
-                    >
+                    <td className={`user-ke-orders-status ${order.status.toLowerCase()}`}>
                       {order.status}
                     </td>
 
@@ -509,7 +517,7 @@ const Ordersofusers = () => {
 
                   {openMapId === order._id && (
                     <tr>
-                      <td colSpan="12">
+                      <td colSpan="21">
                         <div
                           id={`map-${order._id}`}
                           style={{
