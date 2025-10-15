@@ -122,6 +122,228 @@
 
 
 
+// import React, { useState, useEffect } from "react";
+// import { useDashboard } from "./DashboardContext";
+
+// const ReturnDataTable = () => {
+//   const { returndata } = useDashboard();
+//   const [openMapId, setOpenMapId] = useState(null);
+//   const [zoomedImage, setZoomedImage] = useState(null);
+
+//   const toggleZoom = (src) => {
+//     setZoomedImage(zoomedImage === src ? null : src);
+//   };
+
+//   const formatAddress = (address) => {
+//     if (!address) return "";
+//     if (Array.isArray(address)) {
+//       return address
+//         .map(
+//           (a) =>
+//             `${a.building || ""} ${a.street || ""} ${a.locality || ""} ${a.pincode || ""} ${a.city || ""} ${a.state || ""}`
+//         )
+//         .join(" | ");
+//     } else {
+//       return `${address.building || ""} ${address.street || ""} ${address.locality || ""} ${address.pincode || ""} ${address.city || ""} ${address.state || ""}`;
+//     }
+//   };
+
+//   // Load Google Maps API dynamically
+//   const loadGoogleMaps = () => {
+//     if (window.google && window.google.maps) return Promise.resolve();
+
+//     return new Promise((resolve, reject) => {
+//       const existingScript = document.querySelector(
+//         `script[src^="https://maps.googleapis.com/maps/api/js"]`
+//       );
+//       if (existingScript) {
+//         existingScript.addEventListener("load", resolve);
+//         existingScript.addEventListener("error", reject);
+//         return;
+//       }
+
+//       const script = document.createElement("script");
+//       script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`;
+//       script.async = true;
+//       script.defer = true;
+//       script.onload = resolve;
+//       script.onerror = reject;
+//       document.body.appendChild(script);
+//     });
+//   };
+
+//   useEffect(() => {
+//     if (!openMapId) return;
+
+//     const initMap = async () => {
+//       await loadGoogleMaps();
+//       const currentItem = returndata.find((item) => item._id === openMapId);
+//       if (!currentItem) return;
+
+//       const mapContainer = document.getElementById(`map-${openMapId}`);
+//       if (!mapContainer) return;
+
+//       const addr = Array.isArray(currentItem.addressofreturn)
+//         ? currentItem.addressofreturn[0]
+//         : currentItem.addressofreturn;
+
+//       const lat = addr?.lat;
+//       const lng = addr?.lng;
+
+//       if (lat && lng) {
+//         const center = new window.google.maps.LatLng(lat, lng);
+//         const map = new window.google.maps.Map(mapContainer, { zoom: 15, center });
+//         new window.google.maps.Marker({
+//           position: center,
+//           map,
+//           title: addr?.location || formatAddress(currentItem.addressofreturn),
+//           animation: window.google.maps.Animation.DROP,
+//         });
+//       }
+//     };
+//   }, [openMapId, returndata]);
+
+//   if (!returndata || returndata.length === 0) {
+//     return <p className="text-center mt-4">No return data available.</p>;
+//   }
+
+//   return (
+//     <div className="p-4">
+//       <div className="overflow-x-auto">
+//         <table className="min-w-full divide-y divide-gray-200">
+//           <thead className="bg-gray-50">
+//             <tr>
+//               <th>ID</th>
+//               <th>Name</th>
+//               <th>User ID</th>
+//               <th>Transection ID</th>
+//               <th>Email</th>
+//               <th>Address</th>
+//               <th>Phone</th>
+//               <th>Products</th>
+//               <th>Images</th>
+//               <th>Status</th>
+//               <th>Ordered At</th>
+//               <th>Delivered At</th>
+//               <th>Created At</th>
+//               <th>Reason</th>
+//               <th>Subreason</th>
+//               <th>Selected Option</th>
+//               <th>Return Date</th>
+//               <th>Updated At</th>
+//               <th>Map</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {returndata.map((item) => (
+//               <React.Fragment key={item._id}>
+//                 <tr>
+//                   <td>{item._id}</td>
+//                   <td>{item.name}</td>
+//                   <td>{item.userId}</td>
+//                   <td>{item.transectionId}</td>
+//                   <td>{item.email}</td>
+//                   <td>
+//                     {Array.isArray(item.addressofreturn)
+//   ? item.addressofreturn
+//       .map((addr) => 
+//         `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`
+//       )
+//       .join(" | ")
+//   : `${item.addressofreturn?.building || ""}, ${item.addressofreturn?.locality || ""}, ${item.addressofreturn?.city || ""}, ${item.addressofreturn?.state || ""}, ${item.addressofreturn?.pincode || ""}`}
+
+//                   </td>
+//                   <td>
+//                     {Array.isArray(item.addressofreturn)
+//                       ? item.addressofreturn[0]?.phone[0]
+//                       : item.addressofreturn.phone[0]}
+//                   </td>
+//                   <td>
+//                     {Array.isArray(item.products) &&
+//                       item.products.map((prod, idx) => (
+//                         <div key={idx}>
+//                           {prod.tag} | {prod.price} | {prod.quantity} | {prod.size}
+//                         </div>
+//                       ))}
+//                   </td>
+//                   <td>
+//                     {item.imageofreturn.map((img, idx) => (
+//                       <img
+//                         key={idx}
+//                         src={img}
+//                         style={{
+//                           width: "100px",
+//                           height: "100px",
+//                           cursor: "pointer",
+//                           objectFit: "cover",
+//                           marginRight: "5px",
+//                         }}
+//                         onClick={() => toggleZoom(img)}
+//                         alt=""
+//                       />
+//                     ))}
+//                   </td>
+//                   <td>{item.status}</td>
+//                   <td>{item.orderedAt && new Date(item.orderedAt).toLocaleString()}</td>
+//                   <td>{item.deliveredAt && new Date(item.deliveredAt).toLocaleString()}</td>
+//                   <td>{item.createdAt && new Date(item.createdAt).toLocaleString()}</td>
+//                   <td>{item.reason}</td>
+//                   <td>{item.subreason}</td>
+//                   <td>{item.selectedOption}</td>
+//                   <td>{item.returnDate && new Date(item.returnDate).toLocaleString()}</td>
+//                   <td>{item.updatedAt && new Date(item.updatedAt).toLocaleString()}</td>
+//                   <td>
+//                     <button
+//                       className="bg-blue-500 text-white px-2 py-1 rounded text-xs"
+//                       onClick={() => setOpenMapId(openMapId === item._id ? null : item._id)}
+//                     >
+//                       {openMapId === item._id ? "Hide Map" : "View on Map"}
+//                     </button>
+//                   </td>
+//                 </tr>
+
+//                 {openMapId === item._id && (
+//                   <tr>
+//                     <td colSpan="19">
+//                       <div
+//                         id={`map-${item._id}`}
+//                         style={{ width: "100%", height: "300px", borderRadius: "10px", marginTop: "10px" }}
+//                       ></div>
+//                     </td>
+//                   </tr>
+//                 )}
+//               </React.Fragment>
+//             ))}
+//           </tbody>
+//         </table>
+
+//         {zoomedImage && (
+//           <div
+//             className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50"
+//             onClick={() => setZoomedImage(null)}
+//           >
+//             <img
+//               src={zoomedImage}
+//               alt="Zoomed"
+//               style={{ maxWidth: "90%", maxHeight: "90%", borderRadius: "10px" }}
+//             />
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ReturnDataTable;
+
+
+
+
+
+
+//3
+
+
 import React, { useState, useEffect } from "react";
 import { useDashboard } from "./DashboardContext";
 
@@ -134,21 +356,30 @@ const ReturnDataTable = () => {
     setZoomedImage(zoomedImage === src ? null : src);
   };
 
+  // ✅ Address formatter
   const formatAddress = (address) => {
     if (!address) return "";
     if (Array.isArray(address)) {
       return address
         .map(
           (a) =>
-            `${a.building || ""} ${a.street || ""} ${a.locality || ""} ${a.pincode || ""} ${a.city || ""} ${a.state || ""}`
+            `${a?.building || ""}, ${a?.locality || ""}, ${a?.city || ""}, ${a?.state || ""}, ${a?.pincode || ""}`
         )
         .join(" | ");
     } else {
-      return `${address.building || ""} ${address.street || ""} ${address.locality || ""} ${address.pincode || ""} ${address.city || ""} ${address.state || ""}`;
+      return `${address?.building || ""}, ${address?.locality || ""}, ${address?.city || ""}, ${address?.state || ""}, ${address?.pincode || ""}`;
     }
   };
 
-  // Load Google Maps API dynamically
+  // ✅ Safe phone getter
+  const getPhone = (address) => {
+    if (!address) return "N/A";
+    const addr = Array.isArray(address) ? address[0] : address;
+    if (!addr?.phone) return "N/A";
+    return Array.isArray(addr.phone) ? addr.phone[0] : addr.phone;
+  };
+
+  // ✅ Load Google Maps dynamically
   const loadGoogleMaps = () => {
     if (window.google && window.google.maps) return Promise.resolve();
 
@@ -172,6 +403,7 @@ const ReturnDataTable = () => {
     });
   };
 
+  // ✅ Initialize map when openMapId changes
   useEffect(() => {
     if (!openMapId) return;
 
@@ -201,12 +433,16 @@ const ReturnDataTable = () => {
         });
       }
     };
+
+    initMap();
   }, [openMapId, returndata]);
 
+  // ✅ Empty data check
   if (!returndata || returndata.length === 0) {
     return <p className="text-center mt-4">No return data available.</p>;
   }
 
+  // ✅ Table rendering
   return (
     <div className="p-4">
       <div className="overflow-x-auto">
@@ -234,6 +470,7 @@ const ReturnDataTable = () => {
               <th>Map</th>
             </tr>
           </thead>
+
           <tbody>
             {returndata.map((item) => (
               <React.Fragment key={item._id}>
@@ -243,21 +480,14 @@ const ReturnDataTable = () => {
                   <td>{item.userId}</td>
                   <td>{item.transectionId}</td>
                   <td>{item.email}</td>
-                  <td>
-                    {Array.isArray(item.addressofreturn)
-  ? item.addressofreturn
-      .map((addr) => 
-        `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`
-      )
-      .join(" | ")
-  : `${item.addressofreturn?.building || ""}, ${item.addressofreturn?.locality || ""}, ${item.addressofreturn?.city || ""}, ${item.addressofreturn?.state || ""}, ${item.addressofreturn?.pincode || ""}`}
 
-                  </td>
-                  <td>
-                    {Array.isArray(item.addressofreturn)
-                      ? item.addressofreturn[0]?.phone[0]
-                      : item.addressofreturn.phone[0]}
-                  </td>
+                  {/* ✅ Address */}
+                  <td>{formatAddress(item.addressofreturn)}</td>
+
+                  {/* ✅ Phone */}
+                  <td>{getPhone(item.addressofreturn)}</td>
+
+                  {/* ✅ Products */}
                   <td>
                     {Array.isArray(item.products) &&
                       item.products.map((prod, idx) => (
@@ -266,8 +496,10 @@ const ReturnDataTable = () => {
                         </div>
                       ))}
                   </td>
+
+                  {/* ✅ Images */}
                   <td>
-                    {item.imageofreturn.map((img, idx) => (
+                    {item.imageofreturn?.map((img, idx) => (
                       <img
                         key={idx}
                         src={img}
@@ -277,12 +509,14 @@ const ReturnDataTable = () => {
                           cursor: "pointer",
                           objectFit: "cover",
                           marginRight: "5px",
+                          borderRadius: "8px",
                         }}
                         onClick={() => toggleZoom(img)}
                         alt=""
                       />
                     ))}
                   </td>
+
                   <td>{item.status}</td>
                   <td>{item.orderedAt && new Date(item.orderedAt).toLocaleString()}</td>
                   <td>{item.deliveredAt && new Date(item.deliveredAt).toLocaleString()}</td>
@@ -292,6 +526,8 @@ const ReturnDataTable = () => {
                   <td>{item.selectedOption}</td>
                   <td>{item.returnDate && new Date(item.returnDate).toLocaleString()}</td>
                   <td>{item.updatedAt && new Date(item.updatedAt).toLocaleString()}</td>
+
+                  {/* ✅ Map Button */}
                   <td>
                     <button
                       className="bg-blue-500 text-white px-2 py-1 rounded text-xs"
@@ -302,12 +538,18 @@ const ReturnDataTable = () => {
                   </td>
                 </tr>
 
+                {/* ✅ Map Row */}
                 {openMapId === item._id && (
                   <tr>
                     <td colSpan="19">
                       <div
                         id={`map-${item._id}`}
-                        style={{ width: "100%", height: "300px", borderRadius: "10px", marginTop: "10px" }}
+                        style={{
+                          width: "100%",
+                          height: "300px",
+                          borderRadius: "10px",
+                          marginTop: "10px",
+                        }}
                       ></div>
                     </td>
                   </tr>
@@ -317,6 +559,7 @@ const ReturnDataTable = () => {
           </tbody>
         </table>
 
+        {/* ✅ Image Zoom Overlay */}
         {zoomedImage && (
           <div
             className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50"
@@ -325,7 +568,12 @@ const ReturnDataTable = () => {
             <img
               src={zoomedImage}
               alt="Zoomed"
-              style={{ maxWidth: "90%", maxHeight: "90%", borderRadius: "10px" }}
+              style={{
+                maxWidth: "90%",
+                maxHeight: "90%",
+                borderRadius: "10px",
+                boxShadow: "0 0 15px rgba(255,255,255,0.3)",
+              }}
             />
           </div>
         )}
