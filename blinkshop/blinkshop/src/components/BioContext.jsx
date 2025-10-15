@@ -1102,36 +1102,76 @@ if(productdataonlydetail){
 
 
 
-const fetchUserOrders = async (userId) => {
-  console.log("maaro mujhe maaro")
+// const fetchUserOrders = async (userId) => {
+//   console.log("maaro mujhe maaro")
+//   try {
+//     setIsLoading(true)
+//       if (!userDetails._id) {
+//           console.error("❌ User ID is missing!");
+//           return;
+//       }
+//       let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`, {
+//         credentials: 'include', // important: allow cookies to be set
+//       }
+//       //   ,{
+//       //   headers: { 
+//       //     Authorization: `Bearer ${user.accessToken}`,
+//       //   },
+//       // }
+//     );
+//       if (!res.ok) {
+//           throw new Error("Failed to fetch user orders");
+//       }
+//       let data = await res.json();
+//       console.log("order ke data yhamilte",data)
+//       setuserorder(data);
+//   } catch (err) {
+//       console.log(err);
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
+// };
+
+const fetchUserOrders = async () => { 
   try {
-    setIsLoading(true)
-      if (!userDetails._id) {
-          console.error("❌ User ID is missing!");
-          return;
-      }
-      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`, {
-        credentials: 'include', // important: allow cookies to be set
-      }
-      //   ,{
-      //   headers: { 
-      //     Authorization: `Bearer ${user.accessToken}`,
-      //   },
-      // }
-    );
-      if (!res.ok) {
-          throw new Error("Failed to fetch user orders");
-      }
-      let data = await res.json();
-      console.log("order ke data yhamilte",data)
-      setuserorder(data);
+    setIsLoading(true);
+
+    if (!userDetails?._id) {
+      console.error("❌ User ID is missing!");
+      return;
+    }
+
+    let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`, {
+      credentials: 'include', // important: allow cookies
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      // 🔴 Old session expired
+      alert("Your session has expired. Please login again.");
+      // Clear old localStorage / cookies
+      localStorage.clear();
+      document.cookie.split(";").forEach(c => {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      // Redirect to login page
+      navigate("/login");
+      return;
+    }
+
+    if (!res.ok) throw new Error("Failed to fetch user orders");
+
+    let data = await res.json();
+    console.log("Order Data:", data);
+    setuserorder(data);
+
   } catch (err) {
-      console.log(err);
-  }
-  finally{
-    setIsLoading(false)
+    console.error(err);
+  } finally {
+    setIsLoading(false);
   }
 };
+
 
 // useEffect me userId pass karo
 useEffect(() => { 
