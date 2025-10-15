@@ -1109,30 +1109,64 @@ useEffect(() => {
   }, [purchaseproduct]);
 
 //   // Apply coupon logic
-  useEffect(() => {
-    let couponToApply;
+  // useEffect(() => {
+  //   let couponToApply;
 
-    if (!karocode?.length) {
-      couponToApply = coupons?.find(c => c.couponType === "First Order");
-    } else {
-      couponToApply = coupons?.find(c => c.code === karocode);
-    }
+  //   if (!karocode?.length) {
+  //     couponToApply = coupons?.find(c => c.couponType === "First Order");
+  //   } else {
+  //     couponToApply = coupons?.find(c => c.code === karocode);
+  //   }
 
-    if (couponToApply) {
-      const discounted = couponToApply?.discountType === "Percentage"
-        ? (totalDiscountPrice * couponToApply.discountValue) / 100
-        : couponToApply.discountValue;
+  //   if (couponToApply) {
+  //     const discounted = couponToApply?.discountType === "Percentage"
+  //       ? (totalDiscountPrice * couponToApply.discountValue) / 100
+  //       : couponToApply.discountValue;
 
-      setfirstcpn(couponToApply);
-      setamountafteraddcoupon(discounted);
-      setyppicode(true);
-    } else {
-      // Reset if no coupon
-      setfirstcpn([]);
-      setamountafteraddcoupon(0);
-    }
+  //     setfirstcpn(couponToApply);
+  //     setamountafteraddcoupon(discounted);
+  //     setyppicode(true);
+  //   } else {
+  //     // Reset if no coupon
+  //     setfirstcpn([]);
+  //     setamountafteraddcoupon(0);
+  //   }
     
-  }, [coupons, totalDiscountPrice, karocode]);
+  // }, [coupons, totalDiscountPrice, karocode]);
+  // Apply coupon logic safely
+useEffect(() => {
+  if (!coupons || coupons.length === 0) return;
+
+  let couponToApply;
+
+  if (!karocode?.length) {
+    // Apply first order coupon if no code entered
+    couponToApply = coupons.find(c => c?.couponType === "First Order");
+  } else {
+    // Apply coupon by code
+    couponToApply = coupons.find(c => c?.code === karocode);
+  }
+
+  if (couponToApply) {
+    // Safely read discountType and discountValue
+    const discountType = couponToApply?.discountType ?? "Flat"; // default to Flat
+    const discountValue = Number(couponToApply?.discountValue ?? 0); // default 0
+
+    const discounted = discountType === "Percentage"
+      ? (totalDiscountPrice * discountValue) / 100
+      : discountValue;
+
+    setfirstcpn(couponToApply);
+    setamountafteraddcoupon(discounted);
+    setyppicode(true);
+  } else {
+    // Reset if no coupon
+    setfirstcpn([]);
+    setamountafteraddcoupon(0);
+    setyppicode(false);
+  }
+}, [coupons, totalDiscountPrice, karocode]);
+
 
 //   useEffect(() => {
 //   const couponData = {
