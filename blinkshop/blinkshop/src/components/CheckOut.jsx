@@ -1228,7 +1228,7 @@ useEffect(() => {
               if (timeslotlelo) orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount,timeslotlelo);
             }}
           >
-            Pay Now
+            Pay Now jaipur
           </button>
         </>
       ) : (
@@ -1236,7 +1236,7 @@ useEffect(() => {
           className="pay-now-btn-checkoutbuy"
           onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount)}
         >
-          Pay Now
+          Pay Now india
         </button>
       )}
 
