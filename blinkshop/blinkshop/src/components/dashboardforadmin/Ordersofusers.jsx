@@ -237,7 +237,7 @@ const Ordersofusers = () => {
   loading="lazy"
   allowFullScreen
   referrerPolicy="no-referrer-when-downgrade"
-  src={`https://maps.google.com/maps?q=${encodeURIComponent(order?.address[0]?.location || fullAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed&markers=${encodeURIComponent(order?.address[0]?.location || fullAddress)}`}
+   src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCCFRjyQa4l8TOAH_kymb5Acamq_8xccGM&q=${encodeURIComponent(order?.address[0]?.location || fullAddress)}`}
 />
 
                       </td>
