@@ -324,8 +324,11 @@ const Ordersofusers = () => {
       if (!currentOrder) return;
 
       const fullAddress = formatAddress(currentOrder.address);
-      const location =
-        currentOrder?.address[0]?.location?.trim() || fullAddress;
+      // const location =
+      //   currentOrder?.address[0]?.location?.trim() || fullAddress;
+
+      const location=fullAddress;
+      
 
       const geocoder = new window.google.maps.Geocoder();
 
