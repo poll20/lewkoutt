@@ -1922,7 +1922,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
 
     const merchantOrderId = payload.metaInfo?.udf2 || payload.merchantOrderId;
     const state = payload.state;
-
+// const payableAmount=payload.payableAmount
     console.log(`Webhook received for order ${merchantOrderId}: ${state} (${type})`);
 
     let paymentStatus;
@@ -1939,8 +1939,9 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
         console.error("No pending order found for", merchantOrderId);
         return res.status(404).send("Pending order not found");
       }
+const payableAmount=payload.payableAmount
 
-      const { order, address,timeslot ,userDetails, distance, couponcode,payableAmount } = pending;
+      const { order, address,timeslot ,userDetails, distance, couponcode } = pending;
       const ordersArray = Array.isArray(order) ? order : [order];
       const numericDistance = parseFloat(distance.toString().replace("km", "").trim()) || 0;
 
@@ -2007,7 +2008,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
           merchantOrderId,
           status: "Pending",
           paymentStatus: "Paid",
-          totalOrderAmount,
+          totalOrderAmount:payableAmount / 100,
           walletUsed,
           pgUsed,
           refundToWallet: 0,
