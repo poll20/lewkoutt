@@ -989,9 +989,9 @@ const Checkout = () => {
   const [showSheet, setShowSheet] = useState(false);
 
   // Coupon state
-  const [firstcpn, setfirstcpn] = useState([]);
-  const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
-  const [yppicode, setyppicode] = useState(false);
+  // const [firstcpn, setfirstcpn] = useState([]);
+  // const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
+  // const [yppicode, setyppicode] = useState(false);
 
   // Cart & address state from localStorage or context
   const [purchaseproduct, setpurchaseproduct] = useState(
@@ -1005,6 +1005,13 @@ const Checkout = () => {
   const [mywalletAmount, setMywalletAmount] = useState(
     () => JSON.parse(localStorage.getItem("checkoutWallet")) || walletkapesa || 0
   );
+
+
+  const savedCoupon = JSON.parse(localStorage.getItem("checkoutCoupon"));
+
+const [firstcpn, setfirstcpn] = useState(savedCoupon?.firstcpn || []);
+const [amountafteraddcoupon, setamountafteraddcoupon] = useState(savedCoupon?.amountafteraddcoupon || 0);
+const [yppicode, setyppicode] = useState(false);
 
   // Persist to localStorage
 
@@ -1090,7 +1097,18 @@ useEffect(() => {
       setfirstcpn([]);
       setamountafteraddcoupon(0);
     }
+    
   }, [coupons, totalDiscountPrice, karocode]);
+
+  useEffect(() => {
+  const couponData = {
+    firstcpn,
+    amountafteraddcoupon,
+    karocode,
+  };
+  localStorage.setItem("checkoutCoupon", JSON.stringify(couponData));
+}, [firstcpn, amountafteraddcoupon, karocode]);
+
 
   const amountAfterCoupon = totalDiscountPrice - (amountafteraddcoupon || 0);
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
