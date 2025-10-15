@@ -296,6 +296,7 @@ const PendingOrderSchema = new mongoose.Schema({
   merchantOrderId: { type: String, required: true, unique: true },
   order: { type: Array, required: true },       // products array
   address: { type: Array, required: true },     // user address
+  timeslot: { type: String, default: "" },
   userDetails: { type: Object, required: true },// user info (name, email, _id)
   distance: { type: String, default: "" },
   couponcode: { type: String, default: "" },
