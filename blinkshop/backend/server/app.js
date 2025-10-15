@@ -684,7 +684,7 @@ app.put("/user/update-role/:userId", verifySessionCookie,isAdmin,async (req, res
 
 
 
-app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
+app.patch('/user/:userId/address', async (req, res) => {
   let { userId } = req.params;
   console.log("Request Params:", req.params);
   console.log("Extracted uid:", userId);
