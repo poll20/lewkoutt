@@ -1958,7 +1958,9 @@ const payableAmount=payload.payableAmount
         state: address?.[0]?.state || "Rajasthan",
         saveas: address?.[0]?.saveas || "",
         location:address?.[0]?.location||"",
-        isDefault: address?.[0]?.isDefault || false,
+       isDefault: address?.[0]?.isDefault || false,
+          lat:address?.[0]?.lat||"",
+        lng:address?.[0]?.lng||"",
       };
 
       // Calculate total order amount (sum of all products)
