@@ -1321,7 +1321,7 @@ if(getbundeldata){
       >
         <Clock size={22} />
         <span >
-          Genuine products
+          60 mins Delivery (Jaipur)
         </span>
       </div>
 
@@ -1381,6 +1381,18 @@ if(getbundeldata){
         <span>Size Guide</span>
         <span className="prd-ka-dropdown-arrow">›</span>
       </NavLink>
+      <div
+  className="prd-ka-dropdown-item"
+  style={{
+    background: "linear-gradient(to right, white, white)",
+    padding: "1px",
+    borderRadius: "8px",
+    fontSize: "12px",
+  }}
+>
+  <span>Pan India delivery - 3 to 5 working days</span>
+</div>
+
     </div>
 
     {

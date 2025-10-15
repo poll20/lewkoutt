@@ -1283,7 +1283,7 @@ const fetchRatings = async (productId) => {
 //   }
 
 // }
-let orderreturn = async (reason, subreason, selectedOption,refundMode,transectionId, orderdata, uploadedUrls, address) => {
+let orderreturn = async (reason, subreason, selectedOption,transectionId, orderdata, uploadedUrls, address) => {
   console.log("📤 Preparing return request...");
   console.log("➡ reason:", reason);
   console.log("➡ subreason:", subreason);
@@ -1296,7 +1296,6 @@ let orderreturn = async (reason, subreason, selectedOption,refundMode,transectio
     reason,
     subreason,
     selectedOption,
-    refundMode,
     transectionId,
     orderdata,
     uploadedUrls,

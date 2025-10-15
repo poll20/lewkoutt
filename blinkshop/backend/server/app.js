@@ -2686,7 +2686,7 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 
 app.post("/return",verifySessionCookie, async (req, res) => {
   try {
-    let { reason, subreason, selectedOption, refundMode,transectionId, orderdata, uploadedUrls, address } = req.body;
+    let { reason, subreason, selectedOption,transectionId, orderdata, uploadedUrls, address } = req.body;
 
     console.log("✅ Incoming Data:");
     console.log("➡ reason:", reason);
@@ -2701,7 +2701,7 @@ app.post("/return",verifySessionCookie, async (req, res) => {
     if (!subreason) return res.status(400).json({ error: "Missing subreason" });
     if (!selectedOption) return res.status(400).json({ error: "Missing selectedOption" });
     if (!Array.isArray(orderdata) || orderdata.length === 0) return res.status(400).json({ error: "Invalid or empty orderdata" });
-    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 2) return res.status(400).json({ error: "Need at least 6 images" });
+    if (!Array.isArray(uploadedUrls) || uploadedUrls.length < 2) return res.status(400).json({ error: "Need at least 2 images" });
     if (!Array.isArray(address) || address.length === 0) return res.status(400).json({ error: "Address is required" });
 
     const addressd = {
@@ -2723,12 +2723,12 @@ app.post("/return",verifySessionCookie, async (req, res) => {
       reason,
       subreason,
       selectedOption,
-      refundMode,
+    
       transectionId,
       imageofreturn: uploadedUrls,
       addressofreturn: addressd,
-    transectionId:e.merchantOrderId, 
-    refundmode:{type:String},
+    // transectionId:e.merchantOrderId, 
+    // refundmode:{type:String},
       
       
     }));
@@ -2896,7 +2896,7 @@ app.get("/return", async (req, res) => {
         order.reason = ret.reason;
         order.subreason = ret.subreason;
         order.selectedOption = ret.selectedOption;
-        order.refundMode = ret.refundMode;
+        // order.refundMode = ret.refundMode;
         order.imageofreturn = ret.imageofreturn; // Assuming array of strings
         order.addressofreturn = ret.addressofreturn; // Assuming object
         order.transectionId = ret.transectionId;

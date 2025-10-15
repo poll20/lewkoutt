@@ -1486,20 +1486,33 @@ const Checkout = () => {
       {city?.includes("jaipur") ? (
         <>
           <TimeSlots />
-          <button
+          {/* <button
             className="pay-now-btn-checkoutbuy"
             disabled={!timeslotlelo}
             onClick={() => timeslotlelo && orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount, timeslotlelo)}
           >
-            Pay Now Jaipur
-          </button>
+            Pay Now
+          </button> */}
+          <button
+  className="pay-now-btn-checkoutbuy"
+  onClick={() => {
+    if (!timeslotlelo) {
+      alert("Please Select the Slot and Press on Confirm Slot.");
+      return;
+    }
+    orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount, timeslotlelo);
+  }}
+>
+  Pay Now
+</button>
+
         </>
       ) : (
         <button
           className="pay-now-btn-checkoutbuy"
           onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount)}
         >
-          Pay Now India
+          Pay Now
         </button>
       )}
 

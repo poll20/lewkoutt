@@ -250,7 +250,7 @@ import { useState, useRef, useEffect } from "react";
                 ))}
                 </div>
 
-                {error && <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>{error}</p>}
+                {error && <p style={{ color: "red", textAlign: "center", fontSize: "14px" }}>Please Press Again "Send OTP"</p>}
 
                 <button
                 type="submit"
