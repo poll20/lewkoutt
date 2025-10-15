@@ -1149,7 +1149,7 @@ const fetchUserOrders = async () => {
     if (res.status === 401 || res.status === 403) {
       // 🔴 Old session expired
       alert("Your session has expired. Please login again.");
-      // Clear old localStorage / cookies
+      // Clear old localStorage / cookiesg
       localStorage.clear();
       document.cookie.split(";").forEach(c => {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
