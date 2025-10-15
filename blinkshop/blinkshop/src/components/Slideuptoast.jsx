@@ -441,6 +441,27 @@ const {setkarocode}=useBio()
     return totalDiscountPrice >= coupon.minOrderAmount;
   };
 
+  if (!coupon || coupon.length === 0) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: "0",
+        left: "50%",
+        transform: "translateX(-50%)",
+        backgroundColor: "#fff",
+        padding: "20px",
+        borderRadius: "16px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+        textAlign: "center",
+        zIndex: 9999,
+      }}
+    >
+      <p>Loading coupons...</p>
+    </div>
+  );
+}
+
   return (
     <div
       style={{
@@ -485,7 +506,8 @@ const {setkarocode}=useBio()
             type="text" 
             placeholder="Enter Coupon Code"
             value={appliedCode}
-            onChange={(e)=>{setAppliedCode(e.value)}}
+            // onChange={(e)=>{setAppliedCode(e.value)}}
+            onChange={(e)=>{setAppliedCode(e.target.value)}}
             style={{
               flex: 1,
               padding: "10px",

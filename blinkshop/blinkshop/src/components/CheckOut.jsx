@@ -1504,14 +1504,22 @@ const Checkout = () => {
       )}
 
       {/* Coupon Toast */}
-      {yppicode && firstcpn && (
+      {/* {yppicode && firstcpn && (
         <Slideuptoast
           coupon={coupons}
           firstcpns={firstcpn}
           totalDiscountPrice={totalDiscountPrice}
           onClose={() => setyppicode(false)}
         />
-      )}
+      )} */}
+      {yppicode && coupons?.length > 0 && (
+  <Slideuptoast
+    coupon={coupons}
+    firstcpns={firstcpn}
+    totalDiscountPrice={totalDiscountPrice}
+    onClose={() => setyppicode(false)}
+  />
+)}
 
       {/* Bottom Sheet */}
       <div className="bottom-sheet" style={{ display: showSheet ? 'block' : 'none' }}>
