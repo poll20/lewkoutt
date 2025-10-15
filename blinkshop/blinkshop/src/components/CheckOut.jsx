@@ -1023,30 +1023,30 @@ useEffect(() => {
 }, [addresssetkro]);
 
 // Apply coupon logic
-  useEffect(() => {
-    let couponToApply;
+  // useEffect(() => {
+  //   let couponToApply;
 
-    if (!karocode?.length) {
-      couponToApply = coupons?.find(c => c.couponType === "First Order");
-    } else {
-      couponToApply = coupons?.find(c => c.code === karocode);
-    }
+  //   if (!karocode?.length) {
+  //     couponToApply = coupons?.find(c => c.couponType === "First Order");
+  //   } else {
+  //     couponToApply = coupons?.find(c => c.code === karocode);
+  //   }
 
-    if (couponToApply) {
-      const discounted = couponToApply.discountType === "Percentage"
-        ? (totalDiscountPrice * couponToApply.discountValue) / 100
-        : couponToApply.discountValue;
+  //   if (couponToApply) {
+  //     const discounted = couponToApply.discountType === "Percentage"
+  //       ? (totalDiscountPrice * couponToApply.discountValue) / 100
+  //       : couponToApply.discountValue;
 
-      setfirstcpn(couponToApply);
-      setamountafteraddcoupon(discounted);
-      setyppicode(true);
-    } else {
-      // Reset if no coupon
-      setfirstcpn([]);
-      setamountafteraddcoupon(0);
-    }
+  //     setfirstcpn(couponToApply);
+  //     setamountafteraddcoupon(discounted);
+  //     setyppicode(true);
+  //   } else {
+  //     // Reset if no coupon
+  //     setfirstcpn([]);
+  //     setamountafteraddcoupon(0);
+  //   }
     
-  }, [coupons, totalDiscountPrice, karocode]);
+  // }, [coupons, totalDiscountPrice, karocode]);
 
   useEffect(() => {
   const couponData = {
@@ -1109,30 +1109,30 @@ useEffect(() => {
   }, [purchaseproduct]);
 
 //   // Apply coupon logic
-//   useEffect(() => {
-//     let couponToApply;
+  useEffect(() => {
+    let couponToApply;
 
-//     if (!karocode?.length) {
-//       couponToApply = coupons?.find(c => c.couponType === "First Order");
-//     } else {
-//       couponToApply = coupons?.find(c => c.code === karocode);
-//     }
+    if (!karocode?.length) {
+      couponToApply = coupons?.find(c => c.couponType === "First Order");
+    } else {
+      couponToApply = coupons?.find(c => c.code === karocode);
+    }
 
-//     if (couponToApply) {
-//       const discounted = couponToApply.discountType === "Percentage"
-//         ? (totalDiscountPrice * couponToApply.discountValue) / 100
-//         : couponToApply.discountValue;
+    if (couponToApply) {
+      const discounted = couponToApply.discountType === "Percentage"
+        ? (totalDiscountPrice * couponToApply.discountValue) / 100
+        : couponToApply.discountValue;
 
-//       setfirstcpn(couponToApply);
-//       setamountafteraddcoupon(discounted);
-//       setyppicode(true);
-//     } else {
-//       // Reset if no coupon
-//       setfirstcpn([]);
-//       setamountafteraddcoupon(0);
-//     }
+      setfirstcpn(couponToApply);
+      setamountafteraddcoupon(discounted);
+      setyppicode(true);
+    } else {
+      // Reset if no coupon
+      setfirstcpn([]);
+      setamountafteraddcoupon(0);
+    }
     
-//   }, [coupons, totalDiscountPrice, karocode]);
+  }, [coupons, totalDiscountPrice, karocode]);
 
 //   useEffect(() => {
 //   const couponData = {
