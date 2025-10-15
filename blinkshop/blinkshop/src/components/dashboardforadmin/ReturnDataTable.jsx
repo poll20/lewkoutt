@@ -183,9 +183,17 @@ const ReturnDataTable = () => {
       const mapContainer = document.getElementById(`map-${openMapId}`);
       if (!mapContainer) return;
 
-      const addr = Array.isArray(currentItem.addressofreturn)
-        ? currentItem.addressofreturn[0]
-        : currentItem.addressofreturn;
+      // const addr = Array.isArray(currentItem.addressofreturn)
+      //   ? currentItem.addressofreturn[0]
+      //   : currentItem.addressofreturn;
+      const addr = {Array.isArray(item.addressofreturn)
+  ? item.addressofreturn
+      .map((addr) => 
+        `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`
+      )
+      .join(" | ")
+  : `${item.addressofreturn?.building || ""}, ${item.addressofreturn?.locality || ""}, ${item.addressofreturn?.city || ""}, ${item.addressofreturn?.state || ""}, ${item.addressofreturn?.pincode || ""}`}
+
 
       const lat = addr?.lat;
       const lng = addr?.lng;
