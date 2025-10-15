@@ -100,6 +100,8 @@ const addressSchema = new mongoose.Schema({
   saveas:{type:String},
   location:{type:String},
   isDefault: { type: Boolean, default: false },
+  lat: Number,  // Latitude
+  lng: Number   // Longitude
 });
 
 const otpSchema = new mongoose.Schema({

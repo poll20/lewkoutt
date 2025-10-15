@@ -700,8 +700,8 @@ app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { pincode,uname, phone,  building, locality,city,state,saveas,location, isDefault } = req.body;
-    console.log("sab kuch",pincode, phone, building, locality,saveas,location, isDefault)
+    const { pincode,uname, phone,  building, locality,city,state,saveas,location, isDefault,lat,lng } = req.body;
+    console.log("sab kuch",pincode, phone, building, locality,saveas,location, isDefault,lat,lng);
 
     if (phone) {
       console.log("phone received:", phone);
@@ -720,6 +720,8 @@ app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
         saveas,
         location,
         isDefault: isDefault || false,
+        lat,
+        lng
       });
       
   
