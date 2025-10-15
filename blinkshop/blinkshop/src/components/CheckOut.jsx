@@ -1077,7 +1077,7 @@ useEffect(() => {
       localStorage.removeItem("checkoutCart");
       localStorage.removeItem("checkoutAddress");
       localStorage.removeItem("checkoutWallet");
-      localStorage.removeItem("checkoutCoupon"); // if you store coupon too
+      // localStorage.removeItem("checkoutCoupon"); // if you store coupon too
     }
   };
 }, [location.pathname]);
