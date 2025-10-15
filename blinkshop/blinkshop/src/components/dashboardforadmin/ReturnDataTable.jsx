@@ -343,24 +343,25 @@
 
 //3
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDashboard } from "./DashboardContext";
 
 const ReturnDataTable = () => {
   const { returndata } = useDashboard();
   const [openMapId, setOpenMapId] = useState(null);
   const [zoomedImage, setZoomedImage] = useState(null);
+  const mapRefs = useRef({}); // useRef for map containers
 
   const toggleZoom = (src) => setZoomedImage(zoomedImage === src ? null : src);
 
   const formatAddress = (address) => {
-    if (!address) return "N/A";
+    if (!address || address.length === 0) return "N/A";
     const addr = Array.isArray(address) ? address[0] : address;
     return `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`;
   };
 
   const getPhone = (address) => {
-    if (!address) return "N/A";
+    if (!address || address.length === 0) return "N/A";
     const addr = Array.isArray(address) ? address[0] : address;
     return Array.isArray(addr?.phone) && addr.phone.length > 0 ? addr.phone[0] : "N/A";
   };
@@ -380,28 +381,33 @@ const ReturnDataTable = () => {
 
   useEffect(() => {
     if (!openMapId) return;
+
     const initMap = async () => {
-      await loadGoogleMaps();
-      const currentItem = returndata.find((item) => item._id === openMapId);
-      if (!currentItem) return;
+      try {
+        await loadGoogleMaps();
+        const currentItem = returndata.find((item) => item._id === openMapId);
+        if (!currentItem || !currentItem.addressofreturn?.[0]) return;
 
-      const mapContainer = document.getElementById(`map-${openMapId}`);
-      if (!mapContainer) return;
+        const addr = currentItem.addressofreturn[0];
+        if (!addr.lat || !addr.lng) return;
 
-      const addr = Array.isArray(currentItem.addressofreturn)
-        ? currentItem.addressofreturn[0]
-        : currentItem.addressofreturn;
+        // ensure container exists
+        const mapContainer = mapRefs.current[openMapId];
+        if (!mapContainer) return;
 
-      if (!addr?.lat || !addr?.lng) return;
-
-      const center = new window.google.maps.LatLng(addr.lat, addr.lng);
-      const map = new window.google.maps.Map(mapContainer, { zoom: 15, center });
-
-      new window.google.maps.Marker({
-        position: center,
-        map,
-        title: formatAddress(currentItem.addressofreturn),
-      });
+        // small delay to ensure container rendered properly
+        setTimeout(() => {
+          const center = new window.google.maps.LatLng(addr.lat, addr.lng);
+          const map = new window.google.maps.Map(mapContainer, { zoom: 15, center });
+          new window.google.maps.Marker({
+            position: center,
+            map,
+            title: formatAddress(currentItem.addressofreturn),
+          });
+        }, 100);
+      } catch (err) {
+        console.error("Google Maps failed to load", err);
+      }
     };
 
     initMap();
@@ -443,8 +449,8 @@ const ReturnDataTable = () => {
                 <tr className="hover:bg-gray-50">
                   <td className="border px-2 py-1">{item._id}</td>
                   <td className="border px-2 py-1">{item.name || item.addressofreturn?.[0]?.uname || "N/A"}</td>
-                  <td className="border px-2 py-1">{item.userId}</td>
-                  <td className="border px-2 py-1">{item.transectionId}</td>
+                  <td className="border px-2 py-1">{item.userId || "N/A"}</td>
+                  <td className="border px-2 py-1">{item.transectionId || "N/A"}</td>
                   <td className="border px-2 py-1">{item.email || "N/A"}</td>
                   <td className="border px-2 py-1">{formatAddress(item.addressofreturn)}</td>
                   <td className="border px-2 py-1">{getPhone(item.addressofreturn)}</td>
@@ -464,13 +470,13 @@ const ReturnDataTable = () => {
                       />
                     ))}
                   </td>
-                  <td className="border px-2 py-1">{item.status}</td>
+                  <td className="border px-2 py-1">{item.status || "N/A"}</td>
                   <td className="border px-2 py-1">{item.orderedAt && new Date(item.orderedAt).toLocaleString()}</td>
                   <td className="border px-2 py-1">{item.deliveredAt && new Date(item.deliveredAt).toLocaleString()}</td>
                   <td className="border px-2 py-1">{item.createdAt && new Date(item.createdAt).toLocaleString()}</td>
-                  <td className="border px-2 py-1">{item.reason}</td>
-                  <td className="border px-2 py-1">{item.subreason}</td>
-                  <td className="border px-2 py-1">{item.selectedOption}</td>
+                  <td className="border px-2 py-1">{item.reason || "N/A"}</td>
+                  <td className="border px-2 py-1">{item.subreason || "N/A"}</td>
+                  <td className="border px-2 py-1">{item.selectedOption || "N/A"}</td>
                   <td className="border px-2 py-1">{item.returnDate && new Date(item.returnDate).toLocaleString()}</td>
                   <td className="border px-2 py-1">{item.updatedAt && new Date(item.updatedAt).toLocaleString()}</td>
                   <td className="border px-2 py-1">
@@ -486,7 +492,10 @@ const ReturnDataTable = () => {
                 {openMapId === item._id && (
                   <tr>
                     <td colSpan="19">
-                      <div id={`map-${item._id}`} className="w-full h-72 mt-2 rounded" />
+                      <div
+                        ref={(el) => (mapRefs.current[item._id] = el)}
+                        className="w-full h-72 mt-2 rounded"
+                      />
                     </td>
                   </tr>
                 )}
