@@ -941,7 +941,7 @@ let handlenewaddress = async (address, user) => {
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
       method: "PATCH",
-    // credentials: 'include', // important: allow cookies to be set
+    credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
@@ -1283,7 +1283,7 @@ const fetchRatings = async (productId) => {
 //   }
 
 // }
-let orderreturn = async (reason, subreason, selectedOption, orderdata, uploadedUrls, address) => {
+let orderreturn = async (reason, subreason, selectedOption,refundMode,transectionId, orderdata, uploadedUrls, address) => {
   console.log("📤 Preparing return request...");
   console.log("➡ reason:", reason);
   console.log("➡ subreason:", subreason);
@@ -1296,6 +1296,8 @@ let orderreturn = async (reason, subreason, selectedOption, orderdata, uploadedU
     reason,
     subreason,
     selectedOption,
+    refundMode,
+    transectionId,
     orderdata,
     uploadedUrls,
     address,

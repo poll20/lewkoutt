@@ -326,8 +326,11 @@ if(!addtocartdatas){
          <span style={{fontWeight:"bold",fontSize:"20px",color:"green"}}>₹{discounttotal}</span>
          <span className="original-price">₹{cprice}</span>
          </div>
+         <div style={{display:"flex",flexDirection:"row"}}>
          <span style={{fontSize:"14px"}} onClick={(()=>(setpopupbreakup(!popupbreakup)))}>View breakup</span>
-          
+         <span style={{fontSize:"14px"}} onClick={(()=>(setpopupbreakup(!popupbreakup)))}>Coupon at Checkout</span>
+
+          </div>
         
          {/* <span>break up</span> */}
          </div>

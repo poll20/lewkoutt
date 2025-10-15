@@ -276,11 +276,11 @@ useEffect(()=>{
           <p>Address</p>
           <IoIosArrowForward />
         </NavLink>
-        <NavLink className="menu-item navlink">
+        {/* <NavLink className="menu-item navlink">
           <FaShop/>
           <p>Coupon</p>
           <IoIosArrowForward />
-        </NavLink>
+        </NavLink> */}
         <NavLink className="menu-item navlink" to={'/faq'}>
           <FaPhoneAlt />
 

@@ -684,7 +684,7 @@ app.put("/user/update-role/:userId", verifySessionCookie,isAdmin,async (req, res
 
 
 
-app.patch('/user/:userId/address', async (req, res) => {
+app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
   let { userId } = req.params;
   console.log("Request Params:", req.params);
   console.log("Extracted uid:", userId);
@@ -2686,7 +2686,7 @@ app.get("/sales/daily/:shopname", async (req, res) => {
 
 app.post("/return",verifySessionCookie, async (req, res) => {
   try {
-    let { reason, subreason, selectedOption, orderdata, uploadedUrls, address } = req.body;
+    let { reason, subreason, selectedOption, refundMode,transectionId, orderdata, uploadedUrls, address } = req.body;
 
     console.log("✅ Incoming Data:");
     console.log("➡ reason:", reason);
@@ -2713,6 +2713,8 @@ app.post("/return",verifySessionCookie, async (req, res) => {
       phone: address?.[0]?.phone || [],
       city: address?.[0]?.city || "Jaipur",
       state: address?.[0]?.state || "Rajasthan",
+      lat: address?.[0]?.lat || "",
+      lng: address?.[0]?.lng || "",
       isDefault: address?.[0]?.isDefault || false,
     };
 
@@ -2721,8 +2723,14 @@ app.post("/return",verifySessionCookie, async (req, res) => {
       reason,
       subreason,
       selectedOption,
+      refundMode,
+      transectionId,
       imageofreturn: uploadedUrls,
       addressofreturn: addressd,
+    transectionId:e.merchantOrderId, 
+    refundmode:{type:String},
+      
+      
     }));
 
     console.log("✅ Final returnData to save:", returnData);
@@ -2888,6 +2896,10 @@ app.get("/return", async (req, res) => {
         order.reason = ret.reason;
         order.subreason = ret.subreason;
         order.selectedOption = ret.selectedOption;
+        order.refundMode = ret.refundMode;
+        order.imageofreturn = ret.imageofreturn; // Assuming array of strings
+        order.addressofreturn = ret.addressofreturn; // Assuming object
+        order.transectionId = ret.transectionId;
         order.returnDate = ret.returnDate; // Assuming Date or ISO string
         order.status = "Returned Requested";
 

@@ -244,8 +244,8 @@ const UserOrder = () => {
 
                   {/* Product Details - Mobile First Layout */}
                   {product.totalAmount > 0 ? (
-                    <NavLink 
-                      to={`/productdescription/${product.productId}`} 
+                    <div
+                      
                       style={{ textDecoration: 'none', color: 'inherit' }}
                     >
                       <div style={{
@@ -344,7 +344,7 @@ const UserOrder = () => {
                                 fontWeight: '600',
                                 alignSelf: 'flex-start'
                               }}>
-                                ₹{product.discountprice}
+                                ₹{product?.totalOrderAmount}
                               </span>
                             </div>
                           </div>
@@ -363,7 +363,7 @@ const UserOrder = () => {
                           Ordered on {order.orderedAt}
                         </p>
                       </div>
-                    </NavLink>
+                    </div>
                   ) : null}
 
                   {/* Return/Review Section */}

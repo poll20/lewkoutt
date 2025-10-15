@@ -638,7 +638,9 @@ let returnscema=mongoose.Schema({
   selectedOption:String,  
   imageofreturn:{type:[String]},
   addressofreturn:[addressSchema],
-  returnDate:{ type: Date, default: Date.now }
+  transectionId:{type:String}, 
+  refundMode:{type:String},
+   returnDate:{ type: Date, default: Date.now }
 })
 // const mongoose = require("mongoose");
 

@@ -71,7 +71,9 @@ const navigate=useNavigate()
       }).flat()
       console.log("altag",alltags)
       let finaltag=alltags.map((e)=>(e.tag))
-      let distincttag=[...new Set(finaltag)]
+      // let distincttag=[...new Set(finaltag)]
+      let distincttag = [...new Set(finaltag)].filter(tag => tag !== "Co-ord Sets");
+
       settags(distincttag)
     
   };
@@ -108,7 +110,7 @@ let categoryy=categorydata.map((cat)=>{
 })
 
 let distinctcat=[...new Set(categoryy)]
-console.log(distinctcat)
+console.log("subcate",distinctcat)
 useEffect(()=>{
   if(distinctcat){
     setcatehicate(distinctcat)
@@ -277,7 +279,7 @@ console.log("navbar m props.pdd value",props.pd)
               
              <span onClick={() => handleSubMenu(category)}>{category}</span>
               
-              {/* Subcategories */}
+              
               <ul
                 className={`subcategories ${
                   subMenu === category ? "slide-down" : "slide-up"
