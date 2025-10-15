@@ -183,17 +183,9 @@ const ReturnDataTable = () => {
       const mapContainer = document.getElementById(`map-${openMapId}`);
       if (!mapContainer) return;
 
-      // const addr = Array.isArray(currentItem.addressofreturn)
-      //   ? currentItem.addressofreturn[0]
-      //   : currentItem.addressofreturn;
-      const addr = {Array.isArray(item.addressofreturn)
-  ? item.addressofreturn
-      .map((addr) => 
-        `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`
-      )
-      .join(" | ")
-  : `${item.addressofreturn?.building || ""}, ${item.addressofreturn?.locality || ""}, ${item.addressofreturn?.city || ""}, ${item.addressofreturn?.state || ""}, ${item.addressofreturn?.pincode || ""}`}
-
+      const addr = Array.isArray(currentItem.addressofreturn)
+        ? currentItem.addressofreturn[0]
+        : currentItem.addressofreturn;
 
       const lat = addr?.lat;
       const lng = addr?.lng;
@@ -253,13 +245,18 @@ const ReturnDataTable = () => {
                   <td>{item.email}</td>
                   <td>
                     {Array.isArray(item.addressofreturn)
-                      ? item.addressofreturn.map((addr) => `${addr.street}, ${addr.city}`).join(" | ")
-                      : `${item.addressofreturn.street}, ${item.addressofreturn.city}`}
+  ? item.addressofreturn
+      .map((addr) => 
+        `${addr?.building || ""}, ${addr?.locality || ""}, ${addr?.city || ""}, ${addr?.state || ""}, ${addr?.pincode || ""}`
+      )
+      .join(" | ")
+  : `${item.addressofreturn?.building || ""}, ${item.addressofreturn?.locality || ""}, ${item.addressofreturn?.city || ""}, ${item.addressofreturn?.state || ""}, ${item.addressofreturn?.pincode || ""}`}
+
                   </td>
                   <td>
                     {Array.isArray(item.addressofreturn)
-                      ? item.addressofreturn[0]?.phone
-                      : item.addressofreturn.phone}
+                      ? item.addressofreturn[0]?.phone[0]
+                      : item.addressofreturn.phone[0]}
                   </td>
                   <td>
                     {Array.isArray(item.products) &&
