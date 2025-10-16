@@ -655,9 +655,6 @@
 // export default SlideUpCouponToast;
 
 
-
-
-
 import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
 
@@ -666,31 +663,49 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
   const [appliedCode, setAppliedCode] = useState("");
   const { setkarocode } = useBio();
 
-  // Store original total to check coupon validity
-  const [originalTotal, setOriginalTotal] = useState(totalDiscountPrice);
-
+  // Show the toast
   useEffect(() => {
     setVisible(true);
-    setOriginalTotal(totalDiscountPrice);
-  }, []);
 
+    // Check if we already have a coupon in storage
+    const storedCode = localStorage.getItem("appliedCoupon");
+
+    if (storedCode) {
+      setAppliedCode(storedCode);
+      setkarocode(storedCode);
+    } else {
+      // Automatically apply first valid coupon if available
+      const validFirst = coupon?.find(c => totalDiscountPrice >= c.minOrderAmount);
+      if (validFirst) {
+        setAppliedCode(validFirst.code);
+        setkarocode(validFirst.code);
+        localStorage.setItem("appliedCoupon", validFirst.code);
+      }
+    }
+  }, [coupon, totalDiscountPrice]);
+
+  // Calculate discount
   const calculateDiscount = (c) => {
     if (!c) return 0;
     if (c.discountType === "Percentage") {
-      return Math.round((originalTotal * c.discountValue) / 100);
+      return Math.round((totalDiscountPrice * c.discountValue) / 100);
     }
     return c.discountValue || 0;
   };
 
-  const isValidCoupon = (c) => originalTotal >= c.minOrderAmount;
+  // Check if coupon is valid
+  const isValidCoupon = (c) => totalDiscountPrice >= c.minOrderAmount;
 
+  // Handle Apply / Remove
   const handleApplyRemove = (code) => {
     if (appliedCode === code) {
       setAppliedCode("");
-      setkarocode(""); // remove globally
+      setkarocode("");
+      localStorage.removeItem("appliedCoupon");
     } else {
       setAppliedCode(code);
-      setkarocode(code); // apply globally
+      setkarocode(code);
+      localStorage.setItem("appliedCoupon", code);
     }
   };
 
@@ -731,6 +746,37 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
         ×
       </div>
 
+      {/* Top Apply Button */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "10px",
+          marginBottom: "16px",
+        }}
+      >
+        <button
+          onClick={() => {
+            setkarocode(appliedCode);
+            localStorage.setItem("appliedCoupon", appliedCode);
+            setVisible(false);
+            setTimeout(onClose, 300);
+          }}
+          style={{
+            padding: "5px 5px",
+            backgroundColor: "#fff",
+            border: "none",
+            color: "green",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          Apply
+        </button>
+      </div>
+
       {/* Coupon Applied Message */}
       {appliedCode && (
         <>
@@ -743,7 +789,7 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
             }}
           >
             YAY! You saved ₹
-            {calculateDiscount(coupon.find((c) => c.code === appliedCode))}
+            {calculateDiscount(coupon?.find((c) => c?.code === appliedCode))}
           </div>
           <div
             style={{
@@ -763,8 +809,8 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
         {coupon?.map((c) => {
           const valid = isValidCoupon(c);
           const discount = calculateDiscount(c);
-          const isApplied = appliedCode === c.code;
-          const moreNeeded = c.minOrderAmount - originalTotal;
+          const isApplied = appliedCode === c?.code;
+          const moreNeeded = c?.minOrderAmount - totalDiscountPrice;
 
           return (
             <div
@@ -782,7 +828,7 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
                   alignItems: "center",
                 }}
               >
-                <span style={{ fontWeight: "bold" }}>{c.code}</span>
+                <span style={{ fontWeight: "bold" }}>{c?.code}</span>
                 <span
                   onClick={() => valid && handleApplyRemove(c.code)}
                   style={{
@@ -815,7 +861,7 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
                 }}
               >
                 {valid
-                  ? `Get ${c.discountValue}${
+                  ? `Get ${c?.discountValue}${
                       c.discountType === "Percentage" ? "%" : "₹"
                     } off upto ₹100`
                   : ""}
