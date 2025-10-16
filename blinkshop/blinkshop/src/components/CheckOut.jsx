@@ -1384,6 +1384,15 @@ const Checkout = () => {
     }
   }, [purchaseproduct]);
 
+  // 👇 Add this effect near your other useEffects
+useEffect(() => {
+  const firstProduct = purchaseproduct?.[0];
+  if (firstProduct?.cate && firstProduct?.tag) {
+    console.log("🔁 Refetching coupons after returning to checkout...");
+    fetchCoupons(firstProduct.cate, firstProduct.tag);
+  }
+}, [location.pathname]);
+
   // Apply coupon safely
   useEffect(() => {
     if (!coupons?.length || !purchaseproduct?.length) return;
