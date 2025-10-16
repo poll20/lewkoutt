@@ -666,31 +666,31 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
   const [appliedCode, setAppliedCode] = useState("");
   const { setkarocode } = useBio();
 
-  // Show the toast on mount
+  // Store original total to check coupon validity
+  const [originalTotal, setOriginalTotal] = useState(totalDiscountPrice);
+
   useEffect(() => {
     setVisible(true);
+    setOriginalTotal(totalDiscountPrice);
   }, []);
 
-  // Calculate discount
   const calculateDiscount = (c) => {
     if (!c) return 0;
     if (c.discountType === "Percentage") {
-      return Math.round((totalDiscountPrice * c.discountValue) / 100);
+      return Math.round((originalTotal * c.discountValue) / 100);
     }
     return c.discountValue || 0;
   };
 
-  // Check if coupon is valid
-  const isValidCoupon = (c) => totalDiscountPrice >= c.minOrderAmount;
+  const isValidCoupon = (c) => originalTotal >= c.minOrderAmount;
 
-  // Handle Apply / Remove
   const handleApplyRemove = (code) => {
     if (appliedCode === code) {
       setAppliedCode("");
-      setkarocode(""); // Remove globally
+      setkarocode(""); // remove globally
     } else {
       setAppliedCode(code);
-      setkarocode(code); // Apply globally
+      setkarocode(code); // apply globally
     }
   };
 
@@ -764,7 +764,7 @@ const SlideUpCouponToast = ({ onClose, coupon, totalDiscountPrice }) => {
           const valid = isValidCoupon(c);
           const discount = calculateDiscount(c);
           const isApplied = appliedCode === c.code;
-          const moreNeeded = c.minOrderAmount - totalDiscountPrice;
+          const moreNeeded = c.minOrderAmount - originalTotal;
 
           return (
             <div
