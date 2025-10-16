@@ -709,11 +709,11 @@ const MapWithAutocomplete = () => {
 
   // Save Address Function
   const saveAddress = async () => {
-    if (!latLng.lat || !latLng.lng) {
-      alert("Please select a location on the map");
-      return;
-    }
-     if (
+    // if (!latLng.lat || !latLng.lng) {
+    //   alert("Please select a location on the map");
+    //   return;
+    // }
+    if (
       !uname.trim() ||
       !phone.trim() ||
       !building.trim() ||
@@ -727,6 +727,7 @@ const MapWithAutocomplete = () => {
       alert("⚠️ Please fill all fields before saving the address.");
       return;
     }
+     
 
     const newAddress = {
       uname,
