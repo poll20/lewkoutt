@@ -968,7 +968,9 @@ navigate("/address/prd")
     }
     else{
       // setshowloginpage(true)
-      showPopup("Please Select a Size" )
+      // showPopup("Please Select a Size" )
+       prop.showPopup("Please Selete a Size")
+      return;
     }
   }
   else{
