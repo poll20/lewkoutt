@@ -1404,7 +1404,11 @@ const Checkout = () => {
 
       setfirstcpn(couponToApply);
       setamountafteraddcoupon(discounted);
+      setTimeout(()=>{
       setyppicode(true);
+
+      },800)
+      // setyppicode(true);
     } else {
       setfirstcpn(null);
       setamountafteraddcoupon(0);
