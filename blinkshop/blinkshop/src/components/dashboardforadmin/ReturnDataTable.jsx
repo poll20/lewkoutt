@@ -347,7 +347,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDashboard } from "./DashboardContext";
 
 const ReturnDataTable = () => {
-  const { returndata } = useDashboard();
+  const {returndata } = useDashboard();
   const [openMapId, setOpenMapId] = useState(null);
   const [zoomedImage, setZoomedImage] = useState(null);
   const mapRefs = useRef({}); // useRef for map containers
