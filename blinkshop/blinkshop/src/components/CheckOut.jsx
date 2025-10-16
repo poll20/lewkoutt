@@ -1404,11 +1404,8 @@ const Checkout = () => {
 
       setfirstcpn(couponToApply);
       setamountafteraddcoupon(discounted);
-      setTimeout(()=>{
+    
       setyppicode(true);
-
-      },800)
-      // setyppicode(true);
     } else {
       setfirstcpn(null);
       setamountafteraddcoupon(0);
@@ -1529,14 +1526,16 @@ const Checkout = () => {
           onClose={() => setyppicode(false)}
         />
       )} */}
-      {yppicode && coupons?.length > 0 && (
+      {/* {yppicode && coupons?.length > 0 && (
   <Slideuptoast
     coupon={coupons}
     firstcpns={firstcpn}
     totalDiscountPrice={totalDiscountPrice}
     onClose={() => setyppicode(false)}
   />
-)}
+)} */}
+ {yppicode && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setyppicode(false)} />}
+
 
       {/* Bottom Sheet */}
       <div className="bottom-sheet" style={{ display: showSheet ? 'block' : 'none' }}>
