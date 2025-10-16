@@ -519,19 +519,12 @@ const {setkarocode}=useBio()
           /> */}
           <button
             
-          //   onClick={()=>{setkarocode(appliedCode),setTimeout(()=>{
+            onClick={()=>{setkarocode(appliedCode),setTimeout(()=>{
                
-          // setVisible(false);
-          // setTimeout(onClose, 300);
+          setVisible(false);
+          setTimeout(onClose, 300);
     
-          //   },100)}}
-           onClick={() => {
-    if(appliedCode){
-      setkarocode(appliedCode);
-      setVisible(false);
-      onClose();
-    }
-  }}
+            },100)}}
             style={{
               padding: "5px 5px",
               backgroundColor: "#fff",
@@ -589,7 +582,7 @@ const {setkarocode}=useBio()
                 }}
               >
                 <span style={{ fontWeight: "bold" }}>{c.code}</span>
-                {/* <span
+                <span
                   onClick={() => {
                     if (isApplied) {
                       // setkarocode("")
@@ -609,26 +602,7 @@ const {setkarocode}=useBio()
                   }}
                 >
                   {isApplied ? "Remove" : "Apply"}
-                </span> */}
-                <span
-                style={{
-                    color: isApplied ? "red" : "#1a73e8",
-                    cursor: valid ? "pointer" : "not-allowed",
-                    fontWeight: "500",
-                  }}
-  onClick={() => {
-    if (isApplied) {
-      setAppliedCode("");
-      setkarocode("");  // REMOVE from context
-    } else if (valid) {
-      setAppliedCode(c.code);
-      setkarocode(c.code);  // APPLY in context
-    }
-  }}
->
-  {isApplied ? "Remove" : "Apply"}
-</span>
-
+                </span>
               </div>
 
               <div
