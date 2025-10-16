@@ -954,29 +954,60 @@ console.log("qty is",qty)
 
 console.log("sq",selectedSize,quantity)
 
-let buydata=(data,siz,qtys)=>{  
-console.log("kop",data,siz,qtys)
-  if(user){
-    if(siz){
-    console.log("buydatanini",data,siz,qtys)
-    data.size=siz
-    data.qty=qtys
-    console.log("buydata",data)
-    let finalData = Array.isArray(data) ? data : [data];
-    takebuydata(finalData)
-navigate("/address/prd")
-    }
-    else{
-      // setshowloginpage(true)
-      // showPopup("Please Select a Size" )
-       prop.showPopup("Please Selete a Size")
+// let buydata=(data,siz,qtys)=>{  
+// console.log("kop",data,siz,qtys)
+//   if(user){
+//     if(siz){
+//     console.log("buydatanini",data,siz,qtys)
+//     data.size=siz
+//     data.qty=qtys
+//     console.log("buydata",data)
+//     let finalData = Array.isArray(data) ? data : [data];
+//     takebuydata(finalData)
+// navigate("/address/prd")
+//     }
+//     else{
+//       // setshowloginpage(true)
+//       // showPopup("Please Select a Size" )
+//        prop.showPopup("Please Selete a Size")
+//       return;
+//     }
+//   }
+//   else{
+//     setshowloginpage(true)
+//   }
+// }
+let buydata = (data, siz, qtys) => {  
+  console.log("kop", data, siz, qtys);
+
+  if (user) {
+    if (siz) {
+      console.log("buydatanini", data, siz, qtys);
+      data.size = siz;
+      data.qty = qtys;
+      console.log("buydata", data);
+
+      let finalData = Array.isArray(data) ? data : [data];
+
+      // ✅ Context update
+      takebuydata(finalData);
+
+      // ✅ Local storage me save karo
+      localStorage.setItem("buydata", JSON.stringify(finalData));
+
+      // ✅ Thoda delay do taaki state update ho jaye
+      setTimeout(() => {
+        navigate("/address/prd");
+      }, 1000);
+    } else {
+      prop.showPopup("Please Select a Size");
       return;
     }
+  } else {
+    setshowloginpage(true);
   }
-  else{
-    setshowloginpage(true)
-  }
-}
+};
+
 
 let cate=product.cate
 

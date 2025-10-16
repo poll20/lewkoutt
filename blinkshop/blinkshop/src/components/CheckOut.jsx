@@ -1380,7 +1380,7 @@ const Checkout = () => {
   // Fetch coupons for first product
   useEffect(() => {
     if (purchaseproduct[0]?.cate && purchaseproduct[0]?.tag) {
-      fetchCoupons(purchaseproduct[0].cate, purchaseproduct[0].tag);
+      fetchCoupons(purchaseproduct[0]?.cate, purchaseproduct[0]?.tag);
     }
   }, [purchaseproduct]);
 
