@@ -1526,15 +1526,15 @@ const Checkout = () => {
           onClose={() => setyppicode(false)}
         />
       )} */}
-      {/* {yppicode && coupons?.length > 0 && (
+      {yppicode && coupons?.length > 0 && (
   <Slideuptoast
     coupon={coupons}
     firstcpns={firstcpn}
     totalDiscountPrice={totalDiscountPrice}
     onClose={() => setyppicode(false)}
   />
-)} */}
- {yppicode && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setyppicode(false)} />}
+)}
+ {/* {yppicode && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setyppicode(false)} />} */}
 
 
       {/* Bottom Sheet */}
