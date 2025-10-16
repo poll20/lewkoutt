@@ -713,6 +713,20 @@ const MapWithAutocomplete = () => {
       alert("Please select a location on the map");
       return;
     }
+     if (
+      !uname.trim() ||
+      !phone.trim() ||
+      !building.trim() ||
+      !locality.trim() ||
+      !city.trim() ||
+      !state.trim() ||
+      !pincode.trim() ||
+      !latLng.lat ||
+      !latLng.lng
+    ) {
+      alert("⚠️ Please fill all fields before saving the address.");
+      return;
+    }
 
     const newAddress = {
       uname,
