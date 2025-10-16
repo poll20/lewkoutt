@@ -988,13 +988,39 @@ const MapWithAutocomplete = () => {
                   </label>
                 </div>
 
-                <button
+                {/* <button
                   className={`save-address ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
                   onClick={saveAddress}
                   disabled={!isFormValid}
                 >
                   Save my address
-                </button>
+                </button> */}
+                <div style={{ textAlign: "center", marginTop: "10px" }}>
+  <button
+    className={`save-address ${
+      !isFormValid ? "opacity-50 cursor-not-allowed" : ""
+    }`}
+    onClick={saveAddress}
+    disabled={!isFormValid}
+  >
+    Save my address
+  </button>
+
+  {/* 🔴 Error message when button disabled */}
+  {!isFormValid && (
+    <p
+      style={{
+        color: "red",
+        fontSize: "14px",
+        marginTop: "6px",
+        fontFamily: "'Poppins', sans-serif",
+      }}
+    >
+      ⚠️ Please fill all the fields before saving the address.
+    </p>
+  )}
+</div>
+
               </div>
             </div>
           )}
