@@ -709,24 +709,38 @@ const MapWithAutocomplete = () => {
 
   // Save Address Function
   const saveAddress = async () => {
-    if (!latLng.lat || !latLng.lng) {
-      alert("Please select a location on the map");
-      return;
-    }
-     if (
-      !uname.trim() ||
-      !phone.trim() ||
-      !building.trim() ||
-      !locality.trim() ||
-      !city.trim() ||
-      !state.trim() ||
-      !pincode.trim() ||
-      !latLng.lat ||
-      !latLng.lng
-    ) {
-      alert("⚠️ Please fill all fields before saving the address.");
-      return;
-    }
+    // if (!latLng.lat || !latLng.lng) {
+    //   alert("Please select a location on the map");
+    //   return;
+    // }
+    //  if (
+    //   !uname.trim() ||
+    //   !phone.trim() ||
+    //   !building.trim() ||
+    //   !locality.trim() ||
+    //   !city.trim() ||
+    //   !state.trim() ||
+    //   !pincode.trim() ||
+    //   !latLng.lat ||
+    //   !latLng.lng
+    // ) {
+    //   alert("⚠️ Please fill all fields before saving the address.");
+    //   return;
+    // }
+    if (
+    !uname.trim() ||
+    !phone.trim() ||
+    !building.trim() ||
+    !locality.trim() ||
+    !city.trim() ||
+    !state.trim() ||
+    !pincode.trim() ||
+    !selectedAddresss.trim()
+  ) {
+    alert("⚠️ Please fill all fields before saving the address.");
+    return;
+  }
+
 
     const newAddress = {
       uname,
@@ -872,10 +886,13 @@ const MapWithAutocomplete = () => {
           marginBottom: "10px",
         }}
       />
-
+ 
+ <div style={{display:"flex",flexDirection:"column", textAlign: "center",marginBottom: "8px" }}>
       <h6 style={{ textAlign: "center", marginBottom: "10px" }}>
         Drag <FaMapMarkerAlt color="red" /> to select your location
       </h6>
+      <span>Please make sure your location is on</span>
+      </div>
 
       <div
         ref={mapRef}
