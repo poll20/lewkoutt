@@ -760,7 +760,7 @@ if(searchvalue){
         </div>
 
         {/* Details Section */}
-        <div className="product-details" style={{backgroundColor:"white"}}>
+        <div className="product-details" style={{backgroundColor:"white",paddingBottom: "70px"}}>
           {/* fontFamily: "'Inter', sans-serif */}
           <span className="product-title" style={{fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,17)+`...`):(product.description)}</span>
           {

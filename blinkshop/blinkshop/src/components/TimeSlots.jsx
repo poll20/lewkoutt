@@ -20,7 +20,7 @@ const [selectedDate, setSelectedDate] = useState(() => {
   });
   
 const { settimeslotlelo,distance } = useBio();
-
+const [allOtherSlotsDisabled, setAlldisabled] = useState(false);
 
 const isDisabled = (slot) => {
   const now = new Date();
@@ -58,7 +58,10 @@ const isDisabled = (slot) => {
     const otherSlots = timeSlots.filter(s => s.label !== 'Within 60 minutes');
     const allOtherSlotsDisabled = otherSlots.every(s => isDisabled(s));
 
-    if (allOtherSlotsDisabled) return true;
+    if (allOtherSlotsDisabled){
+      setAlldisabled(allOtherSlotsDisabled)
+    return true;
+    }
 
     return false;
   }
@@ -117,7 +120,7 @@ const handleDateChange = (e) => {
   if (selectedSlot) {
     settimeslotlelo(selectedSlot);
   }
-
+const allDisabled = timeSlots.every((slot) => isDisabled(slot));
   return (
 //     <div className="max-w-md mx-auto p-4 border rounded-lg shadow-sm">
 //       {parseFloat(distance?.replace("km", "").trim()) > 10 ? (
@@ -319,6 +322,27 @@ const handleDateChange = (e) => {
       </label>
     );
   })}
+
+  {/* ✅ Pretty Message When All Slots Disabled */}
+      {allDisabled && (
+        <div
+          style={{
+            marginTop: "1rem",
+            marginBottom: "1rem",
+            padding: "0.75rem",
+            backgroundColor: "#fef3c7",
+            border: "1px solid #fcd34d",
+            borderRadius: "0.5rem",
+            textAlign: "center",
+            fontFamily: "'Dancing Script', cursive",
+            fontSize: "1.1rem",
+            color: "#92400e",
+          }}
+        >
+          <p>Fashion never sleeps, but our riders do 💤</p>
+          <p>Please select tomorrow's date</p>
+        </div>
+      )}
 
   <button
     style={{
