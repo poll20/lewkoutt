@@ -1182,6 +1182,7 @@ if(getbundeldata){
        
           
          <div className="webkitscroll" style={{ display: "flex", flexDirection: "row", alignItems: "start", justifyContent: "start",overflowX:"scroll",marginTop:"8px" }}>
+          
       <div style={{ display: "flex", gap: "8px" }}>
         {visibleCoupons?.map(coupon => (
           <CouponCard key={coupon._id} coupon={coupon} prdrate={product.discountprice} />
@@ -1445,6 +1446,7 @@ if(getbundeldata){
       <div>
     <Card  category={cate}/>
     </div>
+     
     </div>
     
     {/* {showloginpage==true?(

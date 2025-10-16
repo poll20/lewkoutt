@@ -328,19 +328,20 @@ const allDisabled = timeSlots.every((slot) => isDisabled(slot));
         <div
           style={{
             marginTop: "1rem",
-            marginBottom: "1rem",
-            padding: "0.75rem",
-            backgroundColor: "#fef3c7",
-            border: "1px solid #fcd34d",
+            marginBottom: "10px",
+            padding: "5px",
+            backgroundColor: "white",
+            // border: "1px solid red",
             borderRadius: "0.5rem",
             textAlign: "center",
-            fontFamily: "'Dancing Script', cursive",
-            fontSize: "1.1rem",
-            color: "#92400e",
+            // fontFamily: "'Dancing Script', cursive",
+            fontSize: "12px",
+            
+            color: "black",
           }}
         >
-          <p>Fashion never sleeps, but our riders do 💤</p>
-          <p>Please select tomorrow's date</p>
+          <span>Fashion never sleeps, but our riders do 💤</span><br></br>
+          <span>Please select Tomorrow's date</span>
         </div>
       )}
 
