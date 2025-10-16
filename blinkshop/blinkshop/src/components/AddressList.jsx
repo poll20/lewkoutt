@@ -560,7 +560,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 const AddressList = ({ loc }) => {
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const { handlenewaddress, handlechooseaddress, deleteandeditaddrress, setshowmeaddress } = useBio();
+  const { handlenewaddress, handlechooseaddress, deleteandeditaddrress, setshowmeaddress,fetchCoupons } = useBio();
   const [pincode, setPincode] = useState("");
   const [uname, setUname] = useState("");
   const [phone, setPhone] = useState("");
@@ -598,6 +598,7 @@ const AddressList = ({ loc }) => {
       setchooseaddress(a);
     }
   }, [selectedAddress]);
+  
 
   const sendtocheckout = () => {
     if (chooseaddress) {

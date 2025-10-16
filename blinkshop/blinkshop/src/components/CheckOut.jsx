@@ -1380,7 +1380,9 @@ const Checkout = () => {
   // Fetch coupons for first product
   useEffect(() => {
     if (purchaseproduct[0]?.cate && purchaseproduct[0]?.tag) {
-      fetchCoupons(purchaseproduct[0]?.cate, purchaseproduct[0]?.tag);
+      // fetchCoupons(purchaseproduct[0]?.cate, purchaseproduct[0]?.tag);
+      fetchCoupons("all","all");
+      
     }
   }, [purchaseproduct]);
 
@@ -1389,7 +1391,9 @@ useEffect(() => {
   const firstProduct = purchaseproduct?.[0];
   if (firstProduct?.cate && firstProduct?.tag) {
     console.log("🔁 Refetching coupons after returning to checkout...");
-    fetchCoupons(firstProduct.cate, firstProduct.tag);
+    // fetchCoupons(firstProduct.cate, firstProduct.tag);
+    fetchCoupons("all","all");
+
   }
 }, [location.pathname]);
 
