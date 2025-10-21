@@ -568,7 +568,7 @@ finally{
     else{
   try {
     setIsLoading(true);
- trackAddToCart(product);
+ trackAddToCart(prd);
 
     const isBundle = Array.isArray(prd) && prd.length > 0;
 
