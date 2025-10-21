@@ -8,6 +8,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
 import { color } from 'framer-motion';
+import { trackViewItem, trackAddToCart, trackAddToWishlist,trackPurchase } from "../analytics/ga4";
 // import { trackEvent } from '../analytics/ga4';
 // import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
 
@@ -263,7 +264,9 @@ useEffect(() => {
       // Correcting the way matchItem is created
       // const matchedColors = productdataonlydetail
       //   .flatMap(product => product.colors)
+
       //   .filter(color => color._id == id);
+      trackAddToWishlist(prd)
       const matchedColors = productdataonlydetail
   .flatMap(product => product.colors || [])
   .filter(color => color._id == id);
@@ -557,7 +560,7 @@ finally{
   //   label: prd.title,
   //   value: prd.price,
   // });
-
+   
     console.log("cartbundle,",prd)
     if(!user){
       setshowloginpage(true)
@@ -565,6 +568,7 @@ finally{
     else{
   try {
     setIsLoading(true);
+ trackAddToCart(product);
 
     const isBundle = Array.isArray(prd) && prd.length > 0;
 
@@ -1049,6 +1053,7 @@ let handlechooseaddress=(add)=>{
 
 
 let orderplaced=async(order,address,walletUsed,payableAmount,timeslot)=>{
+  trackPurchase(order, addtocartitem,payableAmount);
   console.log("userdetailsss",userDetails)
  console.log("orederrr",order)
  console.log("addre",address)

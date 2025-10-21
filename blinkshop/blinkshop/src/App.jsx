@@ -1,4 +1,6 @@
 // import { initGA } from "./analytics/ga4";
+import { initGA, trackPageView } from "./analytics/ga4";
+
 // import usePageTracking from "./analytics/usePageTracking";
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
 import React, { useState, useEffect,Suspense  } from "react";
@@ -110,6 +112,9 @@ import Returnexchange from "./components/ReturnExchange";
 
 export default function App() {
 
+  useEffect(() => {
+  initGA(); // Initialize GA
+}, []);
 //  initGA();
 //   usePageTracking();
   const [popupMessage, setPopupMessage] = useState("");
@@ -193,6 +198,9 @@ const {userdata}=useBio()
 
 
      
+useEffect(() => {
+  trackPageView(location.pathname + location.search);
+}, [location]);
 
   
   return (

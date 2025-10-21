@@ -718,7 +718,7 @@ import BundleProduct from "./BundleProduct";
 import { useLoading } from "./LoadingContext";
 import SlideUpModal from "./SlideupModel";
 import OtpLogin from "./OtpLogin";
-
+import { trackViewItem, trackAddToCart, trackAddToWishlist } from "../analytics/ga4";
 // Example: ProductDescription.js
 // import { trackEvent, setUserProperties } from "../analytics/ga4";
 const ProductDescription = (prop) => {
@@ -905,6 +905,10 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, [product]);
 
+
+
+
+
   const notify = () => toast("Plese Login For Add Items In Cart");
 
   const incrementQuantity = () => setQuantity(quantity + 1);
@@ -1055,6 +1059,14 @@ const handleNext = () => {
 if(getbundeldata){
   console.log("bundle data in prdd",getbundeldata)
 }
+useEffect(() => {
+  trackViewItem({
+    id: product._id,
+    name: product.title,
+    price: product.discountprice,
+    category: product.cate,
+  });
+}, [product]);
 
   return (
     <>

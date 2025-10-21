@@ -11,7 +11,7 @@ import BundleProduct from './BundleProduct';
 import Cardforall from './Cardforall';
 import { color } from 'framer-motion';
 import { slugify } from './Slugify';
-
+import { trackBeginCheckout } from "../analytics/ga4";
 const AddToCart = () => {
   const navigate = useNavigate();
   const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart } = useBio();
@@ -86,6 +86,7 @@ useEffect(()=>{
 let sendtocheckout = () => {
   if (choosebuy) {
     console.log("choosebyu",choosebuy)
+      trackBeginCheckout(choosebuy, totalprice); // Track begin_checkout event
     takebuydata(choosebuy); // Context update karo
     localStorage.setItem("buydata", JSON.stringify(choosebuy)); // ✅ Save to Local Storage
     // ✅ Delay navigation to ensure `buydata` updates before changing page
