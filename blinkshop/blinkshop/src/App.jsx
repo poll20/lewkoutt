@@ -1,5 +1,5 @@
 // import { initGA } from "./analytics/ga4";
-import { initGA, trackPageView } from "./analytics/ga4";
+import { initGA, trackPageView } from "./analytics/g4a";
 
 // import usePageTracking from "./analytics/usePageTracking";
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
