@@ -718,7 +718,7 @@ import BundleProduct from "./BundleProduct";
 import { useLoading } from "./LoadingContext";
 import SlideUpModal from "./SlideupModel";
 import OtpLogin from "./OtpLogin";
-import { trackViewItem, trackAddToCart, trackAddToWishlist } from "../analytics/ga4";
+import { trackViewItem, trackAddToCart, trackAddToWishlist } from "../analytics/g4a";
 // Example: ProductDescription.js
 // import { trackEvent, setUserProperties } from "../analytics/ga4";
 const ProductDescription = (prop) => {
