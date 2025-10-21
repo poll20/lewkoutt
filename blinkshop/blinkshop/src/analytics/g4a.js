@@ -141,11 +141,11 @@ export const trackAddToCart = (product = {}) => {
     value: product.price || 0,
     items: [
       {
-        item_id: product.id,
-        item_name: product.name,
-        price: product.price,
+        item_id: product._id,
+        item_name: product.title,
+        price: product.discountprice,
         quantity: product.quantity || 1,
-        item_category: product.category || "unknown",
+        item_category: product.cate || "unknown",
       },
     ],
   });
