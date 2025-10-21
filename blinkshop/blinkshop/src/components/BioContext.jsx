@@ -8,7 +8,7 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
 import { color } from 'framer-motion';
-import { trackViewItem, trackAddToCart, trackAddToWishlist,trackPurchase } from "../analytics/ga4";
+import { trackViewItem, trackAddToCart, trackAddToWishlist,trackPurchase } from "../analytics/g4a";
 // import { trackEvent } from '../analytics/ga4';
 // import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
 

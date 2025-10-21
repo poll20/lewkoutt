@@ -11,7 +11,7 @@ import BundleProduct from './BundleProduct';
 import Cardforall from './Cardforall';
 import { color } from 'framer-motion';
 import { slugify } from './Slugify';
-import { trackBeginCheckout } from "../analytics/ga4";
+import { trackBeginCheckout } from "../analytics/g4a";
 const AddToCart = () => {
   const navigate = useNavigate();
   const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart } = useBio();
