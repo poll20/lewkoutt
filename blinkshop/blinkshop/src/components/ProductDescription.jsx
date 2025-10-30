@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect, useRef } from "react";
 import { Shield, Clock, RefreshCcw } from "lucide-react";
 import "./ProductDescription.css";
@@ -601,7 +597,7 @@ if(getbundeldata){
   )}
 </div>
 
-          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
+          {/* <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
             <div className="sizes" style={{display:"flex",alignItems:"center",justifyContent:"start",gap:"5px",paddingTop:"5px",borderRadius:"10px"}}>
 <label>Size:</label>
               {sizes.map((size) => (
@@ -614,7 +610,76 @@ if(getbundeldata){
                 </button>
               ))}
             </div>
-          </div>
+          </div> */}
+          <div
+  className="size-options"
+  style={{ gap: "5px", padding: "2px 0", border: "1px solid white" }}
+>
+  <div
+    className="sizes"
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "start",
+      gap: "5px",
+      paddingTop: "5px",
+      borderRadius: "10px",
+      position: "relative",
+    }}
+  >
+    <label>Size:</label>
+    {product?.sizes?.map((sizeObj) => (
+      <div
+        key={sizeObj.size}
+        style={{ position: "relative", display: "inline-block" }}
+      >
+        <button
+          disabled={sizeObj.quantity === 0}
+          onClick={() =>
+            sizeObj.quantity > 0 && setSelectedSize(sizeObj.size)
+          }
+          className={`size-btn ${
+            selectedSize === sizeObj.size ? "active" : ""
+          }`}
+          style={{
+            borderRadius: "30px",
+            width: "50px",
+            position: "relative",
+            opacity: sizeObj.quantity === 0 ? 0.5 : 1,
+            cursor: sizeObj.quantity === 0 ? "not-allowed" : "pointer",
+          }}
+        >
+          <span>{sizeObj.size.toUpperCase()}</span>
+        </button>
+
+        {/* ❌ Red Cross for Out of Stock */}
+        {sizeObj.quantity === 0 && (
+          <span
+            style={{
+              position: "absolute",
+              top: "-3px",
+              right: "-3px",
+              background: "white",
+              borderRadius: "50%",
+              width: "18px",
+              height: "18px",
+              color: "red",
+              fontWeight: "bold",
+              fontSize: "14px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 0 2px rgba(0,0,0,0.3)",
+            }}
+          >
+            ❌
+          </span>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
 
             <div
       style={{

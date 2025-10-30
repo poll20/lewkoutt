@@ -733,61 +733,17 @@ if(searchvalue){
               
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
         
-        <div className="image-container">
+        {/* <div className="image-container">
           <NavLink to={`/productdescription/${ slugify(product.title)}/${!wish?(product._id):(product?.itemid)}/${product?.color || product?.defaultColor}`}>
-          {/* <img
-            src={product.image[0]} // Replace with real image
+          <img
+            src={product.image[0]} 
             alt={product?.title || "Product"}
             className="product-image"
             loading="lazy"
 
-          /> */}
-          <div className="product-image-wrapper" style={{ position: "relative" }}>
-  <img
-    src={product.image[0]}
-    alt={product?.title || "Product"}
-    className="product-image"
-    loading="lazy"
-    style={{
-      filter: product?.colors?.some(color =>
-        color?.sizes?.some(size => size.quantity === 0)
-      )
-        ? "brightness(50%)"
-        : "none",
-      transition: "0.3s ease"
-    }}
-  />
-
-  {/* 🔥 Overlay for sold-out */}
-  {product?.colors?.some(color =>
-    color?.sizes?.some(size => size.quantity === 0)
-  ) && (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "white",
-        fontWeight: "bold",
-        fontSize: "18px",
-        letterSpacing: "1px",
-        fontFamily: "Oswald",
-        borderRadius: "6px",
-      }}
-    >
-      SOLD OUT
-    </div>
-  )}
-</div>
-
+          />
           </NavLink>
-          {/* Heart Icon */}
+          
           <div className="heart-icon">{!wish ? (
     product.colors && product.colors.length > 0 ? (
       <div onClick={() => handleClick(product, product.colors?.[0]?._id)}>
@@ -798,7 +754,108 @@ if(searchvalue){
     <AiOutlineDelete onClick={() => removewishlistonly(product.itemid)} style={{ color: "black", position: 'relative', left: "-3px", bottom: "2px" }} size={15} />
   )}</div>
         
+        </div> */}
+        <div className="image-container" style={{ position: "relative" }}>
+  <NavLink
+    to={`/productdescription/${slugify(product.title)}/${
+      !wish ? product._id : product?.itemid
+    }/${product?.color || product?.defaultColor}`}
+  >
+    <div
+      className="product-image-wrapper"
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "300px", // 👈 same height as before to keep layout stable
+        borderRadius: "6px",
+        overflow: "hidden",
+      }}
+    >
+      <img
+        src={product.image[0]}
+        alt={product?.title || "Product"}
+        className="product-image"
+        loading="lazy"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          transition: "0.3s ease",
+          filter: product?.colors?.some((color) =>
+            color?.sizes?.some((size) => size.quantity === 0)
+          )
+            ? "brightness(50%)"
+            : "none",
+        }}
+      />
+
+      {/* 🔥 Sold Out Overlay */}
+      {product?.colors?.some((color) =>
+        color?.sizes?.some((size) => size.quantity === 0)
+      ) && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "white",
+            fontWeight: "bold",
+            fontSize: "18px",
+            letterSpacing: "1px",
+            fontFamily: "Oswald",
+            borderRadius: "6px",
+            zIndex: 2,
+          }}
+        >
+          SOLD OUT
         </div>
+      )}
+    </div>
+  </NavLink>
+
+  {/* ❤️ Heart Icon - stays fixed at top corner */}
+  <div
+    className="heart-icon"
+    style={{
+      position: "absolute",
+      top: "10px",
+      right: "10px",
+      zIndex: 3,
+    }}
+  >
+    {!wish ? (
+      product.colors && product.colors.length > 0 ? (
+        <div onClick={() => handleClick(product, product.colors?.[0]?._id)}>
+          <HeartButton
+            cardid={product.colors?.[0]?._id}
+            dw={30}
+            dh={30}
+            dmt={-8}
+            dml={-8}
+          />
+        </div>
+      ) : null
+    ) : (
+      <AiOutlineDelete
+        onClick={() => removewishlistonly(product.itemid)}
+        style={{
+          color: "black",
+          position: "relative",
+          left: "-3px",
+          bottom: "2px",
+        }}
+        size={15}
+      />
+    )}
+  </div>
+</div>
+
 
         {/* Details Section */}
         <div className="product-details" style={{backgroundColor:"white",paddingBottom: "70px"}}>
