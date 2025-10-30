@@ -597,8 +597,8 @@ if(getbundeldata){
   )}
 </div>
 
-          {/* <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
-            <div className="sizes" style={{display:"flex",alignItems:"center",justifyContent:"start",gap:"5px",paddingTop:"5px",borderRadius:"10px"}}>
+          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
+            {/* <div className="sizes" style={{display:"flex",alignItems:"center",justifyContent:"start",gap:"5px",paddingTop:"5px",borderRadius:"10px"}}>
 <label>Size:</label>
               {sizes.map((size) => (
                 <button
@@ -609,77 +609,45 @@ if(getbundeldata){
                   <span>{size.toUpperCase()}</span>
                 </button>
               ))}
-            </div>
-          </div> */}
-          <div
-  className="size-options"
-  style={{ gap: "5px", padding: "2px 0", border: "1px solid white" }}
->
-  <div
-    className="sizes"
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "start",
-      gap: "5px",
-      paddingTop: "5px",
-      borderRadius: "10px",
-      position: "relative",
-    }}
-  >
-    <label>Size:</label>
-    {product?.sizes?.map((sizeObj) => (
-      <div
-        key={sizeObj.size}
-        style={{ position: "relative", display: "inline-block" }}
-      >
-        <button
-          disabled={sizeObj.quantity === 0}
-          onClick={() =>
-            sizeObj.quantity > 0 && setSelectedSize(sizeObj.size)
-          }
-          className={`size-btn ${
-            selectedSize === sizeObj.size ? "active" : ""
-          }`}
+            </div> */}
+            <div className="sizes" style={{ display: "flex", alignItems: "center", justifyContent: "start", gap: "5px", paddingTop: "5px", borderRadius: "10px" }}>
+  <label>Size:</label>
+  {product?.sizes?.map((s) => (
+    <button
+      key={s.size}
+      disabled={s.quantity === 0} // 👈 agar quantity 0 hai to button disable
+      onClick={() => s.quantity > 0 && setSelectedSize(s.size)} // sirf tab select ho jab quantity > 0
+      className={`size-btn ${selectedSize === s.size ? "active" : ""}`}
+      style={{
+        borderRadius: "30px",
+        width: "50px",
+        height: "35px",
+        opacity: s.quantity === 0 ? 0.6 : 1, // thoda fade
+        position: "relative",
+        cursor: s.quantity === 0 ? "not-allowed" : "pointer",
+      }}
+    >
+      <span>{s.size.toUpperCase()}</span>
+      {s.quantity === 0 && (
+        <span
           style={{
-            borderRadius: "30px",
-            width: "50px",
-            position: "relative",
-            opacity: sizeObj.quantity === 0 ? 0.5 : 1,
-            cursor: sizeObj.quantity === 0 ? "not-allowed" : "pointer",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            color: "red",
+            fontSize: "16px",
+            fontWeight: "bold",
           }}
         >
-          <span>{sizeObj.size.toUpperCase()}</span>
-        </button>
-
-        {/* ❌ Red Cross for Out of Stock */}
-        {sizeObj.quantity === 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: "-3px",
-              right: "-3px",
-              background: "white",
-              borderRadius: "50%",
-              width: "18px",
-              height: "18px",
-              color: "red",
-              fontWeight: "bold",
-              fontSize: "14px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 0 2px rgba(0,0,0,0.3)",
-            }}
-          >
-            ❌
-          </span>
-        )}
-      </div>
-    ))}
-  </div>
+          ❌
+        </span>
+      )}
+    </button>
+  ))}
 </div>
 
+          </div>
 
             <div
       style={{
