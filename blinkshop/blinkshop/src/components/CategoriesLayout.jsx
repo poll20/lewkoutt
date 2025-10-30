@@ -63,7 +63,7 @@ useEffect(() => {
             e.productdetails.slice(1, 8).map((e,i)=>(
          
           <div key={i} className="cate-card-done">
-            <Cardforall id={e} discription={e.description} price={e.price} discountprice={e.discountprice} image={e.image[0]} discount={e.discount} defaultcolor={e.defaultColor} coupons={coupons}/>
+            <Cardforall id={e} discription={e.description} price={e.price} discountprice={e.discountprice} color={e.colors} image={e.image[0]} discount={e.discount} defaultcolor={e.defaultColor} coupons={coupons}/>
           </div>
           ))
           
