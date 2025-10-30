@@ -732,16 +732,60 @@ if(searchvalue){
             products.map((product) => (
               
               <div className="product-card" style={{boxShadow:"none",margin:"1px auto"}}>
-        {/* Image Section */}
+        
         <div className="image-container">
           <NavLink to={`/productdescription/${ slugify(product.title)}/${!wish?(product._id):(product?.itemid)}/${product?.color || product?.defaultColor}`}>
-          <img
+          {/* <img
             src={product.image[0]} // Replace with real image
             alt={product?.title || "Product"}
             className="product-image"
             loading="lazy"
 
-          />
+          /> */}
+          <div className="product-image-wrapper" style={{ position: "relative" }}>
+  <img
+    src={product.image[0]}
+    alt={product?.title || "Product"}
+    className="product-image"
+    loading="lazy"
+    style={{
+      filter: product?.colors?.some(color =>
+        color?.sizes?.some(size => size.quantity === 0)
+      )
+        ? "brightness(50%)"
+        : "none",
+      transition: "0.3s ease"
+    }}
+  />
+
+  {/* 🔥 Overlay for sold-out */}
+  {product?.colors?.some(color =>
+    color?.sizes?.some(size => size.quantity === 0)
+  ) && (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        fontWeight: "bold",
+        fontSize: "18px",
+        letterSpacing: "1px",
+        fontFamily: "Oswald",
+        borderRadius: "6px",
+      }}
+    >
+      SOLD OUT
+    </div>
+  )}
+</div>
+
           </NavLink>
           {/* Heart Icon */}
           <div className="heart-icon">{!wish ? (
@@ -753,10 +797,7 @@ if(searchvalue){
   ) : (
     <AiOutlineDelete onClick={() => removewishlistonly(product.itemid)} style={{ color: "black", position: 'relative', left: "-3px", bottom: "2px" }} size={15} />
   )}</div>
-          {/* Rating */}
-          {/* <div className="rating">
-            ⭐ 4.7 | 16
-          </div> */}
+        
         </div>
 
         {/* Details Section */}
