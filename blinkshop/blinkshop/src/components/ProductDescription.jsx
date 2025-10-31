@@ -628,21 +628,19 @@ if(getbundeldata){
       }}
     >
       <span>{s.size.toUpperCase()}</span>
-      {s.quantity === 0 && (
-        <span
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            color: "red",
-            fontSize: "16px",
-            fontWeight: "bold",
-          }}
-        >
-          ❌
-        </span>
-      )}
+     {s.quantity === 0 && (
+      <span
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: "90%",
+          height: "2px",
+          backgroundColor: "black",
+          transform: "translate(-50%, -50%) rotate(-45deg)",
+        }}
+      />
+    )}
     </button>
   ))}
 </div>
