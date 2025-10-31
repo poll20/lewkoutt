@@ -49,10 +49,10 @@ console.log("wishlist in coa",wishlistdata)
   const isSoldOut =
   props.colors?.every(
     (color) =>
-      !color?.sizes || color.sizes.every((s) => Number(s.quantity) === 0)
+      !color?.sizes || color?.sizes?.every((s) => (s?.quantity) === 0)
   ) ?? false;
 
-
+console.log("isSoldOut",isSoldOut)
   return (
     isSoldOut && (
       <div

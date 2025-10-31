@@ -80,9 +80,9 @@
 import React, { useEffect, useState } from 'react';
 import './StickyButton.css';
 
-const StickyButton = ({ targetRef, onAddToCart, onBuyNow }) => {
+const StickyButton = ({ targetRef, onAddToCart, onBuyNow,qty }) => {
   const [isSticky, setIsSticky] = useState(false);
-
+console.log("qty in sticky",qty)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -109,14 +109,14 @@ const StickyButton = ({ targetRef, onAddToCart, onBuyNow }) => {
     <>
       {/* Regular Button (in flow) */}
       <div className={`normal-button-container ${!isSticky ? 'visible' : 'hidden'}`} >
-        <button className="add-to-cart" onClick={onAddToCart} style={{backgroundColor:"white",color:"black",padding:"12px 10px",width:"150px",borderRadius:"30px",border:"2px solid black"}}>ADD TO BAG</button>
-        <button className="add-to-cart" onClick={onBuyNow}style={{backgroundColor:"black",padding:"12px 10px",width:"150px",borderRadius:"30px"}}>BUY NOW</button>
+        <button disabled={qty==0} className="add-to-cart" onClick={onAddToCart} style={{backgroundColor:"white",color:"black",padding:"12px 10px",width:"150px",borderRadius:"30px",border:"2px solid black"}}>ADD TO BAG</button>
+        <button disabled={qty==0} className="add-to-cart" onClick={onBuyNow}style={{backgroundColor:"black",padding:"12px 10px",width:"150px",borderRadius:"30px"}}>BUY NOW</button>
       </div>
 
       {/* Sticky Button (fixed at bottom) */}
       <div className={`sticky-button-container ${isSticky ? 'visible' : 'hidden'}`}>
-         <button className="add-to-cart" onClick={onAddToCart} style={{backgroundColor:"white",color:"black",padding:"12px 10px",width:"150px",borderRadius:"30px",border:"2px solid black"}}>ADD TO BAG</button>
-        <button className="add-to-cart" onClick={onBuyNow}style={{backgroundColor:"black",padding:"12px 10px",width:"150px",borderRadius:"30px"}}>BUY NOW</button>
+         <button disabled={qty==0} className="add-to-cart" onClick={onAddToCart} style={{backgroundColor:"white",color:"black",padding:"12px 10px",width:"150px",borderRadius:"30px",border:"2px solid black"}}>ADD TO BAG</button>
+        <button disabled={qty==0} className="add-to-cart" onClick={onBuyNow}style={{backgroundColor:"black",padding:"12px 10px",width:"150px",borderRadius:"30px"}}>BUY NOW</button>
       </div>
     </>
   );

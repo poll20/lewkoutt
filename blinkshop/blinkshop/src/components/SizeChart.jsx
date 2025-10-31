@@ -1,134 +1,3 @@
-// // import React from "react";
-// import "./SizeChart.css";
-// import { BiArrowBack } from "react-icons/bi";
-// import { useNavigate } from "react-router-dom";
-// import { useParams } from "react-router-dom";
-// const SizeChart = ({ onBack }) => {
-//     let navigate=useNavigate()
-//     let btnClick=()=>{
-//         navigate(-1)
-//     }
-//     let {cate}=useParams()
-//     console.log("zzzzzzzz",cate)
-//   return (
-//     <div className="size-chart-container">
-//         <div className="btn-and-bs">
-//       <p>
-//       <BiArrowBack size={30} onClick={btnClick}/>
-//       </p>
-//       </div>
-//       {
-//         cate=="bottom"?(<>  
-//         <div className="btn-and-bss">
-//             <h2>Body Size (in inch)</h2>
-//             </div>
-//             <table className="size-chart-table">
-//               <thead>
-//                 <tr>
-//                   <th>Sizes</th>
-//                   <th>Waist</th>
-//                   <th>Hips</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 <tr>
-//                   <td>XXS</td>
-//                   <td>24</td>
-//                   <td>32</td>
-//                 </tr>
-//                 <tr>
-//                   <td>XS</td>
-//                   <td>26</td>
-//                   <td>34</td>
-//                 </tr>
-//                 <tr>
-//                   <td>S</td>
-//                   <td>28</td>
-//                   <td>36</td>
-//                 </tr>
-//                 <tr>
-//                   <td>M</td>
-//                   <td>30</td>
-//                   <td>38</td>
-//                 </tr>
-//                 <tr>
-//                   <td>L</td>
-//                   <td>32</td>
-//                   <td>40</td>
-//                 </tr>
-//                 <tr>
-//                   <td>XL</td>
-//                   <td>34</td>
-//                   <td>42</td>
-//                 </tr>
-//                 <tr>
-//                   <td>XXL</td>
-//                   <td>36</td>
-//                   <td>44</td>
-//                 </tr>
-//               </tbody>
-//             </table>
-//             </>):(<><div className="btn-and-bss">
-//       <h2>Body Size (in inch)</h2>
-//       </div>
-//       <table className="size-chart-table">
-//         <thead>
-//           <tr>
-//             <th>Sizes</th>
-//             <th>Bust</th>
-//             {/* <th>Hips</th> */}
-//           </tr>
-//         </thead>
-//         <tbody>
-//           <tr>
-//             <td>XXS</td>
-//             <td>24</td>
-//             {/* <td>32</td> */}
-//           </tr>
-//           <tr>
-//             <td>XS</td>
-//             <td>26</td>
-//             {/* <td>34</td> */}
-//           </tr>
-//           <tr>
-//             <td>S</td>
-//             <td>28</td>
-//             {/* <td>36</td> */}
-//           </tr>
-//           <tr>
-//             <td>M</td>
-//             <td>30</td>
-//             {/* <td>38</td> */}
-//           </tr>
-//           <tr>
-//             <td>L</td>
-//             <td>32</td>
-//             {/* <td>40</td> */}
-//           </tr>
-//           <tr>
-//             <td>XL</td>
-//             <td>34</td>
-//             {/* <td>42</td> */}
-//           </tr>
-//           <tr>
-//             <td>XXL</td>
-//             <td>36</td>
-//             {/* <td>44</td> */}
-//           </tr>
-//         </tbody>
-//       </table>
-//       </>
-//       )
-//       }
-      
-
-
-      
-//     </div>
-//   );
-// };
-
-// export default SizeChart;
 import React from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -214,8 +83,8 @@ const SizeChart = () => {
             <tr><td style={tdStyle}>S</td><td style={tdStyle}>26-27</td><td style={tdStyle}>36-37</td></tr>
             <tr><td style={tdStyle}>M</td><td style={tdStyle}>28-29</td><td style={tdStyle}>38-39</td></tr>
             <tr><td style={tdStyle}>L</td><td style={tdStyle}>30-31</td><td style={tdStyle}>40-41</td></tr>
-            <tr><td style={tdStyle}>XL</td><td style={tdStyle}>32-33</td><td style={tdStyle}>42-43</td></tr>
-            <tr><td style={tdStyle}>XXL</td><td style={tdStyle}>34-35</td><td style={tdStyle}>44-45</td></tr>
+            {/* <tr><td style={tdStyle}>XL</td><td style={tdStyle}>32-33</td><td style={tdStyle}>42-43</td></tr>
+            <tr><td style={tdStyle}>XXL</td><td style={tdStyle}>34-35</td><td style={tdStyle}>44-45</td></tr> */}
           </tbody>
         </table>
       ) : (
@@ -233,8 +102,8 @@ const SizeChart = () => {
             <tr><td style={tdStyle}>S</td><td style={tdStyle}>34-35</td><td style={tdStyle}>26-27</td><td style={tdStyle}>36-37</td></tr>
             <tr><td style={tdStyle}>M</td><td style={tdStyle}>36-37</td><td style={tdStyle}>28-29</td><td style={tdStyle}>38-39</td></tr>
             <tr><td style={tdStyle}>L</td><td style={tdStyle}>38-39</td><td style={tdStyle}>30-31</td><td style={tdStyle}>40-41</td></tr>
-            <tr><td style={tdStyle}>XL</td><td style={tdStyle}>40-41</td><td style={tdStyle}>32-33</td><td style={tdStyle}>42-43</td></tr>
-            <tr><td style={tdStyle}>XXL</td><td style={tdStyle}>42-43</td><td style={tdStyle}>34-35</td><td style={tdStyle}>44-45</td></tr>
+            {/* <tr><td style={tdStyle}>XL</td><td style={tdStyle}>40-41</td><td style={tdStyle}>32-33</td><td style={tdStyle}>42-43</td></tr>
+            <tr><td style={tdStyle}>XXL</td><td style={tdStyle}>42-43</td><td style={tdStyle}>34-35</td><td style={tdStyle}>44-45</td></tr> */}
           </tbody>
         </table>
       )}

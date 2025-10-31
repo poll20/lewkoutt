@@ -804,7 +804,7 @@ export default function Filter() {
   });
 
   const sizeOptions = {
-    "": ["S", "M", "L"],
+    "": ["S", "M", "L","XS"],
   
   };
 

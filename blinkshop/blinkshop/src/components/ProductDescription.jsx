@@ -615,13 +615,14 @@ if(getbundeldata){
   {product?.sizes?.map((s) => (
     <button
       key={s.size}
-      disabled={s.quantity === 0} // 👈 agar quantity 0 hai to button disable
+      disabled={s.quantity == 0} // 👈 agar quantity 0 hai to button disable
       onClick={() => s.quantity > 0 && setSelectedSize(s.size)} // sirf tab select ho jab quantity > 0
       className={`size-btn ${selectedSize === s.size ? "active" : ""}`}
       style={{
         borderRadius: "30px",
         width: "50px",
         height: "35px",
+        
         opacity: s.quantity === 0 ? 0.6 : 1, // thoda fade
         position: "relative",
         cursor: s.quantity === 0 ? "not-allowed" : "pointer",
@@ -797,6 +798,7 @@ if(getbundeldata){
   onAddToCart={() => handleclick(product, quantity, selectedSize)}
   onBuyNow={() => buydata(product, selectedSize, quantity)}
   targetRef={targetRef}
+  qty={product.sizes[0]?.quantity}                
 />
 
         </div>
