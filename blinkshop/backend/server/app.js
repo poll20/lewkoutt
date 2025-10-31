@@ -191,7 +191,7 @@ app.post("/cart",verifySessionCookie, async (req, res) => {
 });
 
 //get cart item
-app.get('/cart/:uid',verifySessionCookie, cacheMiddleware((req) => `cart_${req.params.uid}`, 10), async (req, res) => {
+app.get('/cart/:uid',verifySessionCookie, async (req, res) => {
   let { uid } = req.params;
 
   // ✅ Validate UID before using ObjectId
@@ -324,7 +324,7 @@ console.log("bodycheck kroo",body)
   }
 });
 
-app.get("/addtocart/:uid",verifySessionCookie,cacheMiddleware((req) => `addtocart_${req.params.uid}`, 10),async(req,res)=>{
+app.get("/addtocart/:uid",verifySessionCookie,async(req,res)=>{
 
   let { uid } = req.params;
 
@@ -684,7 +684,7 @@ app.put("/user/update-role/:userId", verifySessionCookie,isAdmin,async (req, res
 
 
 
-app.patch('/user/:userId/address',verifySessionCookie, async (req, res) => {
+app.patch('/user/:userId/address',async (req, res) => {
   let { userId } = req.params;
   console.log("Request Params:", req.params);
   console.log("Extracted uid:", userId);
@@ -956,7 +956,7 @@ const addIdsToSubCollections = async () => {
 
 addIdsToSubCollections();
 
-app.get("/productmodel",cacheMiddleware((req) => `products_filtered:${req.query.section}:${req.query.subcategory}`, 10),async(req,res)=>{
+app.get("/productmodel",async(req,res)=>{
 
   
    let operation=req.query.operation
@@ -1073,7 +1073,7 @@ app.get("/productmodel",cacheMiddleware((req) => `products_filtered:${req.query.
 //   }
 // });
 
-app.get("/productmodell",cacheMiddleware((req) => "products_all", 10), async (req, res) => {
+app.get("/productmodell", async (req, res) => {
   const operation = req.query.operation;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -1103,7 +1103,7 @@ app.get("/productmodell",cacheMiddleware((req) => "products_all", 10), async (re
 });
 
 // GET /api/product/:id
-app.get("/product/:id",  cacheMiddleware((req) => `product_${req.params.id}`, 10),async (req, res) => {
+app.get("/product/:id",async (req, res) => {
   const { id } = req.params;
 console.log("colorid",id)
   try {

@@ -945,7 +945,7 @@ let handlenewaddress = async (address, user) => {
     setIsLoading(true)
     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
       method: "PATCH",
-    credentials: 'include', // important: allow cookies to be set
+    // credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
