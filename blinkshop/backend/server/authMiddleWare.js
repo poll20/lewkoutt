@@ -1,10 +1,10 @@
 // authMiddleware.js
 const admin = require("firebase-admin");
 
-// const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
-  // credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const COOKIE_NAME = "session"; // same as backend me set kiya tha

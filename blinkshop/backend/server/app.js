@@ -64,17 +64,17 @@ const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 
 
 const cors = require('cors');
-app.use(cors());//te localhost m h
+// app.use(cors());//te localhost m h
 // app.use(cors({ origin: '*' }));
-// app.use(cors({
-//     origin: [
-//     "https://www.lewkout.com",
-//     "https://lewkout.netlify.app",
-//     "http://localhost:3000"
-//   ],
-//   methods: "GET,POST,PUT,PATCH,DELETE",
-//   credentials: true
-// }));//ye deploy ke baad 
+app.use(cors({
+    origin: [
+    "https://www.lewkout.com",
+    "https://lewkout.netlify.app",
+    "http://localhost:3000"
+  ],
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));//ye deploy ke baad 
 
 // ✅ Fir Helmet lagao
 // app.use(helmet({
