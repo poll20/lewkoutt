@@ -268,46 +268,125 @@ if(!addtocartdatas){
     </div>
   </div>
 ) :  (
+      // <div className="order-card-addtocart" key={order._id}>
+      //   <div className="order-detailss-addtocart">
+      //     <div className="custom-checkbox">
+      //       <input
+      //         type="checkbox"
+      //         style={{ padding: "1px" }}
+      //         checked={choosebuy.some((item) => item._id === order._id)}
+      //         onChange={(e) => handlechoosebuy(order, e.target.checked)}
+      //       />
+      //     </div>
+      //     <NavLink to={`/productdescription/${slugify(order.title)}/${order?.productid}/${order.color}`} className="navlink">
+      //       <div>
+      //         <img src={order.image} alt={order.title} className="order-imagee-addtocart" loading="lazy" />
+      //       </div>
+      //     </NavLink>
+      //     <div>
+      //       <div className="order-info-addtocart">
+      //         <h3 className="order-title-addtocart">
+      //           {order.description?.length > 19
+      //             ? `${order.description.slice(0, 34)}...`
+      //             : order.description}
+      //         </h3>
+      //         <p className="order-meta-addtocart">
+      //           Size: {order?.size} | Qty: {order?.qty} | {order?.discountprice}rs.
+      //         </p>
+      //         <p className="order-delivery-addtocart">
+      //           <span>📦 Delivery in 60 min</span>
+      //         </p>
+      //         <p className="order-delivery-addtocart">
+      //           <span>
+      //             <AiOutlineDelete
+      //               size={20}
+      //               onClick={() => openPopup(order.productid, order)}
+      //             />
+      //           </span>
+      //         </p>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
       <div className="order-card-addtocart" key={order._id}>
-        <div className="order-detailss-addtocart">
-          <div className="custom-checkbox">
-            <input
-              type="checkbox"
-              style={{ padding: "1px" }}
-              checked={choosebuy.some((item) => item._id === order._id)}
-              onChange={(e) => handlechoosebuy(order, e.target.checked)}
+  <div className="order-detailss-addtocart">
+    <div className="custom-checkbox">
+      <input
+        type="checkbox"
+        style={{ padding: "1px" }}
+        checked={choosebuy.some((item) => item._id === order._id)}
+        disabled={order.qty === 0} // ❌ Disable checkbox if sold out
+        onChange={(e) => handlechoosebuy(order, e.target.checked)}
+      />
+    </div>
+
+    <div style={{ position: "relative" }}>
+      <NavLink
+        to={`/productdescription/${slugify(order.title)}/${order?.productid}/${order.color}`}
+        className="navlink"
+      >
+        <img
+          src={order.image}
+          alt={order.title}
+          className="order-imagee-addtocart"
+          loading="lazy"
+          style={{
+            opacity: order.qty === 0 ? 0.6 : 1, // ❌ Dim sold out product
+            filter: order.qty === 0 ? "grayscale(80%)" : "none",
+          }}
+        />
+        {/* ✅ Dark overlay with Sold Out text */}
+        {order.qty === 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "rgba(0,0,0,0.6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "18px",
+              borderRadius: "5px",
+            }}
+          >
+            SOLD OUT
+          </div>
+        )}
+      </NavLink>
+    </div>
+
+    <div>
+      <div className="order-info-addtocart">
+        <h3 className="order-title-addtocart">
+          {order.description?.length > 19
+            ? `${order.description.slice(0, 34)}...`
+            : order.description}
+        </h3>
+        <p className="order-meta-addtocart">
+          Size: {order?.size} | Qty: {order?.qty} | {order?.discountprice}rs.
+        </p>
+        <p className="order-delivery-addtocart">
+          <span>📦 Delivery in 60 min</span>
+        </p>
+        <p className="order-delivery-addtocart">
+          <span>
+            <AiOutlineDelete
+              size={20}
+              onClick={() => openPopup(order.productid, order)}
+              style={{ cursor: order.qty === 0 ? "not-allowed" : "pointer" }}
             />
-          </div>
-          <NavLink to={`/productdescription/${slugify(order.title)}/${order?.productid}/${order.color}`} className="navlink">
-            <div>
-              <img src={order.image} alt={order.title} className="order-imagee-addtocart" loading="lazy" />
-            </div>
-          </NavLink>
-          <div>
-            <div className="order-info-addtocart">
-              <h3 className="order-title-addtocart">
-                {order.description?.length > 19
-                  ? `${order.description.slice(0, 34)}...`
-                  : order.description}
-              </h3>
-              <p className="order-meta-addtocart">
-                Size: {order?.size} | Qty: {order?.qty} | {order?.discountprice}rs.
-              </p>
-              <p className="order-delivery-addtocart">
-                <span>📦 Delivery in 60 min</span>
-              </p>
-              <p className="order-delivery-addtocart">
-                <span>
-                  <AiOutlineDelete
-                    size={20}
-                    onClick={() => openPopup(order.productid, order)}
-                  />
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
+          </span>
+        </p>
       </div>
+    </div>
+  </div>
+</div>
+
     )
   ))
 ) : (

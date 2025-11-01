@@ -70,7 +70,7 @@ app.use(cors({
     origin: [
     "https://www.lewkout.com",
     "https://lewkout.netlify.app",
-    "http://localhost:3000"
+    "http://localhost:5173"
   ],
   methods: "GET,POST,PUT,PATCH,DELETE",
   credentials: true
@@ -324,25 +324,86 @@ console.log("bodycheck kroo",body)
   }
 });
 
-app.get("/addtocart/:uid",verifySessionCookie,async(req,res)=>{
+// app.get("/addtocart/:uid",verifySessionCookie,async(req,res)=>{
 
-  let { uid } = req.params;
+//   let { uid } = req.params;
 
-  // ✅ Validate UID before using ObjectId
+//   // ✅ Validate UID before using ObjectId
  
-  try{
-  // let cartdata=await addtocart.find()
-  const objectId = new mongoose.Types.ObjectId(uid);
-  let cartdata=await addtocart.find({ userId: objectId }).populate("productId").lean()
-  console.log("cartdata",cartdata)
-  // //console.log(cartdata)
-    res.status(200).json(cartdata)
+//   try{
+//   // let cartdata=await addtocart.find()
+//   const objectId = new mongoose.Types.ObjectId(uid);
+//   let cartdata=await addtocart.find({ userId: objectId }).populate("productId").lean()
+//   console.log("cartdata",cartdata)
+//   // //console.log(cartdata)
+//     res.status(200).json(cartdata)
+//   }
+//   catch(e){
+//     //console.log(e)
+//     res.status(400).json(e.message)
+//   }
+// })
+
+app.get("/addtocart/:uid", verifySessionCookie, async (req, res) => {
+  try {
+    const { uid } = req.params;
+
+    // ✅ Validate userId
+    if (!mongoose.Types.ObjectId.isValid(uid)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    const userObjectId = new mongoose.Types.ObjectId(uid);
+
+    // ✅ Fetch user’s cart
+    let cartItems = await addtocart.find({ userId: userObjectId }).lean();
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    // 🧠 Loop through each cart item and check product availability
+    for (const item of cartItems) {
+      if (!item.productId) continue;
+
+      const product = await productsmodel.findById(item.productId).lean();
+      if (!product || !product.productdetails) continue;
+
+      let isOutOfStock = false;
+
+      // 🧩 Traverse nested structure: productdetails → colors → sizes
+      for (const detail of product.productdetails) {
+        for (const colorObj of detail.colors || []) {
+          if (colorObj.color === item.color) {
+            const sizeObj = colorObj.sizes?.find(
+              (s) => s.size === item.size
+            );
+            if (sizeObj && sizeObj.quantity === 0) {
+              isOutOfStock = true;
+              break;
+            }
+          }
+        }
+        if (isOutOfStock) break;
+      }
+
+      // 🔴 If size is out of stock → update cart qty to 0
+      if (isOutOfStock) {
+        await addtocart.updateOne(
+          { _id: item._id },
+          { $set: { qty: 0 } }
+        );
+        item.qty = 0;
+      }
+    }
+
+    // ✅ Send updated cart
+    res.status(200).json(cartItems);
+  } catch (err) {
+    console.error("❌ Error in /addtocart:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-  catch(e){
-    //console.log(e)
-    res.status(400).json(e.message)
-  }
-})
+});
+
 
 app.delete('/addtocart/:id', verifySessionCookie,async (req, res) => {
   const { id } = req.params; // Extract the item ID from the URL params

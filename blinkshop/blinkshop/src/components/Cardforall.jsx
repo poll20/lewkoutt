@@ -43,49 +43,23 @@ console.log("wishlist in coa",wishlistdata)
   className="product-image"
   loading="lazy" // Lazy loading for better performance
 />
-{/* ✅ Sold Out Overlay (Condition) */}
-           {(() => {
-  // Check if all color->size quantities are 0
-  const isSoldOut =
-  props.colors?.every(
-    (color) =>
-      !color?.sizes || color?.sizes?.every((s) => (s?.quantity) === 0)
-  ) ?? false;
-
-console.log("isSoldOut",isSoldOut)
-  return (
-    isSoldOut && (
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          zIndex: 2,
-          borderRadius: "4px",
-        }}
-      >
-        Sold Out
-      </div>
-    )
-  );
-})()}
-
         </NavLink> 
         {/* Heart Icon */}
         <div className="heart-icon"  onClick={(e)=>{ e.stopPropagation();  handleClick(props.id,props.id.colors?.[0]?._id),setShowToast(true)}} style={{height:'20px',width:"20px",}}><HeartButton cardid={props.id.colors?.[0]?._id} w={15} h={15} dw={30} dh={30} dmt={-8} dml={-8}/></div>
         {/* Rating */}
         
-    
+        {/* <div className="rating" style={{display:!props.id.colors[0].ratingCount==0?('flex'):('none')}}>
+          {
+          `⭐ ${props.id.colors[0].avgRating} | ${props.id.colors[0].ratingCount}`
+          }
+          
+        </div> */}
+        {/* {props.section != "bundel" &&
+  props?.id?.colors?.[0]?.ratingCount > 0 && (
+    <div className="rating" style={{ display: "flex" }}>
+      {`⭐ ${props.id.colors[0].avgRating} | ${props.id.colors[0].ratingCount}`}
+    </div>
+)} */}
 
       </div>
 
