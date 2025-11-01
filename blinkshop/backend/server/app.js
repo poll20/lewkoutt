@@ -376,37 +376,31 @@ app.get("/addtocart/:uid", verifySessionCookie, async (req, res) => {
 
     for (const item of cartItems) {
       if (!item.productId) continue;
-console.log("itemid",item.productId)
-      const product = await productsmodel.findById(item.productId).lean();
-console.log("productcheck",product)
+
+      // 🧩 productId nested hai productdetails.colors ke andar
+      const product = await productsmodel.findOne({
+        "productdetails.colors._id": new mongoose.Types.ObjectId(item.productId)
+      }).lean();
+
       if (!product) {
         console.log(`❌ Product not found for cart item: ${item._id}`);
         continue;
       }
 
-      if (!product.productdetails || product.productdetails.length === 0) {
-        console.log(`❌ No productdetails found for product ${product._id}`);
-        continue;
-      }
-
       let isOutOfStock = false;
 
-      for (const detail of product.productdetails) {
-        if (!detail.colors || detail.colors.length === 0) continue;
-
-        for (const colorObj of detail.colors) {
-          // DEBUG: show matching colors
-          console.log(
-            `🟢 Checking color match: ${colorObj.color} vs ${item.color}`
-          );
-
-          if (colorObj.color?.trim().toLowerCase() === item.color?.trim().toLowerCase()) {
+      // 🔍 Traverse nested productdetails -> colors -> sizes
+      for (const detail of product.productdetails || []) {
+        for (const colorObj of detail.colors || []) {
+          if (
+            colorObj._id?.toString() === item.productId.toString() && // match by id
+            colorObj.color?.trim().toLowerCase() === item.color?.trim().toLowerCase()
+          ) {
             for (const s of colorObj.sizes || []) {
-              console.log(
-                `🔹 Size: ${s.size}, Quantity: ${s.quantity}, CartSize: ${item.size}`
-              );
-
-              if (s.size === item.size && s.quantity === 0) {
+              if (
+                s.size === item.size &&
+                Number(s.quantity) === 0
+              ) {
                 console.log(
                   `🚨 Out of stock detected for ${item.title} (color: ${item.color}, size: ${item.size})`
                 );
