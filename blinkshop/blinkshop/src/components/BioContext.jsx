@@ -564,7 +564,7 @@ finally{
     console.log("cartbundle,",prd)
     // 🔥 Facebook Pixel Event
     if (window.fbq) {
-      window.fbq("track", "AddToCart", {
+      window.fbq("track", "Add to cart", {
         content_name: prd.title ,
         content_ids: [prd._id],
         content_type: "product",
