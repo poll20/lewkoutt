@@ -414,7 +414,7 @@ export default function DeliveryTimeSlot() {
       // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
       if (
         selected.toDateString() === now.toDateString() &&
-        now.getHours() === 11
+        now.getHours() >= 11
       ) {
         return false; // active only during 11 AM hour
       } else {

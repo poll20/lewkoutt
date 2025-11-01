@@ -64,7 +64,13 @@ const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 
 
 const cors = require('cors');
-// app.use(cors());//te localhost m h
+// app.use(cors());//te loca+lhost m h
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // ✅ exact origin
+//     credentials: true,               // ✅ allow cookies/auth headers
+//   })
+// );
 // app.use(cors({ origin: '*' }));
 app.use(cors({
     origin: [
@@ -75,6 +81,14 @@ app.use(cors({
   methods: "GET,POST,PUT,PATCH,DELETE",
   credentials: true
 }));//ye deploy ke baad 
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+//   })
+// );
+
 
 // ✅ Fir Helmet lagao
 // app.use(helmet({
@@ -530,6 +544,25 @@ app.get("/wear",async(req,res)=>{
   //   res.status(400).json({ message: "Email is required" });
  
 //user created or registered
+
+// app.post("/user/register", async (req, res) => {
+//   const { phoneNumber, name, email } = req.body;
+
+//   try {
+//     const existing = await userr.findOne({ phoneNumber });
+//     if (existing) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     const newUser = new userr({ phoneNumber, name, email });
+//     await newUser.save();
+
+//     res.status(201).json(newUser);
+//   } catch (e) {
+//     res.status(500).json({ message: e.message });
+//   }
+// });
+
 // app.post("/user/register", async (req, res) => {
 //    console.log("📩 Body received:", req.body);
 //   console.log("📩 Headers:", req.headers);
@@ -889,15 +922,19 @@ console.log("addddddddrrrrrr",addr)
 // Route to get a specific user's profile by phn
 app.get("/user/profile", async (req, res) => {
   const { phoneNumber } = req.query; // Accept phn as a query parameter
+   console.log("Cookies received:", req.cookies);
 if(phoneNumber){
   console.log("emmm",phoneNumber)
+  
+
+
   
 }
 
   try {
     const user = await userr.findOne({ phonenumber:phoneNumber}).lean(); // Find user by phn
     if (user) {
-      console.log(user)
+      
       res.status(200).json(user); // Send user data as JSON
     } else {
       res.status(404).json({ message: "User not found" });
