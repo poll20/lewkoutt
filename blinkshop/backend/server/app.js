@@ -119,6 +119,7 @@ app.get("/ping", (req, res) => {
 });
 
 
+
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -362,61 +363,76 @@ app.get("/addtocart/:uid", verifySessionCookie, async (req, res) => {
   try {
     const { uid } = req.params;
 
-    // ✅ Validate userId
     if (!mongoose.Types.ObjectId.isValid(uid)) {
       return res.status(400).json({ error: "Invalid user ID" });
     }
 
     const userObjectId = new mongoose.Types.ObjectId(uid);
-
-    // ✅ Fetch user’s cart
     let cartItems = await addtocart.find({ userId: userObjectId }).lean();
+
     if (!cartItems || cartItems.length === 0) {
       return res.status(200).json([]);
     }
 
-    // 🧠 Loop through each cart item and check product availability
     for (const item of cartItems) {
       if (!item.productId) continue;
 
       const product = await productsmodel.findById(item.productId).lean();
-      if (!product || !product.productdetails) continue;
+
+      if (!product) {
+        console.log(`❌ Product not found for cart item: ${item._id}`);
+        continue;
+      }
+
+      if (!product.productdetails || product.productdetails.length === 0) {
+        console.log(`❌ No productdetails found for product ${product._id}`);
+        continue;
+      }
 
       let isOutOfStock = false;
 
-      // 🧩 Traverse nested structure: productdetails → colors → sizes
       for (const detail of product.productdetails) {
-        for (const colorObj of detail.colors || []) {
-          if (colorObj.color === item.color) {
-            const sizeObj = colorObj.sizes?.find(
-              (s) => s.size === item.size
-            );
-            if (sizeObj && sizeObj.quantity === 0) {
-              isOutOfStock = true;
-              break;
+        if (!detail.colors || detail.colors.length === 0) continue;
+
+        for (const colorObj of detail.colors) {
+          // DEBUG: show matching colors
+          console.log(
+            `🟢 Checking color match: ${colorObj.color} vs ${item.color}`
+          );
+
+          if (colorObj.color?.trim().toLowerCase() === item.color?.trim().toLowerCase()) {
+            for (const s of colorObj.sizes || []) {
+              console.log(
+                `🔹 Size: ${s.size}, Quantity: ${s.quantity}, CartSize: ${item.size}`
+              );
+
+              if (s.size === item.size && s.quantity === 0) {
+                console.log(
+                  `🚨 Out of stock detected for ${item.title} (color: ${item.color}, size: ${item.size})`
+                );
+                isOutOfStock = true;
+                break;
+              }
             }
           }
+          if (isOutOfStock) break;
         }
         if (isOutOfStock) break;
       }
 
-      // 🔴 If size is out of stock → update cart qty to 0
       if (isOutOfStock) {
-        await addtocart.updateOne(
-          { _id: item._id },
-          { $set: { qty: 0 } }
-        );
+        await addtocart.updateOne({ _id: item._id }, { $set: { qty: 0 } });
         item.qty = 0;
       }
     }
 
-    // ✅ Send updated cart
     res.status(200).json(cartItems);
   } catch (err) {
     console.error("❌ Error in /addtocart:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 
 app.delete('/addtocart/:id', verifySessionCookie,async (req, res) => {

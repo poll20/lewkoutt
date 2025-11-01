@@ -466,7 +466,7 @@ export default function DeliveryTimeSlot() {
   return (
     <div
       style={{
-        border: "2px solid blue",
+      
         maxWidth: "28rem",
         margin: "auto",
         padding: "1rem",

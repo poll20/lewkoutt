@@ -972,7 +972,7 @@ if(searchvalue){
       <button
         key={index}
         className="abhayraj-size-button"
-        onClick={() => handleAddToCart(addtocartkeliyeid, size.quentity, size.size)}
+        onClick={() => handleAddToCart(addtocartkeliyeid, 1, size.size)}
         
       >
       <span style={{textAlign:"center"}}>{size.size}</span>
