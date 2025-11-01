@@ -376,7 +376,7 @@ app.get("/addtocart/:uid", verifySessionCookie, async (req, res) => {
 
     for (const item of cartItems) {
       if (!item.productId) continue;
-
+console.log("itemid",item.productId)
       const product = await productsmodel.findById(item.productId).lean();
 console.log("productcheck",product)
       if (!product) {
