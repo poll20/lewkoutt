@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
 
@@ -440,7 +434,7 @@ const UserOrder = () => {
                               {/* Return Window Expires In 1 Houre Of Order  */}
                               <p>
   Return Window Expires In{" "}
-  {order.address?.[0]?.city?.toLowerCase() === "jaipur"
+  {order.address?.[0]?.city?.toLowerCase() === "jaipur division"
     ? "1 Hour Of Order"
     : "2 Days Of Order"}
 </p>

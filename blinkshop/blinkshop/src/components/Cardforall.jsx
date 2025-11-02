@@ -64,7 +64,7 @@ console.log("wishlist in coa",wishlistdata)
       </div>
 
       {/* Details Section */}
-      <div className="product-details" style={{maxHeight:'80px',paddingLeft:"8px",backgroundColor:"white"}}>
+      <div className="product-detailsss" style={{maxHeight:'80px',paddingLeft:"8px",backgroundColor:"white"}}>
         <span className="product-title" style={{textAlign:"start",fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{props.discription?.length>15?(props.discription?.slice(0,18)+`...`):(props.discription)}</span>
         {
           props.coupons.length==0?( <div className="product-pricing">

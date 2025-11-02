@@ -389,12 +389,14 @@ export default function DeliveryTimeSlot() {
     return today.toISOString().split("T")[0];
   });
 
-  const { settimeslotlelo, distance } = useBio();
+  const { settimeslotlelo, distance,fetchDistance } = useBio();
 
   const isDisabled = (slot) => {
     const now = new Date();
     const selected = new Date(selectedDate);
     const distanceInKm = parseFloat(distance?.replace("km", "").trim());
+    console.log("Distance:", distance, "Parsed:", distanceInKm);
+
     const tomorrow = new Date();
     tomorrow.setDate(now.getDate() + 1);
 
@@ -410,11 +412,15 @@ export default function DeliveryTimeSlot() {
     if (slot.label === "Within 60 minutes") {
       // ❌ Disable if distance > 10 km
       if (!isNaN(distanceInKm) && distanceInKm > 10) return true;
-
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();product-details
       // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
+       const isAfter11AM =
+    currentHour > 11 || (currentHour === 11 && currentMinutes >= 0);
+  const isBefore830PM =
+    currentHour < 20 || (currentHour === 20 && currentMinutes < 30);
       if (
-        selected.toDateString() === now.toDateString() &&
-        now.getHours() >= 11
+        selected.toDateString() === now.toDateString() && isAfter11AM && isBefore830PM
       ) {
         return false; // active only during 11 AM hour
       } else {

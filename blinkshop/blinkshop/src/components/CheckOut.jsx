@@ -26,6 +26,7 @@ const Checkout = () => {
     walletkapesa,
     timeslotlelo,
     fetchCoupons,
+    fetchDistance,
     coupons,
     karocode
   } = useBio();
@@ -64,7 +65,9 @@ const Checkout = () => {
   useEffect(() => localStorage.setItem("checkoutCart", JSON.stringify(purchaseproduct)), [purchaseproduct]);
   useEffect(() => localStorage.setItem("checkoutAddress", JSON.stringify(deleveryaddress)), [deleveryaddress]);
   useEffect(() => localStorage.setItem("checkoutWallet", JSON.stringify(mywalletAmount)), [mywalletAmount]);
-
+useEffect(() => {
+   fetchDistance(deleveryaddress)
+  }, []);
   // Clear checkout data on unmount (except navigating to address page)
   useEffect(() => {
     return () => {
@@ -87,6 +90,23 @@ const Checkout = () => {
       setMywalletAmount(Math.min(availableWallet, tenPercentOfOrder));
     }
   }, [purchaseproduct, userDetails]);
+    useEffect(() => {
+    if (window.fbq && purchaseproduct) {
+      window.fbq("track", "InitiateCheckout", {
+        contents: [
+          {
+            id: purchaseproduct._id,
+            name: purchaseproduct.title,
+            quantity: 1,
+            item_price: purchaseproduct.discountprice || purchaseproduct.price,
+          },
+        ],
+        content_type: "product",
+        value: purchaseproduct.discountprice || purchaseproduct.price,
+        currency: "INR",
+      });
+    }
+  }, [purchaseproduct]);
 
   const toggleSheet = () => setShowSheet(!showSheet);
   const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();

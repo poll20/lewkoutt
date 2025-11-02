@@ -223,6 +223,15 @@ useEffect(() => {
       }
     }
   }, [product]);
+  useEffect(()=>{if (window.fbq) {
+    window.fbq("track", "ViewContent", {
+      content_ids: [product._id],
+      content_name: product.title,
+      content_type: "product",
+      value: product.discountprice || product.price,
+      currency: "INR",
+    });
+  }},[product])
 
 
   const notify = () => toast("Plese Login For Add Items In Cart");

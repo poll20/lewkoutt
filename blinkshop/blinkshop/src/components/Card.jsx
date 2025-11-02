@@ -858,7 +858,7 @@ if(searchvalue){
 
 
         {/* Details Section */}
-        <div className="product-details" style={{backgroundColor:"white",paddingBottom: "70px",marginTop: "0", }}>
+        <div className="product-details">
           {/* fontFamily: "'Inter', sans-serif */}
           <span className="product-title" style={{fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,17)+`...`):(product.description)}</span>
           {
@@ -929,7 +929,7 @@ if(searchvalue){
       color: "white",
       border: "none",
       borderRadius: "5px",
-      marginBottom: coupons.length === 0 ? "40px" : "60px", // 👈 yahan spacing bada di
+      marginBottom: coupons.length === 0 ? "40px" : "30px", // 👈 yahan spacing bada di
       backgroundColor: "black",
       display: "flex",
       alignItems: "center",

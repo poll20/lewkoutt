@@ -261,6 +261,15 @@ useEffect(() => {
       if(!user){
         setshowloginpage(true)
       }
+         if (window.fbq) {
+      window.fbq("track", "AddToWishlist", {
+        content_name: prd.title ,
+        content_ids: [prd._id],
+        content_type: "product",
+        value: prd.discountprice || prd.price,
+        currency: "INR",
+      });
+    }
       // Correcting the way matchItem is created
       // const matchedColors = productdataonlydetail
       //   .flatMap(product => product.colors)
@@ -564,7 +573,7 @@ finally{
     console.log("cartbundle,",prd)
     // 🔥 Facebook Pixel Event
     if (window.fbq) {
-      window.fbq("track", "Add to cart", {
+      window.fbq("track", "AddToCart", {
         content_name: prd.title ,
         content_ids: [prd._id],
         content_type: "product",
@@ -1428,11 +1437,12 @@ const fetchDistance = async (deleveryaddress) => {
   console.log("userkaaddress",userAddress)
   try {
     const res = await fetch(`${apiUrl}/getdistance?userAddress=${encodeURIComponent(userAddress)}`);
+    console.log("fetch distance called",res)
     const data = await res.json();
-    console.log("Distance:", data.distance);
+    console.log("Distanceoo:", data.distance);
     setdistance(data.distance)
   } catch (err) {
-    console.error("Error:", err);
+    console.error("Error distance:", err);
   }
 };
 
