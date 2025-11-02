@@ -562,3 +562,13 @@ font-size: .8rem;
   padding-top: 6px !important;
   height: auto !important; /* Allow flexible height */
 }
+
+/* 🔧 Fix vertical spacing between cards */
+.unique-product-container {
+  gap: 10px !important;
+}
+
+.product-card {
+  margin: 0 !important;
+  padding: 0 !important;
+}
