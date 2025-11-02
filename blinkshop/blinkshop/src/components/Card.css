@@ -535,3 +535,30 @@ font-size: .8rem;
     padding-top: 30px; /* Add space at the top for very small screens */
   }
 }
+
+
+/* 🔧 Fix unwanted space between image and details */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0 !important;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.image-container {
+  height: auto !important; /* Let image adjust naturally */
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+}
+
+.image-container img {
+  display: block; /* Removes inline spacing under img */
+}
+
+.product-details {
+  margin-top: 0 !important;
+  padding-top: 6px !important;
+  height: auto !important; /* Allow flexible height */
+}
