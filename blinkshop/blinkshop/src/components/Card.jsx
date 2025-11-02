@@ -755,7 +755,7 @@ if(searchvalue){
   )}</div>
         
         </div> */}
-        <div className="image-container" style={{ position: "relative" }}>
+        <div className="image-container" style={{ position: "relative",marginBottom: "0"  }}>
   <NavLink
     to={`/productdescription/${slugify(product.title)}/${
       !wish ? product._id : product?.itemid
@@ -858,7 +858,7 @@ if(searchvalue){
 
 
         {/* Details Section */}
-        <div className="product-details" style={{backgroundColor:"white",paddingBottom: "70px"}}>
+        <div className="product-details" style={{backgroundColor:"white",paddingBottom: "70px",marginTop: "0", }}>
           {/* fontFamily: "'Inter', sans-serif */}
           <span className="product-title" style={{fontFamily: "Oswald",fontWeight:"600",fontSize:"15px"}}>{product.description?.length>10?(product.description?.slice(0,17)+`...`):(product.description)}</span>
           {
