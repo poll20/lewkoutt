@@ -95,11 +95,19 @@ let sendtocheckout = () => {
     }, 1000 ); // Small delay to allow React to update state
   }
 };
+// useEffect(() => {
+//   if (addtocartdatas && addtocartdatas.length > 0) {
+//     setchoosebuy(addtocartdatas); // Select all items by default
+//   }
+// }, [addtocartdatas]);
 useEffect(() => {
   if (addtocartdatas && addtocartdatas.length > 0) {
-    setchoosebuy(addtocartdatas); // Select all items by default
+    // ✅ Only include items with qty > 0
+    const validItems = addtocartdatas.filter(item => item.qty > 0);
+    setchoosebuy(validItems);
   }
 }, [addtocartdatas]);
+
 
 
 if(!addtocartdatas){

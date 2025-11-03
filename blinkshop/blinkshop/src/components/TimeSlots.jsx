@@ -413,7 +413,7 @@ export default function DeliveryTimeSlot() {
       // ❌ Disable if distance > 10 km
       if (!isNaN(distanceInKm) && distanceInKm > 10) return true;
   const currentHour = now.getHours();
-  const currentMinutes = now.getMinutes();product-details
+  const currentMinutes = now.getMinutes();
       // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
        const isAfter11AM =
     currentHour > 11 || (currentHour === 11 && currentMinutes >= 0);
