@@ -929,7 +929,7 @@ if(searchvalue){
       color: "white",
       border: "none",
       borderRadius: "5px",
-      marginBottom: coupons.length === 0 ? "40px" : "30px", // 👈 yahan spacing bada di
+      marginBottom: coupons.length === 0 ? "40px" : "10px", // 👈 yahan spacing bada di
       backgroundColor: "black",
       display: "flex",
       alignItems: "center",
