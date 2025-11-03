@@ -29,3 +29,5 @@ echo "blinkshop/node_modules/bun/bin/bun.exe" >> .gitignore
 echo "blinkshop/node_modules/@oven/bun-windows-x64-baseline/bin/bun.exe" >> .gitignore
 .env
 lewkout-bcf84-firebase-adminsdk-fbsvc-e8b98209b3.json
+
+blinkshop/backend/server/serviceAccountKey.json
