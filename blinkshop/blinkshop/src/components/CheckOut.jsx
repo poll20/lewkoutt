@@ -27,6 +27,7 @@ const Checkout = () => {
     timeslotlelo,
     fetchCoupons,
     fetchDistance,
+    distance,
     coupons,
     karocode
   } = useBio();
@@ -39,6 +40,7 @@ const Checkout = () => {
   const [firstcpn, setfirstcpn] = useState(null);
   const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
   const [yppicode, setyppicode] = useState(false);
+ 
 
   // Cart & address state
   const [purchaseproduct, setpurchaseproduct] = useState(
@@ -52,6 +54,11 @@ const Checkout = () => {
   const [mywalletAmount, setMywalletAmount] = useState(
     () => JSON.parse(localStorage.getItem("checkoutWallet")) || walletkapesa || 0
   );
+
+  const [deliveryCharge, setDeliveryCharge] = useState(
+  () => JSON.parse(localStorage.getItem("checkoutDeliveryCharge")) || 0
+);
+
 
   // Persist address if context changes
   useEffect(() => {
@@ -68,6 +75,32 @@ const Checkout = () => {
 useEffect(() => {
    fetchDistance(deleveryaddress)
   }, []);
+
+
+ useEffect(() => {
+  console.log("Distance updated:", distance);
+  if (!distance) return;
+
+  // 🔥 Convert "15.7 km" → 15.7 (number)
+  const numericDistance = parseFloat(distance.toString().replace("km", "").trim());
+  console.log("Parsed numeric distance:", numericDistance);
+
+  if (isNaN(numericDistance)) return; // safety check
+
+  let charge = 0;
+  if (numericDistance >= 16 && numericDistance <= 18) {
+    charge = 49;
+  } else if (numericDistance > 18 && numericDistance <= 21) {
+    charge = 70;
+  } else if (numericDistance > 21 && numericDistance <= 25) {
+    charge = 80;
+  }
+
+  setDeliveryCharge(charge);
+  localStorage.setItem("checkoutDeliveryCharge", JSON.stringify(charge));
+}, [distance]);
+
+
   // Clear checkout data on unmount (except navigating to address page)
   useEffect(() => {
     return () => {
@@ -168,7 +201,7 @@ useEffect(() => {
 
   const amountAfterCoupon = totalDiscountPrice - (amountafteraddcoupon || 0);
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
-  const payableAmount = amountAfterCoupon - walletToUse;
+  const payableAmount = amountAfterCoupon - walletToUse -deliveryCharge;
 
   return (
     <div className="checkout-container-checkoutbuy">
@@ -227,6 +260,17 @@ useEffect(() => {
           <span>Wallet</span>
           <span className="text-green-600 font-semibold text-[16px]">₹{mywalletAmount.toFixed(2)}</span>
         </div>
+
+        <div className="order-row-checkoutbuy">
+          <span style={{ display: 'flex', flexDirection: 'column' }}>
+  <span>Delivery Charges</span>
+  <span style={{ display: 'flex', flexDirection: 'column',fontSize:"10px" }}>{deliveryCharge?('(Distance-based delivery fee applied)'):('')}</span>
+  </span>
+  <span className="text-green-600 font-semibold text-[16px]">
+    ₹{deliveryCharge}
+  </span>
+</div>
+
         <div className="order-row-checkoutbuy payable-row-checkoutbuy">
           <span>Payable amount</span>
           <span>₹{payableAmount}.0</span>
@@ -237,7 +281,7 @@ useEffect(() => {
       </div>
 
       {/* Time Slots + Pay Now */}
-      {city?.includes("jaipur") ? (
+      {city?.toLowerCase().includes("jaipur") && parseFloat(distance) < 20 ? (
         <>
           <TimeSlots />
           {/* <button

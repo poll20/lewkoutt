@@ -1039,6 +1039,8 @@ const Ordersofusers = () => {
               <th>Lng</th>
               <th>Products</th>
               <th>Product image</th>
+              <th>Time Slot</th>
+
               <th>Total Price</th>
               <th>Status</th>
               <th>Ordered At</th>
@@ -1099,7 +1101,7 @@ const Ordersofusers = () => {
                         </div>
                       ))}
                     </td>
-
+<td>{order?.timeslot || "N/A"}</td>
                     <td>
                       ₹{order.products.reduce((acc, p) => acc + p.totalAmount, 0)}
                     </td>
