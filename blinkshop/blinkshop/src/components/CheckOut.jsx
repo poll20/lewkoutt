@@ -201,7 +201,7 @@ useEffect(() => {
 
   const amountAfterCoupon = totalDiscountPrice - (amountafteraddcoupon || 0);
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
-  const payableAmount = amountAfterCoupon - walletToUse -deliveryCharge;
+  const payableAmount = (amountAfterCoupon - walletToUse)+deliveryCharge;
 
   return (
     <div className="checkout-container-checkoutbuy">
