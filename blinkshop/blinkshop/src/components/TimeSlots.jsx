@@ -39,7 +39,7 @@ export default function DeliveryTimeSlot() {
     // ✅ For "Within 60 minutes" slot (special behavior)
     if (slot.label === "Within 60 minutes") {
       // ❌ Disable if distance > 10 km
-      if (!isNaN(distanceInKm) && distanceInKm > 10) return true;
+      if (!isNaN(distanceInKm) && distanceInKm > 15) return true;
   const currentHour = now.getHours();
   const currentMinutes = now.getMinutes();
       // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)

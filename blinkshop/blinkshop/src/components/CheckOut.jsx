@@ -281,7 +281,7 @@ useEffect(() => {
       </div>
 
       {/* Time Slots + Pay Now */}
-      {city?.toLowerCase().includes("jaipur") && parseFloat(distance) < 20 ? (
+      {city?.toLowerCase().includes("jaipur") && parseFloat(distance) < 25 ? (
         <>
           <TimeSlots />
           {/* <button
