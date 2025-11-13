@@ -97,6 +97,26 @@ export default function DeliveryTimeSlot() {
 
   const allDisabled = timeSlots.every((slot) => isDisabled(slot));
 
+
+
+  useEffect(() => {
+  const updateDate = () => {
+    const today = new Date().toISOString().split("T")[0];
+    setSelectedDate(today);
+  };
+
+  // Check every 1 minute if date changed
+  const interval = setInterval(() => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (currentDate !== selectedDate) {
+      updateDate();
+    }
+  }, 60000); // 1 minute = 60000ms
+
+  return () => clearInterval(interval);
+}, [selectedDate]);
+
+
   return (
     <div
       style={{
@@ -134,11 +154,12 @@ export default function DeliveryTimeSlot() {
       >
         Select Delivery Date
       </button>
-
+    <div style={{ border:"2px solid red" }}>
       <input
+      
         id="datePicker"
         type="date"
-        value={selectedDate}
+        value={ selectedDate }
         onChange={handleDateChange}
         min={new Date().toISOString().split("T")[0]}
         max={new Date(
@@ -146,12 +167,14 @@ export default function DeliveryTimeSlot() {
         ).toISOString().split("T")[0]}
         style={{
           marginBottom: "1rem",
+        
           width: "100%",
           padding: "0.5rem",
           border: "1px solid #d1d5db",
           borderRadius: "0.25rem",
         }}
       />
+      </div>
 
       <p style={{ fontWeight: "600", marginBottom: "0.5rem" }}>
         Select Time Window:

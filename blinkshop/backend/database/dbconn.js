@@ -3,7 +3,7 @@ let mongoose=require("mongoose")
 let {productsmodel}=require("./collection.js")
 const connectDB = async () => {
    try {
-     mongoose.set('bufferCommands', false); // ✅ पहले ही सेट कर दो
+     mongoose.set('bufferCommands', false); 
  
      await mongoose.connect(process.env.MONGO_URI
       , {
@@ -12,14 +12,13 @@ const connectDB = async () => {
      }
     );
  
-     console.log("✅ MongoDB connected successfully");
+     console.log("✅MongoDB connected successfully");
      // productdetails.searchcount == null
 // await productsmodel.updateMany(
 //   { "productdetails.searchcount": null },
 //   { $set: { "productdetails.$[pd].searchcount": 0 } },
 //   { arrayFilters: [{ "pd.searchcount": null }] }
 // );
-
 // // colors[].searchcount == null null is 
 // await productsmodel.updateMany(
 //   { "productdetails.colors.searchcount": null },

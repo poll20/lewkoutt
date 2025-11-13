@@ -357,6 +357,34 @@ useEffect(() => {
         
       }, [isRegistered]);
     
+
+      // ✅ Auto logout when session expired
+useEffect(() => {
+  const checkSession = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/user/check-session`, {
+        credentials: "include",
+      });
+
+      if (res.status === 401) {
+        console.warn("⚠️ Session expired — logging out user...");
+        await signOut(auth);
+        setUser(null);
+        setUserDetails({});
+        setIsRegistered(false);
+        localStorage.clear();
+        window.location.href = "/login"; // 👈 redirect to login
+      }
+    } catch (err) {
+      console.error("Session check error:", err);
+    }
+  };
+
+  // check every 5 minutes
+  const interval = setInterval(checkSession, 5 * 60 * 1000);
+  return () => clearInterval(interval);
+}, []);
+
       
   return (
     <FirebaseAuthContext.Provider

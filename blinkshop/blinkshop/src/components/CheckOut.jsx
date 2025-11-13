@@ -59,7 +59,7 @@ const Checkout = () => {
   () => JSON.parse(localStorage.getItem("checkoutDeliveryCharge")) || 0
 );
 
-
+console.log("Deliverykatime:", timeslotlelo);
   // Persist address if context changes
   useEffect(() => {
     if (addresssetkro?.length) {

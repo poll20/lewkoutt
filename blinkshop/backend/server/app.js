@@ -630,6 +630,41 @@ app.get("/wear",async(req,res)=>{
 //   }
 // });
 
+// ✅ REFRESH SESSION (for expired cookies)
+// app.post("/user/refresh-session", async (req, res) => {
+//   try {
+//     const { idToken } = req.body;
+//     if (!idToken) return res.status(400).json({ error: "Missing idToken" });
+
+//     // Verify the new Firebase ID token
+//     const decodedToken = await admin.auth().verifyIdToken(idToken);
+
+//     // Create a new session cookie with updated expiry
+//     const sessionCookie = await admin.auth().createSessionCookie(idToken, {
+//       expiresIn: 1000 * 60 * 60 * 24 * 7, // 7 days
+//     });
+
+//     res.cookie("session", sessionCookie, {
+//       maxAge: 1000 * 60 * 60 * 24 * 7,
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "Lax",
+//       path: "/",
+//     });
+
+//     res.status(200).json({ success: true });
+//   } catch (error) {
+//     console.error("❌ Error refreshing session:", error.message);
+//     res.status(401).json({ error: "Session refresh failed" });
+//   }
+// });
+
+app.get("/user/check-session", verifySessionCookie, (req, res) => {
+  res.status(200).json({ valid: true });
+});
+
+
+
 app.post("/user/register", async (req, res) => {
   try {
     const { idToken, refcode } = req.body;
