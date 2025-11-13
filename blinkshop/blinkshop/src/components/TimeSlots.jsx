@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useBio } from "./BioContext";
 
 const timeSlots = [
@@ -129,10 +129,7 @@ export default function DeliveryTimeSlot() {
       }}
     >
       {parseFloat(distance?.replace("km", "").trim()) > 10 && (
-        <span>
-          You’re a lil’ out of our speed zone 👀 So the 60-min ride won’t make
-          it… but other slots are waiting to be picked 💅
-        </span>
+        <div style={{fontSize:"12px"}}>You’re a lil’ out of our speed zone 👀 So the 60-min ride won’t make it… but other slots are waiting to be picked.</div>
       )}
 
       <h2 style={{ fontSize: "1.25rem", fontWeight: "700", marginBottom: "0.5rem" }}>
@@ -154,7 +151,7 @@ export default function DeliveryTimeSlot() {
       >
         Select Delivery Date
       </button>
-    <div style={{ border:"2px solid red" }}>
+    <div>
       <input
       
         id="datePicker"
