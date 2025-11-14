@@ -121,6 +121,7 @@ export default function App() {
   
   
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  // const location=useLocation()
 const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
 // const navigate=useNavigate()
 

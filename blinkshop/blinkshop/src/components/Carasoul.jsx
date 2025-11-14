@@ -87,13 +87,13 @@ const Carousel = ({ images = [], interval = 4000 }) => {
         /> */}
         <img
   src={getOptimizedUrl(current?.image)}
-  fetchprioprity="high"
+ fetchpriority="high"
   alt={current?.category || "carousel image"}
   className="carousel-image"
   width="1280"
   height="720"
-  loading={currentIndex === 0 ? "eager" : "lazy"}
-  fetchpriority={currentIndex === 0 ? "high" : "auto"}
+  // loading={currentIndex === 0 ? "eager" : "lazy"}
+ loading="eager"
   decoding="async"
   style={{ backgroundColor: "#f0f0f0" }}
 />
