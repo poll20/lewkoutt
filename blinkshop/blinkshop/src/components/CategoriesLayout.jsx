@@ -50,7 +50,7 @@ useEffect(() => {
           alt={e.title || "product"}
           className="parent-image"
           // loading="lazy" // Lazy loading for better performance
-          fetchpriority="high" // ✅ suggest browser to prioritize
+          fetchpriority="low" // ✅ suggest browser to prioritize
   decoding="async"
         />
         </NavLink>

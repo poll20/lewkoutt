@@ -87,6 +87,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
         /> */}
         <img
   src={getOptimizedUrl(current?.image)}
+  fetchprioprity="high"
   alt={current?.category || "carousel image"}
   className="carousel-image"
   width="1280"
