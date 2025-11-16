@@ -360,16 +360,17 @@ console.log("bodycheck kroo",body)
 // })
 
 app.get("/addtocart/:uid", verifySessionCookie, async (req, res) => {
+  console.log("🚀 /addtocart/:uid endpoint hit");
   try {
     const { uid } = req.params;
-
+console.log("uid",uid)
     if (!mongoose.Types.ObjectId.isValid(uid)) {
       return res.status(400).json({ error: "Invalid user ID" });
     }
 
     const userObjectId = new mongoose.Types.ObjectId(uid);
     let cartItems = await addtocart.find({ userId: userObjectId }).lean();
-
+console.log("user add to cart",cartItems)
     if (!cartItems || cartItems.length === 0) {
       return res.status(200).json([]);
     }

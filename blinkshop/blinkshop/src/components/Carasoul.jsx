@@ -56,13 +56,20 @@ const Carousel = ({ images = [], interval = 4000 }) => {
   const current = images[currentIndex];
 
   // ✅ Cloudinary optimization (w=1200, auto format, auto quality)
-  const getOptimizedUrl = (url) => {
-    if (!url) return "";
-    if (url.includes("/upload/")) {
-      return url.replace("/upload/", "/upload/w_1200,f_auto,q_auto/");
-    }
-    return url;
-  };
+  // const getOptimizedUrl = (url) => {
+  //   if (!url) return "";
+  //   if (url.includes("/upload/")) {
+  //     return url.replace("/upload/", "/upload/w_1200,f_auto,q_auto/");
+  //   }
+  //   return url;
+  // };
+ const getOptimizedUrl = (url, width = 400) => {
+  if (!url) return url;
+  return url.replace(
+    "/upload/",
+    `/upload/w_${width},f_auto,q_auto/`
+  );
+};
 
   return (
     <div
@@ -85,7 +92,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
           fetchpriority={currentIndex === 0 ? "high" : "auto"}
           
         /> */}
-        <img
+        {/* <img
   src={getOptimizedUrl(current?.image)}
  fetchpriority="high"
   alt={current?.category || "carousel image"}
@@ -96,7 +103,19 @@ const Carousel = ({ images = [], interval = 4000 }) => {
  loading="eager"
   decoding="async"
   style={{ backgroundColor: "#f0f0f0" }}
+/> */}
+<img
+  src={getOptimizedUrl(current?.image, 400)}
+  fetchpriority="high"
+  alt={current?.category || "carousel image"}
+  className="carousel-image"
+  width="400"
+  height="225"
+  loading="eager"
+  decoding="async"
+  style={{ backgroundColor: "#f0f0f0", width: "100%", height: "auto" }}
 />
+
 
       </NavLink>
 

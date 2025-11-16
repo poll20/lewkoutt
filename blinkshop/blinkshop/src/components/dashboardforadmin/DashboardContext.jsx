@@ -653,7 +653,11 @@ const updateMoodMsg = async (id, updatedData) => {
 const fetchCartItems = async (id) => {
   try {
     // setIsLoading(true)
-    let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
+    let response = await fetch(`${apiUrl}/addtocart/${id}`,
+
+      {
+      credentials: 'include',
+      }
     //   , {
     //   headers: {
     //     Authorization: `Bearer ${user.accessToken}`,
@@ -661,6 +665,7 @@ const fetchCartItems = async (id) => {
     // }
   );
     let data = await response.json();
+    console.log("data in cart",data)
     if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
       console.error("Invalid response format:", data);
       return;
@@ -681,7 +686,10 @@ const fetchCartItems = async (id) => {
 const fetchCartItemss = async (id) => {
   try {
     // setIsLoading(true)
-    let response = await fetch(`${apiUrl}/cart/${userDetails._id}`, 
+    let response = await fetch(`${apiUrl}/cart/${id}`, 
+      {
+      credentials: 'include',
+      }
     //   {
     //   headers: {
     //     Authorization: `Bearer ${user.accessToken}`,
@@ -718,12 +726,12 @@ const fetchUserOrders = async (userId) => {
           console.error("❌ User ID is missing!");
           return;
       }
-      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`
+      let res = await fetch(`${apiUrl}/orders/user/${userId}`
         ,{
           credentials: 'include', 
-        headers: { 
-          Authorization: `Bearer ${user.accessToken}`,
-        },
+        // headers: { 
+        //   Authorization: `Bearer ${user.accessToken}`,
+        // },
       }
     );
       if (!res.ok) {
