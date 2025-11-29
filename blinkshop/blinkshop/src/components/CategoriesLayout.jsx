@@ -33,7 +33,7 @@ useEffect(() => {
   return (
     <>
     {
-      productdata?.map((e,idx)=>(
+      [...productdata].reverse().map((e,idx)=>(
         <div key={idx} className="horizontal-card-layout">
       <span  style={{
     textAlign: "start",
@@ -44,6 +44,7 @@ useEffect(() => {
   }}>{e.category.slice(0,1).toUpperCase()+ e.category.slice(1)}</span>
       {/* Parent Card */}
       <div className="parent-card" style={{borderRadius:'20px'}}>
+        
         <NavLink to={`/productmodel/${e.category}`}>
         <img
           src={e.image}

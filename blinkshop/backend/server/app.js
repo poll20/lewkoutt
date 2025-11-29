@@ -360,7 +360,7 @@ console.log("bodycheck kroo",body)
 // })
 
 app.get("/addtocart/:uid", verifySessionCookie, async (req, res) => {
-  console.log("🚀 /addtocart/:uid endpoint hit");
+  console.log("/addtocart/:uid endpoint hit");
   try {
     const { uid } = req.params;
 console.log("uid",uid)
@@ -484,7 +484,7 @@ app.get("/wear",async(req,res)=>{
   }
   
  })
-  // console.log("Request received at /user/register:", req.body); // ✅ Backend logging
+  // console.log("Request received at /user/register:", req.body); // ✅Backend logging
   // // const { name, email, updated_at } = req.body;
   // const {phoneNumber,uid,refcode, updated_at } = req.body
   // console.log("phonenumberrrrr",phoneNumber)
