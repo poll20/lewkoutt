@@ -294,10 +294,10 @@ useEffect(() => {
           <button
   className="pay-now-btn-checkoutbuy"
   onClick={() => {
-    if (!timeslotlelo) {
-      alert("Please Select the Slot and Press on Confirm Slot.");
-      return;
-    }
+    // if (!timeslotlelo) {
+    //   alert("Please Select the Slot and Press on Confirm Slot.");
+    //   return;
+    // }
     orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount, timeslotlelo);
   }}
 >

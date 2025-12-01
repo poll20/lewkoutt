@@ -20,54 +20,54 @@ export default function DeliveryTimeSlot() {
   const { settimeslotlelo, distance,fetchDistance } = useBio();
 
   const isDisabled = (slot) => {
-    const now = new Date();
-    const selected = new Date(selectedDate);
-    const distanceInKm = parseFloat(distance?.replace("km", "").trim());
-    console.log("Distance:", distance, "Parsed:", distanceInKm);
+  //   const now = new Date();
+  //   const selected = new Date(selectedDate);
+  //   const distanceInKm = parseFloat(distance?.replace("km", "").trim());
+  //   console.log("Distance:", distance, "Parsed:", distanceInKm);
 
-    const tomorrow = new Date();
-    tomorrow.setDate(now.getDate() + 1);
+  //   const tomorrow = new Date();
+  //   tomorrow.setDate(now.getDate() + 1);
 
-    // ✅ Disable "Within 60 minutes" for tomorrow always
-    if (
-      slot.label === "Within 60 minutes" &&
-      selected.toDateString() === tomorrow.toDateString()
-    ) {
-      return true;
-    }
+  //   // ✅ Disable "Within 60 minutes" for tomorrow always
+  //   if (
+  //     slot.label === "Within 60 minutes" &&
+  //     selected.toDateString() === tomorrow.toDateString()
+  //   ) {
+  //     return true;
+  //   }
 
-    // ✅ For "Within 60 minutes" slot (special behavior)
-    if (slot.label === "Within 60 minutes") {
-      // ❌ Disable if distance > 10 km
-      if (!isNaN(distanceInKm) && distanceInKm > 15) return true;
-  const currentHour = now.getHours();
-  const currentMinutes = now.getMinutes();
-      // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
-       const isAfter11AM =
-    currentHour > 11 || (currentHour === 11 && currentMinutes >= 0);
-  const isBefore830PM =
-    currentHour < 20 || (currentHour === 20 && currentMinutes < 30);
-      if (
-        selected.toDateString() === now.toDateString() && isAfter11AM && isBefore830PM
-      ) {
-        return false; // active only during 11 AM hour
-      } else {
-        return true; // disabled before or after 11 AM
-      }
-    }
+  //   // ✅ For "Within 60 minutes" slot (special behavior)
+  //   if (slot.label === "Within 60 minutes") {
+  //     // ❌ Disable if distance > 10 km
+  //     if (!isNaN(distanceInKm) && distanceInKm > 15) return true;
+  // const currentHour = now.getHours();
+  // const currentMinutes = now.getMinutes();
+  //     // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
+  //      const isAfter11AM =
+  //   currentHour > 11 || (currentHour === 11 && currentMinutes >= 0);
+  // const isBefore830PM =
+  //   currentHour < 20 || (currentHour === 20 && currentMinutes < 30);
+  //     if (
+  //       selected.toDateString() === now.toDateString() && isAfter11AM && isBefore830PM
+  //     ) {
+  //       return false; // active only during 11 AM hour
+  //     } else {
+  //       return true; // disabled before or after 11 AM
+  //     }
+  //   }
 
-    // ✅ For future dates (like tomorrow), normal slots are always active
-    if (selected > now) return false;
+  //   // ✅ For future dates (like tomorrow), normal slots are always active
+  //   if (selected > now) return false;
 
-    // ✅ For normal slots today
-    const slotEndTime = new Date(now);
-    slotEndTime.setHours(slot.end, 0, 0, 0);
-    const minutesRemaining = (slotEndTime - now) / (1000 * 60);
+  //   // ✅ For normal slots today
+  //   const slotEndTime = new Date(now);
+  //   slotEndTime.setHours(slot.end, 0, 0, 0);
+  //   const minutesRemaining = (slotEndTime - now) / (1000 * 60);
 
-    // Disable if time slot already passed or less than 60 min left
-    if (minutesRemaining <= 0 || minutesRemaining < 60) return true;
+  //   // Disable if time slot already passed or less than 60 min left
+  //   if (minutesRemaining <= 0 || minutesRemaining < 60) return true;
 
-    return false;
+    return true;
   };
 
   const handleSelect = (slotLabel) => setSelectedSlot(slotLabel);
@@ -223,13 +223,14 @@ export default function DeliveryTimeSlot() {
             color: "black",
           }}
         >
-          <span>Fashion never sleeps, but our riders do 💤</span>
+          {/* <span>Fashion never sleeps, but our riders do 💤</span>
           <br />
-          <span>Please select Tomorrow's date</span>
+          <span>Please select Tomorrow's date</span> */}
+          <span>60 minutes delivery is unavailable for 2 days</span>
         </div>
       )}
 
-      <button
+      {/* <button
         style={{
           marginTop: "1rem",
           backgroundColor: "black",
@@ -243,7 +244,7 @@ export default function DeliveryTimeSlot() {
         onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
       >
         Confirm Slot
-      </button>
+      </button> */}
     </div>
   );
 }
