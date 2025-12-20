@@ -30,3 +30,4 @@ echo "blinkshop/node_modules/@oven/bun-windows-x64-baseline/bin/bun.exe" >> .git
 .env
 lewkout-bcf84-firebase-adminsdk-fbsvc-e8b98209b3.json
 
+package-lock.json
