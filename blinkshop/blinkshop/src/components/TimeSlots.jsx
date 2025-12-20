@@ -98,6 +98,22 @@ export default function DeliveryTimeSlot() {
   const allDisabled = timeSlots.every((slot) => isDisabled(slot));
 
 
+const isBefore11AM = () => {
+  const now = new Date();
+  return now.getHours() < 11;
+};
+
+const isTomorrowSelected = () => {
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  return (
+    new Date(selectedDate).toDateString() ===
+    tomorrow.toDateString()
+  );
+};
+
 
   useEffect(() => {
   const updateDate = () => {
@@ -177,7 +193,7 @@ export default function DeliveryTimeSlot() {
         Select Time Window:
       </p>
 
-      {timeSlots.map((slot, index) => {
+      {/* {timeSlots.map((slot, index) => {
         const disabled = isDisabled(slot);
         return (
           <label
@@ -199,6 +215,9 @@ export default function DeliveryTimeSlot() {
             <span style={{ marginLeft: "4px", fontWeight: "300", flex: 1 }}>
               {slot.label}
             </span>
+            
+              
+            
             <input
               type="radio"
               name="delivery-slot"
@@ -209,7 +228,70 @@ export default function DeliveryTimeSlot() {
             />
           </label>
         );
-      })}
+      })} */}
+      {timeSlots.map((slot, index) => {
+  const disabled = isDisabled(slot);
+
+  return (
+    <label
+      key={index}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        marginBottom: "8px",
+        cursor: disabled ? "not-allowed" : "pointer",
+        padding: "8px",
+        borderRadius: "4px",
+        backgroundColor: disabled ? "#fee2e2" : "transparent",
+        border: disabled ? "1px solid #dc2626" : "1px solid #d1d5db",
+        color: disabled ? "#b91c1c" : "#000",
+        opacity: disabled ? 0.7 : 1,
+      }}
+    >
+      <span style={{ flex: 1 }}>
+        {slot.label}
+
+        {/* ✅ MESSAGE ONLY WHEN 60 MIN SLOT IS DISABLED */}
+        {/* {slot.label === "Within 60 minutes" && disabled && (
+          <div
+            style={{
+              fontSize: "11px",
+              marginTop: "4px",
+              color: "#000000ff",
+            }}
+          >
+            60 min slot will be activated only after 11 AM
+          </div>
+        )} */}
+      {slot.label === "Within 60 minutes" &&
+  (isBefore11AM() || isTomorrowSelected()) && (
+    <div
+      style={{
+        fontSize: "11px",
+        marginTop: "4px",
+        color: "#000",
+      }}
+    >
+      60 min slot will be activated only after 11 AM
+    </div>
+)}
+
+
+
+      </span>
+
+      <input
+        type="radio"
+        name="delivery-slot"
+        value={slot.label}
+        disabled={disabled}
+        checked={selectedSlot === slot.label}
+        onChange={() => handleSelect(slot.label)}
+      />
+    </label>
+  );
+})}
+
 
       {allDisabled && (
         <div

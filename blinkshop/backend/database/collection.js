@@ -282,6 +282,7 @@ const orders = mongoose.Schema({
   returnDate: Date,
 
   /* 🟩 Add these new fields */
+  paymentmode:{type:String},
   totalOrderAmount: { type: Number, default: 0 },     // e.g. 2000
   walletUsed: { type: Number, default: 0 },           // e.g. 1200
   pgUsed: { type: Number, default: 0 },               // e.g. 800

@@ -1,11 +1,4 @@
 
-
-
-
-//5
-
-
-
 import React, { useState, useEffect } from "react";
 import "./CheckOut.css";
 import { useBio } from "./BioContext";
@@ -13,7 +6,9 @@ import { useDashboard } from "./dashboardforadmin/DashboardContext";
 import { IoIosArrowForward } from "react-icons/io";
 import { NavLink, useLocation } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
-
+import phonepay from "../components/image/phonepay.png";
+import paytm from "../components/image/paytm.png";
+import googlepay from "../components/image/gpay.webp";
 import TimeSlots from "./TimeSlots";
 import Slideuptoast from "./Slideuptoast";
 import BundleProduct from "./BundleProduct";
@@ -33,7 +28,7 @@ const Checkout = () => {
   } = useBio();
   const { userDetails } = useFirebaseAuth();
   const location = useLocation();
-
+  const [paymentmode, setpaymentmode] = useState("");
   const [showSheet, setShowSheet] = useState(false);
 
   // Coupon state
@@ -143,7 +138,8 @@ useEffect(() => {
 
   const toggleSheet = () => setShowSheet(!showSheet);
   const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();
-
+const codprice=50
+const upiprice=20
   // Total prices
   const totalDiscountPrice = purchaseproduct.reduce(
     (sum, item) => sum + (item.discountprice || item.price || 0), 0
@@ -279,6 +275,172 @@ useEffect(() => {
           🎉 Yay! You saved ₹{walletToUse + (amountafteraddcoupon || 0)}.0 on the final amount
         </p>
       </div>
+      {/* Payment Methods UI */}
+      {
+        parseFloat(distance) > 25  && <div style={{
+  background: "#fff",
+  borderRadius: "12px",
+  padding: "14px",
+  marginTop: "12px",
+  boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
+  border: "1px solid #eee"
+}}>
+  <div style={{ fontSize: "14px", fontWeight: "600", marginBottom: "10px" }}>
+    Pay via
+    <span style={{ fontSize: "11px", color: "#666", marginLeft: "6px" }}>
+      ⚡ Enjoy fast delivery on all prepaid orders.
+    </span>
+  </div>
+
+  {/* UPI */}
+  <div style={{
+    border: "1px solid #e5e5e5",
+    borderRadius: "10px",
+    padding: "10px",
+    marginBottom: "10px"
+  }}>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <span style={{ fontWeight: "600",fontSize:"15px" }}>UPI payment</span>
+      <span style={{ color: "#1b7f3a", fontSize: "10px", fontWeight:"600" , background: "#e9f7ee",
+      color: "#de4e0bff",padding:"0 10px"}}>enjoy ₹{upiprice} off</span>
+      <span>
+        <span style={{ textDecoration: "line-through", color: "#999", fontSize: "12px" }}>
+          ₹{payableAmount}
+        </span>{" "}
+        <span style={{ fontWeight: "700" }}>₹{payableAmount-upiprice}</span>
+      </span>
+    </div>
+
+    <div style={{
+      background: "#e9f7ee",
+      color: "#1b7f3a",
+      fontSize: "12px",
+      padding: "6px",
+      borderRadius: "6px",
+      marginTop: "6px",
+      textAlign: "center",
+      fontWeight: "600"
+    }}>
+      Pay online and save ₹{upiprice}
+    </div>
+
+    <div style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: "10px"
+    }}>
+      {[phonepay, paytm, googlepay].map((item, i) => (
+          
+        <div  onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount-upiprice)}  key={i}  style={{
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          padding: "8px",
+          fontSize: "11px",
+          width: "23%",
+          textAlign: "center",
+          fontWeight: "600"
+        }}>
+          <img src={item} alt="UPI" style={{ minWidth: "100%", height: "30px", objectFit: "contain" }} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Other Options */}
+  {[
+    "Credit / Debit Card",
+    "Net Banking",
+    "Wallets"
+  ].map((method, i) => (
+    <div onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount-upiprice)} key={i} style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "10px",
+      borderBottom: "1px solid #eee"
+    }}>
+      <span style={{ fontWeight: "500" }}>{method}</span>
+      <span style={{ color: "#1b7f3a", fontSize: "12px", fontWeight:"600" , background: "#e9f7ee",
+      color: "#de4e0bff",padding:"0 10px"}}>enjoy ₹{upiprice} off</span>
+      <span style={{ color: "#1b7f3a", fontSize: "12px", fontWeight: "600" }}>
+        ₹{payableAmount-upiprice}
+      </span>
+    </div>
+  ))}
+
+  {/* COD */}
+  {/* <div style={{
+    display: "flex",
+    flexDirection:"column",
+    alignItems: "start",
+    padding: "10px",
+    marginTop: "6px",
+    // border: "1px solid black"
+  }}>
+    <div style={{width:"100%",display:"flex",justifyContent:"space-between"}}>
+    <span style={{ fontWeight: "500" }}>Cash on delivery</span>
+    
+    <span style={{ color: "#e53935", fontSize: "12px", fontWeight: "700" }}>
+      ₹{payableAmount + codprice}
+    </span>
+    </div>
+    <div>
+    <p style={{ fontSize: "10px", fontWeight: "700" }}>₹{codprice} will be charge extra for cash on delivery option</p>
+    </div>
+  </div> */}
+  <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "start",
+    padding: "10px",
+    marginTop: "6px",
+    cursor: "pointer",
+  }}
+  onClick={() => setpaymentmode("cod")}
+>
+  <div
+    style={{
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+    <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+      <input
+        type="radio"
+        name="paymentMode"
+        value="cod"
+        onChange={() => setpaymentmode("cod")}
+      />
+      <span style={{ fontWeight: "500" }}>Cash on delivery</span>
+    </label>
+
+    <span
+      style={{
+        color: "#e53935",
+        fontSize: "12px",
+        fontWeight: "700",
+      }}
+    >
+      ₹{payableAmount + codprice}
+    </span>
+  </div>
+
+  <p style={{ fontSize: "10px", fontWeight: "700", marginTop: "4px" }}>
+    ₹{codprice} will be charged extra for cash on delivery option
+  </p>
+</div>
+
+</div>
+
+      }
+
+
+
+
+
 
       {/* Time Slots + Pay Now */}
       {city?.toLowerCase().includes("jaipur") && parseFloat(distance) < 25 ? (
@@ -291,9 +453,9 @@ useEffect(() => {
           >
             Pay Now
           </button> */}
-          <button
-  className="pay-now-btn-checkoutbuy"
-  onClick={() => {
+          <button 
+className="pay-now-btn-checkoutbuy"
+onClick={() => {
     // if (!timeslotlelo) {
     //   alert("Please Select the Slot and Press on Confirm Slot.");
     //   return;
@@ -308,9 +470,9 @@ useEffect(() => {
       ) : (
         <button
           className="pay-now-btn-checkoutbuy"
-          onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount)}
+          onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse,paymentmode=="cod"?(payableAmount+codprice):(payableAmount-upiprice),'',paymentmode)}
         >
-          Pay Now
+          {paymentmode === "cod" ? "Confirm Order" : "Pay Now"}
         </button>
       )}
 
@@ -331,10 +493,10 @@ useEffect(() => {
     onClose={() => setyppicode(false)}
   />
 )}
+
  {/* {yppicode && <Slideuptoast coupon={coupons} firstcpns={firstcpn} totalDiscountPrice={totalDiscountPrice} onClose={() => setyppicode(false)} />} */}
 
-
-      {/* Bottom Sheet */}
+{/* Bottom Sheet */}
       <div className="bottom-sheet" style={{ display: showSheet ? 'block' : 'none' }}>
         <p>Review item</p>
         <button onClick={toggleSheet} className="closed-button">✖</button>

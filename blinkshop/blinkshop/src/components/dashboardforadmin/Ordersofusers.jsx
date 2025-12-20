@@ -1040,6 +1040,7 @@ const Ordersofusers = () => {
               <th>Products</th>
               <th>Product image</th>
               <th>Time Slot</th>
+              <th>ModeOfPayment</th>
 
               <th>Total Price</th>
               <th>Status</th>
@@ -1102,6 +1103,8 @@ const Ordersofusers = () => {
                       ))}
                     </td>
 <td>{order?.timeslot || "N/A"}</td>
+<td>{order?.paymentmode || "N/A"}</td>
+
                     <td>
                       ₹{order.products.reduce((acc, p) => acc + p.totalAmount, 0)}
                     </td>

@@ -32,7 +32,9 @@ const OrderConfirmation = () => {
 
   const styles = {
     container: {
-
+display: 'flex',
+alignItems: 'center',
+justifyContent: 'center',
       marginTop:"30px",
       minHeight: '100vh',
       backgroundColor: '#f0fdf4',
@@ -289,167 +291,17 @@ const OrderConfirmation = () => {
           </h1>
           
           <p style={styles.subtitle}>
-            Thank you for your order. We'll send you updates via email.
+            Thank you for your order.
           </p>
         </div>
 
-        {/* Order Summary Card */}
-        <div style={styles.card}>
-          <div style={styles.orderHeader}>
-            <div>
-              <h2 style={styles.orderTitle}>
-                Order #{orderDetails.orderId}
-              </h2>
-              <p style={styles.orderDate}>
-                Placed on {orderDetails.date}
-              </p>
-            </div>
-            <div style={styles.orderTotal}>
-              {orderDetails.total}
-            </div>
-          </div>
-
-          {/* Order Items */}
-          <div style={{ marginBottom: '20px' }}>
-            {orderDetails.items.map((item, index) => (
-              <div key={index} style={styles.itemRow}>
-                <span style={styles.itemName}>
-                  {item.name} {item.qty > 1 && `x${item.qty}`}
-                </span>
-                <span style={styles.itemPrice}>
-                  {item.price}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Payment Info */}
-          <div style={styles.paymentInfo}>
-            <CreditCard size={20} color="#10B981" style={{ marginRight: '12px' }} />
-            <div>
-              <p style={styles.paymentText}>
-                {orderDetails.payment.method}
-              </p>
-              <p style={styles.paymentStatus}>
-                {orderDetails.payment.status}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Order Progress */}
-        <div style={styles.card}>
-          <h3 style={styles.sectionTitle}>
-            Order Status
-          </h3>
-
-          <div style={styles.progressContainer}>
-            {/* Progress Line */}
-            <div style={styles.progressLine}>
-              <div style={styles.progressFill} />
-            </div>
-
-            {orderSteps.map((step, index) => {
-              const Icon = step.icon;
-              const isLast = index === orderSteps.length - 1;
-              
-              return (
-                <div key={index} style={isLast ? styles.stepRowLast : styles.stepRow}>
-                  <div style={{
-                    ...styles.stepIcon,
-                    backgroundColor: step.completed ? '#10B981' : step.active ? '#F97316' : '#e5e7eb'
-                  }}>
-                    <Icon size={16} color="white" />
-                  </div>
-                  <div>
-                    <p style={{
-                      ...styles.stepLabel,
-                      fontWeight: step.active ? '600' : '500',
-                      color: step.completed || step.active ? '#111827' : '#6b7280'
-                    }}>
-                      {step.label}
-                    </p>
-                    {step.active && (
-                      <p style={styles.stepActive}>
-                        In Progress
-                      </p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Delivery Info */}
-        <div style={styles.card}>
-          <h3 style={styles.sectionTitle}>
-            Delivery Information
-          </h3>
-
-          <div style={{ marginBottom: '16px' }}>
-            <div style={styles.deliveryRow}>
-              <MapPin size={18} color="#6b7280" style={{ marginRight: '12px', marginTop: '2px' }} />
-              <div>
-                <p style={styles.deliveryText}>
-                  {orderDetails.delivery.address}
-                </p>
-              </div>
-            </div>
-            
-            <div style={styles.deliveryRow}>
-              <Clock size={18} color="#6b7280" style={{ marginRight: '12px' }} />
-              <div>
-                <p style={styles.deliveryText}>
-                  Expected: {orderDetails.delivery.expectedDate}
-                </p>
-                <p style={styles.deliveryTime}>
-                  {orderDetails.delivery.time}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div style={styles.warningBox}>
-            <Package size={18} color="#d97706" style={{ marginRight: '8px' }} />
-            <p style={styles.warningText}>
-              Free delivery on orders above ₹1,999
-            </p>
-          </div>
-        </div>
+        
 
         {/* Action Buttons */}
-        <div style={styles.buttonContainer}>
-          <button style={styles.primaryButton}>
-            Track Your Order
-          </button>
-
-          <div style={styles.secondaryButtonRow}>
-            <button style={styles.secondaryButton}>
-              <Phone size={16} />
-              Call Support
-            </button>
-
-            <button style={styles.secondaryButton}>
-              <Mail size={16} />
-              Email Us
-            </button>
-          </div>
-        </div>
+       
 
         {/* Footer */}
-        <div style={styles.footer}>
-          <p style={styles.footerText}>
-            Need help? Contact us at{' '}
-            <span style={styles.footerLink}>
-              support@store.com
-            </span>
-            {' '}or call{' '}
-            <span style={styles.footerLink}>
-              1800-123-4567
-            </span>
-          </p>
-        </div>
+        
       </div>
     </div>
   );

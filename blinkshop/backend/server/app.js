@@ -1737,10 +1737,13 @@ async function addcashbacktowallet(userId, amount, type = "cashback") {
 // });
 app.post('/order', verifySessionCookie, async (req, res) => {
   try {
-    const { order, address, userDetails, distance, couponcode, walletUsed = 0,payableAmount,timeslot} = req.body;
-console.log("wallet used",walletUsed)
+    const { order, address, userDetails, distance, couponcode, walletUsed = 0,payableAmount,timeslot,paymentmode} = req.body;
+console.log("wallet ggggused",walletUsed)
     console.log("payableAmount",payableAmount )
+    console.log("paymentmode",paymentmode)
     console.log("timingslot",timeslot )
+console.log("paymentmo0de",paymentmode)
+
 
     if (!order || !address || !userDetails) {
       return res.status(400).json({ error: "All fields are required" });
@@ -1771,6 +1774,75 @@ console.log("wallet used",walletUsed)
     }, 0);
 
     // const payableAmount = totalOrderAmount - walletUsed;
+
+
+
+
+if(paymentmode=="cod"){
+// ✅ Directly save orders as PAID without calling PhonePe
+      for (const item of ordersArray) {
+        const singleProduct = {
+          productId: item.productid || item._id,
+          tag: item.tag || "",
+          description: item.description || "",
+          image: item.image || [],
+          quantity: item.qty || 1,
+          price: item.price || 0,
+          discountprice: item.discountprice || 0,
+          size: item.size || "",
+          shopname: item.shopname || "",
+          totalAmount: item.discountprice || 0,
+          bundle: item.bundle || [],
+        };
+
+        // Deduct stock
+        if (singleProduct.productId) {
+          const product = await productsmodel.findById(singleProduct.productId);
+          if (product && product.qty >= singleProduct.quantity) {
+            product.qty -= singleProduct.quantity;
+            await product.save();
+          }
+        }
+
+        const newOrder = new orderr({
+          name: userDetails.name,
+          userId: userDetails._id,
+          email: userDetails.email,
+          address: address[0] || {},
+          timeslot:timeslot,
+          phone: address?.[0]?.phone?.[0] || "",
+          products: [singleProduct],
+          paymentmode: paymentmode,
+          deliverydistance: parseFloat(distance?.toString().replace("km","") || 0),
+          merchantOrderId,
+          status: "Pending",
+          paymentStatus: "cod", // mark as paid
+          totalOrderAmount,
+          walletUsed,
+          pgUsed: 0,
+        });
+
+        await newOrder.save();
+        orderEvent.emit('new_order', { type: "new_order", order: newOrder });
+      }
+
+      // Apply coupon if any
+      if (couponcode?.length > 0) {
+        await applyCouponSuccess(userDetails._id, couponcode);
+      }
+
+      // Remove pending order
+      await pendingOrderModel.deleteOne({ _id: pendingOrder._id });
+
+      await  addcashbacktowallet(userDetails._id, walletUsed, "purchase");
+      return res.status(201).json({
+        message: "Order placed successfully on COD MODE",
+        merchantOrderId
+      });
+      
+
+}
+
 
     if (payableAmount <= 0) {
       // ✅ Directly save orders as PAID without calling PhonePe
@@ -1806,6 +1878,7 @@ console.log("wallet used",walletUsed)
           timeslot:timeslot,
           phone: address?.[0]?.phone?.[0] || "",
           products: [singleProduct],
+          paymentmode: paymentmode,
           deliverydistance: parseFloat(distance?.toString().replace("km","") || 0),
           merchantOrderId,
           status: "Pending",
@@ -1833,6 +1906,9 @@ console.log("wallet used",walletUsed)
         merchantOrderId
       });
     }
+
+
+
 
     // 🔥 Payable amount > 0 → Use PhonePe
     const client = StandardCheckoutClient.getInstance(

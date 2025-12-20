@@ -20,6 +20,7 @@ export const BioContext = createContext();
 
 export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  
   console.log("urll",apiUrl)
   // const { user,userDetails } = useAuth();
     const {user, userDetails, } = useFirebaseAuth();
@@ -1071,7 +1072,7 @@ let handlechooseaddress=(add)=>{
 }
 
 
-let orderplaced=async(order,address,walletUsed,payableAmount,timeslot)=>{
+let orderplaced=async(order,address,walletUsed,payableAmount,timeslot,paymentmode)=>{
   trackPurchase(order, addtocartitem,payableAmount);
   console.log("userdetailsss",userDetails)
  console.log("orederrr",order)
@@ -1081,7 +1082,9 @@ let orderplaced=async(order,address,walletUsed,payableAmount,timeslot)=>{
 
  console.log("addre",walletUsed)
  console.log("addretime",timeslot)
+ console.log("paymentmodee",paymentmode)
 
+ 
 
 if(user && userDetails){
   try{
@@ -1092,21 +1095,35 @@ if(user && userDetails){
       headers: { "Content-Type": "application/json",
         // Authorization: `Bearer ${user.accessToken}`,
       },
-      body: JSON.stringify({order,address,userDetails,distance,walletUsed,payableAmount,timeslot}), 
+      body: JSON.stringify({order,address,userDetails,distance,walletUsed,payableAmount,timeslot,paymentmode}), 
 
     })
+
+    
     if(orderpost.ok){
-      showPopup("Your Order Has Been Confirmed")
+        
 
       console.log("checkurl",orderpost)
        let data = await orderpost.json();
         console.log("order ka data",data)
           // 🔑 PhonePe Checkout URL redirect
-        if (data.checkoutUrl) {
-          window.location.href = data.checkoutUrl; // ✅ direct redirect to PhonePe
-        } else {
-          showPopup("Your Order Has Been Confirmed");
-        }
+        // if (data.checkoutUrl) {
+        //   window.location.href = data.checkoutUrl; // ✅ direct redirect to PhonePe
+        // } else {
+        //   showPopup("Your Order Has Been Confirmed");
+        // }
+        if (paymentmode !== "cod" && data.checkoutUrl) {
+  window.location.href = data.checkoutUrl;
+  return
+}
+  // 🔹 COD → order confirmed
+  if (paymentmode === "cod") {
+    showPopup("Youvvr Order Has Been Confirmed");
+     window.location.href = "/orderconfirm"
+  }
+
+
+
       
       // navigate("/orderconfirm")
     }

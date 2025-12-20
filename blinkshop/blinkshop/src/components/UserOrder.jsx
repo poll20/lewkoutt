@@ -100,6 +100,17 @@ const UserOrder = () => {
     return () => clearInterval(interval);
   }, []);
 
+
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const paymentStatus = params.get("status"); // PhonePe param
+
+  if (paymentStatus === "SUCCESS") {
+    showPopup("Payment Successful! Order Confirmed 🎉");
+  }
+}, []);
+
+
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);

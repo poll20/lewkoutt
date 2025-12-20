@@ -1105,7 +1105,7 @@ const Card = (props) => {
   const query = searchParams.get("q");
 
   const { setIsLoading } = useLoading();
-  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption } = useBio();
+  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons } = useBio();
 
   // local UI states
   const [originalProducts, setOriginalProducts] = useState([]); // canonical raw data from server (normalized)
@@ -1166,6 +1166,8 @@ const Card = (props) => {
       setOriginalProducts(items);
       setProducts(() => applyFiltersAndSort({ items, filters, selectedSizes, sortOption: selectedSortOption, externalSortOption: sortOption, newarrival, bestsellingIds: (bestsellingdata || []).map(b => b.productId?.toString()) }));
     };
+
+
 
     const fetchProducts = async (url) => {
       try {
@@ -1254,6 +1256,18 @@ const Card = (props) => {
     setProducts(derived);
   }, [originalProducts, filters, selectedSizes, selectedSortOption, sortOption, newarrival, bestsellingdata]);
 
+
+      useEffect(() => {
+      const timer = setTimeout(() => {
+        console.log("🍿 Checking if product has category and tag (delayed):",productdataonlydetail);
+    
+          console.log("📢 Calling fetchCoupons with:", productdataonlydetail?.cate, productdataonlydetail.tag);
+          fetchCoupons("all","all");
+        // console.log("copuen",coupons) 
+      }, 200);
+    
+      return () => clearTimeout(timer);
+    }, [productdataonlydetail]);
   // UI helpers
   const removeSortFilter = () => {
     setSelectedSortOption("");
@@ -1344,12 +1358,17 @@ const Card = (props) => {
 
               <div className="product-details">
                 <span className="product-title" style={{ fontFamily: "Oswald", fontWeight: "600", fontSize: "15px" }}>{product.description?.length > 10 ? (product.description?.slice(0, 17) + `...`) : (product.description)}</span>
+             
 
                 <div className="product-pricing">
+             {/* <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span> */}
+
                   <span className="original-price" style={{ fontFamily: "Oswald" }}>₹{product?.price}</span>
                   <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
                   <span className="discount" style={{ fontFamily: "Oswald", color: "red" }}>{product?.discount}% off</span>
                 </div>
+             <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)",fontSize:"12.8px" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span>
+
 
                 {!wish ? null : (
                   <button className="delivery-info" style={{ padding: "10px", background: "black", color: "white", border: "none", borderRadius: "5px", marginBottom: "20px", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setShowSize(product.itemid)}>Add to Bag</button>
