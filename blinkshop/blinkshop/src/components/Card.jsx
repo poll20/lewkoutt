@@ -1367,7 +1367,23 @@ const Card = (props) => {
                   <span className="current-price" style={{ fontFamily: "Oswald" }}>₹{product?.discountprice}</span>
                   <span className="discount" style={{ fontFamily: "Oswald", color: "red" }}>{product?.discount}% off</span>
                 </div>
-             <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)",fontSize:"12.8px" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span>
+             {/* <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)",fontSize:"12.8px" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span> */}
+<span
+  className="current-price"
+  style={{
+    fontFamily: "Oswald",
+    color: "rgb(52 195 52)",
+    fontSize: "12.8px",
+  }}
+>
+  Get it For ₹
+  {coupons?.[0]?.discountType === "fixed"
+    ? Math.floor(product?.discountprice - coupons?.[0]?.discountValue)
+    : Math.floor(
+        product?.discountprice -
+          (product?.discountprice * coupons?.[0]?.discountValue) / 100
+      )}
+</span>
 
 
                 {!wish ? null : (
