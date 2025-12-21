@@ -1,6 +1,6 @@
 const axios = require("axios");
 const crypto = require("crypto");
-const { getPhonePeAccessToken } = require("./phonepeAuth");
+const { getPhonePeAccessToken } = require("./phonepayAuth");
 
 const PHONEPE_BASE_URL = "https://api.phonepe.com/apis/pg/checkout"; // PRODUCTION
 
