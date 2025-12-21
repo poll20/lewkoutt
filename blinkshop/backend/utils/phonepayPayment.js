@@ -1,24 +1,31 @@
 const axios = require("axios");
 const { getPhonePeAccessToken } = require("./phonepayAuth");
 
-const PHONEPE_BASE_URL = "https://api.phonepe.com/apis/pg/checkout"; // PRODUCTION
+// ✅ Production URL
+const PHONEPE_PAY_URL =
+  "https://api.phonepe.com/apis/pg/checkout/v2/pay";
 
+/**
+ * Create PhonePe Checkout Payment
+ */
 async function createPhonePePayment({
   merchantOrderId,
-  amount,
+  amount,          // rupees
   userId,
   redirectUrl
 }) {
+  // 1️⃣ Get Access Token
   const accessToken = await getPhonePeAccessToken();
 
+  // 2️⃣ Build payload EXACTLY as per PhonePe docs
   const payload = {
-    merchantId: process.env.PHONEPE_MERCHANT_ID, // ✅ REQUIRED
-    merchantTransactionId: merchantOrderId,      // ✅ REQUIRED
-    amount: amount * 100, // paise
-    redirectUrl,
-    callbackUrl: "https://www.lewkout.com/phonepe/webhook", // ✅ REQUIRED
-    paymentInstrument: {
-      type: "PAY_PAGE" // ✅ REQUIRED
+    merchantOrderId: merchantOrderId,
+    amount: amount * 100, // convert to paisa
+    paymentFlow: {
+      type: "PG_CHECKOUT",
+      merchantUrls: {
+        redirectUrl: redirectUrl
+      }
     },
     metaInfo: {
       udf1: userId,
@@ -26,18 +33,28 @@ async function createPhonePePayment({
     }
   };
 
-  const response = await axios.post(
-    `${PHONEPE_BASE_URL}/v2/pay`,
-    payload,
-    {
-      headers: {
-        Authorization: `O-Bearer ${accessToken}`,
-        "Content-Type": "application/json"
+  try {
+    // 3️⃣ Call PhonePe API
+    const response = await axios.post(
+      PHONEPE_PAY_URL,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `O-Bearer ${accessToken}`,
+        },
       }
-    }
-  );
+    );
 
-  return response.data;
+    return response.data;
+
+  } catch (error) {
+    console.error(
+      "PhonePe Create Order Error:",
+      error?.response?.data || error.message
+    );
+    throw error;
+  }
 }
 
 module.exports = { createPhonePePayment };
