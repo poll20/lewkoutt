@@ -1072,72 +1072,146 @@ let handlechooseaddress=(add)=>{
 }
 
 
-let orderplaced=async(order,address,walletUsed,payableAmount,timeslot,paymentmode)=>{
-  trackPurchase(order, addtocartitem,payableAmount);
-  console.log("userdetailsss",userDetails)
- console.log("orederrr",order)
- console.log("addre",address)
- console.log("addre",walletUsed)
- console.log("addre",payableAmount)
+// let orderplaced=async(order,address,walletUsed,payableAmount,timeslot,paymentmode)=>{
+//   trackPurchase(order, addtocartitem,payableAmount);
+//   console.log("userdetailsss",userDetails)
+//  console.log("orederrr",order)
+//  console.log("addre",address)
+//  console.log("addre",walletUsed)
+//  console.log("addre",payableAmount)
 
- console.log("addre",walletUsed)
- console.log("addretime",timeslot)
- console.log("paymentmodee",paymentmode)
+//  console.log("addre",walletUsed)
+//  console.log("addretime",timeslot)
+//  console.log("paymentmodee",paymentmode)
 
  
 
-if(user && userDetails){
-  try{
-    setIsLoading(true)
-    let orderpost=await fetch(`${apiUrl}/order`,{
-      method:"POST",
-     credentials: 'include', // important: allow cookies to be set
-      headers: { "Content-Type": "application/json",
-        // Authorization: `Bearer ${user.accessToken}`,
-      },
-      body: JSON.stringify({order,address,userDetails,distance,walletUsed,payableAmount,timeslot,paymentmode}), 
+// if(user && userDetails){
+//   try{
+//     setIsLoading(true)
+//     let orderpost=await fetch(`${apiUrl}/order`,{
+//       method:"POST",
+//      credentials: 'include', // important: allow cookies to be set
+//       headers: { "Content-Type": "application/json",
+//         // Authorization: `Bearer ${user.accessToken}`,
+//       },
+//       body: JSON.stringify({order,address,userDetails,distance,walletUsed,payableAmount,timeslot,paymentmode}), 
 
-    })
+//     })
 
     
-    if(orderpost.ok){
+//     if(orderpost.ok){
         
 
-      console.log("checkurl",orderpost)
-       let data = await orderpost.json();
-        console.log("order ka data",data)
-          // 🔑 PhonePe Checkout URL redirect
-        // if (data.checkoutUrl) {
-        //   window.location.href = data.checkoutUrl; // ✅ direct redirect to PhonePe
-        // } else {
-        //   showPopup("Your Order Has Been Confirmed");
-        // }
-        if (paymentmode !== "cod" && data.checkoutUrl) {
-  window.location.href = data.checkoutUrl;
-  return
-}
-  // 🔹 COD → order confirmed
-  if (paymentmode === "cod") {
-    showPopup("Youvvr Order Has Been Confirmed");
-     window.location.href = "/orderconfirm"
-  }
+//       console.log("checkurl",orderpost)
+//        let data = await orderpost.json();
+//         console.log("order ka data",data)
+//           // 🔑 PhonePe Checkout URL redirect
+//         // if (data.checkoutUrl) {
+//         //   window.location.href = data.checkoutUrl; // ✅ direct redirect to PhonePe
+//         // } else {
+//         //   showPopup("Your Order Has Been Confirmed");
+//         // }
+//         if (paymentmode !== "cod" && data.checkoutUrl) {
+//   window.location.href = data.checkoutUrl;
+//   return
+// }
+//   // 🔹 COD → order confirmed
+//   if (paymentmode === "cod") {
+//     showPopup("Youvvr Order Has Been Confirmed");
+//      window.location.href = "/orderconfirm"
+//   }
 
 
 
       
-      // navigate("/orderconfirm")
-    }
-     // ✅ New Order ko State me Add Karo
+//       // navigate("/orderconfirm")
+//     }
+//      // ✅ New Order ko State me Add Karo
     
+//   }
+//   catch(e){
+//     console.log(e)
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
+// }
+// }
+
+let orderplaced = async (
+  order,
+  address,
+  walletUsed,
+  payableAmount,
+  timeslot,
+  paymentmode
+) => {
+  trackPurchase(order, addtocartitem, payableAmount);
+
+  if (user && userDetails) {
+    try {
+      setIsLoading(true);
+
+      let orderpost = await fetch(`${apiUrl}/order`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          order,
+          address,
+          userDetails,
+          distance,
+          walletUsed,
+          payableAmount,
+          timeslot,
+          paymentmode,
+        }),
+      });
+
+      if (!orderpost.ok) return;
+
+      let data = await orderpost.json();
+      console.log("order response", data);
+
+      /* =======================
+         🔹 COD FLOW
+      ======================== */
+      if (paymentmode === "cod") {
+        showPopup("Your Order Has Been Confirmed");
+        window.location.href = "/orderconfirm";
+        return;
+      }
+
+      /* =======================
+         🔹 PHONEPE ONLINE FLOW
+      ======================== */
+      if (paymentmode !== "cod" && data.tokenUrl) {
+        window.PhonePeCheckout.transact({
+          tokenUrl: data.tokenUrl,
+          type: "IFRAME", // ✅ Recommended
+          callback: function (response) {
+            if (response === "USER_CANCEL") {
+              console.log("User cancelled payment");
+              showPopup("Payment cancelled");
+            } else if (response === "CONCLUDED") {
+              console.log("Payment finished");
+              // ⚠️ Final status backend webhook / status API se hi aayega
+              window.location.href = "/orderconfirm";
+            }
+          },
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
   }
-  catch(e){
-    console.log(e)
-  }
-  finally{
-    setIsLoading(false)
-  }
-}
-}
+};
+
 if(productdataonlydetail){
   console.log("prddd",productdataonlydetail)
 }
