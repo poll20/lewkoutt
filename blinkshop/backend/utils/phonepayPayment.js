@@ -1,5 +1,4 @@
 const axios = require("axios");
-const crypto = require("crypto");
 const { getPhonePeAccessToken } = require("./phonepayAuth");
 
 const PHONEPE_BASE_URL = "https://api.phonepe.com/apis/pg/checkout"; // PRODUCTION
@@ -13,12 +12,17 @@ async function createPhonePePayment({
   const accessToken = await getPhonePeAccessToken();
 
   const payload = {
-    merchantOrderId,
+    merchantId: process.env.PHONEPE_MERCHANT_ID, // ✅ REQUIRED
+    merchantTransactionId: merchantOrderId,      // ✅ REQUIRED
     amount: amount * 100, // paise
     redirectUrl,
+    callbackUrl: "https://www.lewkout.com/phonepe/webhook", // ✅ REQUIRED
+    paymentInstrument: {
+      type: "PAY_PAGE" // ✅ REQUIRED
+    },
     metaInfo: {
       udf1: userId,
-      udf2: merchantOrderId,
+      udf2: merchantOrderId
     }
   };
 
@@ -28,8 +32,8 @@ async function createPhonePePayment({
     {
       headers: {
         Authorization: `O-Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     }
   );
 
