@@ -8,6 +8,9 @@
     "build": "echo 'No build step required'",
     "dev": "nodemon server/app.js"
   },
+  "engines": {
+  "node": "18.x"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
