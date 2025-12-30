@@ -38,39 +38,7 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
     return () => unsubscribe();
   }, []);
 
-  // ✅ Initialize invisible reCAPTCHA only once
-  // const initRecaptcha = () => {
-  //   if (!hasRecaptchaInitialized.current && !window.recaptchaVerifier) {
-  //     window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-  //       size: "invisible",
-  //       callback: () => console.log("✅ reCAPTCHA verified"),
-  //     });
-
-  //     window.recaptchaVerifier.render().then(() => {
-  //       console.log("✅ reCAPTCHA rendered successfully");
-  //       hasRecaptchaInitialized.current = true;
-  //     });
-  //   }
-  // };
-
-  // // ✅ Send OTP
-  // const sendOTP = async (phoneNumber) => {
-  //   setLoading(true);
-  //   try {
-  //     initRecaptcha();
-  //     const appVerifier = window.recaptchaVerifier;
-  //     await appVerifier.render(); // Just in case
-  //     const result = await signInWithPhoneNumber(auth, `+91${phoneNumber}`, appVerifier);
-  //     setConfirmationResult(result);
-  //     console.log("📤 OTP sent to:", phoneNumber);
-  //     return { success: true };
-  //   } catch (err) {
-  //     console.error("❌ Error sending OTP:", err);
-  //     return { success: false, error: err.message };
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  
 // ✅ Initialize invisible reCAPTCHA only once with better cleanup
 const initRecaptcha = () => {
   try {
@@ -163,34 +131,54 @@ const sendOTP = async (phoneNumber) => {
   }
 };
 
-  // // ✅ Verify OTP
-  // const verifyOTP = async (otp,refcode) => {
-  //   setLoading(true);
-  //   try {
-  //     if (!confirmationResult) {
-  //       throw new Error("OTP confirmation object not found. Please request OTP again.");
-  //     }
+  
+const mergeGuestData = async () => {
+  try {
+    const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+    const guestWishlist = JSON.parse(localStorage.getItem("guestWishlist")) || [];
+    const guestAddress = JSON.parse(localStorage.getItem("guestAddress")) || [];
 
-  //     const result = await confirmationResult.confirm(otp);
-  //     const signedInUser = result.user;
-  //     setUser(signedInUser);
-  //     console.log("✅ OTP Verified:", signedInUser.phoneNumber);
+console.log("🔥 merge payload", {
+  cart: guestCart,
+  wishlist: guestWishlist,
+  address: guestAddress,
+});
 
-  //     await registerUser(signedInUser,refcode);
-      
-  //     return { success: true };
-      
-  //   } catch (err) {
-  //     console.error("❌ OTP verification failed:", err);
-  //     return { success: false, error: err.message };
-  //   } finally {
-  //     setLoading(false);
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //   }, 300);
 
-  //   }
-  // };
+    if (!guestCart.length && !guestWishlist.length && !guestAddress.length) return;
+
+    const res = await fetch(`${apiUrl}/merge-guest-data`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cart: guestCart,
+        wishlist: guestWishlist,
+        address: guestAddress,
+      }),
+    });
+    console.log("reddata",res)
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
+
+    const data = await res.json();
+    console.log("🔥 MERGED SUCCESS:", data);
+
+    localStorage.removeItem("guestCart");
+    localStorage.removeItem("guestWishlist");
+    localStorage.removeItem("guestAddress");
+
+    
+  } catch (err) {
+    console.error("❌ Merge guest data error:", err.message);
+  }
+};
+
+
+
 // ✅ Verify OTP
 const verifyOTP = async (otp, refcode) => {
   setLoading(true);
@@ -225,7 +213,13 @@ const verifyOTP = async (otp, refcode) => {
 
       setUserDetails(data);
       setIsRegistered(true);
-      await fetchUserDetails(firebaseUser)
+      
+
+      // await fetchUserDetails(firebaseUser)
+      // await mergeGuestData();   // 👈 ye call karo
+      await mergeGuestData();        // pehle merge
+await fetchUserDetails(signedInUser); // fir fresh user data lao
+
     console.log("✅ Session cookie set");
     return { success: true };
   } catch (err) {

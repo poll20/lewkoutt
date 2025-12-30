@@ -14,7 +14,7 @@ import { slugify } from './Slugify';
 import { trackBeginCheckout } from "../analytics/g4a";
 const AddToCart = () => {
   const navigate = useNavigate();
-  const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart } = useBio();
+  const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart,guestCart,isLoggedIn } = useBio();
   const [choosebuy,setchoosebuy]=useState([])
   const [popup, setPopup] = useState(false);
   const [popupbreakup,setpopupbreakup]=useState(false)
@@ -23,7 +23,8 @@ const AddToCart = () => {
  const[totalprice,settotalprice]=useState(0)
  const[discounttotal,settotaldiscountprice]=useState(0)
 
-  
+  const activeCart = isLoggedIn ? addtocartdatas : guestCart;
+
  const [isChecked, setIsChecked] = useState(false);
  const[cprice,setcprice]=useState(0)
   
@@ -100,19 +101,32 @@ let sendtocheckout = () => {
 //     setchoosebuy(addtocartdatas); // Select all items by default
 //   }
 // }, [addtocartdatas]);
+// useEffect(() => {
+//   if (addtocartdatas && addtocartdatas.length > 0) {
+//     // ✅ Only include items with qty > 0
+//     const validItems = addtocartdatas.filter(item => item.qty > 0);
+//     setchoosebuy(validItems);
+//   }
+// }, [addtocartdatas]);
+// useEffect(() => {
+//   if (activeCart && activeCart?.length > 0) {
+//     // ✅ Only include items with qty > 0
+//     const validItems = activeCart.filter(item => item.qty > 0);
+//     setchoosebuy(validItems);
+//   }
+// }, [activeCart]);
 useEffect(() => {
-  if (addtocartdatas && addtocartdatas.length > 0) {
-    // ✅ Only include items with qty > 0
-    const validItems = addtocartdatas.filter(item => item.qty > 0);
-    setchoosebuy(validItems);
-  }
-}, [addtocartdatas]);
+  if (!activeCart) return;
+
+  const validItems = activeCart.filter(item => item.qty > 0);
+  setchoosebuy(validItems);
+}, [activeCart?.length]);
 
 
 
-if(!addtocartdatas){
-  return(<p>loadin....  </p>)
-}
+
+if (!Array.isArray(activeCart)) return null;
+
 
   return (
     <>
@@ -166,9 +180,10 @@ if(!addtocartdatas){
           ))
         ) : (
           <EmptyCart endpoint={window.location.pathname.substring(1)} />
-        )} */}
-        {addtocartdatas.length > 0 ? (
-  addtocartdatas.map((order) => (
+        )} */ }
+        {/* PEHLE ADDTOCARTDATAS THA mp m  */}
+        {activeCart?.length > 0 ? (
+  activeCart?.map((order) => (
 //     order.bundle && order.bundle.length > 0 ? (
 //       <div className="order-card-addtocart" key={order._id}>
 //         <div className="order-bundle-container">
@@ -323,6 +338,7 @@ if(!addtocartdatas){
         type="checkbox"
         style={{ padding: "1px" }}
         checked={choosebuy.some((item) => item._id === order._id)}
+        
         disabled={order.qty === 0} // ❌ Disable checkbox if sold out
         onChange={(e) => handlechoosebuy(order, e.target.checked)}
       />
@@ -405,7 +421,7 @@ if(!addtocartdatas){
 
         <div className="bottom-sheet"  style={{
     borderTop: "1px solid gray",
-    display: choosebuy.length > 0 && addtocartdatas.length > 0 ? "flex" : "none",
+    display: choosebuy.length > 0 && activeCart.length > 0 ? "flex" : "none",
     alignItems: "center",
     justifyContent: "space-between"
   }}>

@@ -731,6 +731,80 @@ app.post("/user/register", async (req, res) => {
   }
 });
 
+
+app.post("/merge-guest-data", verifySessionCookie, async (req, res) => {
+  try {
+    // 🔑 Firebase UID
+    const firebaseUid = req.user.uid;
+
+    // 🔥 Mongo user nikalo
+    const dbUser = await userr.findOne({ uid:firebaseUid });
+
+    if (!dbUser) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const userId = dbUser._id; // ✅ REAL Mongo ID
+    const { cart, wishlist, address } = req.body;
+
+    // 🛒 CART
+    for (let item of cart) {
+      const pid = item.productId || item.productid;
+
+      const exists = await addtocart.findOne({ userId, productId: pid });
+
+      if (!exists) {
+        const { _id, ...safeItem } = item;
+        await addtocart.create({
+          ...safeItem,
+          productId: pid,
+          userId,
+        });
+      }
+    }
+
+    // ❤️ WISHLIST
+    for (let item of wishlist) {
+      const pid = item.productId || item.itemid;
+console.log("wishlistid",pid)
+      const exists = await wishmodel.findOne({ userId, productId: pid });
+
+      if (!exists) {
+        const { _id, ...safeItem } = item;
+        await wishmodel.create({
+          ...safeItem,
+          productId: pid,
+          itemid: pid,
+
+          userId,
+        });
+      }
+    }
+
+    // 🏠 ADDRESS
+    // 🏠 ADDRESS
+if (address.length) {
+  const safeAddresses = address.map(addr => {
+    const { _id, ...rest } = addr; // ❌ remove guest _id
+    return rest;
+  });
+
+  await userr.updateOne(
+    { _id: userId },
+    { $push: { address: { $each: safeAddresses } } }
+  );
+}
+
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("MERGE ERROR:", err);
+    res.status(500).json({ message: "Merge failed" });
+  }
+});
+
+
+
 // 🔧 PATCH Route
 app.patch('/useredit',verifySessionCookie, async (req, res) => {
   const { data, userid } = req.body;
@@ -1763,7 +1837,9 @@ console.log("paymentmo0de",paymentmode)
       userDetails,
       distance,
       couponcode,
-      walletUsed
+      walletUsed,
+      payableAmount,        // ✅ ADD THIS
+  paymentmode
     });
 
     // Calculate total order amount
@@ -2292,12 +2368,13 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
 
     
     // ✅ Step-1: Verify webhook auth
-    verifyPhonePeWebhook(req);
+    // verifyPhonePeWebhook(req); commented for now
 
     const payload = req.body;
+    
     console.log("📩 PhonePe Webhook:", payload);
 console.log("Webhook amount:", payload.amount);
-console.log("Expected amount:", pending.payableAmount * 100);
+// console.log("Expected amount:", pending.payableAmount * 100);
 
     const merchantOrderId =
       payload?.metaInfo?.udf2 || payload?.merchantOrderId;

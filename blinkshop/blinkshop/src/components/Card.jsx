@@ -1105,7 +1105,7 @@ const Card = (props) => {
   const query = searchParams.get("q");
 
   const { setIsLoading } = useLoading();
-  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons } = useBio();
+  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons,removewishlistonly,guestWishlist,isLoggedIn } = useBio();
 
   // local UI states
   const [originalProducts, setOriginalProducts] = useState([]); // canonical raw data from server (normalized)
@@ -1123,6 +1123,7 @@ const Card = (props) => {
 
   // Helper: selects a color id and prepares sizes (kept as original behavior)
   const setShowSize = (id) => {
+    console.log("setshowsize",id)
     const prd = productdataonlydetail
       .map((product) => {
         const matchingColor = product.colors.find((color) => color._id === id);
@@ -1161,6 +1162,7 @@ const Card = (props) => {
     const controller = new AbortController();
 
     const doSet = (items) => {
+      console.log("itemofwish",items)
       // ignore outdated responses
       if (fetchId !== latestFetchId.current) return;
       setOriginalProducts(items);
@@ -1231,10 +1233,15 @@ const Card = (props) => {
         return;
       }
 
-      if (wish && Array.isArray(wishlistdata) && wishlistdata.length > 0) {
-        doSet(wishlistdata);
-        return;
-      }
+      // if (wish && Array.isArray(wishlistdata) && wishlistdata.length > 0 ) {
+      //   doSet(wishlistdata);
+      //   return;
+      // }
+      if (wish) {
+  doSet(isLoggedIn ? wishlistdata : guestWishlist);
+  return;
+}
+
 
       // default fallback: fetch a generic listing endpoint
       await fetchProducts(`${apiUrl}/productmodel?operation=list`);
@@ -1247,7 +1254,7 @@ const Card = (props) => {
     };
 
     // only when url-identifying params change
-  }, [apiUrl, section, category, props.category, query, store, rent, wish, productdataonlydetail, productdata, newarrival, bestsellingdata]);
+  }, [apiUrl, section, category, props.category, query, store, rent, wish, productdataonlydetail, productdata, newarrival, bestsellingdata,guestWishlist,wishlistdata]);
 
   // Local filtering and sorting effect: runs when filters or UI sort/size selections change.
   // This DOES NOT trigger network fetch; it derives 'products' from originalProducts.
@@ -1327,12 +1334,16 @@ const Card = (props) => {
 
       {/* Product grid */}
       <div className="unique-product-container" style={{ marginTop: !props.category ? "" : "0px" }}>
+        { console.log("productkesath",products)}
         {products.length > 0 ? (
+         
           products.map((product) => (
+            
+           
             <div key={product._id || product.itemid || Math.random()} className="product-card" style={{ boxShadow: "none", margin: "1px auto" }}>
 
               <div className="image-container" style={{ position: "relative", marginBottom: "0" }}>
-                <NavLink to={`/productdescription/${slugify(product.title)}/${!wish ? product._id : product?.itemid}/${product?.color || product?.defaultColor}`}>
+                <NavLink to={`/productdescription/${slugify(product.title)}/${!wish ? product._id : product?.itemid ?? product.productId}/${product?.color || product?.defaultColor}`}>
                   <div className="product-image-wrapper" style={{ position: "relative", width: "100%", height: "300px", borderRadius: "6px", overflow: "hidden" }}>
                     <img src={product.image?.[0]} alt={product?.title || "Product"} className="product-image" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
 
@@ -1350,7 +1361,7 @@ const Card = (props) => {
                       </div>
                     ) : null
                   ) : (
-                    <AiOutlineDelete onClick={() => console.warn('remove from wishlist not implemented here')} style={{ color: "black", position: 'relative', left: "-3px", bottom: "2px" }} size={15} />
+                    <AiOutlineDelete onClick={() => removewishlistonly(product?.itemid||product?.productId)} style={{ color: "black", position: 'relative', left: "-3px", bottom: "2px" }} size={15} />
                   )}
                 </div>
 
@@ -1387,7 +1398,7 @@ const Card = (props) => {
 
 
                 {!wish ? null : (
-                  <button className="delivery-info" style={{ padding: "10px", background: "black", color: "white", border: "none", borderRadius: "5px", marginBottom: "20px", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setShowSize(product.itemid)}>Add to Bag</button>
+                  <button className="delivery-info" style={{ padding: "10px", background: "black", color: "white", border: "none", borderRadius: "5px", marginBottom: "20px", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setShowSize(product?.itemid||product?.productId)}>Add to Bag</button>
                 )}
 
               </div>

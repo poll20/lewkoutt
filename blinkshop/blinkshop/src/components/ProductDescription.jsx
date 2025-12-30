@@ -112,7 +112,7 @@ const fetchProductFromBackend = async (clr) => {
               : mainProduct?.image,
         });
       }
-    } else if (data.productdetails.length === 0 && data.colors) {
+    } else if (data?.productdetails?.length === 0 && data?.colors) {
       variantProduct = {
         ...data,
         colors: [data.colors[0]],
@@ -285,7 +285,7 @@ console.log("sq",selectedSize,quantity)
 
 let buydata=(data,siz,qtys)=>{  
 console.log("kop",data,siz,qtys)
-  if(user){
+  // if(user){
     if(siz){
     console.log("buydatanini",data,siz,qtys)
     data.size=siz
@@ -301,10 +301,10 @@ navigate("/address/prd")
        prop.showPopup("Please Selete a Size")
       return;
     }
-  }
-  else{
-    setshowloginpage(true)
-  }
+  // }
+  // else{
+  //   setshowloginpage(true)
+  // }
 }
 
 let cate=product.cate

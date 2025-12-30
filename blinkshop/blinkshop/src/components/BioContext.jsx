@@ -2,28 +2,23 @@
 import React, { createContext, useContext, useState, useEffect ,useRef} from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
-
 import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
 import { color } from 'framer-motion';
+import { nanoid } from "nanoid";
+
 import { trackViewItem, trackAddToCart, trackAddToWishlist,trackPurchase } from "../analytics/g4a";
-// import { trackEvent } from '../analytics/ga4';
-// import { OrderAlertProvider } from './dashboardforadmin/OrderAlertProvider';
-
-// import { ToastContainer, toast } from 'react-toastify';
-// import Toast from './Toast';
-
 export const BioContext = createContext();
-
-
 export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   
   console.log("urll",apiUrl)
   // const { user,userDetails } = useAuth();
     const {user, userDetails, } = useFirebaseAuth();
+    const isLoggedIn = !!user && !!userDetails?._id;
+
     // const { playAudio } = OrderAlertProvider();
     // const {slots,toggleSlot,fetchSlots,slotVersion }=useDashboard()
   const { setIsLoading } = useLoading();
@@ -68,6 +63,10 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const loaderRef = useRef(null);
     const [navigateFn, setNavigateFn] = useState(null);
     const [sortOption, setSortOption] = useState("");
+    const [guestWishlist, setGuestWishlist] = useState([]);
+const [guestCart, setGuestCart] = useState([]);
+const [guestAddress, setGuestAddress] = useState([]);
+
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -97,76 +96,201 @@ const backendURL = `${apiUrl}:3000`;
       
    
 // Empty dependency array to run this effect only on the first render
+// useEffect(() => {
+//   if(user && userDetails._id){
+//   console.log("userdetails in bio",userDetails)
+//     const fetchCartItems = async () => {
+//       try {
+//         setIsLoading(true)
+//         let response = await fetch(`${apiUrl}/cart/${userDetails?._id}`, 
+//           {
+//           credentials: 'include', // important: allow cookies to be set
+//         }
+//       );
+//         let data = await response.json();
+//         // console.log("data in cart",data)
+//         // if(data)
+//         //   {
+//         //    console.log("data kokoin cart",data)
+//         //   }
+//         if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+//           console.error("Invalid response format:", data);
+//           return;
+//         }
+//         // console.log("data kokoin cart",data)
+//         setwishlistdata(data)
+//         let cartItemIds = data.map(item => item.itemid); // Collect the ids of the items in the cart
+//         setWishlist(cartItemIds);  // Set the ids in the state to keep the icons red
+//       } catch (error) {
+//         console.error("Error fetching cart items:", error);
+//       }
+//       finally{
+//         setIsLoading(false)
+//       }
+//     };
+//     fetchCartItems()
+  
+// }
+  
+  
+//   }, [user, userDetails]);
 useEffect(() => {
-  if(user && userDetails._id){
-  console.log("userdetails in bio",userDetails)
-    const fetchCartItems = async () => {
-      try {
-        setIsLoading(true)
-        let response = await fetch(`${apiUrl}/cart/${userDetails?._id}`, 
+  const fetchWishlist = async () => {
+    try {
+      setIsLoading(true);
+
+      /* =======================
+         👉 GUEST USER
+      ======================= */
+      if (!isLoggedIn) {
+        const guestWishlist =
+          JSON.parse(localStorage.getItem("guestWishlist")) || [];
+
+        setwishlistdata(guestWishlist);
+
+        const wishlistIds = guestWishlist.map(item => item.productId);
+        setWishlist(wishlistIds);
+
+        return;
+      }
+
+      /* =======================
+         👉 LOGGED-IN USER
+      ======================= */
+      if (user && userDetails?._id) {
+        console.log("userdetails in bio", userDetails);
+
+        const response = await fetch(
+          `${apiUrl}/cart/${userDetails._id}`,
           {
-          credentials: 'include', // important: allow cookies to be set
-        }
-      );
-        let data = await response.json();
-        // console.log("data in cart",data)
-        // if(data)
-        //   {
-        //    console.log("data kokoin cart",data)
-        //   }
-        if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+            credentials: "include",
+          }
+        );
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
           console.error("Invalid response format:", data);
           return;
         }
-        // console.log("data kokoin cart",data)
-        setwishlistdata(data)
-        let cartItemIds = data.map(item => item.itemid); // Collect the ids of the items in the cart
-        setWishlist(cartItemIds);  // Set the ids in the state to keep the icons red
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-      finally{
-        setIsLoading(false)
-      }
-    };
-    fetchCartItems()
-  
-}
-  
-  
-  }, [user, userDetails]);
 
+        setwishlistdata(data);
+
+        const wishlistIds = data.map(item => item.itemid);
+        setWishlist(wishlistIds);
+      }
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchWishlist();
+}, [isLoggedIn, user, userDetails]);
+
+
+
+
+useEffect(() => {
+  setGuestWishlist(
+    JSON.parse(localStorage.getItem("guestWishlist")) || []
+  );
+  setGuestCart(
+    JSON.parse(localStorage.getItem("guestCart")) || []
+  );
+  setGuestAddress(
+    JSON.parse(localStorage.getItem("guestAddress")) || []
+  );
+}, []);
+
+  // useEffect(() => {
+  //   if(user&& userDetails._id){
+  //     const fetchCartItems = async () => {
+  //       try {
+  //         setIsLoading(true)
+  //         let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
+  //           , {
+  //           credentials: 'include', // important: allow cookies to be set
+  //         }
+  //       );
+  //         let data = await response.json();
+  //         if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+  //           console.error("Invalid response format:", data);
+  //           return;
+  //         }
+  //         console.log("data in cart",data)
+  //         setaddtocartdata(data)
+  //         let cartItemIds = data.map(item => item.id); // Collect the ids of the items in the cart
+  //         setaddtocartdataonly(cartItemIds);  // Set the ids in the state to keep the icons red
+  //       } catch (error) {
+  //         console.error("Error fetching cart items:", error);
+  //       }
+  //       finally{
+  //         setIsLoading(false)
+  //       }
+  //     };
+  //     fetchCartItems()
+  //   }
+    
+    
+  //   }, [user,userDetails]);
   useEffect(() => {
-    if(user&& userDetails._id){
-      const fetchCartItems = async () => {
-        try {
-          setIsLoading(true)
-          let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
-            , {
-            credentials: 'include', // important: allow cookies to be set
+  const fetchCartItems = async () => {
+    try {
+      setIsLoading(true);
+
+      /* =======================
+         👉 GUEST USER
+      ======================= */
+      if (!isLoggedIn) {
+        const guestCart =
+          JSON.parse(localStorage.getItem("guestCart")) || [];
+
+        setaddtocartdata(guestCart);
+
+        const cartIds = guestCart.map(item => item.productId);
+        setaddtocartdataonly(cartIds);
+
+        return;
+      }
+
+      /* =======================
+         👉 LOGGED-IN USER
+      ======================= */
+      if (user && userDetails?._id) {
+        const response = await fetch(
+          `${apiUrl}/addtocart/${userDetails._id}`,
+          {
+            credentials: "include",
           }
         );
-          let data = await response.json();
-          if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
-            console.error("Invalid response format:", data);
-            return;
-          }
-          console.log("data in cart",data)
-          setaddtocartdata(data)
-          let cartItemIds = data.map(item => item.id); // Collect the ids of the items in the cart
-          setaddtocartdataonly(cartItemIds);  // Set the ids in the state to keep the icons red
-        } catch (error) {
-          console.error("Error fetching cart items:", error);
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          console.error("Invalid response format:", data);
+          return;
         }
-        finally{
-          setIsLoading(false)
-        }
-      };
-      fetchCartItems()
+
+        console.log("data in cart", data);
+
+        setaddtocartdata(data);
+
+        // 🔴 for red cart icons / disable add button
+        const cartItemIds = data.map(item => item.productid);
+        setaddtocartdataonly(cartItemIds);
+      }
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    } finally {
+      setIsLoading(false);
     }
-    
-    
-    }, [user,userDetails]);
+  };
+
+  fetchCartItems();
+}, [isLoggedIn, user, userDetails]);
+
 //ise abhi dekhna h include krna h ya nhi
   useEffect(()=>{
     if(user&& userDetails._id){
@@ -198,380 +322,564 @@ useEffect(() => {
       fetchalluser()
     }
   },[user,userDetails])
-  // const handleClick = async (prd,id) => {
-  //   try {
-  //     // const matchItem = allproductdata.find((e) => e._id === id);
-  //     const matchItem = productdataonlydetail
-  //     .flatMap(product => product.colors)  // Sare products ke colors ko ek array bana diya
-  //     .filter(color => color._id == id);
-  //      console.log("matchiterm",matchItem)
-  //     console.log("id",id)
-  //     console.log("ui",userDetails._id )
-  //     matchItem["userid"]=userDetails._id
-  //     matchItem["productId"]=id
-  //     matchItem["price"]=prd.price
-  //     matchItem["discountprice"]=prd.discountprice
-  //     matchItem["productId"]=id
-  //     matchItem["image"]=prd.image
-  //     matchItem["shopname"]=prd.shopname
-  //     console.log(typeof(matchItem),"mit")
-  //     console.log("match ho gyaa",matchItem)
-  //     const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
-  //  console.log("delete",itemInCart)
-  //     if (!itemInCart) {
-  //       const response = await fetch('${apiUrl}/cart', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify(matchItem),
-  //       });
+  
+//   const handleClick = async (prd, id) => {
 
-  //       if (response.ok) {
-  //         const addedItem = await response.json();
-  //         setWishlist((prev) => [...prev, id]);
-  //         setwishlistdata((prev) => [...prev, addedItem]);
-  //       }
-  //     } else {
-  //       const response = await fetch(`${apiUrl}/cart/${itemInCart._id}`, {
-  //         method: 'DELETE',
-  //       });
-
-  //       if (response.ok) {
-  //         setWishlist((prev) => prev.filter((itemId) => itemId !== id));
-  //         setwishlistdata((prev) => prev.filter((item) => item.itemid !== id));
-  //         toast.success("data removed succesfully")
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('Error in handleClick:', error);
-      
-  //   }
-  // };
-  const handleClick = async (prd, id) => {
-  //     trackEvent({
-  //   category: "Wishlistr",
-  //   action: "Add to Wishlist",
-  //   label: prd.title,
-  //   value: prd.price,
-  // });
-
-    console.log("iredandid",prd,id)
+//     console.log("iredandid",prd,id)
     
     
-    try {
-      setIsLoading(true)
-      if(!user){
-        setshowloginpage(true)
+//     try {
+//       setIsLoading(true)
+//       // if(!user){
+//       //   setshowloginpage(true)
+//       // }
+//       if (!isLoggedIn) {
+//   const guestWishlist =
+//     JSON.parse(localStorage.getItem("guestWishlist")) || [];
+
+//   guestWishlist.push({
+//     matchItem.productId = id;
+//       matchItem.price = prd.price;
+//       matchItem.discountprice = prd.discountprice;
+//       matchItem.discount = prd.discount;
+
+//       matchItem.image = prd.image;
+//       matchItem.shopname = prd.shopname;
+//       // matchItem.color=prd?.colors[0]?.color || prd?.color
+//       matchItem.color = Array.isArray(prd?.colors) && prd.colors.length > 0 
+//   ? prd.colors[0].color 
+//   : prd?.color || "defaultColor";
+//       matchItem.title = prd.title;
+//       matchItem.description = prd.description;
+//       matchItem.size = prd.sizes;
+//   });
+
+//   localStorage.setItem("guestWishlist", JSON.stringify(guestWishlist));
+//   showPopup("Added to Wishlist");
+//   return;
+// }
+
+//          if (window.fbq) {
+//       window.fbq("track", "AddToWishlist", {
+//         content_name: prd.title ,
+//         content_ids: [prd._id],
+//         content_type: "product",
+//         value: prd.discountprice || prd.price,
+//         currency: "INR",
+//       });
+//     }
+//       // Correcting the way matchItem is created
+//       // const matchedColors = productdataonlydetail
+//       //   .flatMap(product => product.colors)
+
+//       //   .filter(color => color._id == id);
+//       trackAddToWishlist(prd)
+//       const matchedColors = productdataonlydetail
+//   .flatMap(product => product.colors || [])
+//   .filter(color => color._id == id);
+  
+//       if (matchedColors.length === 0) {
+//         console.error("No matching item found!");
+//         return;
+//       }
+  
+//       const matchItem = { ...matchedColors[0] }; // Convert array to object
+//       console.log("matchItem before adding data:", matchItem);
+  
+//       // Adding necessary properties
+//       matchItem.userid = userDetails._id;
+//       matchItem.productId = id;
+//       matchItem.price = prd.price;
+//       matchItem.discountprice = prd.discountprice;
+//       matchItem.discount = prd.discount;
+
+//       matchItem.image = prd.image;
+//       matchItem.shopname = prd.shopname;
+//       // matchItem.color=prd?.colors[0]?.color || prd?.color
+//       matchItem.color = Array.isArray(prd?.colors) && prd.colors.length > 0 
+//   ? prd.colors[0].color 
+//   : prd?.color || "defaultColor";
+//       matchItem.title = prd.title;
+//       matchItem.description = prd.description;
+//       matchItem.size = prd.sizes;
+  
+//       console.log("Final matchItem:", matchItem); // Debugging
+  
+//       const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
+//       console.log("delete", itemInCart);
+  
+//         if (!itemInCart) {
+//           const response = await fetch(`${apiUrl}/cart`, {
+//             method: "POST",
+//             credentials: 'include', // important: allow cookies to be set
+//             headers: { "Content-Type": "application/json",
+//               // Authorization: `Bearer ${user.accessToken}`,
+//             },
+//             body: JSON.stringify(matchItem),
+//           });
+  
+//         if (response.ok) {
+//           const addedItem = await response.json();
+//           setWishlist(prev => [...prev, id]);
+//           setwishlistdata(prev => [...prev, addedItem]);
+//     //       const toast = new window.bootstrap.Toast(toastRef.current);
+//     // toast.show();
+//     //       settoastmsg("item added successfully")
+//     showPopup("Added to Wishlist")
+//         }
+//       } else {
+//         const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
+//           method: "DELETE",
+//           credentials: 'include', // important: allow cookies to be set
+//           // headers: {
+//           //   Authorization: `Bearer ${user.accessToken}`,
+//           // },
+//         });
+  
+//         if (response.ok) {
+//           setWishlist(prev => prev.filter(itemId => itemId !== id));
+//           setwishlistdata(prev => prev.filter(item => item.itemid !== id));
+//           // toast.success("Data removed successfully");
+//     //       const toast = new window.bootstrap.Toast(toastRef.current);
+//     // toast.show();
+//     //       settoastmsg("item removed successfully")
+//     showPopup("Removed from Wishlist")
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error in handleClick:", error);
+//     }
+//     finally{
+//       setIsLoading(false)
+//     }
+  
+//   };
+
+const handleClick = async (prd, id) => {
+  console.log("iredandid", prd, id);
+
+  try {
+    setIsLoading(true);
+
+    /* =======================
+       👉 GUEST USER FLOW
+    ======================= */
+    if (!isLoggedIn) {
+      const guestWishlist =
+        JSON.parse(localStorage.getItem("guestWishlist")) || [];
+
+      const alreadyExists = guestWishlist.find(
+        item => item.productId === id
+      );
+
+      // 🔁 TOGGLE
+      if (alreadyExists) {
+        const updatedWishlist = guestWishlist.filter(
+          item => item.productId !== id
+        );
+setGuestWishlist(updatedWishlist);
+        localStorage.setItem(
+          "guestWishlist",
+          JSON.stringify(updatedWishlist)
+        );
+
+        showPopup("Removed from Wishlist");
+      } else {
+        guestWishlist.push({
+          productId: id,
+          price: prd.price,
+          discountprice: prd.discountprice,
+          discount: prd.discount,
+          image: prd.image,
+          shopname: prd.shopname,
+          color:
+            Array.isArray(prd?.colors) && prd.colors.length > 0
+              ? prd.colors[0].color
+              : prd?.color || "defaultColor",
+          title: prd.title,
+          description: prd.description,
+          size: prd.sizes,
+        });
+setGuestWishlist(guestWishlist);  
+console.log("wdai",guestWishlist)
+        localStorage.setItem(
+          "guestWishlist",
+          JSON.stringify(guestWishlist)
+        );
+
+        showPopup("Added to Wishlist");
       }
-         if (window.fbq) {
+
+      return; // 🚨 important
+    }
+
+    /* =======================
+       👉 LOGGED-IN USER FLOW
+    ======================= */
+
+    // FB Pixel
+    if (window.fbq) {
       window.fbq("track", "AddToWishlist", {
-        content_name: prd.title ,
+        content_name: prd.title,
         content_ids: [prd._id],
         content_type: "product",
         value: prd.discountprice || prd.price,
         currency: "INR",
       });
     }
-      // Correcting the way matchItem is created
-      // const matchedColors = productdataonlydetail
-      //   .flatMap(product => product.colors)
 
-      //   .filter(color => color._id == id);
-      trackAddToWishlist(prd)
-      const matchedColors = productdataonlydetail
-  .flatMap(product => product.colors || [])
-  .filter(color => color._id == id);
-  
-      if (matchedColors.length === 0) {
-        console.error("No matching item found!");
-        return;
-      }
-  
-      const matchItem = { ...matchedColors[0] }; // Convert array to object
-      console.log("matchItem before adding data:", matchItem);
-  
-      // Adding necessary properties
-      matchItem.userid = userDetails._id;
-      matchItem.productId = id;
-      matchItem.price = prd.price;
-      matchItem.discountprice = prd.discountprice;
-      matchItem.discount = prd.discount;
+    trackAddToWishlist(prd);
 
-      matchItem.image = prd.image;
-      matchItem.shopname = prd.shopname;
-      // matchItem.color=prd?.colors[0]?.color || prd?.color
-      matchItem.color = Array.isArray(prd?.colors) && prd.colors.length > 0 
-  ? prd.colors[0].color 
-  : prd?.color || "defaultColor";
-      matchItem.title = prd.title;
-      matchItem.description = prd.description;
-      matchItem.size = prd.sizes;
-  
-      console.log("Final matchItem:", matchItem); // Debugging
-  
-      const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
-      console.log("delete", itemInCart);
-  
-        if (!itemInCart) {
-          const response = await fetch(`${apiUrl}/cart`, {
-            method: "POST",
-            credentials: 'include', // important: allow cookies to be set
-            headers: { "Content-Type": "application/json",
-              // Authorization: `Bearer ${user.accessToken}`,
-            },
-            body: JSON.stringify(matchItem),
-          });
-  
-        if (response.ok) {
-          const addedItem = await response.json();
-          setWishlist(prev => [...prev, id]);
-          setwishlistdata(prev => [...prev, addedItem]);
-    //       const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //       settoastmsg("item added successfully")
-    showPopup("Added to Wishlist")
-        }
-      } else {
-        const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
-          method: "DELETE",
-          credentials: 'include', // important: allow cookies to be set
-          // headers: {
-          //   Authorization: `Bearer ${user.accessToken}`,
-          // },
-        });
-  
-        if (response.ok) {
-          setWishlist(prev => prev.filter(itemId => itemId !== id));
-          setwishlistdata(prev => prev.filter(item => item.itemid !== id));
-          // toast.success("Data removed successfully");
-    //       const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //       settoastmsg("item removed successfully")
-    showPopup("Removed from Wishlist")
-        }
-      }
-    } catch (error) {
-      console.error("Error in handleClick:", error);
+    // Find matching color item
+    const matchedColors = productdataonlydetail
+      .flatMap(product => product.colors || [])
+      .filter(color => color._id === id);
+
+    if (matchedColors.length === 0) {
+      console.error("No matching item found!");
+      return;
     }
-    finally{
-      setIsLoading(false)
-    }
-  
-  };
 
-  const removewishlistonly=async(id)=>{
-    console.log("id",id)
-    try{
-      setIsLoading(true)
-      const response = await fetch(`${apiUrl}/cart/${id}`, {
-        method: "DELETE",
-        credentials: 'include', // important: allow cookies to be set
-        // headers: { 
-        //   Authorization: `Bearer ${user.accessToken}`,
-        // },
+    const matchItem = { ...matchedColors[0] };
+
+    matchItem.userid = userDetails._id;
+    matchItem.productId = id;
+    matchItem.price = prd.price;
+    matchItem.discountprice = prd.discountprice;
+    matchItem.discount = prd.discount;
+    matchItem.image = prd.image;
+    matchItem.shopname = prd.shopname;
+    matchItem.color =
+      Array.isArray(prd?.colors) && prd.colors.length > 0
+        ? prd.colors[0].color
+        : prd?.color || "defaultColor";
+    matchItem.title = prd.title;
+    matchItem.description = prd.description;
+    matchItem.size = prd.sizes;
+
+    const itemInWishlist = wishlistdata.find(
+      item => item.itemid === id
+    );
+
+    /* ➕ ADD */
+    if (!itemInWishlist) {
+      const response = await fetch(`${apiUrl}/cart`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(matchItem),
       });
 
-      const data = await response.json(); // Server se response parse karo
-    console.log("Server Response:", data); // Error ya success message dekho
+      if (response.ok) {
+        const addedItem = await response.json();
+        setWishlist(prev => [...prev, id]);
+        setwishlistdata(prev => [...prev, addedItem]);
+        showPopup("Added to Wishlist");
+      }
+    }
+    /* ➖ REMOVE */
+    else {
+      const response = await fetch(
+        `${apiUrl}/cart/${itemInWishlist.itemid}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
       if (response.ok) {
         setWishlist(prev => prev.filter(itemId => itemId !== id));
-        setwishlistdata(prev => prev.filter(item => item.itemid !== id));
-       // toast.success("Data removed successfully");
-    //    const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //    settoastmsg("item removed successfully")
-    showPopup("Removed From Wishlist")
+        setwishlistdata(prev =>
+          prev.filter(item => item.itemid !== id)
+        );
+        showPopup("Removed from Wishlist");
       }
-      else {
-    //     const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //     settoastmsg(data.message || "Error removing item");
-    showPopup("error removing item")
-      }
-  
     }
-    catch(e){
-    //   const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //   settoastmsg(data.message || "Error removing item");
-    showPopup("error removing item")
-    }
-    finally{
-      setIsLoading(false)
-    }
-
+  } catch (error) {
+    console.error("Error in handleClick:", error);
+  } finally {
+    setIsLoading(false);
   }
-  
-const addtowishlistonly=async(id,prd)=>{
-//   console.log("mili kya",id,prd)
-//   try {
-//     const matchItem = allproductdata.find((e) => e._id === id);
-//     console.log("apd",allproductdata)
-//     console.log("gyu",matchItem)
-//     prd["userid"]=userDetails._id
-//     prd["productId"]=id
-//     const itemInCart = wishlistdata.find((cartItem) => cartItem.itemid === id);
-
-    
-//       const response = await fetch('${apiUrl}/cart', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(prd),
-//       });
-
-//       if (response.ok) {
-//         const addedItem = await response.json();
-//         setWishlist((prev) => [...prev, id]);
-//         setwishlistdata((prev) => [...prev, addedItem]);
-//         toast.success("item move to wishlist")
-//         removefromaddtocart(id)
-//       }
-      
-    
-// }
-console.log("iredandid",prd,id)
-    try {
-      setIsLoading(true)
-      // Correcting the way matchItem is created
-      const matchedColors = productdataonlydetail
-        .flatMap(product => product.colors)
-        .filter(color => color._id == id);
-  
-      if (matchedColors.length === 0) {
-        console.error("No matching item found!");
-        return;
-      }
-  
-      const matchItem = { ...matchedColors[0] }; // Convert array to object
-      console.log("matchItem before adding data:", matchItem);
-  
-      // Adding necessary properties
-      matchItem.userid = userDetails._id;
-      matchItem.productId = id;
-      matchItem.price = prd.price;
-      matchItem.discountprice = prd.discountprice;
-      matchItem.discount = prd.discount;
-
-      matchItem.image = prd.image;
-      matchItem.shopname = prd.shopname;
-      matchItem.title = prd.title;
-      matchItem.description = prd.description;
-      matchItem.size = prd.sizes;
-  
-      console.log("Final matchItem:", matchItem); // Debugging
-  
-      // const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
-      // console.log("delete", itemInCart);
-  
-      
-        const response = await fetch(`${apiUrl}/cart`, {
-          method: "POST",
-          credentials: 'include', // important: allow cookies to be set
-          headers: { "Content-Type": "application/json",
-            // Authorization: `Bearer ${user.accessToken}`,
-          },
-          body: JSON.stringify(matchItem),
-        });
-  
-        if (response.ok) {
-          const addedItem = await response.json();
-          setWishlist(prev => [...prev, id]);
-          setwishlistdata(prev => [...prev, addedItem]);
-        //  toast.success("item move to wishlist")
-    //     const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //     settoastmsg("item moved successfully")
-    showPopup("Item Moved")
-         removefromaddtocart(id)
-        }
-    }
-catch(e){
-  console.log(e)
-}
-finally{
-  setIsLoading(false)
-}
-}
+};
 
 
-  // const handleAddToCart = async (prd,quantity,selectedSize) => {
-
-  //   try {
-      
+  // const removewishlistonly=async(id)=>{
+  //   console.log("id",id)
+  //   try{
   //     setIsLoading(true)
- 
-  //     console.log("iqs",prd,quantity,selectedSize)
-  //     // const matchItem = productdataonlydetail.find((e) => e._id == id);
-  //     // const matchItem = productdataonlydetail
-  //     // .flatMap(product => product.colors)  // Sare products ke colors ko ek array bana diya
-  //     // .filter(color => color._id == id);
-  //     // console.log("dekhte h chlo yha kya milta hia",matchItem)
-  //     prd.userid=userDetails?._id
-  //     prd.productId=prd._id
-  //     prd.size=selectedSize
-  //     prd.qty=quantity
-      
-  //     // Object.assign(matchItem, { size: selectedSize });
-  //     // Object.assign(matchItem, { qty: quantity });
-  //     console.log("dekhte h chlo yha kya milta hia",prd)
-  //     // const itemInCart = addtocartdatas.find((cartItem) => cartItem._id === id);
-  //     // const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
+  //     const response = await fetch(`${apiUrl}/cart/${id}`, {
+  //       method: "DELETE",
+  //       credentials: 'include', // important: allow cookies to be set
+  //       // headers: { 
+  //       //   Authorization: `Bearer ${user.accessToken}`,
+  //       // },
+  //     });
 
-      
-  //       const response = await fetch(`${apiUrl}/addtocart`, {
-  //         method: 'POST',
-  //         headers: { "Content-Type": "application/json",
-  //           // Authorization: `Bearer ${user.accessToken}`,
-  //         },
-  //         body: JSON.stringify(prd),
-  //       });
-
-  //       if (response.ok) {
-  //         const addedItem = await response.json();
-  //         setaddtocartdata((prev) => [...prev, addedItem]);
-  //         setaddtocartdataonly((prev) => [...prev, prd._id]);
-  //       //  toast.success("data added successfully")
+  //     const data = await response.json(); // Server se response parse karo
+  //   console.log("Server Response:", data); // Error ya success message dekho
+  //     if (response.ok) {
+  //       setWishlist(prev => prev.filter(itemId => itemId !== id));
+  //       setwishlistdata(prev => prev.filter(item => item.itemid !== id));
+  //      // toast.success("Data removed successfully");
+  //   //    const toast = new window.bootstrap.Toast(toastRef.current);
+  //   // toast.show();
+  //   //    settoastmsg("item removed successfully")
+  //   showPopup("Removed From Wishlist")
+  //     }
+  //     else {
   //   //     const toast = new window.bootstrap.Toast(toastRef.current);
   //   // toast.show();
-  //   //     settoastmsg("item added successfully")
-  //   showPopup("item added")
-          
-  //       }
-  //       else{
-  //   //       const toast = new window.bootstrap.Toast(toastRef.current);
+  //   //     settoastmsg(data.message || "Error removing item");
+  //   showPopup("error removing item")
+  //     }
+  
+  //   }
+  //   catch(e){
+  //   //   const toast = new window.bootstrap.Toast(toastRef.current);
   //   // toast.show();
-  //   //       settoastmsg("oopss....")
-  //   showPopup("oopsss")
-  //       }
-
-
-  //   // else {
-  //   //     const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
-  //   //       method: 'DELETE',
-  //   //     });
-
-  //   //     if (response.ok) {
-  //   //       setaddtocartdata((prev) => prev.filter((itemId) => itemId !== id));
-  //   //       setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
-  //   //       toast.success("data removed successfully")
-  //   //     }
-  //   //   }
-  //   } catch (error) {
-  //     console.error('Error in handleClick:', error);
+  //   //   settoastmsg(data.message || "Error removing item");
+  //   showPopup("error removing item")
   //   }
   //   finally{
   //     setIsLoading(false)
   //   }
-  // };
 
-  const handleAddToCart = async (prd, quantity, selectedSize) => {
-  //     trackEvent({
-  //   category: "Cart",
-  //   action: "Add to Cart",
-  //   label: prd.title,
-  //   value: prd.price,
-  // });
+  // }
+  const removewishlistonly = async (id) => {
+  console.log("idoo", id);
+
+  try {
+    setIsLoading(true);
+
+    /* =======================
+       👉 GUEST USER REMOVE
+    ======================= */
+    if (!isLoggedIn) {
+      const guestWishlist =
+        JSON.parse(localStorage.getItem("guestWishlist")) || [];
+
+      const updatedWishlist = guestWishlist.filter(
+        item => item.productId !== id
+      );
+  
+      localStorage.setItem(
+        "guestWishlist",
+        JSON.stringify(updatedWishlist)
+      );
+ setGuestWishlist(updatedWishlist);
+      // UI state update
+      // setWishlist(prev => prev.filter(itemId => itemId !== id));
+      // setwishlistdata(prev =>
+      //   prev.filter(item => item.productId !== id)
+      // );
+
+      showPopup("Removed From Wishlist");
+      return; // 🚨 important
+    }
+
+    /* =======================
+       👉 LOGGED-IN USER REMOVE
+    ======================= */
+    const response = await fetch(`${apiUrl}/cart/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    console.log("Server Response:", data);
+
+    if (response.ok) {
+      setWishlist(prev => prev.filter(itemId => itemId !== id));
+      setwishlistdata(prev =>
+        prev.filter(item => item.itemid !== id)
+      );
+
+      showPopup("Removed From Wishlist");
+    } else {
+      showPopup(data.message || "Error removing item");
+    }
+  } catch (e) {
+    console.error("Remove wishlist error:", e);
+    showPopup("Error removing item");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  
+// const addtowishlistonly=async(id,prd)=>{
+
+// console.log("iredandid",prd,id)
+//     try {
+//       setIsLoading(true)
+//       // Correcting the way matchItem is created
+//       const matchedColors = productdataonlydetail
+//         .flatMap(product => product.colors)
+//         .filter(color => color._id == id);
+  
+//       if (matchedColors.length === 0) {
+//         console.error("No matching item found!");
+//         return;
+//       }
+  
+//       const matchItem = { ...matchedColors[0] }; // Convert array to object
+//       console.log("matchItem before adding data:", matchItem);
+  
+//       // Adding necessary properties
+//       matchItem.userid = userDetails._id;
+//       matchItem.productId = id;
+//       matchItem.price = prd.price;
+//       matchItem.discountprice = prd.discountprice;
+//       matchItem.discount = prd.discount;
+
+//       matchItem.image = prd.image;
+//       matchItem.shopname = prd.shopname;
+//       matchItem.title = prd.title;
+//       matchItem.description = prd.description;
+//       matchItem.size = prd.sizes;
+  
+//       console.log("Final matchItem:", matchItem); // Debugging
+  
+//       // const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
+//       // console.log("delete", itemInCart);
+  
+      
+//         const response = await fetch(`${apiUrl}/cart`, {
+//           method: "POST",
+//           credentials: 'include', // important: allow cookies to be set
+//           headers: { "Content-Type": "application/json",
+//             // Authorization: `Bearer ${user.accessToken}`,
+//           },
+//           body: JSON.stringify(matchItem),
+//         });
+  
+//         if (response.ok) {
+//           const addedItem = await response.json();
+//           setWishlist(prev => [...prev, id]);
+//           setwishlistdata(prev => [...prev, addedItem]);
+//         //  toast.success("item move to wishlist")
+//     //     const toast = new window.bootstrap.Toast(toastRef.current);
+//     // toast.show();
+//     //     settoastmsg("item moved successfully")
+//     showPopup("Item Moved")
+//          removefromaddtocart(id)
+//         }
+//     }
+// catch(e){
+//   console.log(e)
+// }
+// finally{
+//   setIsLoading(false)
+// }
+// }
+const addtowishlistonly = async (id, prd) => {
+  console.log("iredandid", prd, id);
+
+  try {
+    setIsLoading(true);
+
+    /* =======================
+       👉 GUEST USER ADD
+    ======================= */
+    if (!isLoggedIn) {
+      const guestWishlist =
+        JSON.parse(localStorage.getItem("guestWishlist")) || [];
+
+      const alreadyExists = guestWishlist.find(
+        item => item.productId === id
+      );
+
+      if (alreadyExists) {
+        showPopup("Already in Wishlist");
+        return;
+      }
+
+      guestWishlist.push({
+        productId: id,
+        price: prd.price,
+        discountprice: prd.discountprice,
+        discount: prd.discount,
+        image: prd.image,
+        shopname: prd.shopname,
+        title: prd.title,
+        description: prd.description,
+        size: prd.sizes,
+      });
+setGuestWishlist(guestWishlist)
+      localStorage.setItem(
+        "guestWishlist",
+        JSON.stringify(guestWishlist)
+      );
+
+      // UI sync
+      setWishlist(prev => [...prev, id]);
+      setwishlistdata(prev => [...prev, { productId: id }]);
+
+      showPopup("Item Moved");
+      removefromaddtocart(id); // optional
+      return; // 🚨 important
+    }
+
+    /* =======================
+       👉 LOGGED-IN USER ADD
+    ======================= */
+
+    const matchedColors = productdataonlydetail
+      .flatMap(product => product.colors || [])
+      .filter(color => color._id === id);
+
+    if (matchedColors.length === 0) {
+      console.error("No matching item found!");
+      return;
+    }
+
+    const matchItem = { ...matchedColors[0] };
+
+    matchItem.userid = userDetails._id;
+    matchItem.productId = id;
+    matchItem.price = prd.price;
+    matchItem.discountprice = prd.discountprice;
+    matchItem.discount = prd.discount;
+    matchItem.image = prd.image;
+    matchItem.shopname = prd.shopname;
+    matchItem.title = prd.title;
+    matchItem.description = prd.description;
+    matchItem.size = prd.sizes;
+
+    const response = await fetch(`${apiUrl}/cart`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(matchItem),
+    });
+
+    if (response.ok) {
+      const addedItem = await response.json();
+      setWishlist(prev => [...prev, id]);
+      setwishlistdata(prev => [...prev, addedItem]);
+      showPopup("Item Moved");
+      removefromaddtocart(id);
+    }
+  } catch (e) {
+    console.error("Add to wishlist error:", e);
+    showPopup("Error adding to wishlist");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
+  
+
+  const handleAddToCart = async (prd, quantity, selectedSize) => {  
+ 
    
-    console.log("cartbundle,",prd)
+    
     // 🔥 Facebook Pixel Event
     if (window.fbq) {
       window.fbq("track", "AddToCart", {
@@ -582,9 +890,36 @@ finally{
         currency: "INR",
       });
     }
-    if(!user){
-      setshowloginpage(true)
-    }
+    // if(!user){
+    //   setshowloginpage(true)
+    // }
+
+    if (!isLoggedIn) {
+  // 👉 Guest cart
+  const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+
+  guestCart.push({
+    _id: nanoid(), 
+     productId: prd._id,
+    
+      productid: prd._id,
+          color: prd?.color,
+          image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
+          title: prd.title,
+          description: prd.description,
+          qty: quantity,
+          size: selectedSize,
+          price: prd.price,
+          discountprice: prd.discountprice,
+          shopname: prd.shopname,
+  });
+
+  setGuestCart(guestCart)
+  localStorage.setItem("guestCart", JSON.stringify(guestCart));
+  showPopup("Added to Bag");
+  return;
+}
+
     else{
   try {
     setIsLoading(true);
@@ -637,64 +972,122 @@ finally{
 }
 };
 
-  const removefromaddtocart=async(id)=>{
-    console.log("crt ki id",id)
-    try{
-      setIsLoading(true)
-      const matchItem = allproductdata.find((e) => e._id === id);
-      console.log("match ho gyaa crtid",matchItem)
-      const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
-   console.log("deletecrtid",itemInCart)
+  // const removefromaddtocart=async(id)=>{
+  //   console.log("crt ki id",id)
+  //   try{
+  //     setIsLoading(true)
+  //     const matchItem = allproductdata.find((e) => e._id === id);
+  //     console.log("match ho gyaa crtid",matchItem)
+  //     const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
+  //  console.log("deletecrtid",itemInCart)
 
-   if(itemInCart)
-   {
-    const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
-      method: 'DELETE',
-      credentials: 'include', // important: allow cookies to be set
-      // headers: { 
-      //   Authorization: `Bearer ${user.accessToken}`,
-      // },
-       });
+  //  if(itemInCart)
+  //  {
+  //   const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
+  //     method: 'DELETE',
+  //     credentials: 'include', // important: allow cookies to be set
+  //     // headers: { 
+  //     //   Authorization: `Bearer ${user.accessToken}`,
+  //     // },
+  //      });
  
-       if (response.ok) {
-              //  setaddtocartdata((prev) => prev.filter((itemId) => itemId.productid !== id));
-              setaddtocartdata((prev) => prev.filter((item) => item._id !== itemInCart._id));
+  //      if (response.ok) {
+  //             //  setaddtocartdata((prev) => prev.filter((itemId) => itemId.productid !== id));
+  //             setaddtocartdata((prev) => prev.filter((item) => item._id !== itemInCart._id));
 
-               // setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
-               //toast.success("data removed successfully")
-    //            const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //            settoastmsg("item removed successfully")
-    showPopup("Removed From Bag")
-             }
-             else{
-    //           const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //            settoastmsg("data not removed")
-    showPopup("Not removed")
-             }
-   }
-    // const response = await fetch(`${apiUrl}/addtocart/${id}`, {
-    //  method: 'DELETE',
-    //   });
-
-    //   if (response.ok) {
-    //           setaddtocartdata((prev) => prev.filter((itemId) => itemId._id !== id));
-    //           // setaddtocartdataonly((prev) => prev.filter((item) => item._id !== id));
-    //           toast.success("data removed successfully")
-    //         }
-    //         else{
-    //           toast.error("data not removed")
-    //         }
-    }
-    catch(e){
-      console.error('Error in handleClick:', error);
-    }
-    finally{
-      setIsLoading(false)
-    }
+              
+  //   showPopup("Removed From Bag")
+  //            }
+  //            else{
     
+  //   showPopup("Not removed")
+  //            }
+  //  }
+   
+  //   }
+  //   catch(e){
+  //     console.error('Error in handleClick:', error);
+  //   }
+  //   finally{
+  //     setIsLoading(false)
+  //   }
+    
+  // }
+  const removefromaddtocart = async (id) => {
+  console.log("crt ki id", id);
+
+  try {
+    setIsLoading(true);
+
+    /* =======================
+       👉 GUEST USER REMOVE
+    ======================= */
+    if (!isLoggedIn) {
+      const guestCart =
+        JSON.parse(localStorage.getItem("guestCart")) || [];
+
+      const updatedCart = guestCart.filter(
+        item => item.productId !== id
+      );
+       setGuestCart(updatedCart)
+      localStorage.setItem(
+        "guestCart",
+        JSON.stringify(updatedCart)
+      );
+
+      // UI sync
+      setaddtocartdata(prev =>
+        prev.filter(item => item.productId !== id)
+      );
+      setaddtocartdataonly(prev =>
+        prev.filter(itemId => itemId !== id)
+      );
+
+      showPopup("Removed From Bag");
+      return; // 🚨 important
+    }
+
+    /* =======================
+       👉 LOGGED-IN USER REMOVE
+    ======================= */
+
+    const itemInCart = addtocartdatas.find(
+      cartItem => cartItem.productid === id
+    );
+
+    if (!itemInCart) {
+      showPopup("Item not found");
+      return;
+    }
+
+    const response = await fetch(
+      `${apiUrl}/addtocart/${itemInCart._id}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+
+    if (response.ok) {
+      setaddtocartdata(prev =>
+        prev.filter(item => item._id !== itemInCart._id)
+      );
+      setaddtocartdataonly(prev =>
+        prev.filter(itemId => itemId !== id)
+      );
+
+      showPopup("Removed From Bag");
+    } else {
+      showPopup("Not removed");
+    }
+  } catch (error) {
+    console.error("Error in removefromaddtocart:", error);
+    showPopup("Error removing item");
+  } finally {
+    setIsLoading(false);
   }
+};
+
 
   useEffect(()=>{
  
@@ -801,10 +1194,7 @@ finally{
         // },
       });
       if(res.ok){
-      //  toast.success("itme removed successfulyy")
-    //   const toast = new window.bootstrap.Toast(toastRef.current);
-    // toast.show();
-    //   settoastmsg("item removed successfully")
+    
     showPopup("item removed")
       }
       setWishlist(wishlist.filter(item => item.id !== id)); // Remove item from local state
@@ -830,27 +1220,6 @@ finally{
       .then(response => setCart(response.data.cart))
       .catch(err => console.log('Error removing from cart', err));
   };
-//  const productfetch=async()=>{ 
-//   try{
-//   let data=await fetch("${apiUrl}/productmodel?operation=all")
-//   let res=await data.json()
-//   console.log("plz acche se ana ",res)
-//   setproductdata(res)
-//   let pdd=res.map((e)=>(e.productdetails)).flat()
-//   setproductdataonlydetail(pdd)
-//   setIsFetched(true); // ✅ Data fetch hone ke baad state update
-//   }
-//   catch(e){
-//     console.log(e)
-//   }
-//  }
-// useEffect(()=>{
-//    // ✅ Infinite loop avoid karne ke liye check
-//     productfetch();
-  
-  
-
-// },[])
 
 
 
@@ -955,11 +1324,28 @@ let handlenewaddress = async (address, user) => {
   // console.log("helllo addresss",otp )
   console.log("useridf", user?._id);  // Check if user._id exists before using it
 
-  if (!user?._id) {
-    console.error("Error: User ID is undefined");
-    alert("User ID is missing. Please try again.");
-    return;
-  }
+  // if (!user?._id) {
+  //   console.error("Error: User ID is undefined");
+  //   alert("User ID is missing. Please try again.");
+  //   return;
+  // }
+  if (!isLoggedIn) {
+  const guestAddress =
+    JSON.parse(localStorage.getItem("guestAddress")) || [];
+
+  const newAddress = {
+      _id: crypto.randomUUID(), // 🔥 VERY IMPORTANT
+      ...address,
+    };
+
+
+  guestAddress.push(newAddress);
+  localStorage.setItem("guestAddress", JSON.stringify(guestAddress));
+  
+  showPopup("Address saved");
+  return;
+}
+
 
   try {
     setIsLoading(true)
@@ -975,12 +1361,7 @@ let handlenewaddress = async (address, user) => {
     const data = await response.json(); // Always parse the response
 
     if (response.ok) {
-      // if (data.message === "OTP sent successfully") {
-      //   // alert("OTP sent! Please enter the OTP to verify.");
-      //   return;
-      // } else {
-      //   alert("Address added successfully!");
-      // }
+     
       console.log("address addedd goodly")
     } else {
       alert("Error: " + data.message);
@@ -995,71 +1376,166 @@ let handlenewaddress = async (address, user) => {
 };
 
 
-let deleteandeditaddrress=async(addresid,action,user,addr)=>{
-console.log("sara add mil jaye",addresid,action,user,addr)
-  if(action=="delete"){
- try{
-  setIsLoading(true)
-  const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
-    method: "PATCH",  // Using PATCH request to update the address
-    credentials: 'include', // important: allow cookies to be set
-    headers: { "Content-Type": "application/json",
-      // Authorization: `Bearer ${user.accessToken}`,
-    },
-    body: JSON.stringify({addresid,action}),  // Convert newAddress to JSON
-  });
-  if(response.ok){
-    console.log("good")
-    // setaddress(prev => {
-    //   console.log("Previous Address State", prev); // Debug check
-    //   return prev.filter(a => a._id !== addresid);
-    // });
-    showPopup("Address Deleted")
-  }
-  else{
-    console.log("issue")
-  }
- } 
- catch(e){
-  console.log(e)
- 
-}
-finally{
-  setIsLoading(false)
-}
-}
 
-else{
-  console.log("userid",user._id)
-  console.log("userid",addr)
-  try {
-    setIsLoading(true)
-    const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
-      method: "PATCH",  // Using PATCH request to update the address
-      credentials: 'include', // important: allow cookies to be set
+// let deleteandeditaddrress=async(addresid,action,user,addr)=>{
+// console.log("sara add mil jaye",addresid,action,user,addr)
+//   if(action=="delete"){
+//  try{
+//   setIsLoading(true)
+//   const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
+//     method: "PATCH",  // Using PATCH request to update the address
+//     credentials: 'include', // important: allow cookies to be set
+//     headers: { "Content-Type": "application/json",
+//       // Authorization: `Bearer ${user.accessToken}`,
+//     },
+//     body: JSON.stringify({addresid,action}),  // Convert newAddress to JSON
+//   });
+//   if(response.ok){
+//     console.log("good")
+//     // setaddress(prev => {
+//     //   console.log("Previous Address State", prev); // Debug check
+//     //   return prev.filter(a => a._id !== addresid);
+//     // });
+//     showPopup("Address Deleted")
+//   }
+//   else{
+//     console.log("issue")
+//   }
+//  } 
+//  catch(e){
+//   console.log(e)
+ 
+// }
+// finally{
+//   setIsLoading(false)
+// }
+// }
+
+// else{
+//   console.log("userid",user._id)
+//   console.log("userid",addr)
+//   try {
+//     setIsLoading(true)
+//     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
+//       method: "PATCH",  // Using PATCH request to update the address
+//       credentials: 'include', // important: allow cookies to be set
      
-      headers: { "Content-Type": "application/json",
-        // Authorization: `Bearer ${user.accessToken}`,
-      },
-      body: JSON.stringify({addresid,action,addr}),  // Convert newAddress to JSON
-    });
-    if(response.ok){
-      console.log("address edit")
-      showPopup("Address Edited")
+//       headers: { "Content-Type": "application/json",
+//         // Authorization: `Bearer ${user.accessToken}`,
+//       },
+//       body: JSON.stringify({addresid,action,addr}),  // Convert newAddress to JSON
+//     });
+//     if(response.ok){
+//       console.log("address edit")
+//       showPopup("Address Edited")
+//     }
+//     else{
+//       console.log("not edit")
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//     alert("An error occurred while adding the address.");
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
+
+// }
+// }
+let deleteandeditaddrress = async (addresid, action, user, addr) => {
+  console.log("sara add mil jaye", addresid, action, user, addr);
+
+  try {
+    setIsLoading(true);
+
+    /* =======================
+       👉 GUEST USER FLOW
+    ======================= */
+    if (!isLoggedIn) {
+      const guestAddress =
+        JSON.parse(localStorage.getItem("guestAddress")) || [];
+
+      // 🗑️ DELETE
+      if (action === "delete") {
+        const updatedAddress = guestAddress.filter(
+          a => a._id !== addresid
+        );
+
+        localStorage.setItem(
+          "guestAddress",
+          JSON.stringify(updatedAddress)
+        );
+
+        // UI sync
+        setaddress(updatedAddress);
+        showPopup("Address Deleted");
+        return;
+      }
+
+      // ✏️ EDIT
+      const updatedAddress = guestAddress.map(a =>
+        a._id === addresid ? { ...a, ...addr } : a
+      );
+
+      localStorage.setItem(
+        "guestAddress",
+        JSON.stringify(updatedAddress)
+      );
+
+      setaddress(updatedAddress);
+      showPopup("Address Edited");
+      return;
     }
-    else{
-      console.log("not edit")
+
+    /* =======================
+       👉 LOGGED-IN USER FLOW
+    ======================= */
+
+    if (action === "delete") {
+      const response = await fetch(
+        `${apiUrl}/user/${user._id}/addressdoe`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ addresid, action }),
+        }
+      );
+
+      if (response.ok) {
+        showPopup("Address Deleted");
+      } else {
+        showPopup("Issue deleting address");
+      }
+    } else {
+      const response = await fetch(
+        `${apiUrl}/user/${user._id}/addressdoe`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ addresid, action, addr }),
+        }
+      );
+
+      if (response.ok) {
+        showPopup("Address Edited");
+      } else {
+        showPopup("Issue editing address");
+      }
     }
   } catch (error) {
-    console.error("Error:", error);
-    alert("An error occurred while adding the address.");
+    console.error("Address delete/edit error:", error);
+    showPopup("Something went wrong");
+  } finally {
+    setIsLoading(false);
   }
-  finally{
-    setIsLoading(false)
-  }
+};
 
-}
-}
 
 
 let handlechooseaddress=(add)=>{
@@ -1070,74 +1546,6 @@ let handlechooseaddress=(add)=>{
   }
 
 }
-
-
-// let orderplaced=async(order,address,walletUsed,payableAmount,timeslot,paymentmode)=>{
-//   trackPurchase(order, addtocartitem,payableAmount);
-//   console.log("userdetailsss",userDetails)
-//  console.log("orederrr",order)
-//  console.log("addre",address)
-//  console.log("addre",walletUsed)
-//  console.log("addre",payableAmount)
-
-//  console.log("addre",walletUsed)
-//  console.log("addretime",timeslot)
-//  console.log("paymentmodee",paymentmode)
-
- 
-
-// if(user && userDetails){
-//   try{
-//     setIsLoading(true)
-//     let orderpost=await fetch(`${apiUrl}/order`,{
-//       method:"POST",
-//      credentials: 'include', // important: allow cookies to be set
-//       headers: { "Content-Type": "application/json",
-//         // Authorization: `Bearer ${user.accessToken}`,
-//       },
-//       body: JSON.stringify({order,address,userDetails,distance,walletUsed,payableAmount,timeslot,paymentmode}), 
-
-//     })
-
-    
-//     if(orderpost.ok){
-        
-
-//       console.log("checkurl",orderpost)
-//        let data = await orderpost.json();
-//         console.log("order ka data",data)
-//           // 🔑 PhonePe Checkout URL redirect
-//         // if (data.checkoutUrl) {
-//         //   window.location.href = data.checkoutUrl; // ✅ direct redirect to PhonePe
-//         // } else {
-//         //   showPopup("Your Order Has Been Confirmed");
-//         // }
-//         if (paymentmode !== "cod" && data.checkoutUrl) {
-//   window.location.href = data.checkoutUrl;
-//   return
-// }
-//   // 🔹 COD → order confirmed
-//   if (paymentmode === "cod") {
-//     showPopup("Youvvr Order Has Been Confirmed");
-//      window.location.href = "/orderconfirm"
-//   }
-
-
-
-      
-//       // navigate("/orderconfirm")
-//     }
-//      // ✅ New Order ko State me Add Karo
-    
-//   }
-//   catch(e){
-//     console.log(e)
-//   }
-//   finally{
-//     setIsLoading(false)
-//   }
-// }
-// }
 
 let orderplaced = async (
   order,
@@ -1363,42 +1771,7 @@ const fetchRatings = async (productId) => {
     }
   };
 
-  
-
-
-
-// let orderreturn=async(reason,subreason,selectedOption,orderdata,uploadedUrls,address)=>{
-//   console.log("slec",selectedOption,uploadedUrls,address)
-
-//   try{
-//     setIsLoading(true)
-//     let orderpost=await fetch(`${apiUrl}/return`,{
-//       method:"POST",
-     
-//       headers: { "Content-Type": "application/json",
-//         // Authorization: `Bearer ${user.accessToken}`,
-//       },
-//       body: JSON.stringify({reason,subreason,selectedOption,orderdata,uploadedUrls,address}), 
-
-//     })
-//     if(orderpost.ok){
-//     //   const toast = new window.bootstrap.Toast(toastRef.current);
-//     // toast.show();
-//     //   settoastmsg("order return process successfull")
-//     showPopup("Return Requested...")
-//     }
-//      // ✅ New Order ko State me Add Karo
-    
-//   }
-//   catch(e){
-//     console.log(e)
-//   }
-//   finally{
-//     setIsLoading(false)
-//   }
-
-// }
-let orderreturn = async (reason, subreason, selectedOption,transectionId, orderdata, uploadedUrls, address) => {
+  let orderreturn = async (reason, subreason, selectedOption,transectionId, orderdata, uploadedUrls, address) => {
   console.log("📤 Preparing return request...");
   console.log("➡ reason:", reason);
   console.log("➡ subreason:", subreason);
@@ -1601,20 +1974,7 @@ const fetchTopSearched = async () => {
 
   return (
     <>
-    {
-    
-    /* <ToastContainer 
-        position="top-center" // You can set the position of the toast
-        autoClose={3000} // Automatically close after 3 seconds
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light" // You can change the theme: light or dark
-      /> */}
+  
     
 
     <BioContext.Provider
@@ -1623,7 +1983,10 @@ const fetchTopSearched = async () => {
         cart,
         bestsellingdata,
         wearsdata,
+        guestWishlist,
+        isLoggedIn,
         wishlist,
+        guestWishlist,
         filters,
         setFilters,
         rentdata,
@@ -1633,6 +1996,7 @@ const fetchTopSearched = async () => {
         addtocartitem,
         handleClick,
         handleAddToCart,
+        guestCart,
         handleRemoveClickwishlist ,
         productdata,
         // productfetch,
@@ -1686,12 +2050,7 @@ const fetchTopSearched = async () => {
         userDetails,
         sortOption, 
         setSortOption
-        
-        
-
-        
-    
-  }}
+    }}
     >
       {children}
     </BioContext.Provider>

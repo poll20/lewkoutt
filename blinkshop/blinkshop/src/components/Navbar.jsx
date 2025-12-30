@@ -22,7 +22,7 @@ const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()
   let {user,userDetails}=useFirebaseAuth()
-  let {setcatehicate,addtocartdatas}=useBio()
+  let {setcatehicate,addtocartdatas,isLoggedIn,guestCart}=useBio()
   const [dropdown, setDropdown] = useState(false);
   const [sideNavbarOpen, setSideNavbarOpen] = useState(false);
 const navigate=useNavigate()
@@ -132,18 +132,36 @@ console.log("navbar m props.pdd value",props.pd)
         <div className="logo lato-thin" ><img style={{width:"150px",height:"auto"}} alt='lewkout'  src={lewkoutlogo} loading="lazy"></img></div>
         
         <div style={{display:"flex",gap:"15%"}}>
-        <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?('position-relative'):('')}`}>
+          <NavLink
+  to="/cart"
+  className={`hideinbigscreen navlink ${
+    (isLoggedIn ? addtocartdatas?.length : guestCart?.length) > 0
+      ? "position-relative"
+      : ""
+  }`}
+>
+
+        {/* <NavLink to="/cart" className={`hideinbigscreen navlink ${addtocartdatas.length>0?('position-relative'):('')}`}> */}
         <svg xmlns="http://www.w3.org/2000/svg" style={{width:"27px",height:"27px"}} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 </svg>
 
-        {
+        {/* {
           addtocartdatas.length>0?( <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             {addtocartdatas.length>0?(addtocartdatas.length):('')}
             <span class="visually-hidden">unread messages</span>
           </span>):('')
        
+} */}
+{
+  (isLoggedIn ? addtocartdatas?.length : guestCart?.length) > 0 && (
+    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {isLoggedIn ? addtocartdatas.length : guestCart.length}
+      <span className="visually-hidden">unread messages</span>
+    </span>
+  )
 }
+
   </NavLink>
 <NavLink to='/searchme'className='navlink'><svg style={{width:"27px",height:"27px"}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
