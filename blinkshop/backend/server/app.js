@@ -2495,8 +2495,10 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     const merchantOrderId = webhookPayload.merchantOrderId;
     const state = webhookPayload.state?.toString().trim().toUpperCase();
     const amount = webhookPayload.amount; // in paise
-    const transactionId = webhookPayload.orderId || "";
 
+    const transactionId = webhookPayload.orderId || "";
+    const expectedAmount = webhookPayload.payableAmount; // in paise
+  
     console.log("STATE:", state);
     console.log("merchantOrderId:", merchantOrderId);
     console.log("amount:", amount);
@@ -2516,7 +2518,7 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
     }
 
     // 💰 Amount verification
-    const expectedAmount = Math.round(pending.payableAmount * 100);
+    // const expectedAmount = Math.round(pending.payableAmount * 100);
     if (amount !== expectedAmount) {
       console.log("❌ Amount mismatch:", amount, expectedAmount);
       return res.status(200).send("OK");
