@@ -2363,122 +2363,247 @@ app.get('/order/:id', async (req, res) => {
 //   }
 // });
 
+// app.post("/phonepe/webhook", express.json(), async (req, res) => {
+//   try {
+
+    
+//     // ✅ Step-1: Verify webhook auth
+//     // verifyPhonePeWebhook(req); commented for now
+
+//     const payload = req.body;
+    
+//     console.log("📩 PhonePe Webhook:", payload);
+// console.log("Webhook amount:", payload.amount);
+// // console.log("Expected amount:", pending.payableAmount * 100);
+
+//     const merchantOrderId =
+//       payload?.metaInfo?.udf2 || payload?.merchantOrderId;
+
+//     const state = payload?.state?.toUpperCase();
+//     const transactionId = payload?.transactionId || "";
+
+//     let paymentStatus = "PENDING";
+//     if (state === "COMPLETED" || state === "SUCCESS") paymentStatus = "PAID";
+//     if (state === "FAILED") paymentStatus = "FAILED";
+
+//     if (paymentStatus === "PAID") {
+//       const pending = await pendingOrderModel.findOne({ merchantOrderId });
+
+//       if (!pending) {
+//         console.warn("⚠️ Pending order not found:", merchantOrderId);
+//         return res.status(200).send("OK");
+//       }
+
+//       const expectedAmount = pending.payableAmount * 100;
+//   if (payload.amount !== expectedAmount) {
+//     throw new Error("Amount mismatch");
+//   }
+
+//       const {
+//         order,
+//         address,
+//         userDetails,
+//         distance,
+//         couponcode,
+//         walletUsed,
+//         timeslot
+//       } = pending;
+
+//       const ordersArray = Array.isArray(order) ? order : [order];
+//       const numericDistance =
+//         parseFloat(distance?.toString().replace("km", "")) || 0;
+
+//       for (const item of ordersArray) {
+//         const singleProduct = {
+//           productId: item.productid || item._id,
+//           tag: item.tag || "",
+//           description: item.description || "",
+//           image: item.image || [],
+//           quantity: item.qty || 1,
+//           price: item.price || 0,
+//           discountprice: item.discountprice || 0,
+//           size: item.size || "",
+//           shopname: item.shopname || "",
+//           totalAmount: item.discountprice || 0,
+//           bundle: item.bundle || [],
+//         };
+
+//         // 🔻 Stock deduction
+//         if (singleProduct.productId) {
+//           const product = await productsmodel.findById(singleProduct.productId);
+//           if (product && product.qty >= singleProduct.quantity) {
+//             product.qty -= singleProduct.quantity;
+//             await product.save();
+//           }
+//         }
+
+//         const newOrder = new orderr({
+//           name: userDetails.name,
+//           userId: userDetails._id,
+//           email: userDetails.email,
+//           address: address?.[0] || {},
+//           timeslot,
+//           phone: address?.[0]?.phone?.[0] || "",
+//           products: [singleProduct],
+//           deliverydistance: numericDistance,
+//           merchantOrderId,
+//           status: "Pending",
+//           paymentStatus: "Paid",
+//           walletUsed,
+//           pgUsed: item.discountprice || 0,
+//           paymentGatewayTxnId: transactionId,
+//         });
+
+//         await newOrder.save();
+//         orderEvent.emit("new_order", { type: "new_order", order: newOrder });
+//       }
+
+//       if (couponcode?.length > 0) {
+//         await applyCouponSuccess(userDetails._id, couponcode);
+//       }
+
+//       await pendingOrderModel.deleteOne({ merchantOrderId });
+//       await addcashbacktowallet(userDetails._id, walletUsed, "purchase");
+
+//       console.log("✅ Order confirmed:", merchantOrderId);
+//     } else {
+//       await orderr.updateMany(
+//         { merchantOrderId },
+//         { paymentStatus }
+//       );
+//     }
+
+//     res.status(200).send("Webhook processed");
+//   } catch (err) {
+//     console.error("❌ PhonePe Webhook Error:", err.message);
+//     res.status(401).send("Unauthorized");
+//   }
+// });
 app.post("/phonepe/webhook", express.json(), async (req, res) => {
   try {
+    // 🔍 Full webhook log (debug)
+    console.log("📩 Full PhonePe Webhook:", JSON.stringify(req.body, null, 2));
 
-    
-    // ✅ Step-1: Verify webhook auth
-    // verifyPhonePeWebhook(req); commented for now
+    // ✅ PhonePe NEW webhook payload is inside req.body.payload
+    const webhookPayload = req.body?.payload;
 
-    const payload = req.body;
-    
-    console.log("📩 PhonePe Webhook:", payload);
-console.log("Webhook amount:", payload.amount);
-// console.log("Expected amount:", pending.payableAmount * 100);
-
-    const merchantOrderId =
-      payload?.metaInfo?.udf2 || payload?.merchantOrderId;
-
-    const state = payload?.state?.toUpperCase();
-    const transactionId = payload?.transactionId || "";
-
-    let paymentStatus = "PENDING";
-    if (state === "COMPLETED" || state === "SUCCESS") paymentStatus = "PAID";
-    if (state === "FAILED") paymentStatus = "FAILED";
-
-    if (paymentStatus === "PAID") {
-      const pending = await pendingOrderModel.findOne({ merchantOrderId });
-
-      if (!pending) {
-        console.warn("⚠️ Pending order not found:", merchantOrderId);
-        return res.status(200).send("OK");
-      }
-
-      const expectedAmount = pending.payableAmount * 100;
-  if (payload.amount !== expectedAmount) {
-    throw new Error("Amount mismatch");
-  }
-
-      const {
-        order,
-        address,
-        userDetails,
-        distance,
-        couponcode,
-        walletUsed,
-        timeslot
-      } = pending;
-
-      const ordersArray = Array.isArray(order) ? order : [order];
-      const numericDistance =
-        parseFloat(distance?.toString().replace("km", "")) || 0;
-
-      for (const item of ordersArray) {
-        const singleProduct = {
-          productId: item.productid || item._id,
-          tag: item.tag || "",
-          description: item.description || "",
-          image: item.image || [],
-          quantity: item.qty || 1,
-          price: item.price || 0,
-          discountprice: item.discountprice || 0,
-          size: item.size || "",
-          shopname: item.shopname || "",
-          totalAmount: item.discountprice || 0,
-          bundle: item.bundle || [],
-        };
-
-        // 🔻 Stock deduction
-        if (singleProduct.productId) {
-          const product = await productsmodel.findById(singleProduct.productId);
-          if (product && product.qty >= singleProduct.quantity) {
-            product.qty -= singleProduct.quantity;
-            await product.save();
-          }
-        }
-
-        const newOrder = new orderr({
-          name: userDetails.name,
-          userId: userDetails._id,
-          email: userDetails.email,
-          address: address?.[0] || {},
-          timeslot,
-          phone: address?.[0]?.phone?.[0] || "",
-          products: [singleProduct],
-          deliverydistance: numericDistance,
-          merchantOrderId,
-          status: "Pending",
-          paymentStatus: "Paid",
-          walletUsed,
-          pgUsed: item.discountprice || 0,
-          paymentGatewayTxnId: transactionId,
-        });
-
-        await newOrder.save();
-        orderEvent.emit("new_order", { type: "new_order", order: newOrder });
-      }
-
-      if (couponcode?.length > 0) {
-        await applyCouponSuccess(userDetails._id, couponcode);
-      }
-
-      await pendingOrderModel.deleteOne({ merchantOrderId });
-      await addcashbacktowallet(userDetails._id, walletUsed, "purchase");
-
-      console.log("✅ Order confirmed:", merchantOrderId);
-    } else {
-      await orderr.updateMany(
-        { merchantOrderId },
-        { paymentStatus }
-      );
+    if (!webhookPayload) {
+      console.log("❌ Webhook payload missing");
+      return res.status(200).send("OK");
     }
 
-    res.status(200).send("Webhook processed");
+    const merchantOrderId = webhookPayload.merchantOrderId;
+    const state = webhookPayload.state?.toString().trim().toUpperCase();
+    const amount = webhookPayload.amount; // in paise
+    const transactionId = webhookPayload.orderId || "";
+
+    console.log("STATE:", state);
+    console.log("merchantOrderId:", merchantOrderId);
+    console.log("amount:", amount);
+
+    // ❌ Payment not completed
+    if (state !== "COMPLETED") {
+      console.log("⚠️ Payment not completed, skipping order creation");
+      return res.status(200).send("OK");
+    }
+
+    // 🔍 Find pending order
+    const pending = await pendingOrderModel.findOne({ merchantOrderId });
+
+    if (!pending) {
+      console.log("❌ Pending order not found:", merchantOrderId);
+      return res.status(200).send("OK");
+    }
+
+    // 💰 Amount verification
+    const expectedAmount = Math.round(pending.payableAmount * 100);
+    if (amount !== expectedAmount) {
+      console.log("❌ Amount mismatch:", amount, expectedAmount);
+      return res.status(200).send("OK");
+    }
+
+    const {
+      order,
+      address,
+      userDetails,
+      distance,
+      couponcode,
+      walletUsed,
+      timeslot
+    } = pending;
+
+    const ordersArray = Array.isArray(order) ? order : [order];
+    const numericDistance =
+      parseFloat(distance?.toString().replace("km", "")) || 0;
+
+    // 🛒 Create final orders
+    for (const item of ordersArray) {
+      const singleProduct = {
+        productId: item.productid || item._id,
+        tag: item.tag || "",
+        description: item.description || "",
+        image: item.image || [],
+        quantity: item.qty || 1,
+        price: item.price || 0,
+        discountprice: item.discountprice || 0,
+        size: item.size || "",
+        shopname: item.shopname || "",
+        totalAmount: item.discountprice || 0,
+        bundle: item.bundle || [],
+      };
+
+      // 🔻 Stock deduction
+      if (singleProduct.productId) {
+        const product = await productsmodel.findById(singleProduct.productId);
+        if (product && product.qty >= singleProduct.quantity) {
+          product.qty -= singleProduct.quantity;
+          await product.save();
+        }
+      }
+
+      const newOrder = new orderr({
+        name: userDetails.name,
+        userId: userDetails._id,
+        email: userDetails.email,
+        address: address?.[0] || {},
+        phone: address?.[0]?.phone?.[0] || "",
+        timeslot,
+        products: [singleProduct],
+        paymentmode: "online",              // ✅ IMPORTANT
+        deliverydistance: numericDistance,
+        merchantOrderId,
+        status: "Pending",
+        paymentStatus: "Paid",
+        walletUsed,
+        pgUsed: amount / 100,               // ✅ correct PG amount
+        paymentGatewayTxnId: transactionId,
+      });
+
+      await newOrder.save();
+      orderEvent.emit("new_order", { type: "new_order", order: newOrder });
+    }
+
+    // 🎟️ Coupon success
+    if (couponcode?.length > 0) {
+      await applyCouponSuccess(userDetails._id, couponcode);
+    }
+
+    // 🧹 Cleanup pending order
+    await pendingOrderModel.deleteOne({ merchantOrderId });
+
+    // 💸 Cashback
+    await addcashbacktowallet(userDetails._id, walletUsed, "purchase");
+
+    console.log("✅ ORDER SAVED SUCCESSFULLY:", merchantOrderId);
+    return res.status(200).send("OK");
+
   } catch (err) {
-    console.error("❌ PhonePe Webhook Error:", err.message);
-    res.status(401).send("Unauthorized");
+    console.error("❌ PhonePe Webhook Error:", err);
+    // ⚠️ Always return 200 to PhonePe (avoid retries loop)
+    return res.status(200).send("OK");
   }
 });
+
 
 
 // 🔵 GET: Fetch orders by User ID
