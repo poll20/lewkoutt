@@ -110,7 +110,7 @@ const sendOTP = async (phoneNumber) => {
     } else if (err.code === 'auth/quota-exceeded') {
       errorMessage = "SMS quota exceeded. Please try again later.";
     } else if (err.message.includes('reCAPTCHA')) {
-      errorMessage = "Verification failed. Please refresh and try again.";
+      errorMessage = `Please press "Send otp" again`;
       // Reset reCAPTCHA on error
       if (window.recaptchaVerifier) {
         try {

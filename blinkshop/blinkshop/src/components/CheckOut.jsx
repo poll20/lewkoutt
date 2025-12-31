@@ -331,7 +331,7 @@ useEffect(() => {
     }}>
       {[phonepay, paytm, googlepay].map((item, i) => (
           
-        <div  onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount-upiprice)}  key={i}  style={{
+        <div  onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse,payableAmount-upiprice,timeslotlelo,"online")}  key={i}  style={{
           border: "1px solid #ddd",
           borderRadius: "8px",
           padding: "8px",
@@ -352,7 +352,7 @@ useEffect(() => {
     "Net Banking",
     "Wallets"
   ].map((method, i) => (
-    <div onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount-upiprice)} key={i} style={{
+    <div onClick={() => orderplaced(purchaseproduct, deleveryaddress, walletToUse,payableAmount-upiprice,timeslotlelo,"online")} key={i} style={{
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -460,7 +460,7 @@ onClick={() => {
     //   alert("Please Select the Slot and Press on Confirm Slot.");
     //   return;
     // }
-    orderplaced(purchaseproduct, deleveryaddress, walletToUse, payableAmount, timeslotlelo);
+    orderplaced(purchaseproduct, deleveryaddress, walletToUse,payableAmount, timeslotlelo,"online");
   }}
 >
   Pay Now
