@@ -16,6 +16,8 @@ import BundleProduct from "./BundleProduct";
 import { useLoading } from "./LoadingContext";
 import SlideUpModal from "./SlideupModel";
 import OtpLogin from "./OtpLogin";
+import { cloudinaryImg } from "../utils/cloudinariimg";
+
 import { trackViewItem, trackAddToCart, trackAddToWishlist } from "../analytics/g4a";
 // Example: ProductDescription.js
 // import { trackEvent, setUserProperties } from "../analytics/ga4";
@@ -407,7 +409,7 @@ if(getbundeldata){
           {product?.sizes?.[0]?.image?.map((image, index) => (
             <div key={index} className="image-slide">
               <img
-                src={product?.sizes[0]?.image[currentImageIndex]}
+                src={cloudinaryImg(product?.sizes[0]?.image[currentImageIndex], 400)}
                 alt={product.title || "dress"}
                 onClick={() => handleImageClick(image, currentImageIndex)}
                 onTouchStart={handleTouchStart}
@@ -428,7 +430,7 @@ if(getbundeldata){
           <div className="image-slider">
             <div className="image-slide" style={{minHeight:"100vh"}}>
               <img
-                src={product?.sizes[0]?.image[popupCurrentIndex]}
+                src={cloudinaryImg(product?.sizes[0]?.image[popupCurrentIndex], 400)}
                 alt={`Product ${popupCurrentIndex + 1}`}
                 onTouchStart={handlePopupTouchStart}
                 onTouchMove={handlePopupTouchMove}
@@ -474,7 +476,7 @@ if(getbundeldata){
                 }}
               >
                 <img 
-                  src={img} 
+                  src={cloudinaryImg(img, 400)} 
                   alt={`Product view ${index + 1}`}
                   style={{
                     width: '100%',

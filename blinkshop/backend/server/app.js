@@ -1819,6 +1819,8 @@ console.log("wallet ggggused",walletUsed)
     console.log("paymentmode",paymentmode)
     console.log("timingslot",timeslot )
 console.log("paymentmo0de",paymentmode)
+console.log("addringg",address)
+
 
 
     if (!order || !address || !userDetails) {
@@ -2273,10 +2275,10 @@ app.get('/order/:id', async (req, res) => {
 //         city: address?.[0]?.city || "Jaipur",
 //         state: address?.[0]?.state || "Rajasthan",
 //         saveas: address?.[0]?.saveas || "",
-//         location:address?.[0]?.location||"",
-//        isDefault: address?.[0]?.isDefault || false,
-//           lat:address?.[0]?.lat||"",
-//         lng:address?.[0]?.lng||"",
+  //         location:address?.[0]?.location||"",
+  //        isDefault: address?.[0]?.isDefault || false,
+  //           lat:address?.[0]?.lat||"",
+  //         lng:address?.[0]?.lng||"",
 //       };
 
 //       // Calculate total order amount (sum of all products)

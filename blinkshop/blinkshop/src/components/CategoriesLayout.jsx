@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import Cardforall from "./Cardforall";
 import { useBio } from "./BioContext";
 import { useEffect } from "react";
+import { cloudinaryImg } from "../utils/cloudinariimg";
 
 const CtegoriesLayout = () => {
   const {productdata,fetchCoupons,coupons,productdataonlydetail}=useBio()
@@ -47,7 +48,8 @@ useEffect(() => {
         
         <NavLink to={`/productmodel/${e.category}`}>
         <img
-          src={e.image}
+          // src={e.image}
+          src={cloudinaryImg(e.image, 400)}
           alt={e.title || "product"}
           className="parent-image"
           // loading="lazy" // Lazy loading for better performance

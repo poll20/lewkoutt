@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import "./Carousel.css";
+import { cloudinaryImg } from "../utils/cloudinariimg";
 
 const Carousel = ({ images = [], interval = 4000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,13 +64,13 @@ const Carousel = ({ images = [], interval = 4000 }) => {
   //   }
   //   return url;
   // };
- const getOptimizedUrl = (url, width = 400) => {
-  if (!url) return url;
-  return url.replace(
-    "/upload/",
-    `/upload/w_${width},f_auto,q_auto/`
-  );
-};
+//  const getOptimizedUrl = (url, width = 400) => {
+//   if (!url) return url;
+//   return url.replace(
+//     "/upload/",
+//     `/upload/w_${width},f_auto,q_auto/`
+//   );
+// };
 
   return (
     <div
@@ -105,7 +106,9 @@ const Carousel = ({ images = [], interval = 4000 }) => {
   style={{ backgroundColor: "#f0f0f0" }}
 /> */}
 <img
-  src={getOptimizedUrl(current?.image, 400)}
+  // src={getOptimizedUrl(current?.image, 400)}
+  src={cloudinaryImg(current?.image, 400)}
+
   fetchpriority="high"
   alt={current?.category || "carousel image"}
   className="carousel-image"

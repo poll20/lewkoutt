@@ -9,13 +9,6 @@ import OfferBanner from "./OfferBanner"
 import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
 import lben from "../components/image/lewkbner.webp"
-// ✅ Lazy imports
-// const Carousel = React.lazy(() => import("./Carasoul"));
-// const CustomerLove = React.lazy(() => import("./CustomerLove"));
-// const CategoriesLayout = React.lazy(() => import("./CategoriesLayout"));
-// const OfferBanner = React.lazy(() => import("./OfferBanner"));
-// const OtpLogin = React.lazy(() => import("./OtpLogin"));
-// const SlideUpModal = React.lazy(() => import("./SlideupModel"));
 
 export default function Home() {
   const { productdata, showloginpage, setshowloginpage } = useBio();

@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import "./Cardforall.css"
 import { NavLink } from 'react-router-dom';
+import { cloudinaryImg } from "../utils/cloudinariimg";
 
 import { useBio } from './BioContext';
 import HeartButton from './HeartButton';
@@ -36,8 +37,11 @@ console.log("wishlist in coa",wishlistdata)
         style={{height:"300px"}}
   src={
     props.section != "bundel"
-      ?( props?.id?.image?.[0] || props?.image || "fallback.jpg")
-      : (props.image || "fallback.jpg")
+      ?cloudinaryImg(
+          props?.id?.image?.[0] || props?.image || "fallback.jpg",
+          300
+        )
+      : cloudinaryImg(props.image || "fallback.jpg", 300)
   }
   alt={props.discription || "Product"}
   className="product-image"

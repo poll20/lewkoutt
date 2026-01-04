@@ -11,6 +11,8 @@ import BundleProduct from './BundleProduct';
 import Cardforall from './Cardforall';
 import { color } from 'framer-motion';
 import { slugify } from './Slugify';
+import { cloudinaryImg } from "../utils/cloudinariimg";
+
 import { trackBeginCheckout } from "../analytics/g4a";
 const AddToCart = () => {
   const navigate = useNavigate();
@@ -350,7 +352,7 @@ if (!Array.isArray(activeCart)) return null;
         className="navlink"
       >
         <img
-          src={order.image}
+          src={cloudinaryImg(order.image)}
           alt={order.title}
           className="order-imagee-addtocart"
           loading="lazy"
