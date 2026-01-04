@@ -351,8 +351,10 @@ if (!Array.isArray(activeCart)) return null;
         to={`/productdescription/${slugify(order.title)}/${order?.productid}/${order.color}`}
         className="navlink"
       >
+        
         <img
-          src={cloudinaryImg(order.image)}
+        
+          src={cloudinaryImg(Array.isArray(order.image) ? order.image[0] : order.image)}
           alt={order.title}
           className="order-imagee-addtocart"
           loading="lazy"
