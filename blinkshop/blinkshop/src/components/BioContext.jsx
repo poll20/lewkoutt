@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect ,useRef} from 'react';
+import React, { createContext, useContext, useState, useEffect ,useRef,useCallback} from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
 import { useLoading } from './LoadingContext';
@@ -87,7 +87,7 @@ const backendURL = `${apiUrl}:3000`;
  const itemsPerPage = 10;
  
   
-  let allproductdata=productdata.map((e)=>(e.productdetails)).flat()
+  // let allproductdata=productdata.map((e)=>(e.productdetails)).flat()
   // allproductdata.map((e)=>{
   //   console.log("hurraaa",e._id)
   // })
@@ -134,8 +134,8 @@ const backendURL = `${apiUrl}:3000`;
   
   
 //   }, [user, userDetails]);
-useEffect(() => {
-  const fetchWishlist = async () => {
+
+const fetchWishlist = async () => {
     try {
       setIsLoading(true);
 
@@ -185,8 +185,8 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
-
-  fetchWishlist();
+useEffect(() => {
+fetchWishlist();
 }, [isLoggedIn, user, userDetails]);
 
 
@@ -235,7 +235,7 @@ useEffect(() => {
     
     
   //   }, [user,userDetails]);
-  useEffect(() => {
+
   const fetchCartItems = async () => {
     try {
       setIsLoading(true);
@@ -287,12 +287,14 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+  
 
   fetchCartItems();
 }, [isLoggedIn, user, userDetails]);
 
 //ise abhi dekhna h include krna h ya nhi
-  useEffect(()=>{
+  useEffect(()=>{ 
     if(user&& userDetails._id){
       const fetchalluser = async () => {
         try {
@@ -319,7 +321,7 @@ useEffect(() => {
           setIsLoading(false)
         }
       };
-      fetchalluser()
+      // fetchalluser()
     }
   },[user,userDetails])
   
@@ -1108,7 +1110,7 @@ finally{
 }
 
  }
- bestselling()
+//  bestselling()
 
   },[])
 
@@ -1131,7 +1133,7 @@ finally{
    }
    
     }
-    wears()
+    // wears()
    
      },[])
 
@@ -1152,9 +1154,9 @@ finally{
 
     };
   
-    useEffect(() => {
-      rentData();
-    }, []);
+    // useEffect(() => {
+    //   rentData();
+    // }, []);
    
 
     useEffect(()=>{
@@ -1172,10 +1174,10 @@ finally{
   setIsLoading(false)
 }
       }
-      newarrival()
+      // newarrival()
     },[])
 
-    console.log("new arrival in bio",newarrival)
+    
 
   // Remove from Wishlist
   let handleRemoveClickwishlist = async (id) => {
@@ -1224,40 +1226,63 @@ finally{
 
 
 
-const productfetch = async () => {
+// const productfetch = async (operationtype) => {
+//   try {
+//     setIsLoading(true)
+//     let data = await fetch(`${apiUrl}/productmodel?operation=${operationtype}`);
+//     let res = await data.json();
+    
+//     console.log("✅ New data fetched:", res);
+//     if (!res || res.length === 0) return; // ✅ Empty response check
+    
+//     setproductdata([...res]); // ✅ Spread operator to force state update
+//     let pdd = res.map((e) => e.productdetails).flat();
+//     setproductdataonlydetail([...pdd]); // ✅ Spread operator again
+//     console.log("📢 Updated productdataonlydetail:", pdd);
+
+//     setIsFetched(true);
+//     setRefetch(false);  
+//   } catch (e) {
+//     console.log("❌ Fetch Error:", e);
+//   }
+//   finally{
+//     setIsLoading(false)
+//   }
+// };
+const productfetch = useCallback(async (operationtype) => {
   try {
-    setIsLoading(true)
-    let data = await fetch(`${apiUrl}/productmodel?operation=all`);
-    let res = await data.json();
-    
-    console.log("✅ New data fetched:", res);
-    if (!res || res.length === 0) return; // ✅ Empty response check
-    
-    setproductdata([...res]); // ✅ Spread operator to force state update
-    let pdd = res.map((e) => e.productdetails).flat();
-    setproductdataonlydetail([...pdd]); // ✅ Spread operator again
-    console.log("📢 Updated productdataonlydetail:", pdd);
+    setIsLoading(true);
+    const res = await fetch(
+      `${apiUrl}/productmodel?operation=${operationtype}`
+    );
+    const data = await res.json();
+
+    if (!data || data.length === 0) return;
+
+    setproductdata(data);
+
+    const pdd = data.flatMap((e) => e.productdetails || []);
+    setproductdataonlydetail(pdd);
 
     setIsFetched(true);
-    setRefetch(false);  
+    setRefetch(false);
   } catch (e) {
-    console.log("❌ Fetch Error:", e);
+    console.error("❌ Fetch Error:", e);
+  } finally {
+    setIsLoading(false);
   }
-  finally{
-    setIsLoading(false)
-  }
-};
+}, []);
 
 
 // ✅ Initial fetch on mount
-useEffect(() => {
-  productfetch();
-}, []);
+// useEffect(() => {
+//   productfetch();
+// }, []);
 
 
 
 // ✅ Re-fetch when manually triggered
-useEffect(() => {
+useEffect(() => { 
   if (refetch) {
     console.log("🔄 Manually re-fetching data...");
     productfetch();
@@ -1275,7 +1300,7 @@ const handleRefetch = () => {
 };
 
 
-console.log("chlo ye bhi sahu hai",productdata)
+
 let getsearchinput=(inp)=>{
   setsearchvalue(inp)
 }
@@ -1620,12 +1645,6 @@ let orderplaced = async (
   }
 };
 
-if(productdataonlydetail){
-  console.log("prddd",productdataonlydetail)
-}
-
-
-
 const fetchUserOrders = async (userId) => {
   console.log("maaro mujhe maaro")
   try {
@@ -1658,46 +1677,23 @@ const fetchUserOrders = async (userId) => {
 };
 
 // useEffect me userId pass karo
-useEffect(() => { 
-  if (userDetails?._id) {
-      fetchUserOrders(userDetails._id);
-       const eventSource = new EventSource(`${apiUrl}/events`);
+// useEffect(() => { 
+//   if (userDetails?._id) {
+//       fetchUserOrders(userDetails._id);
+//        const eventSource = new EventSource(`${apiUrl}/events`);
 
-    eventSource.onmessage = () => {
-   fetchUserOrders(userDetails._id);; // 🟢 Jab bhi event aaye, orders fetch karo
-    };
+//     eventSource.onmessage = () => {
+//    fetchUserOrders(userDetails._id); // 🟢 Jab bhi event aaye, orders fetch karo
+//     };
 
-    return () => {
-        eventSource.close();
-    };
-  }
-}, [user, userDetails?._id,userorder?.status]);
-
-
-// useEffect(()=>{
-//   fetchSlots()
-// },[slotVersion])
-// const submitRating = async (productId, userId, rating, review,image) => {
-//   console.log("rating",rating)
-//   try {
-//     setIsLoading(true)
-//       const response = await fetch(`${apiUrl}/rate`, {
-//           method: "POST",
-//           headers: { "Content-Type": "application/json",
-//             // Authorization: `Bearer ${user.accessToken}`,
-//           },
-//           body: JSON.stringify({ userId, productId, rating, review,image})
-//       });
-
-//       const data = await response.json();
-//       console.log("Rating Submitted:", data);
-//   } catch (error) {
-//       console.error("Error submitting rating:", error);
+//     return () => {
+//         eventSource.close();
+//     };
 //   }
-//   finally{
-//     setIsLoading(false)
-//   }
-// };
+// }, [user, userDetails?._id,userorder?.status]);
+
+
+
 const submitRating = async (productId, userId, rating, review, imageUrl) => {
   try {
     setIsLoading(true);
@@ -1881,19 +1877,7 @@ const getBundleColorData = async (bundleId) => {
 
 
 
-    // if (product) {
-    //   fetchCoupons();
-    // }
-  
-
-
-console.log("toastmsg",toastmsg)
-
-if(user && userDetails){
-  console.log("plz dono bche ajao",user,userDetails)
-}
-
-// const userAddress = "shree gururkripa pg padam vihar colony rajatpath mansarovar, jaipur";
+  // const userAddress = "shree gururkripa pg padam vihar colony rajatpath mansarovar, jaipur";
 
 const fetchDistance = async (deleveryaddress) => {
   let userAddress=`${deleveryaddress[0].building} ${deleveryaddress[0].locality} ${deleveryaddress[0].city} ${deleveryaddress[0].pincode} `
@@ -1948,11 +1932,11 @@ const getRecommendationsFromCart = async () => {
   }
 };
 
-useEffect(() => {
-  if (userDetails?._id) {
-    getRecommendationsFromCart();
-  }
-}, [userDetails]);
+// useEffect(() => {
+//   if (userDetails?._id) {
+//     getRecommendationsFromCart();
+//   }
+// }, [userDetails]);
 
 // somewhere in BioContext or useEffect in component
 const fetchTopSearched = async () => {
@@ -1999,7 +1983,7 @@ const fetchTopSearched = async () => {
         guestCart,
         handleRemoveClickwishlist ,
         productdata,
-        // productfetch,
+        productfetch,
         newarrival,
         productdataonlydetail,
         addtocartdatas,
@@ -2015,7 +1999,7 @@ const fetchTopSearched = async () => {
         handlechooseaddress,
         addresssetkro,
         deleteandeditaddrress,
-        productfetch,
+      
         handleRefetch,
         orderplaced,
         userorder,
@@ -2049,7 +2033,10 @@ const fetchTopSearched = async () => {
         topproducts,
         userDetails,
         sortOption, 
-        setSortOption
+        setSortOption,
+        fetchUserOrders,
+        fetchWishlist,
+        fetchCartItems
     }}
     >
       {children}

@@ -17,12 +17,12 @@ const HeartButton = ({cardid,w,h,mt,dw,dh,dmt,dml,pdml}) => {
   {
   console.log("wyade",wishlistdata)
   }
-  wishlistdata.map((e)=>{
-    if(e._id==cardid)
-    {
-      // console.log("this id is true",e._id)
-    }
-  })
+  // wishlistdata.map((e)=>{
+  //   if(e._id==cardid)
+  //   {
+  //     // console.log("this id is true",e._id)
+  //   }
+  // })
   // const isItemInWishlist = wishlistdata.some((item) => item.itemid === cardid);
   //   const isItemInWishlist = wishlistdata?.some(
   //   (item) =>
@@ -53,8 +53,8 @@ const HeartButton = ({cardid,w,h,mt,dw,dh,dmt,dml,pdml}) => {
 //       autoplay
       
 //       style={{width:dw,height:dh ,marginTop:dmt,marginLeft:dml}}
-//     />)      
-      
+//     />)  
+    
        
 //       }
 

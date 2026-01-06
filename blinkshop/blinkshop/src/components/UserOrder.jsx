@@ -8,9 +8,10 @@ import { useFirebaseAuth } from "./FirebaseContext";
 import EmptyOrders from "./EmptyOrders";
 
 const UserOrder = () => {
-  const { userorder, submitRating, fetchRatings, rating } = useBio();
+  const { userorder, submitRating, fetchRatings, rating ,fetchUserOrders} = useBio();
   const [userorderr, setuserorder] = useState([]);
-  const { userDetails } = useFirebaseAuth();
+  const { userDetails,user } = useFirebaseAuth();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   if (!userorder && !userDetails) {
     return (
@@ -38,6 +39,23 @@ const UserOrder = () => {
 
   // Timer states for each product
   const [timers, setTimers] = useState({});
+
+
+// useEffect me userId pass karo
+useEffect(() => { 
+  if (userDetails?._id) {
+      fetchUserOrders(userDetails._id);
+       const eventSource = new EventSource(`${apiUrl}/events`);
+
+    eventSource.onmessage = () => {
+   fetchUserOrders(userDetails._id); // 🟢 Jab bhi event aaye, orders fetch karo
+    };
+
+    return () => {
+        eventSource.close();
+    };
+  }
+}, [user, userDetails?._id,userorder?.status]);
 
   // Initialize timers for delivered products
   useEffect(() => {

@@ -12,17 +12,19 @@ import Cardforall from './Cardforall';
 import { color } from 'framer-motion';
 import { slugify } from './Slugify';
 import { cloudinaryImg } from "../utils/cloudinariimg";
-
+import { useFirebaseAuth } from "./FirebaseContext";
 import { trackBeginCheckout } from "../analytics/g4a";
 const AddToCart = () => {
   const navigate = useNavigate();
-  const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart,guestCart,isLoggedIn } = useBio();
+  const { addtocartitem, addtocartdatas, removefromaddtocart, addtowishlistonly, takebuydata,recommendations, getRecommendationsFromCart,guestCart,isLoggedIn,fetchCartItems } = useBio();
   const [choosebuy,setchoosebuy]=useState([])
   const [popup, setPopup] = useState(false);
   const [popupbreakup,setpopupbreakup]=useState(false)
   const [popupProductId, setPopupProductId] = useState(null);
   const [wowalaprd, setwowalaprd] = useState(null);
  const[totalprice,settotalprice]=useState(0)
+     const {user, userDetails, } = useFirebaseAuth();
+ 
  const[discounttotal,settotaldiscountprice]=useState(0)
 
   const activeCart = isLoggedIn ? addtocartdatas : guestCart;
@@ -32,9 +34,16 @@ const AddToCart = () => {
   
   
 
-   useEffect(() => {
-    getRecommendationsFromCart(); // Jab cart open ho ya mount ho
-  }, [])
+  //  useEffect(() => {
+  //   getRecommendationsFromCart(); // Jab cart open ho ya mount ho
+  // }, [])
+  useEffect(() => {
+    if (userDetails?._id) {
+      getRecommendationsFromCart();
+    }
+  }, [userDetails]);
+
+
 
   const openPopup = (id,prd) => {
     setPopup(true);

@@ -1186,6 +1186,21 @@ app.get("/productmodel",async(req,res)=>{
   console.log("sec",section)
   
   try{
+
+if (operation === "home") {
+  const data = await productsmodel.find().lean();
+
+  const homeData = data.map(cat => ({
+    _id: cat._id,
+    category: cat.category,
+    image: cat.image, // carousel ke liye
+    productdetails: cat.productdetails.slice(0, 7) // 👈 sirf 7 products
+  }));
+
+  return res.json(homeData);
+}
+
+
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
       let categorydata=await productsmodel.find().lean() 

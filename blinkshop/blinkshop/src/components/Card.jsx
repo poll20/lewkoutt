@@ -106,7 +106,7 @@ const Card = (props) => {
   const query = searchParams.get("q");
 
   const { setIsLoading } = useLoading();
-  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons,removewishlistonly,guestWishlist,isLoggedIn } = useBio();
+  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons,removewishlistonly,guestWishlist,isLoggedIn,productfetch } = useBio();
 
   // local UI states
   const [originalProducts, setOriginalProducts] = useState([]); // canonical raw data from server (normalized)
@@ -223,6 +223,9 @@ const Card = (props) => {
 
       // if store (client-side data available), use it
       if (store && productdataonlydetail?.length > 0) {
+        // productfetch("all")\
+      await fetchProducts(`${apiUrl}/productmodel?operation=all`);
+
         doSet(productdataonlydetail);
         return;
       }
@@ -239,6 +242,7 @@ const Card = (props) => {
       //   return;
       // }
       if (wish) {
+        
   doSet(isLoggedIn ? wishlistdata : guestWishlist);
   return;
 }
