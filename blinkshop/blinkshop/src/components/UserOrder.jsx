@@ -6,7 +6,7 @@ import { useAuth } from "./AuthContext";
 import { NavLink } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 import EmptyOrders from "./EmptyOrders";
-
+import SixtyMinTimer from "./SixtyMinTimer"
 const UserOrder = () => {
   const { userorder, submitRating, fetchRatings, rating ,fetchUserOrders} = useBio();
   const [userorderr, setuserorder] = useState([]);
@@ -75,25 +75,6 @@ useEffect(() => {
           }
         });
       }
-//       if (order.status.toLowerCase() === "delivered" && order.deliveredAt) {
-//   order.products?.forEach(product => {
-//     const deliveredTime = new Date(order.deliveredAt);
-//     const now = new Date();
-//     const diffInMs = now - deliveredTime;
-
-//     // ✅ Agar Jaipur hai to 1 hour otherwise 2 days
-//     const isJaipur = order.address?.[0]?.city?.toLowerCase() === "jaipur";
-//     const allowedTimeInMs = isJaipur 
-//       ? 60 * 60 * 1000               // 1 hour
-//       : 2 * 24 * 60 * 60 * 1000;     // 2 days
-
-//     if (diffInMs < allowedTimeInMs) {
-//       const remainingMs = allowedTimeInMs - diffInMs;
-//       newTimers[product._id] = Math.max(0, Math.floor(remainingMs / 1000));
-//     }
-//   });
-// }
-
     });
     
     setTimers(newTimers);
@@ -238,7 +219,7 @@ useEffect(() => {
             overflow: 'hidden',
             transition: 'all 0.3s ease'
           }}>
-            
+            <SixtyMinTimer order={order}/>
             {order.products?.map((product) => {
               const statusColor = getStatusColor(order.status);
               const timeRemaining = timers[product._id];
@@ -390,10 +371,12 @@ useEffect(() => {
                   ) : null}
 
                   {/* Return/Review Section */}
+
+                  
                   {order.status.toLowerCase() === "delivered" && (
                     <div>
                       {/* Return Window with Timer */}
-                      {timeRemaining > 0 ? (
+                      {timeRemaining > 0 && order?.timeslot !== "60 minutes or free"  ? (
                         <div style={{
                           // backgroundColor: '#fef2f2',
                           // border: '2px solid #fecaca',
@@ -631,7 +614,7 @@ useEffect(() => {
                     </div>
                   )}
 
-                  {/* Bundle Products - Mobile Optimized */}
+                  {/*iske upr Bundle Products - Mobile Optimized */}
                   {product.bundle?.length > 0 && (
                     <div style={{
                       marginTop: '16px',

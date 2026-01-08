@@ -3,6 +3,8 @@ import { useBio } from "./BioContext";
 
 const timeSlots = [
   { label: "Within 60 minutes", start: 0, end: 1 },
+  { label: "60 minutes or free", start: 0, end: 1 },
+
   { label: "11:00 AM – 1:00 PM", start: 11, end: 13 },
   { label: "1:00 PM – 3:00 PM", start: 13, end: 15 },
   { label: "3:00 PM – 5:00 PM", start: 15, end: 17 },
@@ -28,9 +30,16 @@ export default function DeliveryTimeSlot() {
     const tomorrow = new Date();
     tomorrow.setDate(now.getDate() + 1);
 
-    // ✅ Disable "Within 60 minutes" for tomorrow always
+    // ✅ Disable "Within 60 minutes"and "60 minutes or free" for tomorrow always
     if (
-      slot.label === "Within 60 minutes" &&
+      slot.label === "Within 60 minutes"&&
+      selected.toDateString() === tomorrow.toDateString()
+    ) {
+      return true;
+    }
+
+    if (
+      slot.label === "60 minutes or free"&&
       selected.toDateString() === tomorrow.toDateString()
     ) {
       return true;
@@ -38,8 +47,27 @@ export default function DeliveryTimeSlot() {
 
     // ✅ For "Within 60 minutes" slot (special behavior)
     if (slot.label === "Within 60 minutes") {
-      // ❌ Disable if distance > 10 km
+      // ❌ Disable if distance > 15 km
       if (!isNaN(distanceInKm) && distanceInKm > 15) return true;
+  const currentHour = now.getHours();
+  const currentMinutes = now.getMinutes();
+      // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
+       const isAfter11AM =
+    currentHour > 11 || (currentHour === 11 && currentMinutes >= 0);
+  const isBefore830PM =
+    currentHour < 20 || (currentHour === 20 && currentMinutes < 30);
+      if (
+        selected.toDateString() === now.toDateString() && isAfter11AM && isBefore830PM
+      ) {
+        return false; // active only during 11 AM hour
+      } else {
+        return true; // disabled before or after 11 AM
+      }
+    }
+
+     if (slot.label === "60 minutes or free") {
+      // ❌ Disable if distance > 12 km
+      if (!isNaN(distanceInKm) && distanceInKm > 12) return true;
   const currentHour = now.getHours();
   const currentMinutes = now.getMinutes();
       // ✅ Only active exactly at 11 AM (between 11:00 AM and 11:59 AM)
@@ -273,6 +301,33 @@ const isTomorrowSelected = () => {
       }}
     >
       60 min slot will be activated only after 11 AM
+    </div>
+)}
+
+{slot.label === "60 minutes or free" &&
+  (isBefore11AM() || isTomorrowSelected()) && (
+    <div
+      style={{
+        fontSize: "11px",
+        marginTop: "4px",
+        color: "#000",
+      }}
+    >
+      This slot will be activated only after 11 AM
+    </div>
+)}
+
+{slot.label === "60 minutes or free" &&
+ (!isBefore11AM() || !isTomorrowSelected()) &&
+  (
+    <div
+      style={{
+        fontSize: "11px",
+        marginTop: "4px",
+        color: "#000",
+      }}
+    >
+     Order will not be returned if you Select this slot
     </div>
 )}
 
