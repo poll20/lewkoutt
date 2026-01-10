@@ -327,7 +327,7 @@ const isTomorrowSelected = () => {
         color: "#000",
       }}
     >
-     Order will not be returned if you Select this slot
+     No return available for this slot
     </div>
 )}
 

@@ -178,7 +178,10 @@ const Card = (props) => {
         const res = await fetch(url, { signal: controller.signal });
         if (!res.ok) throw new Error("Network error");
         const data = await res.json();
+        
         const productdetails = normalizeProductDetails(data);
+        console.log("data comes in shoping",productdetails)
+
         doSet(productdetails);
       } catch (err) {
         if (err.name === "AbortError") return; // aborted
@@ -222,13 +225,28 @@ const Card = (props) => {
       }
 
       // if store (client-side data available), use it
-      if (store && productdataonlydetail?.length > 0) {
-        // productfetch("all")\
-      await fetchProducts(`${apiUrl}/productmodel?operation=all`);
+//       if (store) {
+//         productfetch("all")
+//       // await fetchProducts(`${apiUrl}/productmodel?operation=all`);
+// if(productdataonlydetail?.length > 0){
+//         doSet(productdataonlydetail);
+// }
+//         return;
+//       }
+if (store) {
+  // 🔥 sirf ek baar fetch karo
+  if (originalProducts.length === 0) {
+    productfetch("all");
+  }
 
-        doSet(productdataonlydetail);
-        return;
-      }
+  // 🔥 context data aane ke baad UI set karo
+  if (productdataonlydetail?.length > 0) {
+    doSet(productdataonlydetail);
+  }
+
+  return;
+}
+
 
       // rent data and wish handled similarly by parent/context; if they are present, use them
       if (rent && Array.isArray(productdata) && productdata.length > 0) {
@@ -259,7 +277,9 @@ const Card = (props) => {
     };
 
     // only when url-identifying params change
-  }, [apiUrl, section, category, props.category, query, store, rent, wish, productdataonlydetail, productdata, newarrival, bestsellingdata,guestWishlist,wishlistdata]);
+  }, [apiUrl, section, category, props.category, query, store, rent, wish, productdataonlydetail, productdata, newarrival, bestsellingdata,guestWishlist,wishlistdata
+    
+  ]);
 
   // Local filtering and sorting effect: runs when filters or UI sort/size selections change.
   // This DOES NOT trigger network fetch; it derives 'products' from originalProducts.

@@ -1187,6 +1187,31 @@ app.get("/productmodel",async(req,res)=>{
   
   try{
 
+if (operation === "navbar") {
+      const data = await productsmodel.find(
+        {},
+        { category: 1, productdetails: 1, _id: 0 }
+      ).lean();
+
+      const navbarData = data.map(cat => {
+        const tags = [
+          ...new Set(
+            (cat.productdetails || [])
+              .map(p => p.tag)
+              .filter(Boolean)
+          )
+        ].filter(tag => tag !== "Co-ord Sets"); // optional cleanup
+
+        return {
+          category: cat.category,
+          tags
+        };
+      });
+
+      return res.json(navbarData);
+    }
+
+
 if (operation === "home") {
   const data = await productsmodel.find().lean();
 
@@ -1204,8 +1229,7 @@ if (operation === "home") {
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
       let categorydata=await productsmodel.find().lean() 
-      console
-      res.json(categorydata)
+    res.json(categorydata)
     }
     else if (operation === "filtered") {
       // Operation 2: Fetch documents filtered by 'tag'

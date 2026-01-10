@@ -325,143 +325,177 @@ useEffect(() => {
     }
   },[user,userDetails])
   
-//   const handleClick = async (prd, id) => {
 
-//     console.log("iredandid",prd,id)
-    
-    
-//     try {
-//       setIsLoading(true)
-//       // if(!user){
-//       //   setshowloginpage(true)
-//       // }
-//       if (!isLoggedIn) {
-//   const guestWishlist =
-//     JSON.parse(localStorage.getItem("guestWishlist")) || [];
 
-//   guestWishlist.push({
-//     matchItem.productId = id;
-//       matchItem.price = prd.price;
-//       matchItem.discountprice = prd.discountprice;
-//       matchItem.discount = prd.discount;
+// const handleClick = async (prd, id) => {
+//   console.log("iredandid", prd, id);
 
-//       matchItem.image = prd.image;
-//       matchItem.shopname = prd.shopname;
-//       // matchItem.color=prd?.colors[0]?.color || prd?.color
-//       matchItem.color = Array.isArray(prd?.colors) && prd.colors.length > 0 
-//   ? prd.colors[0].color 
-//   : prd?.color || "defaultColor";
-//       matchItem.title = prd.title;
-//       matchItem.description = prd.description;
-//       matchItem.size = prd.sizes;
-//   });
+//   try {
+//     setIsLoading(true);
 
-//   localStorage.setItem("guestWishlist", JSON.stringify(guestWishlist));
-//   showPopup("Added to Wishlist");
-//   return;
-// }
+//     /* =======================
+//        👉 GUEST USER FLOW
+//     ======================= */
+//     if (!isLoggedIn) {
+//       const guestWishlist =
+//         JSON.parse(localStorage.getItem("guestWishlist")) || [];
 
-//          if (window.fbq) {
+//       const alreadyExists = guestWishlist.find(
+//         item => item.productId === id
+//       );
+
+//       // 🔁 TOGGLE
+//       if (alreadyExists) {
+//         const updatedWishlist = guestWishlist.filter(
+//           item => item.productId !== id
+//         );
+// setGuestWishlist(updatedWishlist);
+//         localStorage.setItem(
+//           "guestWishlist",
+//           JSON.stringify(updatedWishlist)
+//         );
+
+//         showPopup("Removed from Wishlist");
+//       } else {
+//         guestWishlist.push({
+//           productId: id,
+//           price: prd.price,
+//           discountprice: prd.discountprice,
+//           discount: prd.discount,
+//           image: prd.image,
+//           shopname: prd.shopname,
+//           color:
+//             Array.isArray(prd?.colors) && prd.colors.length > 0
+//               ? prd.colors[0].color
+//               : prd?.color || "defaultColor",
+//           title: prd.title,
+//           description: prd.description,
+//           size: prd.sizes,
+//         });
+// setGuestWishlist(guestWishlist);  
+// console.log("wdai",guestWishlist)
+//         localStorage.setItem(
+//           "guestWishlist",
+//           JSON.stringify(guestWishlist)
+//         );
+
+//         showPopup("Added to Wishlist");
+//       }
+
+//       return; // 🚨 important
+//     }
+
+//     /* =======================
+//        👉 LOGGED-IN USER FLOW
+//     ======================= */
+
+//     // FB Pixel
+//     if (window.fbq) {
 //       window.fbq("track", "AddToWishlist", {
-//         content_name: prd.title ,
+//         content_name: prd.title,
 //         content_ids: [prd._id],
 //         content_type: "product",
 //         value: prd.discountprice || prd.price,
 //         currency: "INR",
 //       });
 //     }
-//       // Correcting the way matchItem is created
-//       // const matchedColors = productdataonlydetail
-//       //   .flatMap(product => product.colors)
 
-//       //   .filter(color => color._id == id);
-//       trackAddToWishlist(prd)
-//       const matchedColors = productdataonlydetail
-//   .flatMap(product => product.colors || [])
-//   .filter(color => color._id == id);
-  
-//       if (matchedColors.length === 0) {
-//         console.error("No matching item found!");
-//         return;
+//     trackAddToWishlist(prd);
+
+//     // Find matching color item
+//     const matchedColors = productdataonlydetail
+//       .flatMap(product => product.colors || [])
+//       .filter(color => color._id === id);
+
+//     if (matchedColors.length === 0) {
+//       console.error("No matching item found!");
+//       return;
+//     }
+
+//     const matchItem = { ...matchedColors[0] };
+
+//     matchItem.userid = userDetails._id;
+//     matchItem.productId = id;
+//     matchItem.price = prd.price;
+//     matchItem.discountprice = prd.discountprice;
+//     matchItem.discount = prd.discount;
+//     matchItem.image = prd.image;
+//     matchItem.shopname = prd.shopname;
+//     matchItem.color =
+//       Array.isArray(prd?.colors) && prd.colors.length > 0
+//         ? prd.colors[0].color
+//         : prd?.color || "defaultColor";
+//     matchItem.title = prd.title;
+//     matchItem.description = prd.description;
+//     matchItem.size = prd.sizes;
+
+//     const itemInWishlist = wishlistdata.find(
+//       item => item.itemid === id
+//     );
+
+//     /* ➕ ADD */
+//     if (!itemInWishlist) {
+//       const response = await fetch(`${apiUrl}/cart`, {
+//         method: "POST",
+//         credentials: "include",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(matchItem),
+//       });
+
+//       if (response.ok) {
+//         const addedItem = await response.json();
+//         setWishlist(prev => [...prev, id]);
+//         setwishlistdata(prev => [...prev, addedItem]);
+//         showPopup("Added to Wishlist");
 //       }
-  
-//       const matchItem = { ...matchedColors[0] }; // Convert array to object
-//       console.log("matchItem before adding data:", matchItem);
-  
-//       // Adding necessary properties
-//       matchItem.userid = userDetails._id;
-//       matchItem.productId = id;
-//       matchItem.price = prd.price;
-//       matchItem.discountprice = prd.discountprice;
-//       matchItem.discount = prd.discount;
-
-//       matchItem.image = prd.image;
-//       matchItem.shopname = prd.shopname;
-//       // matchItem.color=prd?.colors[0]?.color || prd?.color
-//       matchItem.color = Array.isArray(prd?.colors) && prd.colors.length > 0 
-//   ? prd.colors[0].color 
-//   : prd?.color || "defaultColor";
-//       matchItem.title = prd.title;
-//       matchItem.description = prd.description;
-//       matchItem.size = prd.sizes;
-  
-//       console.log("Final matchItem:", matchItem); // Debugging
-  
-//       const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
-//       console.log("delete", itemInCart);
-  
-//         if (!itemInCart) {
-//           const response = await fetch(`${apiUrl}/cart`, {
-//             method: "POST",
-//             credentials: 'include', // important: allow cookies to be set
-//             headers: { "Content-Type": "application/json",
-//               // Authorization: `Bearer ${user.accessToken}`,
-//             },
-//             body: JSON.stringify(matchItem),
-//           });
-  
-//         if (response.ok) {
-//           const addedItem = await response.json();
-//           setWishlist(prev => [...prev, id]);
-//           setwishlistdata(prev => [...prev, addedItem]);
-//     //       const toast = new window.bootstrap.Toast(toastRef.current);
-//     // toast.show();
-//     //       settoastmsg("item added successfully")
-//     showPopup("Added to Wishlist")
-//         }
-//       } else {
-//         const response = await fetch(`${apiUrl}/cart/${itemInCart.itemid}`, {
+//     }
+//     /* ➖ REMOVE */
+//     else {
+//       const response = await fetch(
+//         `${apiUrl}/cart/${itemInWishlist.itemid}`,
+//         {
 //           method: "DELETE",
-//           credentials: 'include', // important: allow cookies to be set
-//           // headers: {
-//           //   Authorization: `Bearer ${user.accessToken}`,
-//           // },
-//         });
-  
-//         if (response.ok) {
-//           setWishlist(prev => prev.filter(itemId => itemId !== id));
-//           setwishlistdata(prev => prev.filter(item => item.itemid !== id));
-//           // toast.success("Data removed successfully");
-//     //       const toast = new window.bootstrap.Toast(toastRef.current);
-//     // toast.show();
-//     //       settoastmsg("item removed successfully")
-//     showPopup("Removed from Wishlist")
+//           credentials: "include",
 //         }
+//       );
+
+//       if (response.ok) {
+//         setWishlist(prev => prev.filter(itemId => itemId !== id));
+//         setwishlistdata(prev =>
+//           prev.filter(item => item.itemid !== id)
+//         );
+//         showPopup("Removed from Wishlist");
 //       }
-//     } catch (error) {
-//       console.error("Error in handleClick:", error);
 //     }
-//     finally{
-//       setIsLoading(false)
-//     }
-  
-//   };
+//   } catch (error) {
+//     console.error("Error in handleClick:", error);
+//   } finally {
+//     setIsLoading(false);
+//   }
+// };
 
 const handleClick = async (prd, id) => {
-  console.log("iredandid", prd, id);
-
   try {
     setIsLoading(true);
+
+    // 🔥 Safe Pixel Tracker (non-blocking)
+    const fireWishlistPixel = () => {
+      if (window.fbq) {
+        window.fbq("track", "AddToWishlist", {
+          content_name: prd.title,
+          content_ids: [prd._id || id],
+          content_type: "product",
+          value: prd.discountprice || prd.price,
+          currency: "INR",
+        });
+      }
+
+      if (typeof trackAddToWishlist === "function") {
+        trackAddToWishlist(prd);
+      }
+    };
 
     /* =======================
        👉 GUEST USER FLOW
@@ -474,94 +508,85 @@ const handleClick = async (prd, id) => {
         item => item.productId === id
       );
 
-      // 🔁 TOGGLE
+      let updatedWishlist;
+
       if (alreadyExists) {
-        const updatedWishlist = guestWishlist.filter(
+        // ➖ REMOVE
+        updatedWishlist = guestWishlist.filter(
           item => item.productId !== id
         );
-setGuestWishlist(updatedWishlist);
-        localStorage.setItem(
-          "guestWishlist",
-          JSON.stringify(updatedWishlist)
-        );
-
         showPopup("Removed from Wishlist");
       } else {
-        guestWishlist.push({
-          productId: id,
-          price: prd.price,
-          discountprice: prd.discountprice,
-          discount: prd.discount,
-          image: prd.image,
-          shopname: prd.shopname,
-          color:
-            Array.isArray(prd?.colors) && prd.colors.length > 0
-              ? prd.colors[0].color
-              : prd?.color || "defaultColor",
-          title: prd.title,
-          description: prd.description,
-          size: prd.sizes,
-        });
-setGuestWishlist(guestWishlist);  
-console.log("wdai",guestWishlist)
-        localStorage.setItem(
-          "guestWishlist",
-          JSON.stringify(guestWishlist)
-        );
+        // ➕ ADD
+        updatedWishlist = [
+          ...guestWishlist,
+          {
+            productId: id,
+            price: prd.price,
+            discountprice: prd.discountprice,
+            discount: prd.discount,
+            image: prd.image,
+            shopname: prd.shopname,
+            color:
+              Array.isArray(prd?.colors) && prd.colors.length > 0
+                ? prd.colors[0].color
+                : prd?.color || "defaultColor",
+            title: prd.title,
+            description: prd.description,
+            size: prd.sizes,
+          },
+        ];
 
         showPopup("Added to Wishlist");
+
+        // 🔥 Pixel AFTER wishlist update
+        setTimeout(fireWishlistPixel, 0);
       }
 
-      return; // 🚨 important
+      setGuestWishlist(updatedWishlist);
+      localStorage.setItem(
+        "guestWishlist",
+        JSON.stringify(updatedWishlist)
+      );
+
+      return;
     }
 
     /* =======================
        👉 LOGGED-IN USER FLOW
     ======================= */
 
-    // FB Pixel
-    if (window.fbq) {
-      window.fbq("track", "AddToWishlist", {
-        content_name: prd.title,
-        content_ids: [prd._id],
-        content_type: "product",
-        value: prd.discountprice || prd.price,
-        currency: "INR",
-      });
-    }
-
-    trackAddToWishlist(prd);
+    const itemInWishlist = wishlistdata.find(
+      item => item.itemid === id
+    );
 
     // Find matching color item
     const matchedColors = productdataonlydetail
       .flatMap(product => product.colors || [])
       .filter(color => color._id === id);
 
-    if (matchedColors.length === 0) {
-      console.error("No matching item found!");
+    if (!matchedColors.length) {
+      console.error("No matching item found");
       return;
     }
 
-    const matchItem = { ...matchedColors[0] };
-
-    matchItem.userid = userDetails._id;
-    matchItem.productId = id;
-    matchItem.price = prd.price;
-    matchItem.discountprice = prd.discountprice;
-    matchItem.discount = prd.discount;
-    matchItem.image = prd.image;
-    matchItem.shopname = prd.shopname;
-    matchItem.color =
-      Array.isArray(prd?.colors) && prd.colors.length > 0
-        ? prd.colors[0].color
-        : prd?.color || "defaultColor";
-    matchItem.title = prd.title;
-    matchItem.description = prd.description;
-    matchItem.size = prd.sizes;
-
-    const itemInWishlist = wishlistdata.find(
-      item => item.itemid === id
-    );
+    const matchItem = {
+      ...matchedColors[0],
+      userid: userDetails._id,
+      productId: id,
+      price: prd.price,
+      discountprice: prd.discountprice,
+      discount: prd.discount,
+      image: prd.image,
+      shopname: prd.shopname,
+      color:
+        Array.isArray(prd?.colors) && prd.colors.length > 0
+          ? prd.colors[0].color
+          : prd?.color || "defaultColor",
+      title: prd.title,
+      description: prd.description,
+      size: prd.sizes,
+    };
 
     /* ➕ ADD */
     if (!itemInWishlist) {
@@ -579,8 +604,12 @@ console.log("wdai",guestWishlist)
         setWishlist(prev => [...prev, id]);
         setwishlistdata(prev => [...prev, addedItem]);
         showPopup("Added to Wishlist");
+
+        // 🔥 Pixel AFTER success
+        setTimeout(fireWishlistPixel, 0);
       }
     }
+
     /* ➖ REMOVE */
     else {
       const response = await fetch(
@@ -592,7 +621,9 @@ console.log("wdai",guestWishlist)
       );
 
       if (response.ok) {
-        setWishlist(prev => prev.filter(itemId => itemId !== id));
+        setWishlist(prev =>
+          prev.filter(itemId => itemId !== id)
+        );
         setwishlistdata(prev =>
           prev.filter(item => item.itemid !== id)
         );
@@ -878,61 +909,163 @@ setGuestWishlist(guestWishlist)
 
   
 
-  const handleAddToCart = async (prd, quantity, selectedSize) => {  
+//   const handleAddToCart = async (prd, quantity, selectedSize) => {  
  
    
     
-    // 🔥 Facebook Pixel Event
-    if (window.fbq) {
-      window.fbq("track", "AddToCart", {
-        content_name: prd.title ,
-        content_ids: [prd._id],
-        content_type: "product",
-        value: prd.discountprice || prd.price,
-        currency: "INR",
-      });
-    }
-    // if(!user){
-    //   setshowloginpage(true)
-    // }
+//     // 🔥 Facebook Pixel Event
+//     if (window.fbq) {
+//       window.fbq("track", "AddToCart", {
+//         content_name: prd.title ,
+//         content_ids: [prd._id],
+//         content_type: "product",
+//         value: prd.discountprice || prd.price,
+//         currency: "INR",
+//       });
+//     }
+//     // if(!user){
+//     //   setshowloginpage(true)
+//     // }
 
-    if (!isLoggedIn) {
-  // 👉 Guest cart
-  const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+//     if (!isLoggedIn) {
+//   // 👉 Guest cart
+//   const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
 
-  guestCart.push({
-    _id: nanoid(), 
-     productId: prd._id,
+//   guestCart.push({
+//     _id: nanoid(), 
+//      productId: prd._id,
     
-      productid: prd._id,
-          color: prd?.color,
-          image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
-          title: prd.title,
-          description: prd.description,
-          qty: quantity,
-          size: selectedSize,
-          price: prd.price,
-          discountprice: prd.discountprice,
-          shopname: prd.shopname,
-  });
+//       productid: prd._id,
+//           color: prd?.color,
+//           image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
+//           title: prd.title,
+//           description: prd.description,
+//           qty: quantity,
+//           size: selectedSize,
+//           price: prd.price,
+//           discountprice: prd.discountprice,
+//           shopname: prd.shopname,
+//   });
 
-  setGuestCart(guestCart)
-  localStorage.setItem("guestCart", JSON.stringify(guestCart));
-  showPopup("Added to Bag");
-  return;
-}
+//   setGuestCart(guestCart)
+//   localStorage.setItem("guestCart", JSON.stringify(guestCart));
+//   showPopup("Added to Bag");
+//   return;
+// }
 
-    else{
+//     else{
+//   try {
+//     setIsLoading(true);
+//  trackAddToCart(prd);
+
+//     const isBundle = Array.isArray(prd) && prd.length > 0;
+
+//     const payload = isBundle
+//       ? {
+//           userid: userDetails?._id,
+//           bundle: prd, // ✅ only send bundle data
+//         }
+//       : {
+//           userid: userDetails?._id,
+//           productId: prd._id,
+//           productid: prd._id,
+//           color: prd?.color,
+//           image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
+//           title: prd.title,
+//           description: prd.description,
+//           qty: quantity,
+//           size: selectedSize,
+//           price: prd.price,
+//           discountprice: prd.discountprice,
+//           shopname: prd.shopname,
+//         };
+
+//     console.log("🧾 Sending payload to cart:", payload);
+
+//     const response = await fetch(`${apiUrl}/addtocart`, {
+//       method: "POST",
+//       credentials: 'include', // important: allow cookies to be set
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (response.ok) {
+//       const addedItem = await response.json();
+//       setaddtocartdata((prev) => [...prev, addedItem]);
+//       if (!isBundle) setaddtocartdataonly((prev) => [...prev, prd._id]);
+//       showPopup("Added to Bag");
+//     } else {
+//       showPopup("Oops...");
+//     }
+//   } catch (error) {
+//     console.error("❌ Error in handleAddToCart:", error);
+//   } finally {
+//     setIsLoading(false);
+//   }
+// }
+// };
+const handleAddToCart = async (prd, quantity, selectedSize) => {
   try {
     setIsLoading(true);
- trackAddToCart(prd);
+
+    // 🔥 Safe Pixel Fire (background)
+    const fireAddToCartPixel = () => {
+      if (window.fbq) {
+        window.fbq("track", "AddToCart", {
+          content_name: prd.title,
+          content_ids: [prd._id],
+          content_type: "product",
+          value: prd.discountprice || prd.price,
+          currency: "INR",
+        });
+      }
+
+      if (typeof trackAddToCart === "function") {
+        trackAddToCart(prd);
+      }
+    };
+
+    /* =======================
+       👉 GUEST USER
+    ======================= */
+    if (!isLoggedIn) {
+      const guestCart =
+        JSON.parse(localStorage.getItem("guestCart")) || [];
+
+      guestCart.push({
+        _id: nanoid(),
+        productId: prd._id,
+        productid: prd._id,
+        color: prd?.color,
+        image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
+        title: prd.title,
+        description: prd.description,
+        qty: quantity,
+        size: selectedSize,
+        price: prd.price,
+        discountprice: prd.discountprice,
+        shopname: prd.shopname,
+      });
+
+      setGuestCart(guestCart);
+      localStorage.setItem("guestCart", JSON.stringify(guestCart));
+      showPopup("Added to Bag");
+
+      // 🔥 Pixel AFTER cart update
+      setTimeout(fireAddToCartPixel, 0);
+      return;
+    }
+
+    /* =======================
+       👉 LOGGED-IN USER
+    ======================= */
 
     const isBundle = Array.isArray(prd) && prd.length > 0;
 
     const payload = isBundle
       ? {
           userid: userDetails?._id,
-          bundle: prd, // ✅ only send bundle data
+          bundle: prd,
         }
       : {
           userid: userDetails?._id,
@@ -949,20 +1082,23 @@ setGuestWishlist(guestWishlist)
           shopname: prd.shopname,
         };
 
-    console.log("🧾 Sending payload to cart:", payload);
-
     const response = await fetch(`${apiUrl}/addtocart`, {
       method: "POST",
-      credentials: 'include', // important: allow cookies to be set
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     if (response.ok) {
       const addedItem = await response.json();
-      setaddtocartdata((prev) => [...prev, addedItem]);
-      if (!isBundle) setaddtocartdataonly((prev) => [...prev, prd._id]);
+      setaddtocartdata(prev => [...prev, addedItem]);
+      if (!isBundle)
+        setaddtocartdataonly(prev => [...prev, prd._id]);
+
       showPopup("Added to Bag");
+
+      // 🔥 Pixel AFTER success
+      setTimeout(fireAddToCartPixel, 0);
     } else {
       showPopup("Oops...");
     }
@@ -971,7 +1107,6 @@ setGuestWishlist(guestWishlist)
   } finally {
     setIsLoading(false);
   }
-}
 };
 
   // const removefromaddtocart=async(id)=>{

@@ -56,27 +56,33 @@ const navigate=useNavigate()
     
   };
 
+  // const handleSubMenu = (category) => {
+  //   console.log("toto",category)
+  //   setSubMenu(category === subMenu ? null : category);
+    
+  //   // let taging=categorydata.filter((tags)=>{
+  //   //   return tags.category===category 
+  //   // })
+
+  //   let taging=categorydata.filter((e)=>(e.category==category))
+  //   console.log("taging",taging)
+  //     let alltags=taging.map((e)=>{
+  //       return e.productdetails
+  //     }).flat()
+  //     console.log("altag",alltags)
+  //     let finaltag=alltags.map((e)=>(e.tag))
+  //     // let distincttag=[...new Set(finaltag)]
+  //     let distincttag = [...new Set(finaltag)].filter(tag => tag !== "Co-ord Sets");
+
+  //     settags(distincttag)
+    
+  // };
   const handleSubMenu = (category) => {
-    console.log("toto",category)
-    setSubMenu(category === subMenu ? null : category);
-    
-    // let taging=categorydata.filter((tags)=>{
-    //   return tags.category===category 
-    // })
+ setSubMenu(category);
 
-    let taging=categorydata.filter((e)=>(e.category==category))
-    console.log("taging",taging)
-      let alltags=taging.map((e)=>{
-        return e.productdetails
-      }).flat()
-      console.log("altag",alltags)
-      let finaltag=alltags.map((e)=>(e.tag))
-      // let distincttag=[...new Set(finaltag)]
-      let distincttag = [...new Set(finaltag)].filter(tag => tag !== "Co-ord Sets");
-
-      settags(distincttag)
-    
-  };
+  const found = categorydata.find(c => c.category === category);
+  settags(found?.tags || []);
+};
   console.log("momk",tags)
 
   // Close dropdown if clicked outside
@@ -94,22 +100,40 @@ const navigate=useNavigate()
   }, []);
 
 
-let datafetch=async()=>{
-  let data=await fetch(`${apiUrl}/productmodel?operation=all`)
-  let finaldata=await data.json()
-  console.log("kookoaio",finaldata)
- setcategorydata(finaldata)
+// let datafetch=async()=>{
+//   let data=await fetch(`${apiUrl}/productmodel?operation=all`)
+//   let finaldata=await data.json()
+//   console.log("kookoaio",finaldata)
+//  setcategorydata(finaldata)
   
-}  
-useEffect(()=>{
-  datafetch()
-},[])
+// }  
+// useEffect(()=>{
+//   datafetch()
+// },[])
+const fetchNavbarData = async () => {
+  const res = await fetch(`${apiUrl}/productmodel?operation=navbar`);
+  const data = await res.json();
+
+  /*
+    data = [
+      { category: "...", tags: [...] },
+      ...
+    ]
+  */
+
+  setcategorydata(data);
+};
+
+useEffect(() => {
+  fetchNavbarData();
+}, []);
+
 
 let categoryy=categorydata.map((cat)=>{
   return cat.category 
 })
 
-let distinctcat=[...new Set(categoryy)]
+const distinctcat = categorydata.map(c => c.category);
 console.log("subcate",distinctcat)
 useEffect(()=>{
   if(distinctcat){
