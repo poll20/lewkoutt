@@ -4101,7 +4101,7 @@ const adminAddress = "117 geetanjali colony Salasar enclave mangyawas jaipur raj
 
 
 // ✅ Route: Calculate Distance + Validate Address
-app.get("/getdistance", async (req, res) => {
+app.get("/getdistance",async (req, res) => {
   const userAddress = req.query.userAddress;
   console.log("📍 User Address:", userAddress);
 
@@ -4116,7 +4116,8 @@ app.get("/getdistance", async (req, res) => {
     const result = geoData.results[0];
 console.log("Geocoding result:", JSON.stringify(result, null, 2));
 
-    // ❌ Reject if partial, vague, or no real address structure
+    // ❌ Reject if partial, vague, or
+    //  no real address structure
     if (
   geoData.status !== "OK" ||
   !result ||

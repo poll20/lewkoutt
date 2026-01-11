@@ -141,6 +141,7 @@ console.log("currentpath",location.pathname);
     setUser(user);
 
     const redirectPath = sessionStorage.getItem("afterLoginRedirect");
+    console.log("redirectpath:", redirectPath);
  const pendingAddress = JSON.parse(
     sessionStorage.getItem("pendingCheckoutAddress")
   );
@@ -151,16 +152,17 @@ console.log("currentpath",location.pathname);
     sessionStorage.removeItem("pendingCheckoutAddress");
   }
 
-    // ✅ sirf in 2 paths se aaye ho tab hi checkout
+    // ✅ sirf in 3 paths se aaye ho tab hi checkout
     if (
-      redirectPath === "/address/prd" ||
-      redirectPath === "/address/atc"
+      location.pathname === "/address/prd" ||
+      location.pathname === "/address/atc"||
+    location.pathname === "/address/map"
     ) {
       sessionStorage.removeItem("afterLoginRedirect");
       
       navigate("/checkout");
     } else {
-      navigate(redirectPath); // normal behaviour
+      navigate("/profile"); // normal behaviour
     }
   } else {
     setError(error || "Invalid OTP");

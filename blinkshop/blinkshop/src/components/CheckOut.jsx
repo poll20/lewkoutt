@@ -35,7 +35,7 @@ const Checkout = () => {
   const [firstcpn, setfirstcpn] = useState(null);
   const [amountafteraddcoupon, setamountafteraddcoupon] = useState(0);
   const [yppicode, setyppicode] = useState(false);
- 
+ const [numericdistanceofaddress, setnumericdistanceofaddress] = useState(0);
 
   // Cart & address state
   const [purchaseproduct, setpurchaseproduct] = useState(
@@ -71,15 +71,19 @@ useEffect(() => {
    fetchDistance(deleveryaddress)
   }, []);
 
-
+  
  useEffect(() => {
   console.log("Distance updated:", distance);
   if (!distance) return;
 
   // 🔥 Convert "15.7 km" → 15.7 (number)
-  const numericDistance = parseFloat(distance.toString().replace("km", "").trim());
-  console.log("Parsed numeric distance:", numericDistance);
+  // const numericDistance = parseFloat(distance.toString().replace("km", "").trim());
+  const numericDistance = parseFloat(
+  distance.toString().replace(/,/g, "").replace("km", "").trim()
+);
 
+  console.log("Parsed numeric distance:", numericDistance);
+setnumericdistanceofaddress(numericDistance)
   if (isNaN(numericDistance)) return; // safety check
 
   let charge = 0;
@@ -138,6 +142,7 @@ useEffect(() => {
 
   const toggleSheet = () => setShowSheet(!showSheet);
   const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();
+  console.log("city is",city)
 const codprice=50
 const upiprice=20
   // Total prices
@@ -277,7 +282,7 @@ useEffect(() => {
       </div>
       {/* Payment Methods UI */}
       {
-        parseFloat(distance) > 25  && <div style={{
+        parseFloat(numericdistanceofaddress) > 25  && <div style={{
   background: "#fff",
   borderRadius: "12px",
   padding: "14px",
