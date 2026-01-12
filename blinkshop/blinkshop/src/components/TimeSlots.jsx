@@ -377,7 +377,20 @@ const isTomorrowSelected = () => {
           cursor: "pointer",
         }}
         disabled={!selectedSlot}
-        onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
+        // onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
+        onClick={() => {
+  let message = `Slot confirmed: ${selectedSlot}`;
+
+  if (selectedSlot === "60 minutes or free") {
+    message += `
+
+If your order is not delivered within 60 minutes, it will be delivered free.
+To ensure fair usage of this service, orders under this slot are not eligible for returns or refunds.`;
+  }
+
+  alert(message);
+}}
+
       >
         Confirm Slot
       </button>

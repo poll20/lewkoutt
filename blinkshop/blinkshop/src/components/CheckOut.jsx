@@ -68,8 +68,11 @@ console.log("Deliverykatime:", timeslotlelo);
   useEffect(() => localStorage.setItem("checkoutAddress", JSON.stringify(deleveryaddress)), [deleveryaddress]);
   useEffect(() => localStorage.setItem("checkoutWallet", JSON.stringify(mywalletAmount)), [mywalletAmount]);
 useEffect(() => {
-   fetchDistance(deleveryaddress)
-  }, []);
+  //  fetchDistance(deleveryaddress)
+  if (deleveryaddress?.length > 0) {
+    fetchDistance(deleveryaddress);
+  }
+  }, [deleveryaddress]);
 
   
  useEffect(() => {
