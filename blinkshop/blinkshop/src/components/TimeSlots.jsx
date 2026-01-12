@@ -20,6 +20,8 @@ export default function DeliveryTimeSlot() {
   });
 
   const { settimeslotlelo, distance,fetchDistance } = useBio();
+const [showPopup, setShowPopup] = useState(false);
+const [popupMessage, setPopupMessage] = useState("");
 
   const isDisabled = (slot) => {
     const now = new Date();
@@ -120,8 +122,22 @@ export default function DeliveryTimeSlot() {
       setSelectedDate(e.target.value);
     }
   };
+useEffect(()=>{ if (selectedSlot) {
+    settimeslotlelo(selectedSlot);
+    let message = `Slot confirmed: ${selectedSlot}`;
 
-  if (selectedSlot) settimeslotlelo(selectedSlot);
+  if (selectedSlot === "60 minutes or free") {
+    message += `
+    
+If your order is not delivered within 60 minutes, it will be delivered free.
+To ensure fair usage of this service, orders under this slot are not eligible for returns or refunds.`;
+  }
+
+  setPopupMessage(message);
+  setShowPopup(true);
+
+  }},[selectedSlot])
+ 
 
   const allDisabled = timeSlots.every((slot) => isDisabled(slot));
 
@@ -366,7 +382,7 @@ const isTomorrowSelected = () => {
         </div>
       )}
 
-      <button
+      {/* <button
         style={{
           marginTop: "1rem",
           backgroundColor: "black",
@@ -378,22 +394,97 @@ const isTomorrowSelected = () => {
         }}
         disabled={!selectedSlot}
         // onClick={() => alert(`Slot confirmed: ${selectedSlot}`)}
-        onClick={() => {
+       onClick={() => {
   let message = `Slot confirmed: ${selectedSlot}`;
 
   if (selectedSlot === "60 minutes or free") {
     message += `
-
+    
 If your order is not delivered within 60 minutes, it will be delivered free.
 To ensure fair usage of this service, orders under this slot are not eligible for returns or refunds.`;
   }
 
-  alert(message);
+  setPopupMessage(message);
+  setShowPopup(true);
 }}
+
 
       >
         Confirm Slot
+      </button> */}
+
+      {showPopup && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: "#fff",
+        width: "90%",
+        maxWidth: "400px",
+        borderRadius: "12px",
+        padding: "16px",
+        position: "relative",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+      }}
+    >
+      {/* ❌ Close Button */}
+      <button
+        onClick={() => setShowPopup(false)}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "transparent",
+          border: "none",
+          fontSize: "18px",
+          cursor: "pointer",
+        }}
+      >
+        ❌
+      </button>
+
+      <h3 style={{ marginBottom: "10px" }}>Delivery Slot Confirmed</h3>
+
+      <pre
+        style={{
+          whiteSpace: "pre-wrap",
+          fontSize: "13px",
+          color: "#333",
+          lineHeight: "1.5",
+          fontFamily: "inherit",
+        }}
+      >
+        {popupMessage}
+      </pre>
+
+      <button
+        onClick={() => setShowPopup(false)}
+        style={{
+          marginTop: "12px",
+          width: "100%",
+          background: "black",
+          color: "white",
+          padding: "8px",
+          borderRadius: "6px",
+          cursor: "pointer",
+        }}
+      >
+        Got it 👍
       </button>
     </div>
+  </div>
+)}
+
+    </div>
+    
   );
 }
