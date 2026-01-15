@@ -1757,6 +1757,7 @@ let orderplaced = async (
          🔹 PHONEPE ONLINE FLOW
       ======================== */
       // if (paymentmode !== "cod" && data.tokenUrl) {
+      //    showPopup("Redirecting to PhonePe…");
       //   window.PhonePeCheckout.transact({
       //     tokenUrl: data.tokenUrl,
       //     type: "IFRAME", // ✅ Recommended
@@ -1772,41 +1773,14 @@ let orderplaced = async (
       //     },
       //   });
       // }
-      /* =======================
-   🔹 PHONEPE ONLINE FLOW
-======================== */
-if (paymentmode !== "cod" && data.tokenUrl) {
+         if (paymentmode !== "cod" && data.tokenUrl) {
+         showPopup("Redirecting to PhonePe…");
+         setTimeout(() => {
+    window.location.replace(data.tokenUrl);
+  }, 300);
+  return;
+      }
 
-  const isInstagramBrowser = /Instagram/i.test(navigator.userAgent);
-
-  // 🔥 Instagram / FB browser → redirect only
-  if (isInstagramBrowser) {
-    window.location.href = data.tokenUrl;
-    return;
-  }
-
-  // ✅ Normal browsers → iframe if available
-  if (
-    window.PhonePeCheckout &&
-    typeof window.PhonePeCheckout.transact === "function"
-  ) {
-    window.PhonePeCheckout.transact({
-      tokenUrl: data.tokenUrl,
-      type: "IFRAME",
-      callback: function (response) {
-        if (response === "USER_CANCEL") {
-          showPopup("Payment cancelled");
-        } else if (response === "CONCLUDED") {
-          window.location.href = "/orderconfirm";
-        }
-      },
-    });
-  } 
-  // ✅ Fallback safety
-  else {
-    window.location.href = data.tokenUrl;
-  }
-}
 
     } catch (e) {
       console.log(e);
