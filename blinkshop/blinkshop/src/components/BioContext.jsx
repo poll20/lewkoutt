@@ -1775,9 +1775,9 @@ let orderplaced = async (
       // }
          if (paymentmode !== "cod" && data.tokenUrl) {
          showPopup("Redirecting to PhonePe…");
-         setTimeout(() => {
+         
     window.location.replace(data.tokenUrl);
-  }, 300);
+
   return;
       }
 
