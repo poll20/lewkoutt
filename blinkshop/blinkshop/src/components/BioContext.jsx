@@ -1,12 +1,12 @@
 
 import React, { createContext, useContext, useState, useEffect ,useRef,useCallback} from 'react';
-import axios from 'axios';
-import { useAuth } from './AuthContext'; // Import AuthContext for Authentication
+// import axios from 'axios';
+
 import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
-import { color } from 'framer-motion';
+
 import { nanoid } from "nanoid";
 
 import { trackViewItem, trackAddToCart, trackAddToWishlist,trackPurchase } from "../analytics/g4a";
@@ -15,7 +15,7 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   
   console.log("urll",apiUrl)
-  // const { user,userDetails } = useAuth();
+  
     const {user, userDetails, } = useFirebaseAuth();
     const isLoggedIn = !!user && !!userDetails?._id;
 
@@ -1345,18 +1345,18 @@ finally{
 
 
 //Add to Cart
-  const addToCart = (item) => {
-    axios.post('/api/cart/add', { productId: item.id }, { headers: { Authorization: `Bearer ${user.token}` } })
-      .then(response => setCart(response.data.cart))
-      .catch(err => console.log('Error adding to cart', err));
-  };
+  // const addToCart = (item) => {
+  //   axios.post('/api/cart/add', { productId: item.id }, { headers: { Authorization: `Bearer ${user.token}` } })
+  //     .then(response => setCart(response.data.cart))
+  //     .catch(err => console.log('Error adding to cart', err));
+  // };
 
-  // Remove from Cart
-  const removeFromCart = (itemId) => {
-    axios.post('/api/cart/remove', { productId: itemId }, { headers: { Authorization: `Bearer ${user.token}` } })
-      .then(response => setCart(response.data.cart))
-      .catch(err => console.log('Error removing from cart', err));
-  };
+  // // Remove from Cart
+  // const removeFromCart = (itemId) => {
+  //   axios.post('/api/cart/remove', { productId: itemId }, { headers: { Authorization: `Bearer ${user.token}` } })
+  //     .then(response => setCart(response.data.cart))
+  //     .catch(err => console.log('Error removing from cart', err));
+  // };
 
 
 
@@ -1756,28 +1756,65 @@ let orderplaced = async (
       /* =======================
          🔹 PHONEPE ONLINE FLOW
       ======================== */
-      if (paymentmode !== "cod" && data.tokenUrl) {
-        window.PhonePeCheckout.transact({
-          tokenUrl: data.tokenUrl,
-          type: "IFRAME", // ✅ Recommended
-          callback: function (response) {
-            if (response === "USER_CANCEL") {
-              console.log("User cancelled payment");
-              showPopup("Payment cancelled");
-            } else if (response === "CONCLUDED") {
-              console.log("Payment finished");
-              // ⚠️ Final status backend webhook / status API se hi aayega
-              window.location.href = "/orderconfirm";
-            }
-          },
-        });
-      }
+      // if (paymentmode !== "cod" && data.tokenUrl) {
+      //   window.PhonePeCheckout.transact({
+      //     tokenUrl: data.tokenUrl,
+      //     type: "IFRAME", // ✅ Recommended
+      //     callback: function (response) {
+      //       if (response === "USER_CANCEL") {
+      //         console.log("User cancelled payment");
+      //         showPopup("Payment cancelled");
+      //       } else if (response === "CONCLUDED") {
+      //         console.log("Payment finished");
+      //         // ⚠️ Final status backend webhook / status API se hi aayega
+      //         window.location.href = "/orderconfirm";
+      //       }
+      //     },
+      //   });
+      // }
+      /* =======================
+   🔹 PHONEPE ONLINE FLOW
+======================== */
+if (paymentmode !== "cod" && data.tokenUrl) {
+
+  const isInstagramBrowser = /Instagram/i.test(navigator.userAgent);
+
+  // 🔥 Instagram / FB browser → redirect only
+  if (isInstagramBrowser) {
+    window.location.href = data.tokenUrl;
+    return;
+  }
+
+  // ✅ Normal browsers → iframe if available
+  if (
+    window.PhonePeCheckout &&
+    typeof window.PhonePeCheckout.transact === "function"
+  ) {
+    window.PhonePeCheckout.transact({
+      tokenUrl: data.tokenUrl,
+      type: "IFRAME",
+      callback: function (response) {
+        if (response === "USER_CANCEL") {
+          showPopup("Payment cancelled");
+        } else if (response === "CONCLUDED") {
+          window.location.href = "/orderconfirm";
+        }
+      },
+    });
+  } 
+  // ✅ Fallback safety
+  else {
+    window.location.href = data.tokenUrl;
+  }
+}
+
     } catch (e) {
       console.log(e);
     } finally {
       setIsLoading(false);
     }
   }
+  
 };
 
 const fetchUserOrders = async (userId) => {
@@ -2110,8 +2147,8 @@ const fetchTopSearched = async () => {
         setFilters,
         rentdata,
         wishlistdata,
-        addToCart,
-        removeFromCart,
+        // addToCart,
+        // removeFromCart,
         addtocartitem,
         handleClick,
         handleAddToCart,

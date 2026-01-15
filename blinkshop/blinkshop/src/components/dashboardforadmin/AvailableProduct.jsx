@@ -5,8 +5,8 @@ import { useDashboard } from "./DashboardContext";
 
 const AvailableProduct = () => {
   const [products, setProducts] = useState([]);
-  const { productdataonlydetail } = useBio();
-  const { editordeleteinexisitingcategory, deletefromexistingproduct, dis } = useDashboard();
+  // const { productdataonlydetail } = useBio();
+  const { editordeleteinexisitingcategory, deletefromexistingproduct, dis ,productfetch,productdataonlydetail} = useDashboard();
   const [editingIndex, setEditingIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortPrice, setSortPrice] = useState("");
@@ -27,10 +27,11 @@ const AvailableProduct = () => {
   }, []);
 
   useEffect(() => {
-    if (productdataonlydetail) {
+    productfetch("all")
+    if(productdataonlydetail){
       setProducts(productdataonlydetail);
     }
-  }, [productdataonlydetail]);
+  }, []);
 
   // Filter and sort products
   useEffect(() => {

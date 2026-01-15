@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState,useEffect } from "react";
-import { useAuth } from "../AuthContext";
-import { User } from "@auth0/auth0-react";
+
+
 import { useFirebaseAuth } from "../FirebaseContext";
-import axios from "axios";
+// import axios from "axios";
 import { useLoading } from "../LoadingContext";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 // import { useOrderAlert } from "./OrderAlertProvider";
@@ -787,10 +787,10 @@ const createCoupon = async (cpn) => {
   }
 };
 
-const productfetch = async () => {
+const productfetch = async (operationtype) => {
   try {
     setIsLoading(true)
-    let data = await fetch(`${apiUrl}/productmodel?operation=all`);
+    let data = await fetch(`${apiUrl}/productmodel?operation=${operationtype || 'all'}`);
     let res = await data.json();
     
     console.log("✅ New data fetched:", res);
@@ -813,9 +813,9 @@ const productfetch = async () => {
 
 
 // ✅ Initial fetch on mount
-useEffect(() => {
-  productfetch();
-}, []);
+// useEffect(() => {
+//   productfetch();
+// }, []);
 
 
 
@@ -931,7 +931,7 @@ setSlotVersion((prev) => prev + 1);
         shopkeepersale,updateOrdersWithReturnDetails,
         returndata,moodmsg,moodmsgs,deleteMoodMsg,updateMoodMsg,
         addtocartdata,addtocartdataonly,fetchCartItems,wishlistdata,wishlist,fetchCartItemss,userorderr,fetchUserOrders,createCoupon,productdata,productdataonlydetail,createBundle,slots,fetchSlots,toggleSlot,
-      ordersound,setordersound,fetchuserorder, returnordersound, setreturnordersound}}
+      ordersound,setordersound,fetchuserorder, returnordersound, setreturnordersound,productfetch}}
     >
       {children}
     </DashboardContext.Provider>

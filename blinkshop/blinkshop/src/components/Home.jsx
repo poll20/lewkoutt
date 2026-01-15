@@ -1,7 +1,7 @@
 import React, { useState, Suspense,useEffect } from "react";
 import "./Home.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 import { useBio } from "./BioContext";
 import Carousel from "./Carasoul"
 import CategoriesLayout from "./CategoriesLayout"

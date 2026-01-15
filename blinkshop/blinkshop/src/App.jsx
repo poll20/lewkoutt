@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from
 import ResponsiveNavbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScollToTop";
-import { AuthProvider } from "./components/AuthContext";
+// import { AuthProvider } from "./components/AuthContext";
 import { BioProvider, useBio } from "./components/BioContext";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 
@@ -153,7 +153,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
   }
   return (
     <FirebaseAuthProvider showPopup={showPopup}>
-    <AuthProvider>
+    {/* <AuthProvider> */}
       
     <DashboardProvider>
     
@@ -175,7 +175,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
       </BioProvider>
     
     </DashboardProvider>
-    </AuthProvider>
+    {/* </AuthProvider> */}
     </FirebaseAuthProvider>
   
   );

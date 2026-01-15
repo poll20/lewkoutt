@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useBio } from "./BioContext";
 
 import { FaStar } from "react-icons/fa";
-import { useAuth } from "./AuthContext";
+
 import { NavLink } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 import EmptyOrders from "./EmptyOrders";

@@ -4,7 +4,7 @@ import { BioContext } from './BioContext';
 // import EmptyCart from './EmptyCart';
 // import { useParams } from 'react-router-dom';
 import { useBio } from './BioContext';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import Card from './Card';
 export default function Wishlist() {
   const apiUrl = import.meta.env.VITE_API_URL;

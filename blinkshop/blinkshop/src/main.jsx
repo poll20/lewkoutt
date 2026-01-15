@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Auth0Provider } from '@auth0/auth0-react';
+// import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App.jsx'
 import './index.css'
 import "../public/fonts.css"
@@ -18,12 +18,12 @@ createRoot(document.getElementById('root')).render(
    
    
    <UserProvider>
-   <Auth0Provider domain={import.meta.env.VITE_AUTH0_DOMAIN} clientId={import.meta.env.VITE_AUTH0_CLIENT_ID} authorizationParams={{
+   {/* <Auth0Provider domain={import.meta.env.VITE_AUTH0_DOMAIN} clientId={import.meta.env.VITE_AUTH0_CLIENT_ID} authorizationParams={{
       redirect_uri:window.location.origin
-    }}>
+    }}> */}
     <App/>
 
-    </Auth0Provider>
+    {/* </Auth0Provider> */}
     </UserProvider>
     
     </FirebaseAuthProvider>

@@ -9,7 +9,6 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { NavLink, useNavigate } from 'react-router-dom';
 import BundleProduct from './BundleProduct';
 import Cardforall from './Cardforall';
-import { color } from 'framer-motion';
 import { slugify } from './Slugify';
 import { cloudinaryImg } from "../utils/cloudinariimg";
 import { useFirebaseAuth } from "./FirebaseContext";

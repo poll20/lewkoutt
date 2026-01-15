@@ -1,29 +1,3 @@
-// import React from "react";
-// import "./Refferal.css";
-
-// const Refferal = () => {
-//   return (
-//     <div className="referral-container">
-//       <div className="referral-content">
-//         <h1 className="referral-title">Refer & Earn Rewards!</h1>
-//         <p className="referral-text">
-//           Invite your friends and earn exclusive discounts on your next purchase.
-//         </p>
-//         <input
-//           type="text"
-//           placeholder="Enter your friend's email"
-//           className="referral-input"
-//         />
-//         <button className="referral-button">Send Invite</button>
-//         <p className="referral-note">
-//           Share your referral code: <strong>ABC123</strong>
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Refferal;
 
 import React, { useEffect, useState } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
@@ -190,71 +164,7 @@ const filteredUsers = alluser.filter(user => Number(user.codepoint) > 0);
         )}
       </div>
 
-      {/* <button
-    onClick={() =>setPopup(true)}
-    style={{
-      width: '100%',
-      backgroundColor: 'white',
-      color: 'black',
-      fontWeight: '600',
-      padding: '12px',
-      borderRadius: '999px',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '16px',
-      boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-    }}
-  >
-    🚀 Invite Friends
-  </button> */}
-
-      
-       {/* <div className="bottom-sheet" style={{ display:popup==true?('flex'):('none'),alignItems:"center",justifyContent:"space-around", borderRadius:'0',border:"1px solid white"}}>
-       <button onClick={()=>{closePopup()}} className="closed-button">✖</button>
-       <NavLink
-        to={`https://wa.me/?text=Hey! Use my referral code *${referralCode}* to get ₹500 off your first order! 🎉🔥 ${codeurl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'block',
-          color: 'white',
-          padding: '10px',
-          borderRadius: '8px',
-          backgroundColor: '#25D366',
-          marginBottom: '10px',
-          textAlign: 'center',
-          textDecoration: 'none',
-          fontWeight: '600',
-        }}
-      >
-        📱 WhatsApp
-      </NavLink>
-      
-      <NavLink
-  onClick={() => {
-    navigator.clipboard.writeText(
-      `Use my referral code ${referralCode} to get ₹500 off your first order!🔥 ${codeurl}` 
-    );
-    window.open("https://www.instagram.com/direct/inbox/", "_blank");
-    alert("Message copied! Paste it in Instagram DMs or Story.");
-  }}
-  style={{
-    display: 'block',
-    color: 'white',
-    padding: '10px',
-    borderRadius: '8px',
-    backgroundColor: '#E1306C',
-    marginBottom: '10px',
-    textAlign: 'center',
-    textDecoration: 'none',
-    fontWeight: '600',
-  }}
->
-  📸 Instagram
-</NavLink>
-       
-       
-       </div> */}
+   
        <button
   onClick={() => {
     if (navigator.share) {
