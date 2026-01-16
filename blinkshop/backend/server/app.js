@@ -2227,6 +2227,8 @@ res.status(201).json({
 
 
 app.get('/orders',verifySessionCookie,isAdmin, async (req, res) => {
+  console.log("ORDERS FETCHED");
+
   try {
     const orders = await orderr
       .find()
@@ -2235,6 +2237,8 @@ app.get('/orders',verifySessionCookie,isAdmin, async (req, res) => {
       .lean();
 
     res.status(200).json(orders);
+    console.log("ORDERS FETCHED2",orders);
+
   } catch (error) {
     console.error("Fetch Orders Error:", error);
     res.status(500).json({ error: "Failed to fetch orders" });
