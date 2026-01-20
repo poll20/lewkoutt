@@ -22,9 +22,9 @@ export default function Home() {
  },[productfetch])
   return (
     <div className="home">
-      <Suspense fallback={<p>Loading Home Content...</p>}>
+      {/* <Suspense fallback={<p>Loading Home Content...</p>}> */}
         <OfferBanner />
-        {/* <Carousel images={productdata} /> */}
+        <Carousel images={productdata} />
         {/* <img src={lben} style={{width:"100%",height:"100px",marginTop:"10px"}}></img> */}
         <img
   src={lben}
@@ -52,7 +52,7 @@ export default function Home() {
             <OtpLogin />
           </SlideUpModal>
         )}
-      </Suspense>
+      {/* </Suspense> */}
     </div>
   );
 }
