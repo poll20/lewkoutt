@@ -13,7 +13,7 @@ const verifySessionCookie = async (req, res, next) => {
     const sessionCookie = req.cookies[COOKIE_NAME];
     if (!sessionCookie) {
       return res.status(401).json({ message: "Unauthorized: No session cookie" });
-    }
+    }  
 
     // 🔑 Verify Firebase session cookie
     const decoded = await admin.auth().verifySessionCookie(sessionCookie, true);
