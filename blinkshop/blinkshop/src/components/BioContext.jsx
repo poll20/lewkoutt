@@ -1707,6 +1707,95 @@ let handlechooseaddress=(add)=>{
 
 }
 
+// let orderplaced = async (
+//   order,
+//   address,
+//   walletUsed,
+//   payableAmount,
+//   timeslot,
+//   paymentmode
+// ) => {
+//   trackPurchase(order, addtocartitem, payableAmount);
+
+//   if (user && userDetails) {
+//     try {
+//       setIsLoading(true);
+
+//       let orderpost = await fetch(`${apiUrl}/order`, {
+//         method: "POST",
+//         credentials: "include",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           order,
+//           address,
+//           userDetails,
+//           distance,
+//           walletUsed,
+//           payableAmount,
+//           timeslot,
+//           paymentmode,
+//         }),
+//       });
+
+//       if (!orderpost.ok) return;
+
+//       let data = await orderpost.json();
+//       console.log("order response", data);
+
+//       /* =======================
+//          🔹 COD FLOW
+//       ======================== */
+//       if (paymentmode === "cod") {
+//         showPopup("Your Order Has Been Confirmed");
+//         window.location.href = "/orderconfirm";
+//         return;
+//       }
+
+//       /* =======================
+//          🔹 PHONEPE ONLINE FLOW
+//       ======================== */
+//       // if (paymentmode !== "cod" && data.tokenUrl) {
+//       //    showPopup("Redirecting to PhonePe…");
+//       //   window.PhonePeCheckout.transact({
+//       //     tokenUrl: data.tokenUrl,
+//       //     type: "IFRAME", // ✅ Recommended
+//       //     callback: function (response) {
+//       //       if (response === "USER_CANCEL") {
+//       //         console.log("User cancelled payment");
+//       //         showPopup("Payment cancelled");
+//       //       } else if (response === "CONCLUDED") {
+//       //         console.log("Payment finished");
+//       //         // ⚠️ Final status backend webhook / status API se hi aayega
+//       //         window.location.href = "/orderconfirm";
+//       //       }
+//       //     },
+//       //   });
+//       // }
+//          if (paymentmode !== "cod" && data.tokenUrl) {
+//          showPopup("Redirecting to PhonePe…");
+         
+//     window.location.replace(data.tokenUrl);
+
+//   return;
+//       }
+
+
+//     } catch (e) {
+//       console.log(e);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   }
+  
+// };
+// 🔍 In-app browser detector
+const isInAppBrowser = () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return /Instagram|FBAN|FBAV|FB_IAB|Messenger/i.test(ua);
+};
+
 let orderplaced = async (
   order,
   address,
@@ -1715,80 +1804,80 @@ let orderplaced = async (
   timeslot,
   paymentmode
 ) => {
-  trackPurchase(order, addtocartitem, payableAmount);
+  try {
+    setIsLoading(true);
 
-  if (user && userDetails) {
-    try {
-      setIsLoading(true);
+    const orderpost = await fetch(`${apiUrl}/order`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order,
+        address,
+        userDetails,
+        distance,
+        walletUsed,
+        payableAmount,
+        timeslot,
+        paymentmode,
+      }),
+    });
 
-      let orderpost = await fetch(`${apiUrl}/order`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          order,
-          address,
-          userDetails,
-          distance,
-          walletUsed,
-          payableAmount,
-          timeslot,
-          paymentmode,
-        }),
-      });
-
-      if (!orderpost.ok) return;
-
-      let data = await orderpost.json();
-      console.log("order response", data);
-
-      /* =======================
-         🔹 COD FLOW
-      ======================== */
-      if (paymentmode === "cod") {
-        showPopup("Your Order Has Been Confirmed");
-        window.location.href = "/orderconfirm";
-        return;
-      }
-
-      /* =======================
-         🔹 PHONEPE ONLINE FLOW
-      ======================== */
-      // if (paymentmode !== "cod" && data.tokenUrl) {
-      //    showPopup("Redirecting to PhonePe…");
-      //   window.PhonePeCheckout.transact({
-      //     tokenUrl: data.tokenUrl,
-      //     type: "IFRAME", // ✅ Recommended
-      //     callback: function (response) {
-      //       if (response === "USER_CANCEL") {
-      //         console.log("User cancelled payment");
-      //         showPopup("Payment cancelled");
-      //       } else if (response === "CONCLUDED") {
-      //         console.log("Payment finished");
-      //         // ⚠️ Final status backend webhook / status API se hi aayega
-      //         window.location.href = "/orderconfirm";
-      //       }
-      //     },
-      //   });
-      // }
-         if (paymentmode !== "cod" && data.tokenUrl) {
-         showPopup("Redirecting to PhonePe…");
-         
-    window.location.replace(data.tokenUrl);
-
-  return;
-      }
-
-
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false);
+    if (!orderpost.ok) {
+      showPopup("Something went wrong. Please try again.");
+      return;
     }
+
+    const data = await orderpost.json();
+
+    /* =========================
+       ✅ COD FLOW
+    ========================= */
+    if (paymentmode === "cod") {
+      showPopup("Your Order Has Been Confirmed");
+      window.location.href = "/orderconfirm";
+      return;
+    }
+
+    /* =========================
+       ✅ ONLINE PAYMENT FLOW
+    ========================= */
+    if (!data?.tokenUrl) {
+      showPopup("Payment initialization failed");
+      return;
+    }
+
+    showPopup("Redirecting to secure payment…");
+
+    /* =========================
+       🚨 INSTAGRAM / FB BROWSER
+    ========================= */
+    if (isInAppBrowser()) {
+      alert(
+        "Instagram browser payment issue.\n\n" +
+        "Please tap 3 dots (⋮) and select 'Open in Chrome' to complete payment."
+      );
+
+      // Android Chrome intent (works best)
+      window.location.href = `intent://${data.tokenUrl.replace(
+        /^https?:\/\//,
+        ""
+      )}#Intent;scheme=https;package=com.android.chrome;end;`;
+
+      return;
+    }
+
+    /* =========================
+       ✅ NORMAL BROWSER
+    ========================= */
+    window.location.href = data.tokenUrl;
+
+  } catch (error) {
+    console.error("Payment error:", error);
+    showPopup("Network error. Please try again.");
+  } finally {
+    setIsLoading(false);
   }
-  
 };
 
 const fetchUserOrders = async (userId) => {
