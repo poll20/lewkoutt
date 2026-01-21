@@ -1792,12 +1792,13 @@ let handlechooseaddress=(add)=>{
 // };
 // 🔍 In-app browser detector
 // 🔍 Detect Instagram / Facebook in-app browser
+// 🔍 Detect Instagram / Facebook in-app browser
 const isInAppBrowser = () => {
   const ua = navigator.userAgent || navigator.vendor || window.opera;
   return /Instagram|FBAN|FBAV|FB_IAB|Messenger/i.test(ua);
 };
 
-let orderplaced = async (
+const orderplaced = async (
   order,
   address,
   walletUsed,
@@ -1805,26 +1806,28 @@ let orderplaced = async (
   timeslot,
   paymentmode
 ) => {
-
-  /* =========================
-     🚫 BLOCK IN-APP BROWSER
-  ========================= */
-  if (isInAppBrowser()) {
-    alert(
-      "Instagram / Facebook browser me payment supported nahi hai.\n\n" +
-      "Please tap 3 dots (⋮) → Open in Chrome to continue."
-    );
-    return;
-  }
-
   try {
     setIsLoading(true);
 
-    const response = await fetch(`${apiUrl}/order`, {
+    /* =========================
+       🔐 FIREBASE TOKEN (fallback for in-app browser)
+    ========================= */
+    let firebaseToken = null;
+    if (user) {
+      firebaseToken = await user.getIdToken(true);
+    }
+
+    /* =========================
+       📦 CREATE ORDER API
+    ========================= */
+    const orderpost = await fetch(`${apiUrl}/order`, {
       method: "POST",
-      credentials: "include",
+      credentials: "include", // works for normal browser
       headers: {
         "Content-Type": "application/json",
+        ...(firebaseToken && {
+          Authorization: `Bearer ${firebaseToken}`,
+        }),
       },
       body: JSON.stringify({
         order,
@@ -1838,44 +1841,61 @@ let orderplaced = async (
       }),
     });
 
-    /* =========================
-       ❌ API FAILURE
-    ========================= */
-    if (!response.ok) {
-      console.error("Order API failed:", response.status);
-      showPopup("Unable to place order. Please try again in Chrome.");
+    if (!orderpost.ok) {
+      showPopup("Something went wrong. Please try again.");
       return;
     }
 
-    const data = await response.json();
+    const data = await orderpost.json();
 
     /* =========================
-       ✅ COD FLOW
+       ✅ CASH ON DELIVERY
     ========================= */
     if (paymentmode === "cod") {
-      showPopup("Your Order Has Been Confirmed");
+      showPopup("Your order has been confirmed");
       window.location.href = "/orderconfirm";
       return;
     }
 
     /* =========================
-       ❌ PAYMENT INIT FAILED
+       ❌ PAYMENT TOKEN ERROR
     ========================= */
     if (!data?.tokenUrl) {
-      showPopup("Payment initialization failed. Please retry.");
+      showPopup("Payment initialization failed");
       return;
     }
 
-    showPopup("Redirecting to secure payment…");
+    showPopup("Opening secure payment…");
 
     /* =========================
-       ✅ NORMAL BROWSER PAYMENT
+       🚀 IN-APP BROWSER (ALLOW)
+       Uses IFRAME if available
+    ========================= */
+    if (isInAppBrowser() && window.PhonePeCheckout) {
+      window.PhonePeCheckout.transact({
+        tokenUrl: data.tokenUrl,
+        type: "IFRAME",
+        callback: function (status) {
+          if (status === "CONCLUDED") {
+            window.location.href = "/orderconfirm";
+          } else if (status === "USER_CANCEL") {
+            showPopup("Payment cancelled");
+          } else {
+            showPopup("Payment failed. Try again.");
+          }
+        },
+      });
+      return;
+    }
+
+    /* =========================
+       🌐 NORMAL BROWSER FALLBACK
     ========================= */
     window.location.href = data.tokenUrl;
 
-  } catch (err) {
-    console.error("Payment Error:", err);
-    showPopup("Network error. Please check your connection.");
+  } catch (error) {
+    console.error("Order placement error:", error);
+    showPopup("Network error. Please try again.");
   } finally {
     setIsLoading(false);
   }

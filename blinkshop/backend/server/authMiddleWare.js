@@ -1,29 +1,78 @@
-// authMiddleware.js
+// // authMiddleware.js
+// const admin = require("firebase-admin");
+// // const serviceAccount = require("./serviceAccount/serviceAccount.json"); // safe + clean
+// const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
+
+// const COOKIE_NAME = "session"; // same as backend me set kiya tha
+// const verifySessionCookie = async (req, res, next) => {
+//   try {
+//     const sessionCookie = req.cookies[COOKIE_NAME];
+//     if (!sessionCookie) {
+//       return res.status(401).json({ message: "Unauthorized: No session cookie" });
+//     }  
+
+//     // 🔑 Verify Firebase session cookie
+//     const decoded = await admin.auth().verifySessionCookie(sessionCookie, true);
+
+//     req.user = decoded; // ab user ka uid, phone, email sab aa jayega
+//     next();
+//   } catch (err) {
+//     console.error("❌ Session verification failed:", err);
+//     return res.status(401).json({ message: "Invalid or expired session" });
+//   }
+// };
+
+// module.exports = verifySessionCookie ;
 const admin = require("firebase-admin");
-// const serviceAccount = require("./serviceAccount/serviceAccount.json"); // safe + clean
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
+const serviceAccount = JSON.parse(
+  process.env.FIREBASE_SERVICE_ACCOUNT_KEY
+);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const COOKIE_NAME = "session"; // same as backend me set kiya tha
+const COOKIE_NAME = "session";
+
 const verifySessionCookie = async (req, res, next) => {
   try {
-    const sessionCookie = req.cookies[COOKIE_NAME];
-    if (!sessionCookie) {
-      return res.status(401).json({ message: "Unauthorized: No session cookie" });
-    }  
+    /* =========================
+       1️⃣ SESSION COOKIE (NORMAL BROWSER)
+    ========================= */
+    const sessionCookie = req.cookies?.[COOKIE_NAME];
+    if (sessionCookie) {
+      const decoded = await admin
+        .auth()
+        .verifySessionCookie(sessionCookie, true);
+      req.user = decoded;
+      return next();
+    }
 
-    // 🔑 Verify Firebase session cookie
-    const decoded = await admin.auth().verifySessionCookie(sessionCookie, true);
+    /* =========================
+       2️⃣ BEARER TOKEN (IN-APP BROWSER)
+    ========================= */
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split("Bearer ")[1];
+      const decoded = await admin.auth().verifyIdToken(token);
+      req.user = decoded;
+      return next();
+    }
 
-    req.user = decoded; // ab user ka uid, phone, email sab aa jayega
-    next();
+    return res.status(401).json({
+      message: "Unauthorized: No session or token",
+    });
   } catch (err) {
-    console.error("❌ Session verification failed:", err);
-    return res.status(401).json({ message: "Invalid or expired session" });
+    console.error("❌ Auth verification failed:", err);
+    return res.status(401).json({
+      message: "Invalid or expired authentication",
+    });
   }
 };
 
-module.exports = verifySessionCookie ;
+module.exports = verifySessionCookie;
