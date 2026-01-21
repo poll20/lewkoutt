@@ -1791,6 +1791,7 @@ let handlechooseaddress=(add)=>{
   
 // };
 // 🔍 In-app browser detector
+// 🔍 Detect Instagram / Facebook in-app browser
 const isInAppBrowser = () => {
   const ua = navigator.userAgent || navigator.vendor || window.opera;
   return /Instagram|FBAN|FBAV|FB_IAB|Messenger/i.test(ua);
@@ -1804,13 +1805,27 @@ let orderplaced = async (
   timeslot,
   paymentmode
 ) => {
+
+  /* =========================
+     🚫 BLOCK IN-APP BROWSER
+  ========================= */
+  if (isInAppBrowser()) {
+    alert(
+      "Instagram / Facebook browser me payment supported nahi hai.\n\n" +
+      "Please tap 3 dots (⋮) → Open in Chrome to continue."
+    );
+    return;
+  }
+
   try {
     setIsLoading(true);
 
-    const orderpost = await fetch(`${apiUrl}/order`, {
+    const response = await fetch(`${apiUrl}/order`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         order,
         address,
@@ -1823,12 +1838,16 @@ let orderplaced = async (
       }),
     });
 
-    if (!orderpost.ok) {
-      showPopup("Something went wrong. Please try again.");
+    /* =========================
+       ❌ API FAILURE
+    ========================= */
+    if (!response.ok) {
+      console.error("Order API failed:", response.status);
+      showPopup("Unable to place order. Please try again in Chrome.");
       return;
     }
 
-    const data = await orderpost.json();
+    const data = await response.json();
 
     /* =========================
        ✅ COD FLOW
@@ -1840,41 +1859,23 @@ let orderplaced = async (
     }
 
     /* =========================
-       ✅ ONLINE PAYMENT FLOW
+       ❌ PAYMENT INIT FAILED
     ========================= */
     if (!data?.tokenUrl) {
-      showPopup("Payment initialization failed");
+      showPopup("Payment initialization failed. Please retry.");
       return;
     }
 
     showPopup("Redirecting to secure payment…");
 
     /* =========================
-       🚨 INSTAGRAM / FB BROWSER
-    ========================= */
-    if (isInAppBrowser()) {
-      alert(
-        "Instagram browser payment issue.\n\n" +
-        "Please tap 3 dots (⋮) and select 'Open in Chrome' to complete payment."
-      );
-
-      // Android Chrome intent (works best)
-      window.location.href = `intent://${data.tokenUrl.replace(
-        /^https?:\/\//,
-        ""
-      )}#Intent;scheme=https;package=com.android.chrome;end;`;
-
-      return;
-    }
-
-    /* =========================
-       ✅ NORMAL BROWSER
+       ✅ NORMAL BROWSER PAYMENT
     ========================= */
     window.location.href = data.tokenUrl;
 
-  } catch (error) {
-    console.error("Payment error:", error);
-    showPopup("Network error. Please try again.");
+  } catch (err) {
+    console.error("Payment Error:", err);
+    showPopup("Network error. Please check your connection.");
   } finally {
     setIsLoading(false);
   }
