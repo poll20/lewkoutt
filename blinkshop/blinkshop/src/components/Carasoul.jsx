@@ -192,7 +192,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
   if (!images.length) return null;
 
   const current = images[currentIndex];
-
+console.log("current",current)
   return (
     <div
       className="carousel-container"
@@ -201,7 +201,7 @@ const Carousel = ({ images = [], interval = 4000 }) => {
       onTouchEnd={handleTouchEnd}
     >
       <NavLink
-        to={`/productmodel/${current?.category || ""}`}
+        to={`/store/store`}
         className="carousel-slide"
       >
         <img
