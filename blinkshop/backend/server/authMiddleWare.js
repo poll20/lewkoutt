@@ -28,7 +28,7 @@
 
 // module.exports = verifySessionCookie ;
 const admin = require("firebase-admin");
-
+// const serviceAccount = require("./serviceAccount/serviceAccount.json"); // safe + clean
 const serviceAccount = JSON.parse(
   process.env.FIREBASE_SERVICE_ACCOUNT_KEY
 );

@@ -30,6 +30,7 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const [bestsellingdata,setbestsellingdata]=useState([])
   const [wearsdata,setwearsdata]=useState([])
   const [productdata,setproductdata]=useState([])
+  
   const[rentdata,setrentdata]=useState([])
   const[newarrival,setnewarrival]=useState([])
  const [addtocartdatas,setaddtocartdata]=useState([])
@@ -560,6 +561,8 @@ const handleClick = async (prd, id) => {
       item => item.itemid === id
     );
 
+     const pdd = productdata.flatMap((e) => e.productdetails || []);
+    setproductdataonlydetail(pdd);
     // Find matching color item
     const matchedColors = productdataonlydetail
       .flatMap(product => product.colors || [])
@@ -1426,7 +1429,26 @@ useEffect(() => {
 
  
    
+  const fetchCategories = async (page) => {
+    try {
+      const res = await fetch(
+        `${apiUrl}/categories?page=${page}`
+      );
+      const json = await res.json();
 
+      setproductdata((prev) => [...prev, ...json.data]);
+      setHasMore(json.hasMore);
+    } catch (err) {
+      console.error("fetchCategories error:", err);
+    }
+  };
+
+   const fetchCarousel = async () => {
+    const res = await fetch(
+      `${apiUrl}/home/carousel`
+    );
+    return await res.json();
+  };
 
 // ✅ Jab bhi naye product add ho, ye function call karo
 const handleRefetch = () => {
@@ -2292,7 +2314,10 @@ const fetchTopSearched = async () => {
         setSortOption,
         fetchUserOrders,
         fetchWishlist,
-        fetchCartItems
+        fetchCartItems,
+        fetchCarousel,
+         fetchCategories,
+          hasMore
     }}
     >
       {children}

@@ -1264,6 +1264,42 @@ if (operation === "home") {
     res.status(500).json({ error: "An error occurred while fetching data" });
   }
 })
+
+
+// categories with pagination
+app.get("/categories", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 2; // ek page me kitni categories
+    const skip = (page - 1) * limit;
+
+    const data = await productsmodel
+      .find({})
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const total = await productsmodel.countDocuments();
+
+    res.json({
+      data,
+      hasMore: skip + data.length < total,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.get("/home/carousel", async (req, res) => {
+  const data = await productsmodel.find(
+    {},
+    { image: 1, _id: 0 }
+  ).lean();
+
+  res.json(data);
+});
+
 // app.get("/productmodel", cacheMiddleware((req) => "products_all", 60), async (req, res) => {
 //   let operation = req.query.operation;
 //   let section = req.query.section;
