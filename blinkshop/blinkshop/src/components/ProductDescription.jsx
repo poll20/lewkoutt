@@ -409,7 +409,7 @@ if(getbundeldata){
           {product?.sizes?.[0]?.image?.map((image, index) => (
             <div key={index} className="image-slide">
               <img
-                src={cloudinaryImg(product?.sizes[0]?.image[currentImageIndex], 400)}
+                src={cloudinaryImg(product?.sizes[0]?.image[currentImageIndex], 1000)}
                 alt={product.title || "dress"}
                 onClick={() => handleImageClick(image, currentImageIndex)}
                 onTouchStart={handleTouchStart}
@@ -430,7 +430,7 @@ if(getbundeldata){
           <div className="image-slider">
             <div className="image-slide" style={{minHeight:"100vh"}}>
               <img
-                src={cloudinaryImg(product?.sizes[0]?.image[popupCurrentIndex], 400)}
+                src={cloudinaryImg(product?.sizes[0]?.image[popupCurrentIndex], 1800)}
                 alt={`Product ${popupCurrentIndex + 1}`}
                 onTouchStart={handlePopupTouchStart}
                 onTouchMove={handlePopupTouchMove}

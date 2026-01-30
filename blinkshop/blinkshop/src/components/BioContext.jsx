@@ -643,7 +643,7 @@ const handleClick = async (prd, id) => {
 
   // const removewishlistonly=async(id)=>{
   //   console.log("id",id)
-  //   try{
+  //   try{ 
   //     setIsLoading(true)
   //     const response = await fetch(`${apiUrl}/cart/${id}`, {
   //       method: "DELETE",
@@ -679,8 +679,8 @@ const handleClick = async (prd, id) => {
   //   showPopup("error removing item")
   //   }
   //   finally{
-  //     setIsLoading(false)
-  //   }
+  //     setIsLoading(false) 
+  //   } 
 
   // }
   const removewishlistonly = async (id) => {
