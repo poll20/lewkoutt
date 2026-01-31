@@ -430,14 +430,14 @@ if(getbundeldata){
           <div className="image-slider">
             <div className="image-slide" style={{minHeight:"100vh"}}>
               <img
-                src={cloudinaryImg(product?.sizes[0]?.image[popupCurrentIndex], 1800)}
+                src={cloudinaryImg(product?.sizes[0]?.image[popupCurrentIndex], 1000)}
                 alt={`Product ${popupCurrentIndex + 1}`}
                 onTouchStart={handlePopupTouchStart}
                 onTouchMove={handlePopupTouchMove}
                 onTouchEnd={handlePopupTouchEnd}
                 onClick={() =>closePopup()}
                 style={{ cursor: "pointer", touchAction: "pan-y" }}
-                loading="lazy"
+                // loading="lazy"
               />
             </div>
           </div>

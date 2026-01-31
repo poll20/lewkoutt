@@ -1347,46 +1347,7 @@ finally{
   };
 
 
-//Add to Cart
-  // const addToCart = (item) => {
-  //   axios.post('/api/cart/add', { productId: item.id }, { headers: { Authorization: `Bearer ${user.token}` } })
-  //     .then(response => setCart(response.data.cart))
-  //     .catch(err => console.log('Error adding to cart', err));
-  // };
 
-  // // Remove from Cart
-  // const removeFromCart = (itemId) => {
-  //   axios.post('/api/cart/remove', { productId: itemId }, { headers: { Authorization: `Bearer ${user.token}` } })
-  //     .then(response => setCart(response.data.cart))
-  //     .catch(err => console.log('Error removing from cart', err));
-  // };
-
-
-
-
-// const productfetch = async (operationtype) => {
-//   try {
-//     setIsLoading(true)
-//     let data = await fetch(`${apiUrl}/productmodel?operation=${operationtype}`);
-//     let res = await data.json();
-    
-//     console.log("✅ New data fetched:", res);
-//     if (!res || res.length === 0) return; // ✅ Empty response check
-    
-//     setproductdata([...res]); // ✅ Spread operator to force state update
-//     let pdd = res.map((e) => e.productdetails).flat();
-//     setproductdataonlydetail([...pdd]); // ✅ Spread operator again
-//     console.log("📢 Updated productdataonlydetail:", pdd);
-
-//     setIsFetched(true);
-//     setRefetch(false);  
-//   } catch (e) {
-//     console.log("❌ Fetch Error:", e);
-//   }
-//   finally{
-//     setIsLoading(false)
-//   }
-// };
 const productfetch = useCallback(async (operationtype) => {
   try {
     setIsLoading(true);
@@ -1410,6 +1371,31 @@ const productfetch = useCallback(async (operationtype) => {
     setIsLoading(false);
   }
 }, []);
+// const productfetch = useCallback(
+//   async (operationtype, pageNo = 1) => {
+//     try {
+//       setIsLoading(true);
+
+//       const res = await fetch(
+//         `${apiUrl}/productmodel?operation=${operationtype}&page=${pageNo}&limit=4`
+//       );
+//       const data = await res.json();
+//       if (!data?.products) return;
+
+//       setproductdataonlydetail((prev) =>
+//         pageNo === 1 ? data.products : [...prev, ...data.products]
+//       );
+
+//       setHasMore(data.pagination?.hasMore);
+//       setPage(pageNo);
+//     } catch (e) {
+//       console.error(e);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   },
+//   []
+// );
 
 
 // ✅ Initial fetch on mount

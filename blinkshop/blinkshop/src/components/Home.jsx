@@ -8,7 +8,7 @@ import CategoriesLayout from "./CategoriesLayout"
 import OfferBanner from "./OfferBanner"
 import OtpLogin from "./OtpLogin";
 import SlideUpModal from "./SlideupModel";
-import lben from "../components/image/lewkbner.webp"
+// import lben from "../components/image/lewkbner.webp"
 
 export default function Home() {
   const { productdata, showloginpage, setshowloginpage,productfetch,fetchCarousel} = useBio();
@@ -33,7 +33,7 @@ export default function Home() {
          */}
           <Carousel images={carousel} />
         {/* <img src={lben} style={{width:"100%",height:"100px",marginTop:"10px"}}></img> */}
-        <img
+        {/* <img
   src={lben}
   alt="lewkout banner"
   fetchpriority="high"
@@ -45,7 +45,7 @@ export default function Home() {
   }}
   width="600"
   height="180"
-/>
+/> */}
 
 
         {/* <CategoriesLayout />

@@ -106,7 +106,8 @@ const Card = (props) => {
   const query = searchParams.get("q");
 
   const { setIsLoading } = useLoading();
-  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons,removewishlistonly,guestWishlist,isLoggedIn,productfetch } = useBio();
+  const { filters, wishlistdata, productdataonlydetail, productdata, newarrival, bestsellingdata, handleClick, handleAddToCart, showloginpage, setshowloginpage, sortOption,fetchCoupons,coupons,removewishlistonly,guestWishlist,isLoggedIn,productfetch ,hasMore,
+  page} = useBio();
 
   // local UI states
   const [originalProducts, setOriginalProducts] = useState([]); // canonical raw data from server (normalized)
