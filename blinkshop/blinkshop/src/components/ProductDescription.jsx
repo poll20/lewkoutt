@@ -1,6 +1,8 @@
+import { Helmet } from "react-helmet";
 import React, { useState, useEffect, useRef } from "react";
 import { Shield, Clock, RefreshCcw } from "lucide-react";
 import "./ProductDescription.css";
+
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useBio } from "./BioContext";
@@ -63,7 +65,33 @@ const targetRef = useRef(null);
   const hasMore = coupons.length > 2;
 
 
-
+const productSchema =
+  product && product.title
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: product.title,
+        image: product?.sizes?.[0]?.image?.map(
+          (img) => cloudinaryImg(img, 1000)
+        ),
+        description: `${product.material || "Cotton"} ${product.title}`,
+        sku: product._id,
+        brand: {
+          "@type": "Brand",
+          name: mainProductt?.shopname || "Lewkout",
+        },
+        offers: {
+          "@type": "Offer",
+          url: window.location.href,
+          priceCurrency: "INR",
+          price: product.discountprice || product.price,
+          availability:
+            product?.sizes?.some((s) => s.quantity > 0)
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+        },
+      }
+    : null;
   
 const fetchProductFromBackend = async (clr) => {
   console.log("🔥 clrchange", clr);
@@ -397,7 +425,13 @@ if(getbundeldata){
 
   return (
     <>
-          
+          {productSchema && (
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(productSchema)}
+      </script>
+    </Helmet>
+  )}
     <div className="container">
       
       <div className="product-page">
