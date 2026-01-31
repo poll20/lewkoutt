@@ -13,7 +13,7 @@ const links = [
   { url: '/about', changefreq: 'weekly', priority: 0.8 },
   { url: '/contact', changefreq: 'monthly', priority: 0.5 },
   { url: '/faq', changefreq: 'monthly', priority: 0.6 },
-  { url: '/shop', changefreq: 'weekly', priority: 0.9 }
+  { url: '/store/store', changefreq: 'weekly', priority: 0.9 }
 ];
 
 // Create sitemap stream

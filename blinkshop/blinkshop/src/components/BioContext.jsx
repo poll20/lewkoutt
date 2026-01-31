@@ -1860,6 +1860,10 @@ const orderplaced = async (
        ✅ CASH ON DELIVERY
     ========================= */
     if (paymentmode === "cod") {
+       window.fbq?.("track", "Purchase", {
+    value: payableAmount,
+    currency: "INR",
+  });
       showPopup("Your order has been confirmed");
       window.location.href = "/orderconfirm";
       return;
@@ -1885,6 +1889,11 @@ const orderplaced = async (
         type: "IFRAME",
         callback: function (status) {
           if (status === "CONCLUDED") {
+             // 🔥 PURCHASE EVENT
+  window.fbq?.("track", "Purchase", {
+    value: payableAmount,
+    currency: "INR",
+  });
             window.location.href = "/orderconfirm";
           } else if (status === "USER_CANCEL") {
             showPopup("Payment cancelled");
