@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import {
   RecaptchaVerifier,
@@ -214,6 +215,11 @@ const verifyOTP = async (otp, refcode) => {
       setUserDetails(data);
       setIsRegistered(true);
       
+      // 🔥🔥 SENTRY USER SET (EXACT PLACE)
+Sentry.setUser({
+  id: data._id || data.userId || data.id,
+  phone: signedInUser.phoneNumber,
+});
 
       // await fetchUserDetails(firebaseUser)
       // await mergeGuestData();   // 👈 ye call karo
@@ -312,6 +318,10 @@ await fetchUserDetails(signedInUser); // fir fresh user data lao
 const logout = async () => {
     try {
       await signOut(auth);
+
+       // 🔥 SENTRY USER CLEAR
+    Sentry.setUser(null);
+    
       setUser(null);
       setUserDetails({});
       setIsRegistered(false);

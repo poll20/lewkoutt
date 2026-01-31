@@ -699,6 +699,12 @@ app.post("/user/register", async (req, res) => {
     const decoded = await admin.auth().verifyIdToken(idToken);
     console.log("✅ Decoded token:", decoded);
 
+// 🔥🔥 SENTRY USER CONTEXT (EXACT PLACE)
+    Sentry.setUser({
+      id: decoded.uid,
+      phone: decoded.phone_number,
+    });
+
     // 🔑 Create Firebase session cookie
     const sessionCookie = await admin.auth().createSessionCookie(idToken, {
       expiresIn: SESSION_EXPIRES_IN,
@@ -747,6 +753,8 @@ app.post("/user/register", async (req, res) => {
     });
   } catch (err) {
     console.error("❌ sessionLogin error:", err);
+     // 🔥 ERROR MANUALLY CAPTURE
+    Sentry.captureException(err);
     res.status(401).json({ error: "Unauthorized" });
   }
 });
@@ -875,6 +883,8 @@ app.patch('/useredit',verifySessionCookie, async (req, res) => {
 //   }
 // });
 app.post("/user/logout",(req, res) => {
+    // 🔥 SENTRY USER CLEAR
+  Sentry.setUser(null);
   res.clearCookie("session", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
