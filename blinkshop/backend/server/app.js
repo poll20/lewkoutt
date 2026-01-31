@@ -70,46 +70,41 @@ const SESSION_EXPIRES_IN = 14 * 24 * 60 * 60 * 1000; // 14 days
 
 
 const cors = require('cors');
-// app.use(cors());//te loca+lhost m h
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173", // ✅ exact origin
-//     credentials: true,               // ✅ allow cookies/auth headers
-//   })
-// );
-// app.use(cors({ origin: '*' }));
-app.use(cors({
-    origin: [
-    "https://www.lewkout.com",
-    "https://lewkout.netlify.app",
-    "http://localhost:5173"
-  ],
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  credentials: true
-}));//ye deploy ke baad 
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-//   })
-// );
 
-
-// ✅ Fir Helmet lagao
-// app.use(helmet({
-//   crossOriginResourcePolicy: { policy: "cross-origin" }
+// app.use(cors({
+//     origin: [
+//     "https://www.lewkout.com",
+//     "https://lewkout.netlify.app",
+//     "http://localhost:5173"
+//   ],
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true
 // }));
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "https://www.lewkout.com",
+      "https://lewkout.netlify.app",
+      "http://localhost:5173",
+      "https://l.instagram.com",
+      "https://instagram.com"
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS blocked"));
+    }
+  },
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true,
+}));
 
 app.use((express.urlencoded({extented:false})))
     
 app.use(express.json())
 app.use(bodyparser.json())
-// app.use((req, res, next) => {
-//     res.header({"Access-Control-Allow-Origin": "*"});
-//     next();
-//   }) 
-// require("../database/dbconn.js")
+
 const { getPhonePeToken } = require('./phonepe');
 const connectDB = require('../database/dbconn.js');
 const isAdmin = require('./adminCheck.js');
