@@ -253,15 +253,37 @@ useEffect(() => {
       }
     }
   }, [product]);
-  useEffect(()=>{if (window.fbq) {
+  // useEffect(()=>{if (window.fbq) {
+  //   window.fbq("track", "ViewContent", {
+  //     content_ids: [product._id],
+  //     content_name: product.title,
+  //     content_type: "product",
+  //     value: product.discountprice || product.price,
+  //     currency: "INR",
+  //   });
+  // }},[product])
+  useEffect(() => {
+  if (window.fbq && product) {
     window.fbq("track", "ViewContent", {
-      content_ids: [product._id],
+      content_ids: [`SKU_${product._id}`],
+      content_type: "product_group",
       content_name: product.title,
-      content_type: "product",
       value: product.discountprice || product.price,
       currency: "INR",
+
+      // 🔥 CATALOG FIELDS
+      title: product.title,
+      description: product.description,
+      image_url:
+        product.image ||
+        product?.sizes?.[0]?.image?.[0] ||
+        "",
+      availability: "in stock",
+      condition: "new",
+      price: `${product.discountprice || product.price} INR`,
     });
-  }},[product])
+  }
+}, [product]);
 
 
   const notify = () => toast("Plese Login For Add Items In Cart");

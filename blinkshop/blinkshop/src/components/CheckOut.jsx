@@ -125,23 +125,43 @@ setnumericdistanceofaddress(numericDistance)
       setMywalletAmount(Math.min(availableWallet, tenPercentOfOrder));
     }
   }, [purchaseproduct, userDetails]);
-    useEffect(() => {
-    if (window.fbq && purchaseproduct) {
-      window.fbq("track", "InitiateCheckout", {
-        contents: [
-          {
-            id: purchaseproduct._id,
-            name: purchaseproduct.title,
-            quantity: 1,
-            item_price: purchaseproduct.discountprice || purchaseproduct.price,
-          },
-        ],
-        content_type: "product",
-        value: purchaseproduct.discountprice || purchaseproduct.price,
-        currency: "INR",
-      });
-    }
-  }, [purchaseproduct]);
+  //   useEffect(() => {
+  //   if (window.fbq && purchaseproduct) {
+  //     window.fbq("track", "InitiateCheckout", {
+  //       contents: [
+  //         {
+  //           id: purchaseproduct._id,
+  //           name: purchaseproduct.title,
+  //           quantity: 1,
+  //           item_price: purchaseproduct.discountprice || purchaseproduct.price,
+  //         },
+  //       ],
+  //       content_type: "product",
+  //       value: purchaseproduct.discountprice || purchaseproduct.price,
+  //       currency: "INR",
+  //     });
+  //   }
+  // }, [purchaseproduct]);
+  useEffect(() => {
+  if (window.fbq && cartItems?.length) {
+    window.fbq("track", "InitiateCheckout", {
+      content_ids: cartItems.map(
+        item => `SKU_${item.productId}`
+      ),
+      content_type: "product_group",
+
+      contents: cartItems.map(item => ({
+        id: `SKU_${item.productId}`,
+        quantity: item.qty,
+        item_price: item.price,
+      })),
+
+      value: totalAmount,
+      currency: "INR",
+      num_items: cartItems.length,
+    });
+  }
+}, [cartItems]);
 
   const toggleSheet = () => setShowSheet(!showSheet);
   const city = deleveryaddress?.[0]?.city?.toString().trim().toLowerCase();

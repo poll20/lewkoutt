@@ -485,11 +485,16 @@ const handleClick = async (prd, id) => {
     const fireWishlistPixel = () => {
       if (window.fbq) {
         window.fbq("track", "AddToWishlist", {
-          content_name: prd.title,
-          content_ids: [prd._id || id],
-          content_type: "product",
-          value: prd.discountprice || prd.price,
-          currency: "INR",
+          // content_name: prd.title,
+          // content_ids: [prd._id || id],
+          // content_type: "product",
+          // value: prd.discountprice || prd.price,
+          // currency: "INR",
+          content_ids: [`SKU_${prd._id}`],
+  content_type: "product_group",
+  content_name: prd.title,
+  value: prd.discountprice || prd.price,
+  currency: "INR",
         });
       }
 
@@ -1014,13 +1019,13 @@ const handleAddToCart = async (prd, quantity, selectedSize) => {
     // 🔥 Safe Pixel Fire (background)
     const fireAddToCartPixel = () => {
       if (window.fbq) {
-        window.fbq("track", "AddToCart", {
-          content_name: prd.title,
-          content_ids: [prd._id],
-          content_type: "product",
-          value: prd.discountprice || prd.price,
-          currency: "INR",
-        });
+       window.fbq("track", "AddToCart", {
+  content_ids: [`SKU_${prd._id}`],
+  content_type: "product_group",
+  content_name: prd.title,
+  value: prd.discountprice || prd.price,
+  currency: "INR",
+});
       }
 
       if (typeof trackAddToCart === "function") {
@@ -1860,10 +1865,12 @@ const orderplaced = async (
        ✅ CASH ON DELIVERY
     ========================= */
     if (paymentmode === "cod") {
-       window.fbq?.("track", "Purchase", {
-    value: payableAmount,
-    currency: "INR",
-  });
+     window.fbq?.("track", "Purchase", {
+  content_ids: [`SKU_${product._id}`],
+  content_type: "product_group",
+  value: payableAmount,
+  currency: "INR",
+});
       showPopup("Your order has been confirmed");
       window.location.href = "/orderconfirm";
       return;
@@ -1891,9 +1898,11 @@ const orderplaced = async (
           if (status === "CONCLUDED") {
              // 🔥 PURCHASE EVENT
   window.fbq?.("track", "Purchase", {
-    value: payableAmount,
-    currency: "INR",
-  });
+  content_ids: [`SKU_${product._id}`],
+  content_type: "product_group",
+  value: payableAmount,
+  currency: "INR",
+});
             window.location.href = "/orderconfirm";
           } else if (status === "USER_CANCEL") {
             showPopup("Payment cancelled");
