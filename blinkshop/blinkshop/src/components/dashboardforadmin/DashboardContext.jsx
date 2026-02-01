@@ -26,6 +26,7 @@ export const DashboardProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const[ returnordersound, setreturnordersound]=useState(false)
     const [ordersound,setordersound]=useState(false)
+    
     const [userorder,setuserorder]=useState([])
     const[shopkeeperprd,setshopkeeperprd]=useState([])
     const[productonlydetails,setproductonlydetails]=useState([])
@@ -210,7 +211,7 @@ let deletefromexistingproduct=async(id)=>{
           let data = await response.json();
           setUsers(data); // ✅ Set users in state
         } catch (err) {
-          setError(err.message); // ✅ Store error in state
+        console.error("fetchUsers error:", err.message);
         } 
       };
     

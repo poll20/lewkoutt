@@ -157,6 +157,7 @@ const UserProfile = () => {
   let {user,userDetails,logout,addnameemail}=useFirebaseAuth()
   let [popup,setPopup]=useState(false)
   const [showOverlayForm, setShowOverlayForm] = useState(false);
+  
 const [formData, setFormData] = useState({
   name: '',
   email: '',
@@ -202,7 +203,7 @@ useEffect(()=>{
             navigate("/loginn")
         }, 200);
         } else {
-        setError(error || "failed logout");
+        console.error("fetchUsers error:", err.message);
         }
   }
   let sendtofirebase=()=>{
