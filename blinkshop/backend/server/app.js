@@ -51,7 +51,7 @@ let bodyparser=require("body-parser")
 
 // let addtocart=require("../database/collection.js")
 let {wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel,pendingOrderModel  }=require("../database/collection.js")
-let facebookFeedRoute = require("../routes/facebookFeed.js");
+let facebookFeedRoute = require("./routes/facebookFeed.js");
 // import img1 from "../../blinkshop/src/components/image/img1.jpg"
 const viewdIncrementor = require("../helperfunc/viewdincrement.js"); // ✅ import helper
 
