@@ -4285,7 +4285,7 @@ app.post("/slot-status/toggle",isAdmin,verifySessionCookie,async (req, res) => {
 //   console.log(`🚀 Server running on port: ${port}`);
 // });
 (async () => {
-  await connectDB();  // ✅ पहले DB कनेक्ट करो, फिर सर्वर स्टार्ट करो
+  await connectDB();  // ✅ first bd connect then server start 
   app.listen(port, () => console.log(`🚀 Server running on port: ${port}`));
 })();
 

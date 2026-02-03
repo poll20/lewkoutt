@@ -7,14 +7,16 @@ router.get("/facebook-product-feed", async (req, res) => {
   try {
     const products = await Product.find();
 
+    console.log("products fetched for Facebook feed:", products.length);
     // CSV header
     let csv =
-      "id,title,description,image_link,availability,price,condition,link\n";
+      "id,title,description,image_link,availability,price,condition,link,brand\n";
 
     products.forEach((product) => {
       if (!product.productdetails || product.productdetails.length === 0)
         return;
 
+      
       product.productdetails.forEach((pd) => {
         const id = `SKU_${pd._id}`;
 
@@ -31,8 +33,9 @@ router.get("/facebook-product-feed", async (req, res) => {
         const price = `${pd.discountprice || pd.price} INR`;
         const condition = "new";
         const link = `https://lewkout.com/product/${pd._id}`;
-
-        csv += `${id},${title},${description},${image},${availability},${price},${condition},${link}\n`;
+        const brand="lewkout"
+if (!pd.title || !price || !image) return;
+        csv += `${id},${title},${description},${image},${availability},${price},${condition},${link}\n,${brand}`;
       });
     });
 
