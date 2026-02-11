@@ -81,25 +81,34 @@ const cors = require('cors');
 //   methods: "GET,POST,PUT,PATCH,DELETE",
 //   credentials: true
 // }));
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      "https://www.lewkout.com",
-      "https://lewkout.netlify.app",
-      "http://localhost:5173",
-      "https://l.instagram.com",
-      "https://instagram.com"
-    ];
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     const allowedOrigins = [
+//       "https://www.lewkout.com",
+//       "https://lewkout.netlify.app",
+//       "http://localhost:5173",
+//       "https://l.instagram.com",
+//       "https://instagram.com"
+//     ];
 
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS blocked"));
-    }
-  },
-  methods: "GET,POST,PUT,PATCH,DELETE",
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("CORS blocked"));
+//     }
+//   },
+//   methods: "GET,POST,PUT,PATCH,DELETE",
+//   credentials: true,
+// }));
+app.use(cors({
+  origin: [
+    "https://www.lewkout.com",
+    "https://lewkout.com"
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
 }));
+
 
 app.use((express.urlencoded({extented:false})))
     
