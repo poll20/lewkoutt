@@ -103,7 +103,8 @@ const cors = require('cors');
 app.use(cors({
   origin: [
     "https://www.lewkout.com",
-    "https://lewkout.com"
+    "https://lewkout.com",
+    // "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,

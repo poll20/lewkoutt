@@ -176,7 +176,7 @@
 @media (max-width: 768px) {
   .carousel-container {
     aspect-ratio:4 /3;
-     min-height: 400px;
+     min-height: 460px;
   }
 
   .indicator {

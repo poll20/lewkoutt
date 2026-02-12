@@ -213,6 +213,7 @@ console.log("current",current)
           loading={currentIndex === 0 ? "eager" : "lazy"}
           fetchpriority={currentIndex === 0 ? "high" : "low"}
           decoding="async"
+          // style={{ backgroundColor: "#f0f0f0", width: "100%", height: "100%" }}
         />
       </NavLink>
 

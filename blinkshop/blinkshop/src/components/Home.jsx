@@ -22,6 +22,12 @@ export default function Home() {
 //  useEffect(()=>{
 //   productfetch("home")
 //  },[productfetch])
+useEffect(() => {
+  if (!productdata || productdata.length === 0) {
+    productfetch("home");
+  }
+}, [productfetch]);
+
   useEffect(() => {
     fetchCarousel().then(setCarousel);
   }, []);
