@@ -18,12 +18,15 @@ import { useBio } from './BioContext';
 import { useFirebaseAuth } from './FirebaseContext';
 
 import lewkoutlogo from "../components/image/lewklogo.webp"
+import { useLoading } from './LoadingContext';
 const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()
   let {user,userDetails}=useFirebaseAuth()
   let {setcatehicate,addtocartdatas,isLoggedIn,guestCart}=useBio()
   const [dropdown, setDropdown] = useState(false);
+    const { setIsLoading } = useLoading();
+  
   const [sideNavbarOpen, setSideNavbarOpen] = useState(false);
 const navigate=useNavigate()
   // Toggle for the category dropdown
@@ -126,7 +129,7 @@ const navigate=useNavigate()
 
 const fetchNavbarData = async () => {
   try {
-    setIsLoading(true); // agar loading state hai
+    setIsLoading(true); 
 
     const res = await fetch(
       `${apiUrl}/productmodel?operation=navbar`,
