@@ -80,7 +80,7 @@ const navigate=useNavigate()
   const handleSubMenu = (category) => {
  setSubMenu(category);
 
-  const found = categorydata.find(c => c.category === category);
+  const found = categorydata?.find(c => c.category === category);
   settags(found?.tags || []);
 };
   console.log("momk",tags)
@@ -110,18 +110,59 @@ const navigate=useNavigate()
 // useEffect(()=>{
 //   datafetch()
 // },[])
+// const fetchNavbarData = async () => {
+//   const res = await fetch(`${apiUrl}/productmodel?operation=navbar`);
+//   const data = await res.json();
+
+//   /*
+//     data = [
+//       { category: "...", tags: [...] },
+//       ...
+//     ]
+//   */
+
+//   setcategorydata(data);
+// };
+
 const fetchNavbarData = async () => {
-  const res = await fetch(`${apiUrl}/productmodel?operation=navbar`);
-  const data = await res.json();
+  try {
+    setIsLoading(true); // agar loading state hai
 
-  /*
-    data = [
-      { category: "...", tags: [...] },
-      ...
-    ]
-  */
+    const res = await fetch(
+      `${apiUrl}/productmodel?operation=navbar`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  setcategorydata(data);
+    // ✅ Check HTTP status
+    if (!res.ok) {
+      throw new Error(`Server Error: ${res.status}`);
+    }
+
+    // ✅ Safely parse JSON
+    const data = await res.json();
+
+    // ✅ Validate data
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid data format received");
+    }
+
+    setcategorydata(data);
+  } catch (error) {
+    console.error("❌ Navbar Fetch Error:", error.message);
+
+    // Optional: empty fallback
+    setcategorydata([]);
+
+    // Optional: show toast / UI message
+    // setError("Failed to load categories");
+  } finally {
+    setIsLoading(false);
+  }
 };
 
 useEffect(() => {
@@ -129,11 +170,11 @@ useEffect(() => {
 }, []);
 
 
-let categoryy=categorydata.map((cat)=>{
+let categoryy=categorydata?.map((cat)=>{
   return cat.category 
 })
 
-const distinctcat = categorydata.map(c => c.category);
+const distinctcat = categorydata?.map(c => c.category);
 console.log("subcate",distinctcat)
 useEffect(()=>{
   if(distinctcat){
