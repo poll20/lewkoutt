@@ -1865,14 +1865,24 @@ const orderplaced = async (
        ✅ CASH ON DELIVERY
     ========================= */
     if (paymentmode === "cod") {
+showPopup("Your order has been confirmed");
+      try{
      window.fbq?.("track", "Purchase", {
-  content_ids: [`SKU_${product._id}`],
+  // content_ids: [`SKU_${product._id}`],
+   content_ids: Array.isArray(order)
+        ? order.map(p => `SKU_${p._id}`)
+        : [`SKU_${order?._id}`],
   content_type: "product_group",
   value: payableAmount,
   currency: "INR",
 });
-      showPopup("Your order has been confirmed");
-      window.location.href = "/orderconfirm";
+      
+      
+}
+catch(e){
+  console.warn("FB Pixel error", e);
+}
+window.location.href = "/orderconfirm";
       return;
     }
 
