@@ -205,7 +205,7 @@ console.log("current",current)
         className="carousel-slide"
       >
         <img
-          src={cloudinaryImg(current?.image, 400)}
+          src={cloudinaryImg(current?.image, 800)}
           alt={current?.category || "carousel image"}
           className="carousel-image"
           width="400"

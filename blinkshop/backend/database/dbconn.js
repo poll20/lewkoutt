@@ -1,6 +1,6 @@
 let mongoose=require("mongoose")
 // const {slotmodel} = require('./collection.js');
-let {productsmodel}=require("./collection.js")
+// let {productsmodel}=require("./collection.js")
 const connectDB = async () => {
    try {
      mongoose.set('bufferCommands', false); 

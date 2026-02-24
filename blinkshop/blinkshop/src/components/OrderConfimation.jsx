@@ -1,7 +1,18 @@
 // import React from 'react';
 import { Check, Package, Truck, Clock, Phone, Mail, MapPin, CreditCard } from 'lucide-react';
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const OrderConfirmation = () => {
+
+   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate("/userorder");
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
   const orderDetails = {
     orderId: "ORD-2025-0123",
     date: "15 Jan 2025",
