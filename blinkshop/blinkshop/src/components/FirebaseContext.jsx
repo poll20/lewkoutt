@@ -376,8 +376,8 @@ useEffect(() => {
         setUser(null);
         setUserDetails({});
         setIsRegistered(false);
-        localStorage.clear();
-        window.location.href = "/login"; // 👈 redirect to login
+        // localStorage.clear();
+        // window.location.href = "/login"; // 👈 redirect to login
       }
     } catch (err) {
       console.error("Session check error:", err);

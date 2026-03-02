@@ -102,7 +102,7 @@ export const initGA = () => {
     return;
   }
   ReactGA.initialize(GA_MEASUREMENT_ID);
-  console.log("✅ Google Analytics 4 initialized");
+  // console.log("✅ Google Analytics 4 initialized");
 };
 
 // Track Page Views

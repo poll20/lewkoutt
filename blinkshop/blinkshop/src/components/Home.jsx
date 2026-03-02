@@ -28,9 +28,21 @@ useEffect(() => {
   }
 }, [productfetch]);
 
+  // useEffect(() => {
+  //   fetchCarousel().then(setCarousel);
+  // }, []);
   useEffect(() => {
-    fetchCarousel().then(setCarousel);
-  }, []);
+  const loadCarousel = async () => {
+    try {
+      const data = await fetchCarousel();
+      setCarousel(data);
+    } catch (error) {
+      console.error("Carousel load failed:", error);
+    }
+  };
+
+  loadCarousel();
+}, [fetchCarousel]);
   return (
     <div className="home">
       {/* <Suspense fallback={<p>Loading Home Content...</p>}> */}

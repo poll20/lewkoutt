@@ -14,10 +14,11 @@ export const BioContext = createContext();
 export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   
-  console.log("urll",apiUrl)
+  // console.log("urll",apiUrl)
   
     const {user, userDetails, } = useFirebaseAuth();
-    const isLoggedIn = !!user && !!userDetails?._id;
+    // const isLoggedIn = !!user && !!userDetails?._id;
+    const isLoggedIn = !!userDetails?._id;
 
     // const { playAudio } = OrderAlertProvider();
     // const {slots,toggleSlot,fetchSlots,slotVersion }=useDashboard()
@@ -82,7 +83,7 @@ const [guestAddress, setGuestAddress] = useState([]);
     printtype: [],
     discount: []
 });
-console.log("myfil",filters)
+// console.log("myfil",filters)
 const backendURL = `${apiUrl}:3000`;
 // const notify = () => toast("Plese Login For Add Items In Wishlist");
  const itemsPerPage = 10;
@@ -158,7 +159,7 @@ const fetchWishlist = async () => {
       /* =======================
          👉 LOGGED-IN USER
       ======================= */
-      if (user && userDetails?._id) {
+      if (isLoggedIn) {
         console.log("userdetails in bio", userDetails);
 
         const response = await fetch(
@@ -188,7 +189,7 @@ const fetchWishlist = async () => {
   };
 useEffect(() => {
 fetchWishlist();
-}, [isLoggedIn, user, userDetails]);
+}, [isLoggedIn]);
 
 
 
@@ -259,7 +260,7 @@ useEffect(() => {
       /* =======================
          👉 LOGGED-IN USER
       ======================= */
-      if (user && userDetails?._id) {
+      if (isLoggedIn) {
         const response = await fetch(
           `${apiUrl}/addtocart/${userDetails._id}`,
           {
@@ -292,11 +293,11 @@ useEffect(() => {
   
 
   fetchCartItems();
-}, [isLoggedIn, user, userDetails]);
+}, [isLoggedIn]);
 
 //ise abhi dekhna h include krna h ya nhi
   useEffect(()=>{ 
-    if(user&& userDetails._id){
+    if(isLoggedIn){
       const fetchalluser = async () => {
         try {
           setIsLoading(true)
@@ -324,7 +325,7 @@ useEffect(() => {
       };
       // fetchalluser()
     }
-  },[user,userDetails])
+  },[isLoggedIn])
   
 
 
@@ -1159,7 +1160,7 @@ const handleAddToCart = async (prd, quantity, selectedSize) => {
     
   // }
   const removefromaddtocart = async (id) => {
-  console.log("crt ki id", id);
+  // console.log("crt ki id", id);
 
   try {
     setIsLoading(true);
@@ -1242,11 +1243,11 @@ const handleAddToCart = async (prd, quantity, selectedSize) => {
 let bestselingdata=await fetch(`${apiUrl}/bestselling`)
 
 let resdata=await bestselingdata.json()
-console.log("papapama",resdata)
+// console.log("papapama",resdata)
 setbestsellingdata(resdata)
 }
 catch(e){
-  console.log(e)
+  // console.log(e)
 }
 finally{
   setIsLoading(false)
@@ -1263,13 +1264,13 @@ finally{
      try{
       setIsLoading(true)
    let wearsdata=await fetch(`${apiUrl}/wear?operation=all`)
-   console.log(wearsdata)
+  //  console.log(wearsdata)
    let resdata=await wearsdata.json()
-   console.log("ajana",resdata)
+  //  console.log("ajana",resdata)
   setwearsdata(resdata)
    }
    catch(e){
-     console.log(e)
+    //  console.log(e)
    }
    finally{
     setIsLoading(false)
@@ -1286,7 +1287,7 @@ finally{
         setIsLoading(true)
         let rentRes = await fetch(`${apiUrl}/rent?operation=all`);
         let finalRes = await rentRes.json();
-        console.log("rentdress ka data",finalRes)
+        // console.log("rentdress ka data",finalRes)
         setrentdata(finalRes);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -1311,7 +1312,7 @@ try{
    setnewarrival(resdata)
 }
 catch(e){
-  console.log(e)
+  // console.log(e)
 }
 finally{
   setIsLoading(false)
@@ -1324,13 +1325,13 @@ finally{
 
   // Remove from Wishlist
   let handleRemoveClickwishlist = async (id) => {
-    console.log(typeof(id))
-    console.log("myid",id)
-    console.log("wishid",wishlist)
+    // console.log(typeof(id))
+    // console.log("myid",id)
+    // console.log("wishid",wishlist)
     try {
       setIsLoading(true)
       let data =wishlistdata.find((e) => e.id === id);
-      console.log("xdx",data)
+      // console.log("xdx",data)
       let res = await fetch(`${apiUrl}/cart/${data._id}`, {
         method: "DELETE",
         credentials: 'include', // important: allow cookies to be set
@@ -1344,7 +1345,7 @@ finally{
       }
       setWishlist(wishlist.filter(item => item.id !== id)); // Remove item from local state
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
     finally{
       setIsLoading(false)
@@ -1413,7 +1414,7 @@ const productfetch = useCallback(async (operationtype) => {
 // ✅ Re-fetch when manually triggered
 useEffect(() => { 
   if (refetch) {
-    console.log("🔄 Manually re-fetching data...");
+    // console.log("🔄 Manually re-fetching data...");
     productfetch();
   }
 }, [refetch]);
@@ -1434,16 +1435,32 @@ useEffect(() => {
     }
   };
 
-   const fetchCarousel = async () => {
-    const res = await fetch(
-      `${apiUrl}/home/carousel`
-    );
-    return await res.json();
-  };
+  //  const fetchCarousel = async () => {
+  //   const res = await fetch(
+  //     `${apiUrl}/home/carousel`
+  //   );
+  //   return await res.json();
+  // };
+  const fetchCarousel = async () => {
+  try {
+    const res = await fetch(`${apiUrl}/home/carousel`);
+
+    if (!res.ok) {
+      throw new Error(`Carousel API failed: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data;
+
+  } catch (error) {
+    console.error("Error fetching carousel:", error);
+    throw error; // important so caller can catch
+  }
+};
 
 // ✅ Jab bhi naye product add ho, ye function call karo
 const handleRefetch = () => {
-  console.log("🔄 Refetch triggered...");
+  // console.log("🔄 Refetch triggered...");
   setRefetch(true);
 };
 
@@ -1454,7 +1471,7 @@ let getsearchinput=(inp)=>{
 }
 
 let takebuydata=(data)=>{
-  console.log("yoyoy",data)
+  // console.log("yoyoy",data)
   setbuydata(data)
 }
 
@@ -1493,9 +1510,9 @@ setcatehicate(catearr)
 
 // }
 let handlenewaddress = async (address, user) => {
-  console.log("helllo addresss",address)
+  // console.log("helllo addresss",address)
   // console.log("helllo addresss",otp )
-  console.log("useridf", user?._id);  // Check if user._id exists before using it
+  // console.log("useridf", user?._id);  // Check if user._id exists before using it
 
   // if (!user?._id) {
   //   console.error("Error: User ID is undefined");
@@ -1616,7 +1633,7 @@ let handlenewaddress = async (address, user) => {
 // }
 // }
 let deleteandeditaddrress = async (addresid, action, user, addr) => {
-  console.log("sara add mil jaye", addresid, action, user, addr);
+  // console.log("sara add mil jaye", addresid, action, user, addr);
 
   try {
     setIsLoading(true);
@@ -1712,9 +1729,9 @@ let deleteandeditaddrress = async (addresid, action, user, addr) => {
 
 
 let handlechooseaddress=(add)=>{
-  console.log("hello add")
+  // console.log("hello add")
   if(add){
-    console.log("addresschoosed",add)
+    // console.log("addresschoosed",add)
     setaddress(add)
   }
 
@@ -1938,7 +1955,7 @@ window.location.href = "/orderconfirm";
 };
 
 const fetchUserOrders = async (userId) => {
-  console.log("maaro mujhe maaro")
+  // console.log("maaro mujhe maaro")
   try {
     setIsLoading(true)
       if (!userDetails._id) {
@@ -1958,7 +1975,7 @@ const fetchUserOrders = async (userId) => {
           throw new Error("Failed to fetch user orders");
       }
       let data = await res.json();
-      console.log("order ke data yhamilte",data)
+      // console.log("order ke data yhamilte",data)
       setuserorder(data);
   } catch (err) {
       console.log(err);
@@ -2004,7 +2021,7 @@ const submitRating = async (productId, userId, rating, review, imageUrl) => {
     });
 
     const data = await response.json();
-    console.log("Rating Submitted:", data);
+    // console.log("Rating Submitted:", data);
   } catch (error) {
     console.error("Error submitting rating:", error);
   } finally {
@@ -2031,7 +2048,7 @@ const fetchRatings = async (productId) => {
         throw new Error("Failed to fetch iusers rating");
     }
     let data = await res.json();
-    console.log("rating of my prodduct",data)
+    // console.log("rating of my prodduct",data)
     setrating(data);
 
      
@@ -2045,12 +2062,12 @@ const fetchRatings = async (productId) => {
 // Function to fetch ratings from backend
   const  callreivewfunc= async (id) => {
     
-    console.log("haa mujhe hi call ho rha hau",id)
+    // console.log("haa mujhe hi call ho rha hau",id)
     try {
       setIsLoading(true)
       const response = await fetch(`${apiUrl}/rate/${id}`);
       const data = await response.json();
-      console.log("dekh mila kya",data)
+      // console.log("dekh mila kya",data)
       setprdreviewdata(data);
     } catch (error) {
       console.error("Error fetching ratings:", error);
@@ -2060,13 +2077,13 @@ const fetchRatings = async (productId) => {
   };
 
   let orderreturn = async (reason, subreason, selectedOption,transectionId, orderdata, uploadedUrls, address) => {
-  console.log("📤 Preparing return request...");
-  console.log("➡ reason:", reason);
-  console.log("➡ subreason:", subreason);
-  console.log("➡ selectedOption:", selectedOption);
-  console.log("➡ orderdata:", orderdata);
-  console.log("➡ uploadedUrls:", uploadedUrls);
-  console.log("➡ address:", address);
+  // console.log("📤 Preparing return request...");
+  // console.log("➡ reason:", reason);
+  // console.log("➡ subreason:", subreason);
+  // console.log("➡ selectedOption:", selectedOption);
+  // console.log("➡ orderdata:", orderdata);
+  // console.log("➡ uploadedUrls:", uploadedUrls);
+  // console.log("➡ address:", address);
 
   const bodyToSend = {
     reason,

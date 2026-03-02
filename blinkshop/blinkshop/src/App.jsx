@@ -136,7 +136,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
 
 
   const showPopup = (msg) => {
-    console.log("msg agya na showpopup sehehehe",msg)
+    // console.log("msg agya na showpopup sehehehe",msg)
     setPopupMessage(msg);
   };
 
@@ -249,7 +249,7 @@ useEffect(() => {
       ):( <div className="mainnn-contenttttttt">
         <div className="contenttt" >
           <Suspense fallback={<GlobalLoader />}>
-        {console.log("Admin Route Status:", isAdminRoute)} {/* ✅ Debugging */}
+        {/* {console.log("Admin Route Status:", isAdminRoute)} ✅ Debugging */}
           <Routes>
             {/* ✅ Normal Website Routes */}
             <Route path="/" element={<Home />} />

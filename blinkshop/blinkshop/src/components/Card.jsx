@@ -125,7 +125,7 @@ const Card = (props) => {
 
   // Helper: selects a color id and prepares sizes (kept as original behavior)
   const setShowSize = (id) => {
-    console.log("setshowsize",id)
+    // console.log("setshowsize",id)
     const prd = productdataonlydetail
       .map((product) => {
         const matchingColor = product.colors.find((color) => color._id === id);
@@ -164,7 +164,7 @@ const Card = (props) => {
     const controller = new AbortController();
 
     const doSet = (items) => {
-      console.log("itemofwish",items)
+      // console.log("itemofwish",items)
       // ignore outdated responses
       if (fetchId !== latestFetchId.current) return;
       setOriginalProducts(items);
@@ -181,7 +181,7 @@ const Card = (props) => {
         const data = await res.json();
         
         const productdetails = normalizeProductDetails(data);
-        console.log("data comes in shoping",productdetails)
+        // console.log("data comes in shoping",productdetails)
 
         doSet(productdetails);
       } catch (err) {
@@ -292,9 +292,9 @@ if (store) {
 
       useEffect(() => {
       const timer = setTimeout(() => {
-        console.log("🍿 Checking if product has category and tag (delayed):",productdataonlydetail);
+        // console.log("🍿 Checking if product has category and tag (delayed):",productdataonlydetail);
     
-          console.log("📢 Calling fetchCoupons with:", productdataonlydetail?.cate, productdataonlydetail.tag);
+          // console.log("📢 Calling fetchCoupons with:", productdataonlydetail?.cate, productdataonlydetail.tag);
           fetchCoupons("all","all");
         // console.log("copuen",coupons) 
       }, 200);
@@ -360,7 +360,7 @@ if (store) {
 
       {/* Product grid */}
       <div className="unique-product-container" style={{ marginTop: !props.category ? "" : "0px" }}>
-        { console.log("productkesath",products)}
+        {/* { console.log("productkesath",products)} */}
         {products.length > 0 ? (
          
           products.map((product) => (

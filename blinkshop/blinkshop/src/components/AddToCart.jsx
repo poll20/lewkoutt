@@ -61,7 +61,7 @@ const AddToCart = () => {
   const handlechoosebuy = (order, isChecked) => {
     if (isChecked) {
       // Add item to the choosebuy list
-      console.log("order kya mila",order)
+      // console.log("order kya mila",order)
       setchoosebuy((prev) => [...prev, order]);
     } else {
       // Remove item from the choosebuy list
@@ -82,12 +82,12 @@ useEffect(() => {
 }, [choosebuy]);
 
 if(totalprice){
-  console.log("tp",totalprice)
+  // console.log("tp",totalprice)
 } 
 
 useEffect(()=>{
   if(choosebuy){
-  console.log("cb",choosebuy)
+  // console.log("cb",choosebuy)
   
   
 }
@@ -96,7 +96,7 @@ useEffect(()=>{
 
 let sendtocheckout = () => {
   if (choosebuy) {
-    console.log("choosebyu",choosebuy)
+    // console.log("choosebyu",choosebuy)
       trackBeginCheckout(choosebuy, totalprice); // Track begin_checkout event
     takebuydata(choosebuy); // Context update karo
     localStorage.setItem("buydata", JSON.stringify(choosebuy)); // ✅ Save to Local Storage

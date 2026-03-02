@@ -31,7 +31,8 @@ const AddressList = ({ loc }) => {
   const [addressList, setAddressList] = useState([]);
 const location = useLocation();
   const { sec } = useParams();
-    const isLoggedIn = !!user && !!userDetails?._id;
+    // const isLoggedIn = !!user && !!userDetails?._id;
+    const isLoggedIn =!!userDetails?._id;
 
   // useEffect(() => {
   //   if (userDetails && user) {
