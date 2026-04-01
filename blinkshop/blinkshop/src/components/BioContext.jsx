@@ -1921,22 +1921,47 @@ window.location.href = "/orderconfirm";
       window.PhonePeCheckout.transact({
         tokenUrl: data.tokenUrl,
         type: "IFRAME",
-        callback: function (status) {
-          if (status === "CONCLUDED") {
-             // 🔥 PURCHASE EVENT
-  window.fbq?.("track", "Purchase", {
-  content_ids: [`SKU_${product._id}`],
-  content_type: "product_group",
-  value: payableAmount,
-  currency: "INR",
-});
-            window.location.href = "/orderconfirm";
-          } else if (status === "USER_CANCEL") {
-            showPopup("Payment cancelled");
-          } else {
-            showPopup("Payment failed. Try again.");
-          }
-        },
+//         callback: function (status) {
+//           if (status === "CONCLUDED") {
+//              //  PURCHASE EVENT
+//   window.fbq?.("track", "Purchase", {
+//   content_ids: [`SKU_${product._id}`],
+//   content_type: "product_group",
+//   value: payableAmount,
+//   currency: "INR",
+// });
+//             window.location.href = "/orderconfirm";
+//           } else if (status === "USER_CANCEL") {
+//             showPopup("Payment cancelled");
+//           } else {
+//             showPopup("Payment failed. Try again.");
+//           } 
+//         },
+callback: function (status) {
+  if (status === "CONCLUDED") {
+
+    // ✅ FIXED FB PIXEL EVENT
+    try {
+      window.fbq?.("track", "Purchase", {
+        content_ids: Array.isArray(order)
+          ? order.map(p => `SKU_${p._id}`)
+          : [`SKU_${order?._id}`],
+        content_type: "product_group",
+        value: payableAmount,
+        currency: "INR",
+      });
+    } catch (e) {
+      console.warn("FB Pixel error", e);
+    }
+
+    window.location.href = "/orderconfirm";
+
+  } else if (status === "USER_CANCEL") {
+    showPopup("Payment cancelled");
+  } else {
+    showPopup("Payment failed. Try again.");
+  }
+}
       });
       return;
     }

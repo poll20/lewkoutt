@@ -802,7 +802,7 @@ const productfetch = async (operationtype) => {
     setproductdataonlydetail([...pdd]); // ✅ Spread operator again
     console.log("📢 Updated productdataonlydetail:", pdd);
 
-    setIsFetched(true);
+    // setIsFetched(true);
     setRefetch(false);  
   } catch (e) {
     console.log("❌ Fetch Error:", e);

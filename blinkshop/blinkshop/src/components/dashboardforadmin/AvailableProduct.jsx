@@ -26,12 +26,23 @@ const AvailableProduct = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    productfetch("all")
-    if(productdataonlydetail){
-      setProducts(productdataonlydetail);
-    }
-  }, []);
+  // useEffect(() => {
+  //   productfetch("all")
+  //   if(productdataonlydetail){
+  //     setProducts(productdataonlydetail);
+  //   }
+  // }, []);
+  // 1️⃣ sirf fetch ke liye
+useEffect(() => {
+  productfetch("all");
+}, []);
+
+// 2️⃣ jab data aaye tab set karo
+useEffect(() => {
+  if (productdataonlydetail && productdataonlydetail.length > 0) {
+    setProducts(productdataonlydetail);
+  }
+}, [productdataonlydetail]);
 
   // Filter and sort products
   useEffect(() => {
