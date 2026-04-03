@@ -6,7 +6,7 @@ import { useLoading } from './LoadingContext';
 import { useFirebaseAuth } from "./FirebaseContext";
 import { Navigate, useFetcher, useNavigate } from 'react-router-dom';
 import { useDashboard } from './dashboardforadmin/DashboardContext';
-
+import { fetchWithAuth } from "../utils/sessionHelpers";
 import { nanoid } from "nanoid";
 
 import { trackViewItem, trackAddToCart, trackAddToWishlist,trackPurchase } from "../analytics/g4a";
@@ -162,7 +162,7 @@ const fetchWishlist = async () => {
       if (isLoggedIn) {
         console.log("userdetails in bio", userDetails);
 
-        const response = await fetch(
+        const response = await fetchWithAuth (
           `${apiUrl}/cart/${userDetails._id}`,
           {
             credentials: "include",
@@ -261,7 +261,7 @@ useEffect(() => {
          👉 LOGGED-IN USER
       ======================= */
       if (isLoggedIn) {
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `${apiUrl}/addtocart/${userDetails._id}`,
           {
             credentials: "include",
@@ -599,7 +599,7 @@ const handleClick = async (prd, id) => {
 
     /* ➕ ADD */
     if (!itemInWishlist) {
-      const response = await fetch(`${apiUrl}/cart`, {
+      const response = await fetchWithAuth(`${apiUrl}/cart`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -621,7 +621,7 @@ const handleClick = async (prd, id) => {
 
     /* ➖ REMOVE */
     else {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${apiUrl}/cart/${itemInWishlist.itemid}`,
         {
           method: "DELETE",
@@ -724,7 +724,7 @@ const handleClick = async (prd, id) => {
     /* =======================
        👉 LOGGED-IN USER REMOVE
     ======================= */
-    const response = await fetch(`${apiUrl}/cart/${id}`, {
+    const response = await fetchWithAuth(`${apiUrl}/cart/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -890,7 +890,7 @@ setGuestWishlist(guestWishlist)
     matchItem.description = prd.description;
     matchItem.size = prd.sizes;
 
-    const response = await fetch(`${apiUrl}/cart`, {
+    const response = await fetchWithAuth(`${apiUrl}/cart`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -1091,7 +1091,7 @@ const handleAddToCart = async (prd, quantity, selectedSize) => {
           shopname: prd.shopname,
         };
 
-    const response = await fetch(`${apiUrl}/addtocart`, {
+    const response = await fetchWithAuth(`${apiUrl}/addtocart`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -1206,7 +1206,7 @@ const handleAddToCart = async (prd, quantity, selectedSize) => {
       return;
     }
 
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${apiUrl}/addtocart/${itemInCart._id}`,
       {
         method: "DELETE",
@@ -1332,7 +1332,7 @@ finally{
       setIsLoading(true)
       let data =wishlistdata.find((e) => e.id === id);
       // console.log("xdx",data)
-      let res = await fetch(`${apiUrl}/cart/${data._id}`, {
+      let res = await fetchWithAuth(`${apiUrl}/cart/${data._id}`, {
         method: "DELETE",
         credentials: 'include', // important: allow cookies to be set
         // headers: { 
@@ -1682,7 +1682,7 @@ let deleteandeditaddrress = async (addresid, action, user, addr) => {
     ======================= */
 
     if (action === "delete") {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${apiUrl}/user/${user._id}/addressdoe`,
         {
           method: "PATCH",
@@ -1700,7 +1700,7 @@ let deleteandeditaddrress = async (addresid, action, user, addr) => {
         showPopup("Issue deleting address");
       }
     } else {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${apiUrl}/user/${user._id}/addressdoe`,
         {
           method: "PATCH",
@@ -1850,7 +1850,7 @@ const orderplaced = async (
     /* =========================
        📦 CREATE ORDER API
     ========================= */
-    const orderpost = await fetch(`${apiUrl}/order`, {
+    const orderpost = await fetchWithAuth(`${apiUrl}/order`, {
       method: "POST",
       credentials: "include", // works for normal browser
       headers: {
@@ -1987,7 +1987,7 @@ const fetchUserOrders = async (userId) => {
           console.error("❌ User ID is missing!");
           return;
       }
-      let res = await fetch(`${apiUrl}/orders/user/${userDetails._id}`, {
+      let res = await fetchWithAuth(`${apiUrl}/orders/user/${userDetails._id}`, {
         credentials: 'include', // important: allow cookies to be set
       }
       //   ,{
@@ -2123,7 +2123,7 @@ const fetchRatings = async (productId) => {
   try {
     setIsLoading(true);
 
-    const orderpost = await fetch(`${apiUrl}/return`, {
+    const orderpost = await fetchWithAuth(`${apiUrl}/return`, {
       method: "POST",
       credentials: 'include', // important: allow cookies to be set
       headers: { "Content-Type": "application/json" },

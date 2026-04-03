@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/react";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import { fetchWithAuth } from "../utils/sessionHelpers"
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
@@ -22,22 +23,87 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
   const hasRecaptchaInitialized = useRef(false);
 
   // ✅ Setup Firebase Auth Listener
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+  //     if (firebaseUser) {
+  //       console.log("✅ User signed in:", firebaseUser.phoneNumber);
+  //       setUser(firebaseUser);
+  //       await fetchUserDetails(firebaseUser); // 🔥 Fetch details on login
+  //     } else {
+  //       console.log("❌ No user signed in");
+  //       setUser(null);
+  //       setUserDetails({});
+  //       setIsRegistered(false);
+  //     }
+  //   });
+
+  //   return () => unsubscribe();
+  // }, []);/
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        console.log("✅ User signed in:", firebaseUser.phoneNumber);
+  const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    if (firebaseUser) {
+      console.log("✅ Firebase user found");
+
+      try {
+        const res = await fetch(`${apiUrl}/user/check-session`, {
+          credentials: "include",
+        });
+
+        if (res.status === 401) {
+          console.warn("🔥 Session expired but Firebase alive → logout");
+
+          await signOut(auth);
+          setUser(null);
+          setUserDetails({});
+          setIsRegistered(false);
+          return;
+        }
+
         setUser(firebaseUser);
-        await fetchUserDetails(firebaseUser); // 🔥 Fetch details on login
-      } else {
-        console.log("❌ No user signed in");
+        await fetchUserDetails(firebaseUser);
+
+      } catch (err) {
+        console.error("Session check failed:", err);
+      }
+
+    } else {
+      console.log("❌ No user signed in");
+      setUser(null);
+      setUserDetails({});
+      setIsRegistered(false);
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
+
+useEffect(() => {
+  const checkSession = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/user/check-session`, {
+        credentials: "include",
+      });
+
+      if (res.status === 401) {
+        console.warn("⚠️ Session expired");
+
+        await signOut(auth);
         setUser(null);
         setUserDetails({});
         setIsRegistered(false);
       }
-    });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    return () => unsubscribe();
-  }, []);
+  checkSession(); // first run
+
+  const interval = setInterval(checkSession, 60 * 1000);
+
+  return () => clearInterval(interval);
+}, []);
 
   
 // ✅ Initialize invisible reCAPTCHA only once with better cleanup
@@ -148,7 +214,7 @@ console.log("🔥 merge payload", {
 
     if (!guestCart.length && !guestWishlist.length && !guestAddress.length) return;
 
-    const res = await fetch(`${apiUrl}/merge-guest-data`, {
+    const res = await fetchWithAuth(`${apiUrl}/merge-guest-data`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -266,7 +332,7 @@ await fetchUserDetails(signedInUser); // fir fresh user data lao
   const addnameemail = async (data,userid) => {
     console.log("datform ka or userid",data,userid)
     try {
-      const response = await fetch(`${apiUrl}/useredit`, {
+      const response = await fetchWithAuth(`${apiUrl}/useredit`, {
         method: 'PATCH',
         credentials:'include',
         headers: {
@@ -297,7 +363,7 @@ await fetchUserDetails(signedInUser); // fir fresh user data lao
       setLoading(true);
       const phone = firebaseUser.phoneNumber;
       const encodedPhone = encodeURIComponent(phone);
-      const res = await fetch(`${apiUrl}/user/profile?phoneNumber=${encodedPhone}`);
+      const res = await fetchWithAuth(`${apiUrl}/user/profile?phoneNumber=${encodedPhone}`);
       if (!res.ok) throw new Error("User details fetch failed");
 
       const data = await res.json();
@@ -363,31 +429,31 @@ useEffect(() => {
     
 
       // ✅ Auto logout when session expired
-useEffect(() => {
-  const checkSession = async () => {
-    try {
-      const res = await fetch(`${apiUrl}/user/check-session`, {
-        credentials: "include",
-      });
+// useEffect(() => {
+//   const checkSession = async () => {
+//     try {
+//       const res = await fetch(`${apiUrl}/user/check-session`, {
+//         credentials: "include",
+//       });
 
-      if (res.status === 401) {
-        console.warn("⚠️ Session expired — logging out user...");
-        await signOut(auth);
-        setUser(null);
-        setUserDetails({});
-        setIsRegistered(false);
-        // localStorage.clear();
-        // window.location.href = "/login"; // 👈 redirect to login
-      }
-    } catch (err) {
-      console.error("Session check error:", err);
-    }
-  };
+//       if (res.status === 401) {
+//         console.warn("⚠️ Session expired — logging out user...");
+//         await signOut(auth);
+//         setUser(null);
+//         setUserDetails({});
+//         setIsRegistered(false);
+//         // localStorage.clear();
+//         // window.location.href = "/login"; // 👈 redirect to login
+//       }
+//     } catch (err) {
+//       console.error("Session check error:", err);
+//     }
+//   };
 
-  // check every 5 minutes
-  const interval = setInterval(checkSession, 5 * 60 * 1000);
-  return () => clearInterval(interval);
-}, []);
+//   // check every 5 minutes
+//   const interval = setInterval(checkSession, 60 * 1000);
+//   return () => clearInterval(interval);
+// }, []);
 
       
   return (

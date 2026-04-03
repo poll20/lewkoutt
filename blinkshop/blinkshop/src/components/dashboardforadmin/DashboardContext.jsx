@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState,useEffect } from "react";
 
-
+import { fetchWithAuth } from "../../utils/sessionHelpers";
 import { useFirebaseAuth } from "../FirebaseContext";
 // import axios from "axios";
 import { useLoading } from "../LoadingContext";
@@ -57,7 +57,7 @@ export const DashboardProvider = ({ children }) => {
     let adddatatoexistingcategory = async (data, id) => {
         try {
             console.log("data m cate h kya ",data)
-          let response = await fetch(`${apiUrl}/productmodel/${id}`, {
+          let response = await fetchWithAuth(`${apiUrl}/productmodel/${id}`, {
             method: "PATCH",
             credentials: 'include', 
             headers: {
@@ -90,7 +90,7 @@ export const DashboardProvider = ({ children }) => {
       let  editordeleteinexisitingcategory = async (data, id) => {
         try {
             if(data && Object.keys(data).length > 0){
-          let response = await fetch(`${apiUrl}/editordeleteproduct/${id}`, {
+          let response = await fetchWithAuth(`${apiUrl}/editordeleteproduct/${id}`, {
             method: "PATCH",
             credentials: 'include', 
             headers: {
@@ -144,7 +144,7 @@ export const DashboardProvider = ({ children }) => {
 let deletefromexistingproduct=async(id)=>{
     try{
         if(id){
-            let response = await fetch(`${apiUrl}/deleteproductfromcate/${id}`, {
+            let response = await fetchWithAuth(`${apiUrl}/deleteproductfromcate/${id}`, {
                 method: "PATCH",
                 credentials: 'include', 
                 headers: {
@@ -175,7 +175,7 @@ let deletefromexistingproduct=async(id)=>{
       let addnewcategory = async (data) => {
         try {
           console.log("cateka data",data)
-          let response = await fetch(`${apiUrl}/productmodel`, {
+          let response = await fetchWithAuth(`${apiUrl}/productmodel`, {
             method: "POST",
             credentials: 'include', 
             headers: {
@@ -222,7 +222,7 @@ let deletefromexistingproduct=async(id)=>{
       
 const fetchuserorder= async()=>{    
 try{
-    let res=await fetch(`${apiUrl}/orders`
+    let res=await fetchWithAuth(`${apiUrl}/orders`
       , {
       credentials: 'include',
       headers: {
@@ -346,7 +346,7 @@ useEffect(() => {
 
       const postNewArrival = async (productId) => {
         try {
-          const response = await fetch(`${apiUrl}/newarrival`, {
+          const response = await fetchWithAuth(`${apiUrl}/newarrival`, {
             method: "POST",
             credentials: 'include', 
             headers: {
@@ -377,7 +377,7 @@ useEffect(() => {
         {
         try {
           //  const payload = decision ? { decision } : {}; // sirf decision jab required ho
-            const response = await fetch(`${apiUrl}/order/deliver/${orderId}`, {
+            const response = await fetchWithAuth(`${apiUrl}/order/deliver/${orderId}`, {
                 method: "PUT",
                 credentials: 'include', 
                 headers: {
@@ -435,7 +435,7 @@ useEffect(() => {
     
                 console.log("Sending Data:", requestBody); // ✅ Debugging log
 
-            const response = await fetch(`${apiUrl}/user/update-role/${userId}`, {
+            const response = await fetchWithAuth(`${apiUrl}/user/update-role/${userId}`, {
                 method: "PUT",
                 credentials: 'include', 
                 headers: {
@@ -587,7 +587,7 @@ useEffect(() => {
   }, [user]);
     let moodmsg=async(data)=>{
       try{
-      let response=await fetch(`${apiUrl}/moodmsg`,{
+      let response=await fetchWithAuth(`${apiUrl}/moodmsg`,{
         method:'POST',
         credentials: 'include', 
         headers: {
@@ -614,7 +614,7 @@ useEffect(() => {
     // DELETE mood message
 const deleteMoodMsg = async (id) => {
   try {
-    let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
+    let res = await fetchWithAuth(`${apiUrl}/moodmsg/${id}`, {
       method: 'DELETE',
       credentials: 'include', 
       headers:{
@@ -632,7 +632,7 @@ const deleteMoodMsg = async (id) => {
 // UPDATE mood message
 const updateMoodMsg = async (id, updatedData) => {
   try {
-    let res = await fetch(`${apiUrl}/moodmsg/${id}`, {
+    let res = await fetchWithAuth(`${apiUrl}/moodmsg/${id}`, {
       method: 'PUT',
       credentials: 'include', 
       headers: { "Content-Type": "application/json",
@@ -654,7 +654,7 @@ const updateMoodMsg = async (id, updatedData) => {
 const fetchCartItems = async (id) => {
   try {
     // setIsLoading(true)
-    let response = await fetch(`${apiUrl}/addtocart/${id}`,
+    let response = await fetchWithAuth(`${apiUrl}/addtocart/${id}`,
 
       {
       credentials: 'include',
@@ -687,7 +687,7 @@ const fetchCartItems = async (id) => {
 const fetchCartItemss = async (id) => {
   try {
     // setIsLoading(true)
-    let response = await fetch(`${apiUrl}/cart/${id}`, 
+    let response = await fetchWithAuth(`${apiUrl}/cart/${id}`, 
       {
       credentials: 'include',
       }
@@ -727,7 +727,7 @@ const fetchUserOrders = async (userId) => {
           console.error("❌ User ID is missing!");
           return;
       }
-      let res = await fetch(`${apiUrl}/orders/user/${userId}`
+      let res = await fetchWithAuth(`${apiUrl}/orders/user/${userId}`
         ,{
           credentials: 'include', 
         // headers: { 
@@ -762,7 +762,7 @@ const createCoupon = async (cpn) => {
   };
 
   try {
-    const response = await fetch(`${apiUrl}/create`, {
+    const response = await fetchWithAuth(`${apiUrl}/create`, {
       method: "POST",
       credentials: 'include', 
       headers: {
@@ -848,7 +848,7 @@ const createBundle = async (ids,val) => {
 
   try {
     setIsLoading(true)
-    const response = await fetch(`${apiUrl}/bundle`, {
+    const response = await fetchWithAuth(`${apiUrl}/bundle`, {
       method: "PATCH",
       credentials: 'include', 
       headers: {
@@ -899,7 +899,7 @@ const toggleSlot = async (label) => {
   try {
     setIsLoading(true);
 
-    const res = await fetch(`${apiUrl}/slot-status/toggle`, {
+    const res = await fetchWithAuth(`${apiUrl}/slot-status/toggle`, {
       method: "POST",
       credentials: 'include', 
       headers: {
