@@ -18,7 +18,7 @@ export const fetchWithAuth = async (url, options = {}) => {
       localStorage.clear();
 
       // redirect
-      window.location.href = "/login";
+      // window.location.href = "/login";
 
       return null;
     }
