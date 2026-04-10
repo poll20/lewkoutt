@@ -90,6 +90,9 @@ setnumericdistanceofaddress(numericDistance)
   if (isNaN(numericDistance)) return; // safety check
 
   let charge = 0;
+  if(numericDistance < 15 || purchaseproduct?.discountprice<799){
+    charge=50 
+  }
   if (numericDistance >= 16 && numericDistance <= 18) {
     charge = 49;
   } else if (numericDistance > 18 && numericDistance <= 21) {

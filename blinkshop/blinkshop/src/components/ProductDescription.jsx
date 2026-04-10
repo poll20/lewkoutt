@@ -92,6 +92,8 @@ const productSchema =
         },
       }
     : null;
+
+    
   
 const fetchProductFromBackend = async (clr) => {
   console.log("🔥 clrchange", clr);
@@ -310,9 +312,12 @@ useEffect(() => {
     }
   };
 
-  if (!product || product.length==0) {
-    return <p></p>;
-  }
+  // if (!product || product.length==0) {
+  //   return <p></p>;
+  // }
+  if (!product || Object.keys(product).length === 0) {
+  return <p></p>;
+}
 
   const sizes=product?.sizes?.map((e)=>(e.size)) 
 

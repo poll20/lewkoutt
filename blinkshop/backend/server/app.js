@@ -1230,7 +1230,7 @@ if (operation === "navbar") {
       const data = await productsmodel.find(
         {},
         { category: 1, productdetails: 1, _id: 0 }
-      ).lean();
+      ).sort({ _id: -1 }).lean();
 
       const navbarData = data.map(cat => {
         const tags = [
@@ -1267,7 +1267,7 @@ if (operation === "home") {
 
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata=await productsmodel.find().lean() 
+      let categorydata=await productsmodel.find().sort({ _id: -1 }).lean() 
     res.json(categorydata)
     }
     else if (operation === "filtered") {
@@ -1275,7 +1275,7 @@ if (operation === "home") {
       const cat = section;
       const subcat = subcategory;
      
-      const categoryData = await productsmodel.find({}).lean();
+      const categoryData = await productsmodel.find({}).sort({ _id: -1 }).lean();
       console.log("pm",categoryData)
       const finalData = categoryData.filter((item) => item.category == cat);
       const finalllData = finalData.map((item) => item.productdetails).flat();
@@ -1314,6 +1314,7 @@ app.get("/categories", async (req, res) => {
 
     const data = await productsmodel
       .find({})
+      .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
@@ -1334,10 +1335,12 @@ app.get("/home/carousel", async (req, res) => {
   const data = await productsmodel.find(
     {},
     { image: 1, _id: 0 }
-  ).lean();
+  ).sort({ _id: -1 }). lean();
 
   res.json(data);
 });
+
+      
 
 // app.get("/productmodel", cacheMiddleware((req) => "products_all", 60), async (req, res) => {
 //   let operation = req.query.operation;
@@ -1414,7 +1417,8 @@ app.get("/productmodell", async (req, res) => {
 
   try {
     if (operation === "all") {
-      const allData = await productsmodel.find().lean();
+      
+      const allData = await productsmodel.find().sort({ _id: -1 }).lean();
       const allProductDetails = allData.map(e => e.productdetails).flat();
 
       const start = (page - 1) * limit;
@@ -2000,14 +2004,17 @@ if(paymentmode=="cod"){
 
         const newOrder = new orderr({
           name: userDetails.name,
-          userId: userDetails._id,
+          userId: userDetails?._id,
           email: userDetails.email,
           address: address[0] || {},
           timeslot:timeslot,
           phone: address?.[0]?.phone?.[0] || "",
           products: [singleProduct],
           paymentmode: paymentmode,
-          deliverydistance: parseFloat(distance?.toString().replace("km","") || 0),
+          // deliverydistance: parseFloat(distance?.toString().replace("km","") || 0),
+          deliverydistance: parseFloat(
+  (distance ? String(distance) : "0").replace("km", "")
+),
           merchantOrderId,
           status: "Pending",
           paymentStatus: "cod", // mark as paid

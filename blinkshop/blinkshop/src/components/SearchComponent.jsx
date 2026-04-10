@@ -202,14 +202,14 @@ const SearchComponent = () => {
     images={topproducts.map((p) => p.image)}  // ✅ correct prop name
   />
 )} */}
-{topproducts?.length > 0 && (
+{/* {topproducts?.length > 0 && (
   <AutoScrollCarasoul
     data={topproducts.map((p) => ({
       _id: p._id,
       image: p.image,
     }))}
   />
-)}
+)} */}
 
 
       {/* Categories */}

@@ -478,7 +478,7 @@ To ensure fair usage of this service, orders under this slot are not eligible fo
           cursor: "pointer",
         }}
       >
-        Got it 👍
+        Got it
       </button>
     </div>
   </div>

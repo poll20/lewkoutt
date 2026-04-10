@@ -16,21 +16,14 @@ export default function Home() {
    const [carousel, setCarousel] = useState([]);
   const [page, setPage] = useState(1);
 
-  // if (!productdata) {
-  //   return <p>Loading...</p>;
-  // }
-//  useEffect(()=>{
-//   productfetch("home")
-//  },[productfetch])
-useEffect(() => {
-  if (!productdata || productdata.length === 0) {
-    productfetch("home");
-  }
-}, [productfetch]);
+ 
+// useEffect(() => {
+//   if (!productdata || productdata.length === 0) {
+//     productfetch("home");
+//   }
+// }, [productfetch]);
 
-  // useEffect(() => {
-  //   fetchCarousel().then(setCarousel);
-  // }, []);
+ 
   useEffect(() => {
   const loadCarousel = async () => {
     try {

@@ -1428,7 +1428,16 @@ useEffect(() => {
       );
       const json = await res.json();
 
-      setproductdata((prev) => [...prev, ...json.data]);
+      // setproductdata((prev) => [...prev, ...json.data]);
+      setproductdata((prev) => {
+  const existingIds = new Set(prev.map(item => item._id));
+
+  const newUniqueData = json.data.filter(
+    item => !existingIds.has(item._id)
+  );
+
+  return [...prev, ...newUniqueData];
+});
       setHasMore(json.hasMore);
     } catch (err) {
       console.error("fetchCategories error:", err);
