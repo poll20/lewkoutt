@@ -90,9 +90,9 @@ setnumericdistanceofaddress(numericDistance)
   if (isNaN(numericDistance)) return; // safety check
 
   let charge = 0;
-  if(numericDistance < 15 || purchaseproduct?.discountprice<799){
-    charge=50 
-  }
+  // if(numericDistance < 15 || purchaseproduct?.discountprice<799){
+  //   charge=50 
+  // }
   if (numericDistance >= 16 && numericDistance <= 18) {
     charge = 49;
   } else if (numericDistance > 18 && numericDistance <= 21) {
@@ -229,6 +229,13 @@ useEffect(() => {
   const amountAfterCoupon = totalDiscountPrice - (amountafteraddcoupon || 0);
   const walletToUse = Math.min(mywalletAmount, amountAfterCoupon);
   const payableAmount = (amountAfterCoupon - walletToUse)+deliveryCharge;
+  useEffect(()=>{
+    if(payableAmount<799){
+  let charge=50
+
+  setDeliveryCharge(charge)
+}
+  },[payableAmount ])
 
   return (
     <div className="checkout-container-checkoutbuy">

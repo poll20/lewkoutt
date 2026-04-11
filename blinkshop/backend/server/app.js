@@ -1228,7 +1228,9 @@ app.get("/productmodel",async(req,res)=>{
 
 if (operation === "navbar") {
       const data = await productsmodel.find(
-        {},
+        { category: {
+            $nin: ["The Cozy Edit", "Warm & Chic"]
+          }},
         { category: 1, productdetails: 1, _id: 0 }
       ).sort({ _id: -1 }).lean();
 
@@ -1252,7 +1254,9 @@ if (operation === "navbar") {
 
 
 if (operation === "home") {
-  const data = await productsmodel.find().lean();
+  const data = await productsmodel.find({ category: {
+            $nin: ["The Cozy Edit", "Warm & Chic"]
+          }}).lean();
 
   const homeData = data.map(cat => ({
     _id: cat._id,
@@ -1267,7 +1271,9 @@ if (operation === "home") {
 
     if(operation=="all"){
        //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata=await productsmodel.find().sort({ _id: -1 }).lean() 
+      let categorydata=await productsmodel.find({ category: {
+            $nin: ["The Cozy Edit", "Warm & Chic"]
+          }}).sort({ _id: -1 }).lean() 
     res.json(categorydata)
     }
     else if (operation === "filtered") {
@@ -1275,7 +1281,9 @@ if (operation === "home") {
       const cat = section;
       const subcat = subcategory;
      
-      const categoryData = await productsmodel.find({}).sort({ _id: -1 }).lean();
+      const categoryData = await productsmodel.find({ category: {
+            $nin: ["The Cozy Edit", "Warm & Chic"]
+          }}).sort({ _id: -1 }).lean();
       console.log("pm",categoryData)
       const finalData = categoryData.filter((item) => item.category == cat);
       const finalllData = finalData.map((item) => item.productdetails).flat();
@@ -1313,13 +1321,17 @@ app.get("/categories", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const data = await productsmodel
-      .find({})
+      .find({ category: { 
+          $nin: ["The Cozy Edit", "Warm & Chic"] 
+        }})
       .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
 
-    const total = await productsmodel.countDocuments();
+    const total = await productsmodel.countDocuments({category: { 
+        $nin: ["The Cozy Edit", "Warm & Chic"] 
+      }});
 
     res.json({
       data,
@@ -1333,7 +1345,9 @@ app.get("/categories", async (req, res) => {
 
 app.get("/home/carousel", async (req, res) => {
   const data = await productsmodel.find(
-    {},
+    { category: {
+            $nin: ["The Cozy Edit", "Warm & Chic"]
+          }},
     { image: 1, _id: 0 }
   ).sort({ _id: -1 }). lean();
 
