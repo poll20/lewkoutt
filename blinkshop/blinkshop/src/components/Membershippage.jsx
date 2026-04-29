@@ -1,6 +1,6 @@
 import { useState } from "react";
 import lewkoutlogo from "../components/image/lewklogo.webp";
-import "./MembershipPage.css";
+import "./Membershippage.css";
 
 const plans = [
   {
