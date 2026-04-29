@@ -2229,8 +2229,8 @@ if (pendingMember) {
   const expiry = new Date();
   expiry.setFullYear(expiry.getFullYear() + 1);
 
-  await userr.findOneAndUpdate(
-  { uid: pendingMember.userId }, // 🔥 MATCH FIREBASE UID
+  await userr.findByIdAndUpdate(
+  pendingMember.userId, // ✅ ObjectId
   {
     "member.isMember": true,
     "member.memberType": pendingMember.planId,
@@ -2350,10 +2350,60 @@ if (pendingMember) {
 });
 
 
+// app.post("/member", verifySessionCookie, async (req, res) => {
+//   try {
+//     const { planId, planName, amount } = req.body;
+//     const userId = req.user.uid; // 🔥 FIREBASE UID
+
+//     if (!planId || !amount) {
+//       return res.status(400).json({ error: "Invalid data" });
+//     }
+
+//     const merchantOrderId = randomUUID();
+
+//     // 🔥 Save pending membership
+//     await pendingMembershipModel.create({
+//       merchantOrderId,
+//        userId: req.user.uid,
+//       planId,
+//       planName,
+//       amount,
+//     });
+
+//     const redirectUrl = "https://www.lewkout.com/profile";
+
+//     const phonepeResponse = await createPhonePePayment({
+//       merchantOrderId,
+//       amount,
+//       userId: userId,
+//       redirectUrl,
+//     });
+
+//     res.status(201).json({
+//       message: "Redirect to PhonePe",
+//       tokenUrl: phonepeResponse.redirectUrl,
+//       merchantOrderId,
+//     });
+
+//   } catch (err) {
+//     console.error("Membership Error:", err);
+//     res.status(500).json({ error: err });
+//   }
+// });
 app.post("/member", verifySessionCookie, async (req, res) => {
   try {
     const { planId, planName, amount } = req.body;
-    const userId = req.user.uid; // 🔥 FIREBASE UID
+
+    const firebaseUid = req.user.uid;
+
+    // 🔥 find user from DB
+    const user = await userr.findOne({ uid: firebaseUid });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const userId = user._id;
 
     if (!planId || !amount) {
       return res.status(400).json({ error: "Invalid data" });
@@ -2361,10 +2411,9 @@ app.post("/member", verifySessionCookie, async (req, res) => {
 
     const merchantOrderId = randomUUID();
 
-    // 🔥 Save pending membership
     await pendingMembershipModel.create({
       merchantOrderId,
-       userId: req.user.uid,
+      userId, // ✅ correct ObjectId
       planId,
       planName,
       amount,
@@ -2375,19 +2424,18 @@ app.post("/member", verifySessionCookie, async (req, res) => {
     const phonepeResponse = await createPhonePePayment({
       merchantOrderId,
       amount,
-      userId: userId,
+      userId: userId.toString(),
       redirectUrl,
     });
 
     res.status(201).json({
-      message: "Redirect to PhonePe",
       tokenUrl: phonepeResponse.redirectUrl,
       merchantOrderId,
     });
 
   } catch (err) {
     console.error("Membership Error:", err);
-    res.status(500).json({ error: err });
+    res.status(500).json({ error: err.message });
   }
 });
 
