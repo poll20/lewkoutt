@@ -262,7 +262,7 @@ const handleClosePopup = () => {
       ) : (<div className="mainnn-contenttttttt">
         <div className="contenttt" >
           <Suspense fallback={<GlobalLoader />}>
-           {openpopup==true  &&  !member && <SubscriptionPopup onClose={handleClosePopup} />}
+           {/* {openpopup==true  &&  !member && <SubscriptionPopup onClose={handleClosePopup} />} */}
             {/* {console.log("Admin Route Status:", isAdminRoute)} ✅ Debugging */}
             <Routes>
               {/* ✅ Normal Website Routes */}
@@ -332,7 +332,7 @@ const handleClosePopup = () => {
         !searchme && (
           <div className="mainnn-contenttttttt">
             <Footer />
-            {showIcon && (
+            {/* {showIcon && (
   <div
     onClick={() => {
       setOpenpopup(true);
@@ -358,7 +358,7 @@ const handleClosePopup = () => {
   >
     🎁
   </div>
-)}
+)} */}
           </div>
         )}
 
