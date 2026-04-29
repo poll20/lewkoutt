@@ -2229,12 +2229,15 @@ if (pendingMember) {
   const expiry = new Date();
   expiry.setFullYear(expiry.getFullYear() + 1);
 
-  await userr.findByIdAndUpdate(pendingMember.userId, {
+  await userr.findOneAndUpdate(
+  { uid: pendingMember.userId }, // 🔥 MATCH FIREBASE UID
+  {
     "member.isMember": true,
     "member.memberType": pendingMember.planId,
     "member.activatedAt": new Date(),
     "member.expiresAt": expiry,
-  });
+  }
+);
 
   await pendingMembershipModel.deleteOne({ merchantOrderId });
 
@@ -2350,7 +2353,7 @@ if (pendingMember) {
 app.post("/member", verifySessionCookie, async (req, res) => {
   try {
     const { planId, planName, amount } = req.body;
-    const userId = req.user._id;
+    const userId = req.user.uid; // 🔥 FIREBASE UID
 
     if (!planId || !amount) {
       return res.status(400).json({ error: "Invalid data" });
@@ -2361,7 +2364,7 @@ app.post("/member", verifySessionCookie, async (req, res) => {
     // 🔥 Save pending membership
     await pendingMembershipModel.create({
       merchantOrderId,
-      userId,
+       userId: req.user.uid,,
       planId,
       planName,
       amount,
