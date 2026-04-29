@@ -1,13 +1,14 @@
 import { useState } from "react";
 import lewkoutlogo from "../components/image/lewklogo.webp";
 import "./Membershippage.css";
+import { useFirebaseAuth } from "./FirebaseContext";
 
 const plans = [
   {
     id: "silver",
     name: "Silver",
     badge: null,
-    price: 599,
+    price: 1,
     tagline: "Perfect starter for savvy shoppers",
     benefits: [
       { label: "All Tops", member: "₹299", icon: "👕" },
@@ -30,37 +31,70 @@ export default function MembershipPage() {
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
+const {user, userDetails, } = useFirebaseAuth();
+  
 
   const showToast = (msg, type = "info") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3500);
   };
 
-  const handleBecomeMember = () => {
-    if (!selected) {
-      showToast("Please select a plan first.", "warn");
+  const handleBecomeMember = async () => {
+  if (!selected) {
+    showToast("Please select a plan first.", "warn");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+     let firebaseToken = null;
+        if (user) {
+          firebaseToken = await user.getIdToken(true);
+        }
+    const plan = plans.find((p) => p.id === selected);
+
+    const res = await fetch(`${apiUrl}/member`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...(firebaseToken && {
+          Authorization: `Bearer ${firebaseToken}`,
+        }),
+      },
+      body: JSON.stringify({
+        planId: plan.id,
+        planName: plan.name,
+        amount: plan.price,
+      }),
+    });
+
+    if (!res.ok) {
+      showToast("Something went wrong", "warn");
       return;
     }
-    setLoading(true);
-    const plan = plans.find((p) => p.id === selected);
-    setTimeout(() => {
-      const url = `https://phonepe.com/pay?amount=${plan.price * 100}&note=Membership-${plan.name}&merchant=Lewkout`;
-      const win = window.open(url, "_blank");
-      if (!win) {
-        showToast("Allow popups to open PhonePe.", "warn");
-        setLoading(false);
-        return;
-      }
-      showToast(`Opening PhonePe for ₹${plan.price}…`, "info");
-      const timer = setInterval(() => {
-        if (win.closed) {
-          clearInterval(timer);
-          handlePaymentSuccess(plan);
-        }
-      }, 800);
-      setLoading(false);
-    }, 500);
-  };
+
+    const data = await res.json();
+
+    if (!data?.tokenUrl) {
+      showToast("Payment init failed", "warn");
+      return;
+    }
+
+    showToast("Opening PhonePe…", "info");
+
+    // ✅ SAME FLOW AS ORDER
+    window.location.href = data.tokenUrl;
+
+  } catch (err) {
+    console.error("err aya",err);
+    showToast("Network error", "warn");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handlePaymentSuccess = (plan) => {
     const membership = {

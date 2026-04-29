@@ -121,6 +121,12 @@ let users =mongoose.Schema({
     email:{type:String},
     dob:{type:Date},
     phonenumber:{type:String},
+   member: {
+  isMember: { type: Boolean, default: false },
+  memberType: { type: String, default: "" },
+  activatedAt: Date,
+  expiresAt: Date
+},
     code: { type: String, default: generateRandomCode }, // 🔥 New random code field,
     refercode:{type: String},
     // uid: { type: String, required: true, unique: true },
@@ -154,6 +160,15 @@ let users =mongoose.Schema({
     created_at: Date
 })
 
+
+const pendingMembershipSchema = new mongoose.Schema({
+  merchantOrderId: String,
+  userId: mongoose.Schema.Types.ObjectId,
+  planId: String,
+  planName: String,
+  amount: Number,
+  createdAt: { type: Date, default: Date.now }
+});
 // let orders=mongoose.Schema({
 //   name:String,
 //   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
@@ -781,7 +796,7 @@ let cpn=mongoose.model("coupon",couponSchema)
 let cpnusage=mongoose.model("couponusage",couponUsageSchema)
 let slotmodel= mongoose.model('SlotStatus', slotStatusSchema);
 const pendingOrderModel = mongoose.model("PendingOrder", PendingOrderSchema);
-
-module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel,pendingOrderModel}
+const pendingMembershipModel=mongoose.model("pendingmember",pendingMembershipSchema)
+module.exports={wishmodel,addtocart,wear,userr,orderr,rentt,newarival,bestseling,productsmodel,otpmodel,Rating,SalesModel,wallettrans,returnmodel,moodmodel,cpn,cpnusage,slotmodel,pendingOrderModel,pendingMembershipModel}
 
 
