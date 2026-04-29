@@ -2364,7 +2364,7 @@ app.post("/member", verifySessionCookie, async (req, res) => {
     // 🔥 Save pending membership
     await pendingMembershipModel.create({
       merchantOrderId,
-       userId: req.user.uid,,
+       userId: req.user.uid,
       planId,
       planName,
       amount,
