@@ -2229,7 +2229,7 @@ if (pendingMember) {
   const expiry = new Date();
   expiry.setFullYear(expiry.getFullYear() + 1);
 
-  await usersmodel.findByIdAndUpdate(pendingMember.userId, {
+  await userr.findByIdAndUpdate(pendingMember.userId, {
     "member.isMember": true,
     "member.memberType": pendingMember.planId,
     "member.activatedAt": new Date(),
