@@ -1,6 +1,8 @@
 import React, { useState,useRef,useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import { CiShoppingCart, CiHome, CiLogin} from "react-icons/ci";
+import { SlBadge } from "react-icons/sl";
+
 import { PiDressThin } from "react-icons/pi";
 // import { CiUser } from "react-icons/ci";
 import { IoIosMenu } from "react-icons/io";
@@ -19,6 +21,7 @@ import { useFirebaseAuth } from './FirebaseContext';
 
 import lewkoutlogo from "../components/image/lewklogo.webp"
 import { useLoading } from './LoadingContext';
+
 const ResponsiveNavbar = (props) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // let {user,userDetails}=useAuth()
@@ -333,12 +336,14 @@ console.log("navbar m props.pdd value",props.pd)
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",borderRadius:"50%",width:"40px",height:"40px"}}>
           
           <li><LoginButton/>
+          
           <span onClick={() => {navigate("/profile"); // Click andar na jaye
           }}
           className='menu-link-name'
        style={{ cursor: "default" }}
     >
       Account
+     
     </span></li>
           {/* <li className='homer'>account</li> */}
           </div>
