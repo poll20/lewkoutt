@@ -1,9 +1,10 @@
 // import { initGA } from "./analytics/ga4";
 import { initGA, trackPageView } from "./analytics/g4a";
-
+import SubscriptionPopup from "./components/SubscriptionPopup";
+import Membershippage from "./components/Membershippage"
 // import usePageTracking from "./analytics/usePageTracking";
 import { LoadingProvider, useLoading } from "./components/LoadingContext";
-import React, { useState, useEffect,Suspense  } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import ResponsiveNavbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -79,7 +80,7 @@ import PopUpNotificationss from "./components/PopUpNotificationss";
 import GlobalLoader from "./components/GlobalLoader";
 import { FirebaseAuthProvider } from "./components/FirebaseContext";
 import TermsAndConditions from "./components/TermsAndConditions";
-import Moodcom from "./components/Moodcom"; 
+import Moodcom from "./components/Moodcom";
 import MoodMsgType from "./components/dashboardforadmin/MoodMsgType";
 import MoodMagManager from "./components/dashboardforadmin/MoodMsgManager";
 import UserActivity from "./components/dashboardforadmin/UserActivity";
@@ -113,17 +114,17 @@ import Returnexchange from "./components/ReturnExchange";
 export default function App() {
 
   useEffect(() => {
-  initGA(); // Initialize GA
-}, []);
-//  initGA();
-//   usePageTracking();
+    initGA(); // Initialize GA
+  }, []);
+  //  initGA();
+  //   usePageTracking();
   const [popupMessage, setPopupMessage] = useState("");
-  
-  
+const [openpopup,setOpenpopup]=useState("")
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   // const location=useLocation()
-const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
-// const navigate=useNavigate()
+  const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/shopkeeper");
+  // const navigate=useNavigate()
 
   useEffect(() => {
     const handleResize = () => {
@@ -140,7 +141,7 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
     setPopupMessage(msg);
   };
 
- 
+
 
 
   if (!isMobile && !isAdminRoute) {
@@ -153,31 +154,31 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
   }
   return (
     <FirebaseAuthProvider showPopup={showPopup}>
-    {/* <AuthProvider> */}
-      
-    <DashboardProvider>
-    
-      <BioProvider  showPopup={showPopup} >
-        <Router>
-            
-          <ScrollToTop />
-          
-  <div id="popup-wrapper">
-  {popupMessage && (
-    <PopUpNotificationss
-      message={popupMessage}
-      onClose={() => setPopupMessage("")}
-    />
-  )}
-</div>
-          <Layout showPopup={showPopup}/>
-        </Router>
-      </BioProvider>
-    
-    </DashboardProvider>
-    {/* </AuthProvider> */}
+      {/* <AuthProvider> */}
+
+      <DashboardProvider>
+
+        <BioProvider showPopup={showPopup} >
+          <Router>
+
+            <ScrollToTop />
+
+            <div id="popup-wrapper">
+              {popupMessage && (
+                <PopUpNotificationss
+                  message={popupMessage}
+                  onClose={() => setPopupMessage("")}
+                />
+              )}
+            </div>
+            <Layout showPopup={showPopup} />
+          </Router>
+        </BioProvider>
+
+      </DashboardProvider>
+      {/* </AuthProvider> */}
     </FirebaseAuthProvider>
-  
+
   );
 }
 
@@ -185,127 +186,143 @@ const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname
 // ✅ Separate Layout Component to Hide Navbar & Footer on Admin Routes
 function Layout({ showPopup }) {
   const location = useLocation();
-  
- const { setIsLoading,isLoading } = useLoading(); // ✅ add this inside the App component
-const {userdata}=useBio()
+const [openpopup, setOpenpopup] = useState(false);
+const [showIcon, setShowIcon] = useState(false);
+  const { setIsLoading, isLoading } = useLoading(); // ✅ add this inside the App component
+  const { userdata } = useBio()
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
   const address = location.pathname.startsWith("/address/");
-
+const member=location.pathname.startsWith("/member");
   const isref = location.pathname.startsWith("/refferal");
   const mood = location.pathname.startsWith("/mood");
-    const pd = location.pathname.startsWith("/productdescription");
-        const searchme = location.pathname.startsWith("/searchme");
+  const pd = location.pathname.startsWith("/productdescription");
+  const searchme = location.pathname.startsWith("/searchme");
 
 
-     
+
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
 useEffect(() => {
-  trackPageView(location.pathname + location.search);
-}, [location]);
+  const timer = setTimeout(() => {
+    setOpenpopup(true);
+  }, 3000);
 
-  
+  return () => clearTimeout(timer);
+}, []);
+const handleClosePopup = () => {
+  setOpenpopup(false);
+  setShowIcon(true); // 👈 icon show after close
+};
+
   return (
     <>
-    <GlobalLoader/>
-      {!isAdminRoute && <ResponsiveNavbar pd={pd}/>}
+      <GlobalLoader />
+      {!isAdminRoute && <ResponsiveNavbar pd={pd} />}
       {isAdminRoute ? (
         <div className="admin-ka-panel-container" >
 
           <DashNavbar />
+
           {/* <OfferBanner/> */}
-          <GlobalAlert/>
+          <GlobalAlert />
           <OrderAlertProvider>
-          <div className="admin-ka-panel-main">
-                <Suspense fallback={<GlobalLoader />}>
+            <div className="admin-ka-panel-main">
+              <Suspense fallback={<GlobalLoader />}>
+                <Routes>
+
+                  <Route path="/admin" element={<ProtectedRoutes>  <DahBoard /> </ProtectedRoutes>} />
+                  <Route path="/admin/available-products" element={<ProtectedRoutes> <AvailableProduct /> </ProtectedRoutes>} />
+                  <Route path="/admin/category" element={<ProtectedRoutes> <DashCategory /> </ProtectedRoutes>} />
+                  <Route path="/admin/lowstock" element={<ProtectedRoutes><LowStock /> </ProtectedRoutes>} />
+                  <Route path="/admin/outofstock" element={<ProtectedRoutes><OutOfStock /> </ProtectedRoutes>} />
+                  <Route path="/admin/adddata" element={<ProtectedRoutes> <AddData /> </ProtectedRoutes>} />
+                  <Route path="/admin/registeruser" element={<ProtectedRoutes><RegisterUser /></ProtectedRoutes>} />
+                  <Route path="/admin/newarrival" element={<ProtectedRoutes><NewArrival /></ProtectedRoutes>} />
+                  <Route path="/admin/userorder" element={<ProtectedRoutes><Ordersofusers /> </ProtectedRoutes>} />
+                  <Route path="/admin/returnmyorder" element={<ProtectedRoutes><ReturnDataTable /></ProtectedRoutes>} />
+                  <Route path="/admin/moodmsg" element={<ProtectedRoutes><MoodMsgType /></ProtectedRoutes>} />
+                  <Route path="/admin/moodmngr" element={<ProtectedRoutes><MoodMagManager /></ProtectedRoutes>} />
+                  <Route path="/admin/coupon" element={<ProtectedRoutes><CouponForm /></ProtectedRoutes>} />
+                  <Route path="/admin/useractivity/:id" element={<ProtectedRoutes><UserActivity /></ProtectedRoutes>} />
+
+                  <Route path="/admin/slots" element={<ProtectedRoutes><SlotControl /></ProtectedRoutes>} />
+                  {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
+                  <Route path="/admin/bandle" element={<ProtectedRoutes><Bandle /></ProtectedRoutes>} />
+
+
+
+                </Routes>
+              </Suspense>
+
+            </div>
+          </OrderAlertProvider>
+        </div>
+      ) : (<div className="mainnn-contenttttttt">
+        <div className="contenttt" >
+          <Suspense fallback={<GlobalLoader />}>
+           {openpopup==true  &&  !member && <SubscriptionPopup onClose={handleClosePopup} />}
+            {/* {console.log("Admin Route Status:", isAdminRoute)} ✅ Debugging */}
             <Routes>
-            
-              <Route path="/admin" element={ <ProtectedRoutes>  <DahBoard /> </ProtectedRoutes>} />
-              <Route path="/admin/available-products" element={<ProtectedRoutes> <AvailableProduct /> </ProtectedRoutes>} />
-              <Route path="/admin/category" element={<ProtectedRoutes> <DashCategory /> </ProtectedRoutes>} />
-              <Route path="/admin/lowstock" element={<ProtectedRoutes><LowStock/> </ProtectedRoutes>} />
-              <Route path="/admin/outofstock" element={<ProtectedRoutes><OutOfStock/> </ProtectedRoutes>} />
-              <Route path="/admin/adddata" element={<ProtectedRoutes> <AddData/> </ProtectedRoutes>} />
-              <Route path="/admin/registeruser" element={<ProtectedRoutes><RegisterUser/></ProtectedRoutes>} />
-              <Route path="/admin/newarrival" element={<ProtectedRoutes><NewArrival/></ProtectedRoutes>} />
-              <Route path="/admin/userorder" element={<ProtectedRoutes><Ordersofusers/> </ProtectedRoutes>} />
-              <Route path="/admin/returnmyorder" element={<ProtectedRoutes><ReturnDataTable/></ProtectedRoutes>} />
-              <Route path="/admin/moodmsg" element={<ProtectedRoutes><MoodMsgType/></ProtectedRoutes>} />
-              <Route path="/admin/moodmngr" element={<ProtectedRoutes><MoodMagManager/></ProtectedRoutes>} />
-              <Route path="/admin/coupon" element={<ProtectedRoutes><CouponForm/></ProtectedRoutes>} />
-              <Route path="/admin/useractivity/:id" element={<ProtectedRoutes><UserActivity/></ProtectedRoutes>} />
+              {/* ✅ Normal Website Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/card" element={<Card />} />
+              <Route path="/productmodel/:section" element={<Card />} />
+              <Route path="/searchresults" element={<Card />} />
+              <Route path="/productdescription/:slug/:id/:coloring" element={<ProductDescription showPopup={showPopup} />} />
+              <Route path="/cart" element={<AddToCart />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/searchme" element={<SearchComponent />} />
 
-              <Route path="/admin/slots" element={<ProtectedRoutes><SlotControl/></ProtectedRoutes>} />
-              {/* <Route path="/admin/bandle" element={<Bandle/>} /> */}
-              <Route path="/admin/bandle" element={<ProtectedRoutes><Bandle/></ProtectedRoutes>} />
+              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/rentcompo" element={<BottomUpSlidingList />} />
+              <Route path="/userorder" element={<UserOrder />} />
+              <Route path="/address/:sec" element={<AddressList />} />
 
+              <Route path="/sizechart/:cate" element={<SizeChart />} />
+              <Route path="/store/:store" element={<Card />} />
+              <Route path="/rent/:rent" element={<Card />} />
+              <Route path="/wishlist/:wish" element={<Card />} />
+              <Route path="/bestsalling/:bestsale" element={<Card />} />
+              <Route path="/filter" element={<Filter />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/wallet" element={<Wallet />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/member" element={<Membershippage />} />
+
+              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+
+              <Route path="/return/:id" element={<ReturnRequest />} />
+              <Route path="/loginn" element={<OTPLogin />} />
+              <Route path="/mood" element={<Moodcom />} />
+              <Route path="/payment-mode" element={<Paymentmode />} />
+              <Route path="/return-exchange-refund" element={<Returnexchange />} />
+              <Route path="/shipping-delivery" element={<ShippingDelivery />} />
+
+              <Route path="/maps" element={<MapWithAutocompelete />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy email="" phone="" />} />
+
+
+              <Route path="/orderconfirm" element={<OrderConfirmation />} />
+
+              <Route path="/prdreview/:id/:avgrating" element={<ReviewProduct />} />
 
 
             </Routes>
-            </Suspense>
-
-          </div>
-          </OrderAlertProvider>
-        </div>
-      ):( <div className="mainnn-contenttttttt">
-        <div className="contenttt" >
-          <Suspense fallback={<GlobalLoader />}>
-        {/* {console.log("Admin Route Status:", isAdminRoute)} ✅ Debugging */}
-          <Routes>
-            {/* ✅ Normal Website Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/card" element={<Card />} />
-            <Route path="/productmodel/:section" element={<Card />} />
-            <Route path="/searchresults" element={<Card />} />
-            <Route path="/productdescription/:slug/:id/:coloring" element={<ProductDescription showPopup={showPopup}/>} />
-            <Route path="/cart" element={<AddToCart />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/searchme" element={<SearchComponent />} />
-         
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/rentcompo" element={<BottomUpSlidingList />} />
-            <Route path="/userorder" element={<UserOrder />} />
-            <Route path="/address/:sec" element={<AddressList />} />
-    
-            <Route path="/sizechart/:cate" element={<SizeChart />} />
-            <Route path="/store/:store" element={<Card />} />
-            <Route path="/rent/:rent" element={<Card />} />
-            <Route path="/wishlist/:wish" element={<Card />} />
-            <Route path="/bestsalling/:bestsale" element={<Card />} />
-            <Route path="/filter" element={<Filter />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/wallet" element={<Wallet />} />
-            <Route path="/faq" element={<Faq/>} />
-            <Route path="/aboutus" element={<AboutUs/>} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions/>} />
-            
-            <Route path="/return/:id" element={<ReturnRequest/>} />
-            <Route path="/loginn" element={<OTPLogin/>} />
-            <Route path="/mood" element={<Moodcom/>} />
-            <Route path="/payment-mode" element={<Paymentmode/>} />
-            <Route path="/return-exchange-refund" element={<Returnexchange/>} />
-            <Route path="/shipping-delivery" element={<ShippingDelivery/>} />
-           
-            <Route path="/maps" element={<MapWithAutocompelete/>} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy email="" phone=""/>}/> 
-           
-
-              <Route path="/orderconfirm" element={<OrderConfirmation/>} />
-            
-            <Route path="/prdreview/:id/:avgrating" element={<ReviewProduct/>} />
-
-        
-          </Routes>
           </Suspense>
-          </div>   
-           
-        </div>)}
-      
+          
+        </div>
 
-     
-      
+      </div>)}
 
-    {/* {!isAdminRoute && !isabout && !isref  && !mood  &&  !searchme   && <div className="mainnn-contenttttttt"> <Footer /></div>} */}
-    {/* ✅ Footer ab sirf tab show hoga jab loader OFF hai */}
+
+
+
+
+      {/* {!isAdminRoute && !isabout && !isref  && !mood  &&  !searchme   && <div className="mainnn-contenttttttt"> <Footer /></div>} */}
+      {/* ✅ Footer ab sirf tab show hoga jab loader OFF hai */}
       {!isLoading &&
         !isAdminRoute &&
         !isabout &&
@@ -315,9 +332,36 @@ useEffect(() => {
         !searchme && (
           <div className="mainnn-contenttttttt">
             <Footer />
+            {showIcon && (
+  <div
+    onClick={() => {
+      setOpenpopup(true);
+      setShowIcon(false);
+    }}
+    style={{
+      position: "fixed",
+      bottom: "80px",
+      left: "20px",
+      width: "30px",
+      height: "30px",
+      borderRadius: "50%",
+      background: "black",
+      color: "white",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      cursor: "pointer",
+      zIndex: 999,
+      boxShadow: "0 10px 20px rgba(0,0,0,0.2)",
+      fontSize: "13px"
+    }}
+  >
+    🎁
+  </div>
+)}
           </div>
         )}
-    
+
     </>
   );
 }
