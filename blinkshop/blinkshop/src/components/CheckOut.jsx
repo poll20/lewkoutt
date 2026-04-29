@@ -592,8 +592,14 @@ import BundleProduct from "./BundleProduct";
  * based on membership type. Never mutates the original object.
  */
 const getMembershipPrice = (item, memberType) => {
-  const category = item?.cate?.toString().trim().toLowerCase();
+  // const category = item?.cate?.toString().trim().toLowerCase();
+  const rawCategory = item?.cate?.toString().toLowerCase();
 
+// 🔥 Extract only "tops" or "dress"
+const match = rawCategory?.match(/\b(tops?|dress(es)?)\b/);
+
+const category = match ? match[0] : null;
+console.log("memcate",category)
   if (memberType === "silver") {
     if (category === "tops") return 299;
   }
