@@ -569,6 +569,24 @@
 // };
 
 // export default Checkout;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import "./CheckOut.css";
 import { useBio } from "./BioContext";
@@ -593,21 +611,31 @@ import BundleProduct from "./BundleProduct";
  */
 const getMembershipPrice = (item, memberType) => {
   // const category = item?.cate?.toString().trim().toLowerCase();
-  const rawCategory = item?.cate?.toString().toLowerCase();
+  console.log("cartcate",item)
+  // const rawCategory = item?.cate?.toString().toLowerCase();
+  const rawCategory = (
+  item?.cate ||
+  item?.category ||
+  item?.description ||
+  item?.title ||
+  ""
+)
+  .toString()
+  .toLowerCase();
 
 // 🔥 Extract only "tops" or "dress"
-const match = rawCategory?.match(/\b(tops?|dress(es)?)\b/);
+const match = rawCategory?.match(/\b(top(s)?|dress(es)?)\b/);
 
 const category = match ? match[0] : null;
 
 console.log("memcate",category,memberType)
   if (memberType === "silver") {
-    if (category === "tops") return 299;
+    if (category === "tops" ||category === "top" ) return 299;
   }
 
   if (memberType === "gold") {
-    if (category === "tops") return 299;
-    if (category != "tops") return 599;
+    if (category === "tops" || category === "top") return 299;
+    if (category != "tops" || category != "top") return 599;
   }
 
   // Fallback: use existing discountprice or price
@@ -757,6 +785,23 @@ const Checkout = () => {
    */
   const pricedCart = applyMembershipPricing(purchaseproduct, member);
 
+
+  const isOnlyTopCart = (cartItems) => {
+  return cartItems.every((item) => {
+    const rawCategory = (
+      item?.cate ||
+      item?.category ||
+      item?.description ||
+      item?.title ||
+      ""
+    )
+      .toString()
+      .toLowerCase();
+
+    const match = rawCategory.match(/\b(top(s)?)\b/);
+    return match !== null;
+  });
+};
   // Show membership toast once when component mounts for a member
   useEffect(() => {
     if (isMember) {
@@ -810,11 +855,18 @@ const Checkout = () => {
     if (isNaN(numericDistance)) return;
 
     // Members always pay ₹100 flat shipping
-    if (isMember) {
-      setDeliveryCharge(100);
-      localStorage.setItem("checkoutDeliveryCharge", JSON.stringify(100));
-      return;
-    }
+    // if (isMember) {
+    //   setDeliveryCharge(100);
+    //   localStorage.setItem("checkoutDeliveryCharge", JSON.stringify(100));
+    //   return;
+    // }
+    const onlyTop = isOnlyTopCart(purchaseproduct);
+
+if (member?.memberType === "silver" && onlyTop || member?.memberType=="gold") {
+  setDeliveryCharge(100);
+  localStorage.setItem("checkoutDeliveryCharge", JSON.stringify(100));
+  return;
+}
 
     let charge = 0;
     if (numericDistance >= 16 && numericDistance <= 18) {
@@ -1070,13 +1122,14 @@ const Checkout = () => {
         <div className="order-row-checkoutbuy">
           <span style={{ display: "flex", flexDirection: "column" }}>
             <span>Delivery Charges</span>
-            <span style={{ display: "flex", flexDirection: "column", fontSize: "10px" }}>
+            {/* <span style={{ display: "flex", flexDirection: "column", fontSize: "10px" }}>
               {isMember
                 ? "(Fixed ₹100 for members)"
                 : deliveryCharge
                 ? "(Distance-based delivery fee applied)"
                 : ""}
-            </span>
+                
+            </span> */}
           </span>
           <span className="text-green-600 font-semibold text-[16px]">
             ₹{deliveryCharge}

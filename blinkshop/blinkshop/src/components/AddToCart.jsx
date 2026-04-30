@@ -71,10 +71,10 @@ const AddToCart = () => {
 
 
 useEffect(() => {
-  const total = choosebuy.reduce((acc, item) => acc + ( item.price || item.bundle[0].bundletotalamount ), 0);
-  const discounttotal = choosebuy.reduce((acc, item) => acc + ( item.discountprice || item.bundle[0].bundletotalamount ), 0);
+  const total = choosebuy.reduce((acc, item) => acc + ( item.price || item.bundle[0]?.bundletotalamount ), 0);
+  const discounttotal = choosebuy.reduce((acc, item) => acc + ( item.discountprice || item.bundle[0]?.bundletotalamount ), 0);
 
-  const ct=choosebuy.reduce((acc,item)=>acc +( item.price || item.bundle[0].bundletotalamount ) ,0)
+  const ct=choosebuy.reduce((acc,item)=>acc +( item.price || item.bundle[0]?.bundletotalamount ) ,0)
   settotalprice(total);
   settotaldiscountprice(discounttotal);
 
