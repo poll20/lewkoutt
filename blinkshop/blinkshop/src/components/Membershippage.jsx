@@ -1,9 +1,19 @@
 import { useState } from "react";
 import lewkoutlogo from "../components/image/lewklogo.webp";
 import "./Membershippage.css";
-import { useFirebaseAuth } from "./FirebaseContext";
 
+import { RiMoneyRupeeCircleLine } from "react-icons/ri";
+import { SlLockOpen } from "react-icons/sl";
+import { BsBoxSeam } from "react-icons/bs";
+import { AiOutlineThunderbolt } from "react-icons/ai";
+import { useBio } from "./BioContext";
+import "./AddressList.css";
+import SlideUpModal from "./SlideupModel";
+import OtpLogin from "./OtpLogin";
+
+import { useFirebaseAuth } from "./FirebaseContext";
 const plans = [
+    
   {
     id: "silver",
     name: "Silver",
@@ -28,11 +38,14 @@ const plans = [
 ];
 
 export default function MembershipPage() {
+      const { handlenewaddress, handlechooseaddress, deleteandeditaddrress, setshowmeaddress,fetchCoupons, setshowloginpage,showloginpage } = useBio();
+      const { user, userDetails, fetchUserDetails } = useFirebaseAuth();
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
-const {user, userDetails, } = useFirebaseAuth();
+  const isLoggedIn =!!userDetails?._id;
+
   
 
   const showToast = (msg, type = "info") => {
@@ -45,6 +58,8 @@ const {user, userDetails, } = useFirebaseAuth();
     showToast("Please select a plan first.", "warn");
     return;
   }
+  if(!isLoggedIn){setshowloginpage(true);return;}
+  
 
   setLoading(true);
 
@@ -94,6 +109,9 @@ const {user, userDetails, } = useFirebaseAuth();
   } finally {
     setLoading(false);
   }
+
+  
+
 };
 
   const handlePaymentSuccess = (plan) => {
@@ -196,18 +214,15 @@ const {user, userDetails, } = useFirebaseAuth();
                   </div>
                 </div>
 
-                <div className="mp-card__pricing">
+                {/* <div className="mp-card__pricing">
                   <div className="mp-card__price">
                     <span className="mp-card__cur">₹</span>
                     <span className="mp-card__amt">{plan.price}</span>
                     <span className="mp-card__per">/yr</span>
                   </div>
                   <span className="mp-card__mo">≈ ₹{Math.round(plan.price / 12)}/mo</span>
-                </div>
-
-                <div className="mp-card__divider" />
-
-                <ul className="mp-card__benefits">
+                </div> */}
+                 <ul className="mp-card__benefits">
                   {plan.benefits.map((b, i) => (
                     <li key={i} className="mp-benefit">
                       <span className="mp-benefit__icon">{b.icon}</span>
@@ -219,6 +234,29 @@ const {user, userDetails, } = useFirebaseAuth();
                     </li>
                   ))}
                 </ul>
+
+                <div className="mp-card__divider" />
+
+                {/* <ul className="mp-card__benefits">
+                  {plan.benefits.map((b, i) => (
+                    <li key={i} className="mp-benefit">
+                      <span className="mp-benefit__icon">{b.icon}</span>
+                      <div className="mp-benefit__body">
+                        <span className="mp-benefit__name">{b.label}</span>
+                        <span className="mp-benefit__price">Member price <strong>{b.member}</strong></span>
+                      </div>
+                      <span className="mp-benefit__tick">✓</span>
+                    </li>
+                  ))}
+                </ul> */}
+                <div className="mp-card__pricing" >
+                  <div className="mp-card__price" >
+                    <span className="mp-card__cur">₹</span>
+                    <span className="mp-card__amt">{plan.price}</span>
+                    <span className="mp-card__per">/yr</span>
+                  </div>
+                  <span className="mp-card__mo">≈ ₹{Math.round(plan.price / 365)}/per day</span>
+                </div>
 
                 {isSel && <div className="mp-card__chosen">Plan selected ✓</div>}
               </div>
@@ -252,9 +290,86 @@ const {user, userDetails, } = useFirebaseAuth();
         </div>
         <p className="mp-cta__fine">Secure · PhonePe · Annual · No hidden fees</p>
       </section>
+{/* ── MEMBER BENEFITS ── */}
+<section style={styles.benefitsSection}>
+  <h2 style={styles.heading}>★ Member Benefits ★</h2>
 
+  {/* BIG DISCOUNTS */}
+  <div style={styles.row}>
+    <RiMoneyRupeeCircleLine style={styles.icon} />
+    <div style={styles.content}>
+      <h4 style={styles.title}>BIG DISCOUNTS</h4>
+<div style={{display:"flex",width:"100%",gap:"0px",alignItems:"center",justifyContent:"center",padding:"4px 0"}}>
+      <div style={{border:"2px solid black",background:"black",width:"5px",height:"5px",borderRadius:"100%"}}></div>
+
+      <div style={{border:"1px solid black",width:"100%",height:"0px"}}></div>
+      </div>
+      <p style={styles.text}>All tops at ₹299/-</p>
+      <p style={styles.text}>All dresses at ₹599/-</p>
+    </div>
+  </div>
+
+  {/* EARLY ACCESS */}
+  <div style={styles.row}>
+    <SlLockOpen style={styles.icon} />
+    <div style={styles.content}>
+      <h4 style={styles.title}>EARLY ACCESS</h4>
+      <div style={{display:"flex",width:"100%",gap:"0px",alignItems:"center",justifyContent:"center",padding:"4px 0"}}>
+      <div style={{border:"2px solid black",background:"black",width:"5px",height:"5px",borderRadius:"100%"}}></div>
+
+      <div style={{border:"1px solid black",width:"100%",height:"0px"}}></div>
+      </div>
+      <p style={styles.text}>Get early access to every new drop.</p>
+    </div>
+  </div>
+
+  {/* NO LIMIT */}
+  <div style={styles.row}>
+    <BsBoxSeam style={styles.icon} />
+    <div style={styles.content}>
+      <h4 style={styles.title}>NO LIMIT ADVANTAGE</h4>
+      <div style={{display:"flex",width:"100%",gap:"0px",alignItems:"center",justifyContent:"center",padding:"4px 0"}}>
+      <div style={{border:"2px solid black",background:"black",width:"5px",height:"5px",borderRadius:"100%"}}></div>
+
+      <div style={{border:"1px solid black",width:"100%",height:"0px"}}></div>
+      </div>
+      <p style={styles.text}>No limits. Order as much as you want, save every time.</p>
+    </div>
+  </div>
+
+  {/* INSTANT SAVINGS */}
+  <div style={styles.row}>
+    <AiOutlineThunderbolt style={styles.icon} />
+    <div style={styles.content}>
+      <h4 style={styles.title}>INSTANT SAVINGS</h4>
+      <div style={{display:"flex",width:"100%",gap:"0px",alignItems:"center",justifyContent:"center",padding:"4px 0"}}>
+      <div style={{border:"2px solid black",background:"black",width:"5px",height:"5px",borderRadius:"100%"}}></div>
+
+      <div style={{border:"1px solid black",width:"100%",height:"0px"}}></div>
+      </div>
+      <p style={styles.text}>Start saving from your very first order.</p>
+      <p style={styles.text}>No minimum spend required.</p>
+    </div>
+  </div>
+</section>
+{/* ── TERMS & CONDITIONS ── */}
+<section style={tcStyles.section}>
+  <h2 style={tcStyles.heading}>Terms & Conditions</h2>
+
+  <ul style={tcStyles.list}>
+    <li>Membership fee is non-refundable and non-transferable.</li>
+    <li>Membership benefits are applicable only on purchases made via the registered account.</li>
+    <li>Membership is valid for 3 months from date of purchase.</li>
+    <li>Membership benefits cannot be combined with any other offers, discounts, or promotions. Only one offer can be applied per order.</li>
+    <li>60-minute delivery is available in select locations and time slots only. Delivery timelines may vary due to external factors beyond control.</li>
+    <li>If Lewkout discontinues the membership, a pro-rata refund will be issued based on the unused duration.</li>
+    <li>Lewkout reserves the right to suspend or terminate membership if any misuse, fraudulent activity, or abnormal usage patterns are detected.</li>
+    <li>Lewkout reserves the right to modify the terms and conditions at any time without prior notice. In case of major changes, Lewkout may refund the last membership amount at its discretion.</li>
+    <li>Accounts with unusually high return rates, repeated delivery failures, or abnormal usage may be restricted after review.</li>
+  </ul>
+</section>
       {/* ── TRUST ── */}
-      <footer className="mp-trust">
+      {/* <footer className="mp-trust">
         {[
           { icon: "🔒", label: "Secure Payments" },
           { icon: "⚡", label: "Instant Activation" },
@@ -266,7 +381,85 @@ const {user, userDetails, } = useFirebaseAuth();
             <span className="mp-trust__label">{t.label}</span>
           </div>
         ))}
-      </footer>
+      </footer> */}
+        <SlideUpModal show={showloginpage} onClose={() => setshowloginpage(false)}>
+                <OtpLogin/>
+              </SlideUpModal>
     </div>
   );
 }
+const styles = {
+  benefitsSection: {
+    background: "#f9f9f9",
+    padding: "40px 20px",
+    // marginTop: "40px",
+    // border:"2px solid red",
+    borderRadius: "12px",
+  },
+  heading: {
+    textAlign: "center",
+    marginBottom: "30px",
+    fontWeight: "600",
+    fontSize: "20px",
+  },
+  row: {
+    display: "flex",
+    // border:"2px solid red",
+width:"98%",
+    alignItems: "flex-start",
+    gap: "15px",
+    padding: "15px 0",
+    borderBottom: "1px solid #ddd",
+  },
+  icon: {
+    fontSize: "28px",
+    color: "#000",
+    minWidth: "30px",
+  },
+  content: {
+    flex: 1,
+  },
+  title: {
+    margin: 0,
+    fontSize: "14px",
+    fontWeight: "700",
+    letterSpacing: "1px",
+  },
+  text: {
+    margin: "4px 0",
+    fontSize: "13px",
+    color: "#333",
+    fontWeight:"bold",
+    lineHeight:"14px"
+  },
+  textSmall: {
+    margin: "2px 0",
+    fontSize: "12px",
+    color: "#666",
+  },
+};
+const tcStyles = {
+  section: {
+    background: "#fff",
+    padding: "40px 20px",
+    marginTop: "30px",
+    borderRadius: "12px",
+    border: "1px solid #eee",
+  },
+  heading: {
+    textAlign: "center",
+    fontSize: "20px",
+    fontWeight: "600",
+    marginBottom: "20px",
+  },
+  list: {
+    // border:"2px solid red",
+    display:"flex",
+    flexDirection:"column",
+gap:"10px",
+    lineHeight: "1.7",
+    color: "#444",
+    fontSize: "13px",
+    lineHeight:"1.2em"
+  },
+};

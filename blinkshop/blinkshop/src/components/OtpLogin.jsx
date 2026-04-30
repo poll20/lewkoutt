@@ -161,7 +161,11 @@ console.log("currentpath",location.pathname);
       sessionStorage.removeItem("afterLoginRedirect");
       
       navigate("/checkout");
-    } else {
+    } 
+    else if(location.pathname==="/member"){
+       navigate("/member");
+    }
+    else {
       navigate("/profile"); // normal behaviour
     }
   } else {

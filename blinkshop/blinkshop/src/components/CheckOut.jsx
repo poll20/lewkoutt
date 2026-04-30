@@ -599,14 +599,15 @@ const getMembershipPrice = (item, memberType) => {
 const match = rawCategory?.match(/\b(tops?|dress(es)?)\b/);
 
 const category = match ? match[0] : null;
-console.log("memcate",category)
+
+console.log("memcate",category,memberType)
   if (memberType === "silver") {
     if (category === "tops") return 299;
   }
 
   if (memberType === "gold") {
     if (category === "tops") return 299;
-    if (category === "dress") return 599;
+    if (category != "tops") return 599;
   }
 
   // Fallback: use existing discountprice or price
@@ -618,11 +619,12 @@ console.log("memcate",category)
  * Original items are not mutated.
  */
 const applyMembershipPricing = (cartItems, member) => {
+  console.log("member",member)
   if (!member?.isMember) return cartItems; // non-member → untouched
 
   return cartItems.map((item) => ({
     ...item,
-    discountprice: getMembershipPrice(item, member.memberType),
+    discountprice: getMembershipPrice(item, member?.memberType),
   }));
 };
 
@@ -630,6 +632,7 @@ const applyMembershipPricing = (cartItems, member) => {
 // 🟢  MEMBERSHIP TOAST  (self-contained)
 // ─────────────────────────────────────────────
 const MembershipToast = ({ memberType, onClose }) => {
+  console.log("chhlodekhe",memberType)
   useEffect(() => {
     const t = setTimeout(onClose, 3500);
     return () => clearTimeout(t);
@@ -1397,7 +1400,7 @@ const Checkout = () => {
                 <div className="item-details">
                   {/* Show membership price if applicable */}
                   <span className="item-price">
-                    ₹{getMembershipPrice(order, member.isMember ? member.memberType : null)}
+                    ₹{getMembershipPrice(order, member.isMember ? member?.memberType : null)}
                     {isMember &&
                       getMembershipPrice(order, member.memberType) !==
                         (order.discountprice ?? order.price) && (
