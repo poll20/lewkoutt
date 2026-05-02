@@ -1490,9 +1490,9 @@ const extractCategory = (item) => {
   )
     .toString()
     .toLowerCase();
-
-  const match = raw.match(/\b(tops?|dresses?)\b/);
-  return match ? match[0].replace(/s$/, "") : null; // normalise: "tops"→"top", "dresses"→"dress"
+console.log("raww,",raw)
+  const match = raw.match(/\b(tops?|dresses?|Dresses)\b/);
+  return match ? match[0].replace(/s$/, "") : "dress"; // normalise: "tops"→"top", "dresses"→"dress"
 };
 
 /**
@@ -1505,6 +1505,7 @@ const extractCategory = (item) => {
  */
 const getMembershipPrice = (item, memberType) => {
   const category = extractCategory(item);
+  console.log("catwgory",item,category,memberType)
   const original = item?.discountprice ?? item?.price ?? 0;
 
   if (memberType === "silver") {
@@ -1812,10 +1813,10 @@ const Checkout = () => {
     };
   }, [location.pathname]);
 
-  // ── Coupon eligibility: coupons are BLOCKED when silver member + all-tops cart ──
+  // ── Coupon eligibility: coupons are BLOCKED when gold member, silver member + all-tops cart ──
   // In that case the membership discount already applies; stacking a coupon is not allowed.
   const isCouponBlocked = useMemo(
-    () => memberType === "silver" && isOnlyTopCart(purchaseproduct),
+    () => memberType === "silver" && isOnlyTopCart(purchaseproduct) || memberType === "gold",
     [memberType, purchaseproduct]
   );
 
@@ -1873,9 +1874,32 @@ const Checkout = () => {
     // 4. Calculate discount amount
     const isPercent = couponToApply?.discountType === "Percentage";
     const value = Number(couponToApply?.discountValue ?? 0);
-    const discount = isPercent
-      ? Math.round((totalDiscountPrice * value) / 100)
-      : value;
+    // const discount = isPercent
+    //   ? Math.round((totalDiscountPrice * value) / 100)
+    //   : value;
+    // 🧠 check cart type
+const onlyTop = isOnlyTopCart(purchaseproduct);
+const hasDress = purchaseproduct.some(
+  (item) => extractCategory(item) != "top"
+);
+
+// 🧠 dress total nikalo
+const dressTotal = pricedCart
+  .filter((item) => extractCategory(item) !="top")
+  .reduce((sum, item) => sum + (item.discountprice ?? item.price ?? 0), 0);
+
+// 🧠 decide base amount
+let baseAmount = totalDiscountPrice;
+
+// 🔥 MAIN CONDITION
+if (memberType === "silver" && !onlyTop && hasDress) {
+  baseAmount = dressTotal; // only dress pe discount lagega
+}
+
+// 🎯 final discount
+const discount = isPercent
+  ? Math.round((baseAmount * value) / 100)
+  : value;
 
     setFirstcpn(couponToApply);
     setCouponDiscount(discount);
@@ -2006,7 +2030,7 @@ const Checkout = () => {
         >
           <span style={{ fontWeight: "600", color: "#888" }}>Coupon Not Applicable</span>
           <span style={{ fontSize: "11px", color: "#888", fontStyle: "italic" }}>
-            Membership discount already applied on tops
+            Membership discount already applied.
           </span>
         </div>
       ) : (
