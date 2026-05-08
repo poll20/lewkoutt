@@ -16,15 +16,20 @@ import { useDashboard } from "./DashboardContext";
 
 const AddData = () => {
   const { adddatatoexistingcategory, addnewcategory } = useDashboard();
-  const { productdata, handleRefetch } = useBio();
+  const { productdata, handleRefetch ,productfetch} = useBio();
 
   const [step, setStep] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [newCoupon, setNewCoupon] = useState("");
 
+useEffect(()=>{
+  productfetch("all")
+},[])
+
   useEffect(() => {
     if (productdata) {
+      console.log("categorymaidata",productdata)
       let categoryList = productdata.map((e) => e.category);
       setCategories(categoryList);
     }
