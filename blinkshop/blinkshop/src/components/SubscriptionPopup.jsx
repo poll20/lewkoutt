@@ -145,7 +145,7 @@ const SubscriptionPopup = ({ onClose }) => {
 
         {/* Content */}
         <div style={styles.content}>
-          <h2 style={styles.heading}>Why pay full when you get it at half</h2>
+          <h2 style={styles.heading}>Why pay full when you can get it at half</h2>
           {/* <p style={styles.text}>
             Join our inner circle for early access to curated collections and private offers.
           </p> */}
@@ -175,7 +175,7 @@ const SubscriptionPopup = ({ onClose }) => {
           {/* Button */}
           <NavLink to='/member' >
           <button style={styles.button}>
-            Start saving now
+            Start Saving Now
             </button>
           </NavLink>
 
