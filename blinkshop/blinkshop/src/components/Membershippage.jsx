@@ -120,7 +120,7 @@ const [openTerms, setOpenTerms] = useState(false);
       planName: plan.name,
       price: plan.price,
       activatedAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+      expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
     };
     console.log("Saving to DB:", membership);
     // TODO: POST to your backend
@@ -468,7 +468,7 @@ const [openTerms, setOpenTerms] = useState(false);
                     <span className="mp-card__amt">{plan.price}</span>
                     {/* <span className="mp-card__per">/yr</span> */}
                   </div>
-                  <span className="mp-card__mo">≈ ₹{Math.round(plan.price / 365)}/per day</span>
+                  <span className="mp-card__mo">≈ ₹{Math.round(plan.price / 90)}/per day</span>
                 </div>
 
                 {isSel && <div className="mp-card__chosen">Plan selected ✓</div>}
