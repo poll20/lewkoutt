@@ -1476,6 +1476,15 @@ const MEMBER_DELIVERY_CHARGE = 70;
 const MIN_FREE_DELIVERY_AMOUNT = 799;
 const LOW_ORDER_DELIVERY_CHARGE = 50;
 
+
+
+
+
+
+
+
+
+
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1521,6 +1530,10 @@ const getMembershipPrice = (item, memberType) => {
 
   return original;
 };
+
+
+
+
 
 /** Returns a new cart array with membership prices applied (non-mutating) */
 const applyMembershipPricing = (cartItems, member) => {
@@ -1650,7 +1663,12 @@ const Checkout = () => {
   // ── Coupon state ─────────────────────────────────────────────────────────────
   const [firstcpn, setFirstcpn] = useState(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+// ─────────────────────────────────────────────────────────────
+// MEMBERSHIP POPUP
+// ─────────────────────────────────────────────────────────────
 
+const [showMembershipPopup, setShowMembershipPopup] = useState(false);
+const [membershipPopupClosed, setMembershipPopupClosed] = useState(false);
   // ── Distance ─────────────────────────────────────────────────────────────────
   const [numericDistance, setNumericDistance] = useState(0);
   const [deliveryCharge, setDeliveryCharge] = useState(
@@ -1723,6 +1741,68 @@ const Checkout = () => {
   // EFFECTS
   // ─────────────────────────────────────────────────────────────────────────────
 
+
+
+  // savings calculation
+const membershipSavingsData = useMemo(() => {
+  let topSavings = 0;
+  let dressSavings = 0;
+
+  let topOriginal = 0;
+  let topMember = 0;
+
+  let dressOriginal = 0;
+  let dressMember = 0;
+
+  let topCount = 0;
+  let dressCount = 0;
+
+  purchaseproduct.forEach((item) => {
+    const category = extractCategory(item);
+
+    const originalPrice =
+      Number(item?.discountprice ?? item?.price ?? 0);
+
+    // TOPS
+    if (category === "top") {
+      topCount += 1;
+
+      topOriginal += originalPrice;
+      topMember += 399;
+
+      topSavings += Math.max(0, originalPrice - 399);
+    }
+
+    // DRESSES
+    else {
+      dressCount += 1;
+
+      dressOriginal += originalPrice;
+      dressMember += 699;
+
+      dressSavings += Math.max(0, originalPrice - 699);
+    }
+  });
+
+  return {
+    topSavings,
+    dressSavings,
+
+    topOriginal,
+    topMember,
+
+    dressOriginal,
+    dressMember,
+
+    topCount,
+    dressCount,
+
+    hasTop: topCount > 0,
+    hasDress: dressCount > 0,
+
+    totalSavings: topSavings + dressSavings,
+  };
+}, [purchaseproduct]);  
   // Show membership toast once when membership data is confirmed
   useEffect(() => {
     if (isMember) setShowMembershipToast(true);
@@ -1757,6 +1837,31 @@ const Checkout = () => {
       fetchDistance(deliveryAddress);
     }
   }, [deliveryAddress]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+// show popup only once per checkout visit
+useEffect(() => {
+  if (
+    !isMember &&
+    !membershipPopupClosed &&
+    membershipSavingsData.totalSavings > 0
+  ) {
+    const timer = setTimeout(() => {
+      setShowMembershipPopup(true);
+    }, 700);
+
+    return () => clearTimeout(timer);
+  }
+}, [
+  isMember,
+  membershipPopupClosed,
+  membershipSavingsData.totalSavings,
+]);
+
+const closeMembershipPopup = () => {
+  setShowMembershipPopup(false);
+  setMembershipPopupClosed(true);
+};
 
   // Compute delivery charge whenever distance OR membership changes
   useEffect(() => {
@@ -2382,6 +2487,241 @@ const discount = isPercent
           )
         )}
       </div>
+
+      {/* ───────────────────────────────────────────────────── */}
+{/* MEMBERSHIP SAVINGS POPUP */}
+{/* ───────────────────────────────────────────────────── */}
+
+{showMembershipPopup && !isMember && (
+  <>
+    <style>
+      {`
+        @keyframes membershipFade {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes membershipScale {
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+      `}
+    </style>
+
+    {/* BACKDROP */}
+    <div
+      onClick={closeMembershipPopup}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.45)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+        zIndex: 999999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "18px",
+        animation: "membershipFade 0.3s ease",
+      }}
+    >
+      {/* POPUP */}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          borderRadius: "30px",
+          background: "rgba(255,255,255,0.88)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.18)",
+          border: "1px solid rgba(255,255,255,0.7)",
+          padding: "34px 24px 24px",
+          animation:
+            "membershipScale 0.35s cubic-bezier(.17,.67,.35,1.2)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Glow */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-80px",
+            right: "-70px",
+            width: "180px",
+            height: "180px",
+            borderRadius: "50%",
+            background:
+              "linear-gradient(135deg,#fde68a,#fca5a5)",
+            opacity: 0.22,
+            filter: "blur(40px)",
+          }}
+        />
+
+        {/* CLOSE */}
+        <button
+          onClick={closeMembershipPopup}
+          style={{
+            position: "absolute",
+            top: "14px",
+            right: "14px",
+            width: "34px",
+            height: "34px",
+            borderRadius: "50%",
+            border: "none",
+            background: "#f5f5f5",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "700",
+            color: "#444",
+            transition: "0.25s",
+          }}
+        >
+          ✕
+        </button>
+
+        {/* HEADING */}
+        <div
+          style={{
+            fontSize: "16px",
+            fontWeight: "800",
+            color: "#111",
+            // lineHeight: "1.2",
+            marginBottom: "18px",
+            textAlign: "center",
+          }}
+        >
+        Unlock Membership Savings
+        </div>
+
+        {/* TEXT */}
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "28px",
+            // lineHeight: "1.7",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "17px",
+              color: "#555",
+              fontWeight: "500",
+            }}
+          >
+            You can save <span style={{
+              fontSize: "17px",
+              fontWeight: "600",
+              color: "#16a34a",
+              
+            }}> ₹{membershipSavingsData.totalSavings}</span>  on this order
+          </span>
+
+          {/* <div
+            style={{
+              fontSize: "42px",
+              fontWeight: "900",
+              color: "#16a34a",
+              marginTop: "6px",
+              marginBottom: "6px",
+              letterSpacing: "-1px",
+            }}
+          >
+            ₹{membershipSavingsData.totalSavings}
+          </div> */}
+
+          {/* <span
+            style={{
+              fontSize: "16px",
+              color: "#666",
+              fontWeight: "500",
+            }}
+          >
+            on this order
+          </span> */}
+        </div>
+
+        {/* BUTTONS */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          {/* START SAVING */}
+          <button
+            onClick={() => navigate("/member")}
+            style={{
+              width: "100%",
+              height: "56px",
+              border: "none",
+              borderRadius: "18px",
+              background:
+                "linear-gradient(135deg,#111827,#374151)",
+              color: "#fff",
+              fontSize: "16px",
+              fontWeight: "800",
+              cursor: "pointer",
+              boxShadow:
+                "0 12px 28px rgba(17,24,39,0.22)",
+              transition: "0.3s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform =
+                "translateY(-2px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform =
+                "translateY(0)";
+            }}
+          >
+            Start Saving Now
+          </button>
+
+          {/* FULL PAY */}
+          <button
+            onClick={closeMembershipPopup}
+            style={{
+              width: "100%",
+              height: "56px",
+              borderRadius: "18px",
+              background: "#fff",
+              border: "1px solid #e5e5e5",
+              color: "#333",
+              fontSize: "15px",
+              fontWeight: "700",
+              cursor: "pointer",
+              transition: "0.25s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background =
+                "#f9fafb";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background =
+                "#fff";
+            }}
+          >
+            I Want To Pay Full
+          </button>
+        </div>
+      </div>
+    </div>
+  </>
+)}
     </div>
   );
 };

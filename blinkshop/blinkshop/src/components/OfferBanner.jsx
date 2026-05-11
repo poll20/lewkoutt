@@ -25,20 +25,21 @@ export default function OfferBanner() {
         style={{
           display: "flex",
           gap: "50px",
-          color: "black",
-          fontSize: "18px",
-          fontWeight: "400",
-          fontFamily:" 'Playfair Display',serif;",
-          whiteSpace: "nowrap",
+          fontFamily:" 'Cormorant Garamond', serif",
+  fontSize: "18px",
+  fontWeight:"300",
+  color:"black",
+  textShadow:"0 1px 8px rgba(0, 0, 0, 0.3)",
+    whiteSpace: "nowrap",
         }}
       >
         
         <span>
-        🕒 Delivery In⚡60 Mins (jaipur)
+        🕒 Delivery In⚡60 Mins (JAIPUR)
         </span>
 
          <span>
-        🕒4-6 days Delivery (pan-india)
+        🕒4-6 days Delivery (PAN-INDIA)
         </span>
         <span>
         25% OFF ON FIRST 3 ORDERS 🛍️

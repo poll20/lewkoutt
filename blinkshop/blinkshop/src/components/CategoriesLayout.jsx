@@ -129,12 +129,141 @@
 
 // export default CategoriesLayout;
 
+// import React, { useEffect, useRef, useState } from "react";
+// import "./CategoriesLayout.css";
+// import { NavLink } from "react-router-dom";
+// import Cardforall from "./Cardforall";
+// import { useBio } from "./BioContext";
+// import { cloudinaryImg } from "../utils/cloudinariimg";
+// import cara1 from "../components/image/cara1.jpeg";
+// import cara2 from "../components/image/cara2.jpeg";
+// import cara3 from "../components/image/cara3.jpeg";
+// import cara4 from "../components/image/cara4.jpeg";
+// import cara5 from "../components/image/cara5.jpeg";
+// const CategoriesLayout = () => {
+//   const {
+//     productdata,
+//     fetchCategories,
+//     hasMore,
+//     fetchCoupons,
+//     coupons,
+//   } = useBio();
+
+//   const [page, setPage] = useState(1);
+//   const loaderRef = useRef(null);
+
+//   useEffect(() => {
+//     fetchCategories(page);
+//   }, [page]);
+
+//   useEffect(() => {
+//     fetchCoupons("all", "all");
+//   }, []);
+
+//   useEffect(() => {
+//     const observer = new IntersectionObserver(
+//       ([entry]) => {
+//         if (entry.isIntersecting && hasMore) {
+//           setPage((prev) => prev + 1);
+//         }
+//       },
+//       { threshold: 1 }
+//     );
+//     if (loaderRef.current) observer.observe(loaderRef.current);
+//     return () => observer.disconnect();
+//   }, [hasMore]);
+
+//   if (!productdata || !coupons) return null;
+
+//   return (
+//     <>
+//       {[...productdata].map((cat, idx) => (
+//         <section key={idx} className="cat-section">
+
+//           {/* ── Section header ── */}
+//           <div className="cat-header">
+//             <h2 className="cat-title">
+//               {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
+//             </h2>
+//             <NavLink to={`/productmodel/${cat.category}`} className="cat-see-all">
+//               See all →
+//             </NavLink>
+//           </div>
+
+//           {/* ── Banner image ── */}
+//           <NavLink
+//             to={`/productmodel/${cat.category}`}
+//             className="cat-banner-link"
+//           >
+//             <div className="cat-banner">
+//               <img
+//                 src={cloudinaryImg(cat.image, 400)}
+//                 alt={cat.category}
+//                 className="cat-banner-img"
+//                 decoding="async"
+//                 fetchpriority="low"
+//               />
+//               <div className="cat-banner-overlay" />
+//               <span className="cat-banner-label">
+//                 Explore {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
+//               </span>
+//             </div>
+//           </NavLink>
+
+//           {/* ── Horizontally scrolling product cards ── */}
+//           <div className="cat-cards-wrapper">
+//             <div className="cat-cards">
+//               {cat.productdetails.map((p, i) => (
+//                 <div key={i} className="cat-card-item">
+//                   <Cardforall
+//                     id={p}
+//                     discription={p.description}
+//                     price={p.price}
+//                     discountprice={p.discountprice}
+//                     color={p.colors}
+//                     image={p.image[0]}
+//                     discount={p.discount}
+//                     defaultcolor={p.defaultColor}
+//                     coupons={coupons}
+//                   />
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* ── View all button ── */}
+//           <NavLink to={`/productmodel/${cat.category}`} className="cat-view-all-link">
+//             <button className="cat-view-all-btn">
+//               View all {cat.category}
+//             </button>
+//           </NavLink>
+
+//         </section>
+//       ))}
+
+//       {/* Infinite scroll sentinel */}
+//       <div ref={loaderRef} style={{ height: "1px" }} />
+//     </>
+//   );
+// };
+
+// export default CategoriesLayout;
+
+
+
 import React, { useEffect, useRef, useState } from "react";
 import "./CategoriesLayout.css";
 import { NavLink } from "react-router-dom";
 import Cardforall from "./Cardforall";
 import { useBio } from "./BioContext";
-import { cloudinaryImg } from "../utils/cloudinariimg";
+
+import cara1 from "../components/image/cara1.jpeg";
+import cara2 from "../components/image/cara2.jpeg";
+import cara3 from "../components/image/cara3.jpeg";
+import cara4 from "../components/image/cara4.jpeg";
+import cara5 from "../components/image/cara5.jpeg";
+import cara6 from "../components/image/cara6.jpeg";
+
 
 const CategoriesLayout = () => {
   const {
@@ -146,7 +275,17 @@ const CategoriesLayout = () => {
   } = useBio();
 
   const [page, setPage] = useState(1);
+
   const loaderRef = useRef(null);
+
+  /* STATIC BANNER IMAGES */
+  const bannerImages = [
+    cara1,
+    cara2,
+    cara3,
+    cara4,
+    cara5,
+  ];
 
   useEffect(() => {
     fetchCategories(page);
@@ -165,7 +304,11 @@ const CategoriesLayout = () => {
       },
       { threshold: 1 }
     );
-    if (loaderRef.current) observer.observe(loaderRef.current);
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
     return () => observer.disconnect();
   }, [hasMore]);
 
@@ -173,72 +316,94 @@ const CategoriesLayout = () => {
 
   return (
     <>
-      {[...productdata].map((cat, idx) => (
-        <section key={idx} className="cat-section">
+      {[...productdata].map((cat, idx) => {
+        /* 5 → 4 → 3 → 2 → 1 */
+        const bannerImage =
+          bannerImages[idx % bannerImages.length];
 
-          {/* ── Section header ── */}
-          <div className="cat-header">
-            <h2 className="cat-title">
-              {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
-            </h2>
-            <NavLink to={`/productmodel/${cat.category}`} className="cat-see-all">
-              See all →
+        return (
+          <section key={idx} className="cat-section">
+            {/* HEADER */}
+            <div className="cat-header">
+              <h2 className="cat-title">
+                {cat.category.charAt(0).toUpperCase() +
+                  cat.category.slice(1)}
+              </h2>
+
+              <NavLink
+                to={`/productmodel/${cat.category}`}
+                className="cat-see-all"
+              >
+                See all →
+              </NavLink>
+            </div>
+
+            {/* BANNER */}
+            <NavLink
+              to={`/productmodel/${cat.category}`}
+              className="cat-banner-link"
+            >
+              <div className="cat-banner">
+                <img
+                  src={bannerImage}
+                  alt={cat.category}
+                  className="cat-banner-img"
+                  decoding="async"
+                  fetchpriority="low"
+                />
+
+                <div className="cat-banner-overlay" />
+
+                <span className="cat-banner-label">
+                  Explore{" "}
+                  {cat.category.charAt(0).toUpperCase() +
+                    cat.category.slice(1)}
+                </span>
+              </div>
             </NavLink>
-          </div>
 
-          {/* ── Banner image ── */}
-          <NavLink
-            to={`/productmodel/${cat.category}`}
-            className="cat-banner-link"
-          >
-            <div className="cat-banner">
-              <img
-                src={cloudinaryImg(cat.image, 400)}
-                alt={cat.category}
-                className="cat-banner-img"
-                decoding="async"
-                fetchpriority="low"
-              />
-              <div className="cat-banner-overlay" />
-              <span className="cat-banner-label">
-                Explore {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
-              </span>
+            {/* CARDS */}
+            <div className="cat-cards-wrapper">
+              <div className="cat-cards">
+                {cat.productdetails.map((p, i) => (
+                  <div
+                    key={i}
+                    className="cat-card-item"
+                  >
+                    <Cardforall
+                      id={p}
+                      discription={p.description}
+                      price={p.price}
+                      discountprice={p.discountprice}
+                      color={p.colors}
+                      image={p.image[0]}
+                      discount={p.discount}
+                      defaultcolor={p.defaultColor}
+                      coupons={coupons}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </NavLink>
 
-          {/* ── Horizontally scrolling product cards ── */}
-          <div className="cat-cards-wrapper">
-            <div className="cat-cards">
-              {cat.productdetails.map((p, i) => (
-                <div key={i} className="cat-card-item">
-                  <Cardforall
-                    id={p}
-                    discription={p.description}
-                    price={p.price}
-                    discountprice={p.discountprice}
-                    color={p.colors}
-                    image={p.image[0]}
-                    discount={p.discount}
-                    defaultcolor={p.defaultColor}
-                    coupons={coupons}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+            {/* VIEW ALL BTN */}
+            <NavLink
+              to={`/productmodel/${cat.category}`}
+              className="cat-view-all-link"
+            >
+              <button className="cat-view-all-btn">
+                View all {cat.category}
+              </button>
+            </NavLink>
+          </section>
+        );
+      })}
 
-          {/* ── View all button ── */}
-          <NavLink to={`/productmodel/${cat.category}`} className="cat-view-all-link">
-            <button className="cat-view-all-btn">
-              View all {cat.category}
-            </button>
-          </NavLink>
-
-        </section>
-      ))}
-
-      {/* Infinite scroll sentinel */}
-      <div ref={loaderRef} style={{ height: "1px" }} />
+      {/* INFINITE SCROLL */}
+      <div
+        ref={loaderRef}
+        style={{ height: "1px" }}
+      />
     </>
   );
 };

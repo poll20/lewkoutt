@@ -1431,18 +1431,29 @@ app.get("/categories", async (req, res) => {
           $nin: ["The Cozy Edit", "Warm & Chic"],
         },
       })
-      .sort({ _id: -1 })
+      // .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
 
     // 🔥 newest 6 products only
-    const updatedData = data.map((cat) => ({
-      ...cat,
-      productdetails: [...cat.productdetails]
-        .reverse()
-        .slice(0, 6),
-    }));
+    // const updatedData = data.map((cat) => ({
+    //   ...cat,
+    //   productdetails: [...cat.productdetails]
+    //     .reverse()
+    //     .slice(0, 6),
+    // }));
+    const updatedData = data.map((cat) => {
+  const category = cat.category?.trim().toLowerCase();
+
+  return {
+    ...cat,
+    productdetails:
+      category === "tops & tunics"
+        ? [...cat.productdetails].slice(0, 6)
+        : [...cat.productdetails].reverse().slice(0, 6),
+  };
+});
 
     const total = await productsmodel.countDocuments({
       category: {

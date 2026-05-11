@@ -60,11 +60,15 @@ const SubscriptionPopup = ({ onClose }) => {
       padding: "20px",
       textAlign: "center",
     },
-    heading: {
-      fontSize: "16px",
-      fontWeight:"bold",
-      marginBottom: "10px",
-    },
+   heading: {
+  fontFamily:" 'Cormorant Garamond', serif",
+    fontSize: "18px",
+    fontWeight:"400",
+    color:"black",
+    textShadow:"0 1px 8px rgba(0, 0, 0, 0.3)",
+  // letterSpacing: "0.01em",
+  marginBottom: "10px",
+},
     text: {
       fontSize: "12px",
       color: "#666",
@@ -89,12 +93,24 @@ const SubscriptionPopup = ({ onClose }) => {
       textAlign: "center",
     },
     label: {
+      fontFamily: "'Cormorant Garamond', serif",
+  
+  fontWeight: "600",
+  fontStyle: "italic",
+ letterSpacing: "0.01em",
+  
       fontSize: "10px",
       color: "#888",
     },
     price: {
-      fontSize: "12px",
+      fontSize: "14px",
       fontWeight: "bold",
+      fontFamily: "'Cormorant Garamond', serif",
+ 
+  fontWeight: "600",
+  fontStyle: "italic",
+
+
     },
     input: {
       width: "100%",
@@ -111,10 +127,13 @@ const SubscriptionPopup = ({ onClose }) => {
       borderRadius: "30px",
       border: "none",
       background: "black",
-      color: "white",
-      cursor: "pointer",
-      fontWeight: "bold",
-      fontSize:"12px"
+      color:"white",
+    fontFamily: "'Cormorant Garamond', serif",
+  fontSize: "18px",
+  fontWeight: "600",
+  fontStyle: "italic",
+ letterSpacing: "0.01em",
+  
     },
     footer: {
         // border:"2px solid red",
@@ -145,7 +164,7 @@ const SubscriptionPopup = ({ onClose }) => {
 
         {/* Content */}
         <div style={styles.content}>
-          <h2 style={styles.heading}>Why pay full when you can get it at half</h2>
+          <p style={styles.heading}>Why Pay Full When You Can Get It At Half</p>
           {/* <p style={styles.text}>
             Join our inner circle for early access to curated collections and private offers.
           </p> */}

@@ -16,7 +16,7 @@ export default function Filter() {
   });
 
   const sizeOptions = {
-    "": ["S", "M", "L","XS"],
+    "": ["XS", "S", "M","L"],
   
   };
 
