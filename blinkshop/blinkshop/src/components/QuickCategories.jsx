@@ -6,8 +6,8 @@ const CATEGORIES = [
   { emoji: "👗", label: "Tops & Tunics",  path: "/productmodel/Tops%20&%20Tunics"  },
   { emoji: "👚", label: "Vacation Vibes",     path: "productmodel/Vacation%20Vibes"     },
   { emoji: "👖", label: "Co-ord Sets",  path: "/productmodel/Co-ord%20Sets"  },
-  { emoji: "🧥", label: "The Evening Edits",   path: "/The%20Evening%20Edit"   },
-  { emoji: "👙", label: "Pretty In Pastels",   path: "/Pretty%20In%20Pastels"   },
+  { emoji: "🧥", label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
+  { emoji: "👙", label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
 ];
 
 export default function QuickCategories({images}) {
