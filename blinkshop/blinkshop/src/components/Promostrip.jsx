@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./PromoStrip.css";
+import "./PromosTrip.css";
 
 export default function PromoStrip() {
   return (
