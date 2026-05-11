@@ -1289,7 +1289,7 @@ app.get("/productmodel", async (req, res) => {
       $nin: ["The Cozy Edit", "Warm & Chic"]
     }
   })
-  .sort({ _id: -1 }) // newest category first
+  // .sort({ _id: -1 }) // newest category first
   .lean();
 
   // 🔥 newest productdetails first
@@ -1339,7 +1339,7 @@ app.get("/productmodel", async (req, res) => {
       $nin: ["The Cozy Edit", "Warm & Chic"]
     }
   })
-  .sort({ _id: -1 }) // newest category first
+  // .sort({ _id: -1 }) // newest category first
   .lean();
 
   console.log("pm", categoryData);
