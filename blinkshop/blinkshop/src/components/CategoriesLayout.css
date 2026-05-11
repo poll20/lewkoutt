@@ -1,31 +1,31 @@
-/* Main Layout Container */
+/* Main Layout Container
 .horizontal-card-layout {
   
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 15px;
-    /* background-color: #f8f9fa; */
+  
   }
   
-  /* Parent Card */
+  
   .parent-card {
-    /* border: 2px solid red; */
+   
     width: 100%;
     height: 50vh;
     overflow: hidden;
-    /* border-radius: 12px; */
+    
   }
   
   .parent-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* border-radius: 12px; */
-    aspect-ratio: 16 / 9; /* ✅ Helps browser reserve space */
+    
+    aspect-ratio: 16 / 9; 
   }
   
-  /* Child Cards - Horizontal Scroll */
+ 
   .child-cards-wrapper {
     overflow-x: auto;
     display: flex;
@@ -35,21 +35,18 @@
   }
   
   .child-cards {
-    /* border: 2px solid red; */
+    
     display: flex;
     gap: 20px;
     width: max-content;
   }
   
-  /* Individual Child Card */
+  
   .child-card {
-    /* border: 2px solid red; */
+  
     flex: 0 0 auto;
     width: 250px;
-    /* background-color: whit; */
-    /* border-radius: 8px; */
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
-    /* padding: 10px; */
+ 
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
@@ -77,24 +74,22 @@
     color: #555;
     margin-bottom: 10px;
   }
-  /* h{
-    color:rgb(131, 241, 131)
-  } */
+
   .child-price {
     font-size: 1rem;
     
     color: #555;
   }
-  /* For modern browsers */
+  
 .child-cards-wrapper {
   
     overflow-x: scroll;
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none;    /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none;    
   }
   
   .child-cards-wrapper::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+    display: none;
   }
 .catebtn{
   border:1px solid rgb(190, 190, 190);
@@ -104,15 +99,15 @@
   background: white;
   color: black;
 }
-  /* Responsive Design */
+
   @media (max-width: 768px) {
 
     .parent-card {
-      /* border: 2px solid red; */
+     
       width: 100%;
       min-height: 60vh;
       overflow: hidden;
-      /* border-radius: 12px; */
+  
     }
     .child-card {
       width: 200px;
@@ -122,7 +117,7 @@
     }
 
     .cate-card-done{
-    /* border: 2px solid red; */
+    
     width: 200px;
     }
   }
@@ -138,4 +133,173 @@
       height: 200px;
     }
   }
-  
+   */
+   /* ═══════════════════════════════════════
+   Category section wrapper
+═══════════════════════════════════════ */
+.cat-section {
+  padding: 26px 20px 8px;
+}
+
+/* ── Header row ── */
+.cat-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cat-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 400;
+  font-style: italic;
+  color: #2a1f1d;
+  letter-spacing: 0.01em;
+}
+
+
+.cat-see-all {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c17464;
+  text-decoration: none;
+  border-bottom: 0.5px solid #e8b8af;
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.cat-see-all:hover {
+  color: #8b4a3d;
+  border-color: #c17464;
+}
+
+/* ── Banner image ── */
+.cat-banner-link {
+  /* border:2px solid red; */
+  display: block;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+
+.cat-banner {
+  width: 100%;
+  height: 44vw;
+  min-height: 64vh;
+  max-height: 60vh;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background: #f4ddd8;
+}
+
+.cat-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.cat-banner-link:hover .cat-banner-img {
+  transform: scale(1.04);
+}
+
+.cat-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(42, 31, 29, 0.58) 0%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.cat-banner-label {
+  position: absolute;
+  bottom: 14px;
+  left: 18px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   Horizontal product card scroll
+═══════════════════════════════════════ */
+.cat-cards-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+}
+
+.cat-cards-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-cards {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+}
+
+.cat-card-item {
+  flex: 0 0 auto;
+  width: 155px;
+}
+
+/* ─── View All button ─── */
+.cat-view-all-link {
+  display: block;
+  text-decoration: none;
+  margin-top: 16px;
+}
+
+.cat-view-all-btn {
+  width: 100%;
+  padding: 14px 0;
+  border: 1px solid rgba(193, 116, 100, 0.25);
+  background: #ffffff;
+  color: #2a1f1d;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.cat-view-all-btn:hover {
+  background: #fdf6f4;
+  border-color: #c17464;
+  color: #8b4a3d;
+}
+
+.cat-view-all-btn:active {
+  background: #f4ddd8;
+  transform: scale(0.98);
+}
+
+/* ═══════════════════════════════════════
+   Responsive
+═══════════════════════════════════════ */
+@media (max-width: 480px) {
+  .cat-banner {
+    height: 48vw;
+    max-height: 175px;
+  }
+
+  .cat-card-item {
+    width: 148px;
+  }
+}

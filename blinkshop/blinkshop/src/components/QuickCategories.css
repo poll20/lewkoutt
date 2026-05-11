@@ -1,0 +1,93 @@
+.qcat-section {
+  padding: 22px 20px 10px;
+}
+
+.qcat-header {
+  margin-bottom: 16px;
+}
+
+.qcat-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #2a1f1d;
+  letter-spacing: 0.01em;
+}
+
+/* Horizontal scroll row */
+.qcat-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.qcat-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each pill */
+.qcat-item {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.qcat-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fdf6f4;
+  border: 1.5px solid rgba(193, 116, 100, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+  will-change: transform;
+}
+
+.qcat-item:hover .qcat-circle,
+.qcat-item:focus .qcat-circle {
+  border-color: #c17464;
+  background: #f4ddd8;
+  transform: translateY(-3px);
+}
+
+.qcat-item:active .qcat-circle {
+  transform: scale(0.94);
+}
+
+.qcat-emoji {
+  font-size: 26px;
+  line-height: 1;
+  /* prevent emoji from inheriting huge container font */
+  display: block;
+}
+
+.qcat-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #9e8682;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.qcat-item:hover .qcat-label,
+.qcat-item:focus .qcat-label {
+  color: #c17464;
+}
+
+.qcat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}

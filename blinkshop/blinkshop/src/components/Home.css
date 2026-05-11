@@ -1,5 +1,43 @@
-.home{
+/* .home{
     margin: 0;
     padding: 0;
     background-color: white;
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+:root {
+  --rose:       #f4ddd8;
+  --rose-mid:   #e8b8af;
+  --rose-deep:  #c17464;
+  --rose-dark:  #8b4a3d;
+  --blush:      #fdf6f4;
+  --cream:      white,
+  --ink:        #2a1f1d;
+  --muted:      #9e8682;
+  --border:     rgba(193, 116, 100, 0.15);
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.home {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--cream);
+  min-height: 100vh;
+  padding-bottom: 72px; /* space for BottomNav */
+  position: relative;
 }

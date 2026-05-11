@@ -1260,7 +1260,7 @@ app.get("/productmodel", async (req, res) => {
         category: {
           $nin: ["The Cozy Edit", "Warm & Chic"]
         }
-      }).lean();
+      }).sort({ _id: -1 }).lean();
 
       const homeData = data.map(cat => ({
         _id: cat._id,
@@ -1273,44 +1273,110 @@ app.get("/productmodel", async (req, res) => {
     }
 
 
+    // if (operation == "all") {
+    //   //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
+    //   let categorydata = await productsmodel.find({
+    //     category: {
+    //       $nin: ["The Cozy Edit", "Warm & Chic"]
+    //     }
+    //   }).sort({ _id: -1 }).lean()
+    //   res.json(categorydata)
+    // }
     if (operation == "all") {
-      //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-      let categorydata = await productsmodel.find({
-        category: {
-          $nin: ["The Cozy Edit", "Warm & Chic"]
-        }
-      }).sort({ _id: -1 }).lean()
-      res.json(categorydata)
+
+  let categorydata = await productsmodel.find({
+    category: {
+      $nin: ["The Cozy Edit", "Warm & Chic"]
     }
+  })
+  .sort({ _id: -1 }) // newest category first
+  .lean();
+
+  // 🔥 newest productdetails first
+  const updatedData = categorydata.map((cat) => ({
+    ...cat,
+    productdetails: [...cat.productdetails].reverse()
+  }));
+
+  res.json(updatedData);
+}
+    // else if (operation === "filtered") {
+    //   // Operation 2: Fetch documents filtered by 'tag'
+    //   const cat = section;
+    //   const subcat = subcategory;
+
+    //   const categoryData = await productsmodel.find({
+    //     category: {
+    //       $nin: ["The Cozy Edit", "Warm & Chic"]
+    //     }
+    //   }).sort({ _id: -1 }).lean();
+    //   console.log("pm", categoryData)
+    //   const finalData = categoryData.filter((item) => item.category == cat);
+    //   const finalllData = finalData.map((item) => item.productdetails).flat();
+    //   const finalsubData = categoryData.map((item) => item.productdetails).flat();
+    //   const subdata = finalsubData.filter((e) => (e.tag == section))
+    //   console.log("fd", finalData)
+    //   console.log("sd", subdata)
+    //   if (finalllData.length != 0) {
+    //     res.json(finalllData);
+    //   }
+    //   else if (subdata != 0) {
+    //     res.json(subdata)
+    //   }
+
+
+    //   else {
+    //     res.json({ message: "No data found" });
+    //   }
+    // }
     else if (operation === "filtered") {
-      // Operation 2: Fetch documents filtered by 'tag'
-      const cat = section;
-      const subcat = subcategory;
 
-      const categoryData = await productsmodel.find({
-        category: {
-          $nin: ["The Cozy Edit", "Warm & Chic"]
-        }
-      }).sort({ _id: -1 }).lean();
-      console.log("pm", categoryData)
-      const finalData = categoryData.filter((item) => item.category == cat);
-      const finalllData = finalData.map((item) => item.productdetails).flat();
-      const finalsubData = categoryData.map((item) => item.productdetails).flat();
-      const subdata = finalsubData.filter((e) => (e.tag == section))
-      console.log("fd", finalData)
-      console.log("sd", subdata)
-      if (finalllData.length != 0) {
-        res.json(finalllData);
-      }
-      else if (subdata != 0) {
-        res.json(subdata)
-      }
+  const cat = section;
+  const subcat = subcategory;
 
+  const categoryData = await productsmodel.find({
+    category: {
+      $nin: ["The Cozy Edit", "Warm & Chic"]
+    }
+  })
+  .sort({ _id: -1 }) // newest category first
+  .lean();
 
-      else {
-        res.json({ message: "No data found" });
-      }
-    } else {
+  console.log("pm", categoryData);
+
+  const finalData = categoryData.filter(
+    (item) => item.category == cat
+  );
+
+  // 🔥 newest productdetails first
+  const finalllData = finalData
+    .map((item) => [...item.productdetails].reverse())
+    .flat();
+
+  const finalsubData = categoryData
+    .map((item) => [...item.productdetails].reverse())
+    .flat();
+
+  const subdata = finalsubData.filter(
+    (e) => e.tag == section
+  );
+
+  console.log("fd", finalData);
+  console.log("sd", subdata);
+
+  if (finalllData.length != 0) {
+    res.json(finalllData);
+  }
+
+  else if (subdata.length != 0) {
+    res.json(subdata);
+  }
+
+  else {
+    res.json({ message: "No data found" });
+  }
+}
+     else {
       res.status(400).json({ message: "Invalid operation type" });
     }
   }
@@ -1322,38 +1388,77 @@ app.get("/productmodel", async (req, res) => {
 
 
 // categories with pagination
+// app.get("/categories", async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = 2; // ek page me kitni categories
+//     const skip = (page - 1) * limit;
+
+//     const data = await productsmodel
+//       .find({
+//         category: {
+//           $nin: ["The Cozy Edit", "Warm & Chic"]
+//         }
+//       })
+//       .sort({ _id: -1 })
+//       .skip(skip)
+//       .limit(limit)
+//       .lean();
+
+//     const total = await productsmodel.countDocuments({
+//       category: {
+//         $nin: ["The Cozy Edit", "Warm & Chic"]
+//       }
+//     });
+
+//     res.json({
+//       data,
+//       hasMore: skip + data.length < total,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 app.get("/categories", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = 2; // ek page me kitni categories
+    const limit = 2;
     const skip = (page - 1) * limit;
 
     const data = await productsmodel
       .find({
         category: {
-          $nin: ["The Cozy Edit", "Warm & Chic"]
-        }
+          $nin: ["The Cozy Edit", "Warm & Chic"],
+        },
       })
       .sort({ _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
 
+    // 🔥 newest 6 products only
+    const updatedData = data.map((cat) => ({
+      ...cat,
+      productdetails: [...cat.productdetails]
+        .reverse()
+        .slice(0, 6),
+    }));
+
     const total = await productsmodel.countDocuments({
       category: {
-        $nin: ["The Cozy Edit", "Warm & Chic"]
-      }
+        $nin: ["The Cozy Edit", "Warm & Chic"],
+      },
     });
 
     res.json({
-      data,
+      data: updatedData,
       hasMore: skip + data.length < total,
     });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 app.get("/home/carousel", async (req, res) => {
   const data = await productsmodel.find(
@@ -2227,7 +2332,8 @@ if (pendingMember) {
   }
 
   const expiry = new Date();
-  expiry.setFullYear(expiry.getFullYear() + 1);
+  // expiry.setFullYear(expiry.getFullYear() + 1);
+  expiry.setMonth(expiry.getMonth() + 3);
 
   await userr.findByIdAndUpdate(
   pendingMember.userId, // ✅ ObjectId
@@ -3265,7 +3371,37 @@ cron.schedule("*/5 * * * *", async () => {
 
 
 
+cron.schedule("0 0 * * *", async () => {
+  console.log("🔄 Checking expired memberships...");
 
+  try {
+
+    // Find expired active memberships
+    const expiredUsers = await userr.find({
+      "member.isMember": true,
+      "member.expiresAt": { $lte: new Date() }
+    });
+
+    console.log(`🟡 Expired memberships found: ${expiredUsers.length}`);
+
+    for (const user of expiredUsers) {
+
+      user.member.isMember = false;
+      user.member.memberType = "";
+      // optional
+      // user.member.activatedAt = null;
+
+      await user.save();
+
+      console.log(`❌ Membership expired for user: ${user._id}`);
+    }
+
+    console.log("✅ Membership expiry cron completed");
+
+  } catch (error) {
+    console.error("❌ Membership cron error:", error);
+  }
+});
 
 app.get("/return", async (req, res) => {
   try {

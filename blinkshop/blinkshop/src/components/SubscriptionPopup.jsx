@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
-
+import whatimg from "../components/image/whatimg2.jpeg"
 const SubscriptionPopup = ({ onClose }) => {
 
   const styles = {
@@ -17,7 +17,7 @@ const SubscriptionPopup = ({ onClose }) => {
     },
     container: {
       width: "100%",
-    //   minHeight:"80%",
+    //   height:"100%",
       maxWidth: "420px",
       background: "#fff",
       borderRadius: "12px",
@@ -40,15 +40,21 @@ const SubscriptionPopup = ({ onClose }) => {
       fontSize: "18px",
     },
     imageSection: {
-      width: "100%",
-    //   aspectRatio: "4/5",
-    height:"55%",
-      overflow: "hidden",
+       width: "100%",
+  maxHeight: "320px",
+  overflow: "hidden",
+  background: "#f5f5f5",
     },
     image: {
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
+         width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  objectPosition: "center top",
+  display: "block",
+  objectPosition: "center 5%"
+      
+
+      
     },
     content: {
       padding: "20px",
@@ -131,7 +137,7 @@ const SubscriptionPopup = ({ onClose }) => {
         {/* Image */}
         <div style={styles.imageSection}>
           <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCILbW6-oovKewC_u24AaqDEmdbqEkHbczEZUZ_qkD1w4vAnPFgAMZ_7tDMUQhetdAoE5wz5bRa2KVj5CvR2qqHfdDB8RUa-c63Az0zQAMoU6RUOVUpHwgbD80QC97iEfZYLG_g_MYXgktDlQu0SnUZwcdmM4B8UlR8eb7DmMaGG3Pe_pTPzwDMYaKywIX1NNsrmDT1nwDHIshyULvVonpnP1fjDvtgesOTyb8NQlfsF635DhOCBIFJzvO3oojUHUefmqzokIhuGT8"
+            src={whatimg}
             alt="banner"
             style={styles.image}
           />
@@ -139,23 +145,23 @@ const SubscriptionPopup = ({ onClose }) => {
 
         {/* Content */}
         <div style={styles.content}>
-          <h2 style={styles.heading}>Unlock Exclusive Style Deals</h2>
-          <p style={styles.text}>
+          <h2 style={styles.heading}>Why pay full when you get it at half</h2>
+          {/* <p style={styles.text}>
             Join our inner circle for early access to curated collections and private offers.
-          </p>
+          </p> */}
 
           {/* Offers */}
           <div style={styles.offers}>
             <div style={styles.offerBox}>
               {/* <div style={styles.label}>VOUCHER 01</div> */}
-              <div style={styles.price}>₹200 OFF</div>
-              <div style={styles.label}>ON PANTS</div>
+              <div style={styles.label}>ALL TOPS</div>
+              <div style={styles.price}>at ₹399</div>
             </div>
 
             <div style={styles.offerBox}>
               {/* <div style={styles.label}>VOUCHER 02</div> */}
-              <div style={styles.price}>₹150 OFF</div>
-              <div style={styles.label}>ON TOPS</div>
+              <div style={styles.label}>ALL DRESS</div>
+              <div style={styles.price}>at ₹699</div>
             </div>
           </div>
 
@@ -169,14 +175,14 @@ const SubscriptionPopup = ({ onClose }) => {
           {/* Button */}
           <NavLink to='/member' >
           <button style={styles.button}>
-            Unlock My Discount
+            Start saving now
             </button>
           </NavLink>
 
           {/* Footer */}
-          <p style={styles.footer}>
+          {/* <p style={styles.footer}>
             No spam. Only exclusive deals.
-          </p>
+          </p> */}
         </div>
 
       </div>

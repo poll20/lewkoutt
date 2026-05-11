@@ -406,9 +406,9 @@ if (!Array.isArray(activeCart)) return null;
         <p className="order-meta-addtocart">
           Size: {order?.size} | Qty: {order?.qty} | {order?.discountprice}rs.
         </p>
-        <p className="order-delivery-addtocart">
+        {/* <p className="order-delivery-addtocart">
           <span>📦 Delivery in 60 min</span>
-        </p>
+        </p> */}
         <p className="order-delivery-addtocart">
           <span>
             <AiOutlineDelete

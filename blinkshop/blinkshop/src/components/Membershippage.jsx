@@ -10,7 +10,7 @@ import { useBio } from "./BioContext";
 import "./AddressList.css";
 import SlideUpModal from "./SlideupModel";
 import OtpLogin from "./OtpLogin";
-
+import heroimg from "../components/image/whatimg.jpeg"
 import { useFirebaseAuth } from "./FirebaseContext";
 const plans = [
     
@@ -18,21 +18,21 @@ const plans = [
     id: "silver",
     name: "Silver",
     badge: null,
-    price: 1,
+    price: 149,
     tagline: "Perfect starter for savvy shoppers",
     benefits: [
-      { label: "All Tops", member: "₹299", icon: "👕" },
+      { label: "All Tops", member: "₹399",  },
     ],
   },
   {
     id: "gold",
     name: "Gold",
     badge: "BEST VALUE",
-    price: 999,
+    price: 299,
     tagline: "Maximum savings across your wardrobe",
     benefits: [
-      { label: "All Tops", member: "₹299", icon: "👕" },
-      { label: "All Dresses", member: "₹555", icon: "👗" },
+      { label: "All Tops", member: "₹399",  },
+      { label: "All Dresses", member: "₹699",  },
     ],
   },
 ];
@@ -45,7 +45,7 @@ export default function MembershipPage() {
   const [toast, setToast] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
   const isLoggedIn =!!userDetails?._id;
-
+const [openTerms, setOpenTerms] = useState(false);
   
 
   const showToast = (msg, type = "info") => {
@@ -134,54 +134,273 @@ export default function MembershipPage() {
       {toast && <div className={`mp-toast mp-toast--${toast.type}`}>{toast.msg}</div>}
 
       {/* ── HERO ── */}
-      <section className="mp-hero">
-        {/* Speed lines bg */}
-        <div className="mp-hero__speedlines" aria-hidden="true">
-          {Array.from({ length: 18 }).map((_, i) => (
-            <span key={i} className="mp-speedline" style={{ "--i": i }} />
-          ))}
-        </div>
-        {/* Soft glow blobs */}
-        <div className="mp-hero__blob mp-hero__blob--1" aria-hidden="true" />
-        <div className="mp-hero__blob mp-hero__blob--2" aria-hidden="true" />
+      import heroimg from "../components/image/whatimg.png";
 
-        <div className="mp-hero__content">
-          {/* Logo */}
-          <div className="mp-hero__logo-wrap">
-            <img src={lewkoutlogo} alt="Lewkout" className="mp-hero__logo" />
-          </div>
+<section
+  className="mp-hero"
+  style={{
+    position: "relative",
+    minHeight: "90vh",
+    overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "40px 18px",
+  }}
+>
+  {/* Background Image */}
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      zIndex: 0,
+    }}
+  >
+    <img
+      src={heroimg}
+      alt="hero background"
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        filter: "blur(2px)", // more blur
+        transform: "scale(1.08)",
+      }}
+    />
 
-          <div className="mp-hero__eyebrow">EXCLUSIVE MEMBER ACCESS</div>
+    {/* Lighter Overlay */}
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(to bottom, rgba(0,0,0,0.28), rgba(0,0,0,0.45))",
+        backdropFilter: "blur(1px)",
+      }}
+    />
+  </div>
 
-          <h1 className="mp-hero__headline">
-            Unlock Exclusive<br />
-            <span className="mp-hero__accent">Member Pricing</span>
-          </h1>
+  {/* Content */}
+  <div
+    className="mp-hero__content"
+    style={{
+      position: "relative",
+      zIndex: 2,
+      textAlign: "center",
+      color: "white",
+      maxWidth: "800px",
+      width: "100%",
+    }}
+  >
+    {/* Logo */}
+    <div
+      className="mp-hero__logo-wrap"
+      style={{
+        marginBottom: "14px",
+      }}
+    >
+      <img
+        src={lewkoutlogo}
+        alt="Lewkout"
+        className="mp-hero__logo"
+        style={{
+          width: "130px",
+          maxWidth: "42vw",
+          filter:
+            "brightness(0) invert(1)", // makes logo white
+        }}
+      />
+    </div>
 
-          <p className="mp-hero__sub">
-            Save more on every order — forever. One annual plan, instant benefits.
-          </p>
+    {/* Small Text */}
+    <div
+      className="mp-hero__eyebrow"
+      style={{
+        color: "rgba(255,255,255,0.82)",
+        letterSpacing: "1.5px",
+        fontSize: "clamp(11px, 2vw, 14px)",
+        marginBottom: "14px",
+        fontWeight: "500",
+      }}
+    >
+      EXCLUSIVE MEMBER ACCESS
+    </div>
 
-          <div className="mp-hero__pills">
-            <span className="mp-pill mp-pill--solid">Save More on Every Order</span>
-            <span className="mp-pill mp-pill--ghost">No hidden fees</span>
-          </div>
-        </div>
+    {/* Heading */}
+    <h1
+      className="mp-hero__headline"
+      style={{
+        fontSize: "clamp(2rem, 8vw, 5rem)", // responsive smaller mobile text
+        lineHeight: "1.05",
+        fontWeight: "800",
+        color: "white",
+        margin: 0,
+      }}
+    >
+      Unlock Exclusive
+      <br />
+      <span
+        style={{
+          color: "white",
+        }}
+      >
+        Member Pricing
+      </span>
+    </h1>
 
-        <div className="mp-hero__scroll" aria-hidden="true">↓</div>
-      </section>
+    {/* Sub Text */}
+    <p
+      className="mp-hero__sub"
+      style={{
+        marginTop: "18px",
+        fontSize: "clamp(14px, 3.4vw, 18px)",
+        color: "rgba(255,255,255,0.88)",
+        lineHeight: "1.6",
+        padding: "0 10px",
+      }}
+    >
+      Save more on every order — forever.
+      <br />
+      3 months plan, instant benefits.
+    </p>
 
+    {/* Pills */}
+    <div
+      className="mp-hero__pills"
+      style={{
+        display: "flex",
+        gap: "12px",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        marginTop: "24px",
+      }}
+    >
+      <span
+        className="mp-pill mp-pill--solid"
+        style={{
+          padding: "10px 18px",
+          borderRadius: "999px",
+          fontSize: "clamp(12px, 2.8vw, 14px)",
+          fontWeight: "600",
+          background: "white",
+          color: "black",
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        Save More on Every Order
+      </span>
+
+      <span
+        className="mp-pill mp-pill--ghost"
+        style={{
+          padding: "10px 18px",
+          borderRadius: "999px",
+          fontSize: "clamp(12px, 2.8vw, 14px)",
+          fontWeight: "600",
+          border: "1px solid rgba(255,255,255,0.35)",
+          color: "white",
+          background: "rgba(255,255,255,0.08)",
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        No hidden fees
+      </span>
+    </div>
+  </div>
+
+  {/* Scroll Icon */}
+  <div
+    className="mp-hero__scroll"
+    aria-hidden="true"
+    style={{
+      position: "absolute",
+      bottom: "18px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      color: "white",
+      fontSize: "24px",
+      zIndex: 2,
+      opacity: 0.8,
+    }}
+  >
+    ↓
+  </div>
+</section>
       {/* ── TICKER ── */}
-      <div className="mp-ticker">
-        <div className="mp-ticker__inner">
-          {["Tops at ₹299", "Dresses at ₹555", "Members-Only Deals", "Instant Activation",
-            "Tops at ₹299", "Dresses at ₹555", "Members-Only Deals", "Instant Activation"].map((t, i) => (
-            <span key={i} className="mp-ticker__item">
-              <span className="mp-ticker__dot" />{t}
-            </span>
-          ))}
-        </div>
-      </div>
+      
+      <div
+  className="mp-ticker"
+  style={{
+    position: "relative",
+    overflow: "hidden",
+    padding: "14px 0",
+   
+    WebkitBackdropFilter: "blur(14px)",
+    borderTop: "1px solid rgba(255,255,255,0.06)",
+    borderBottom: "1px solid rgba(255,255,255,0.06)", background:"white",
+    backdropFilter: "blur(14px)",
+  }}
+>
+  {/* Extra dark overlay */}
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      background:"white",
+      
+      pointerEvents: "none",
+    }}
+  />
+
+  <div
+    className="mp-ticker__inner"
+    style={{
+      display: "flex",
+      gap: "40px",
+      whiteSpace: "nowrap",
+      alignItems: "center",
+      position: "relative",
+      zIndex: 2,
+    }}
+  >
+    {[
+      "Tops at ₹399",
+      "Dresses at ₹699",
+      "Members-Only Deals",
+      "Instant Activation",
+      "Tops at ₹399",
+      "Dresses at ₹699",
+      "Members-Only Deals",
+      "Instant Activation",
+    ].map((t, i) => (
+      <span
+        key={i}
+        className="mp-ticker__item"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          color: "black",
+          fontSize: "clamp(12px, 2vw, 15px)",
+          fontWeight: "500",
+          opacity: 0.96,
+        }}
+      >
+        <span
+          className="mp-ticker__dot"
+          style={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            background: "white",
+            boxShadow: "0 0 12px rgba(255,255,255,0.9)",
+          }}
+        />
+        {t}
+      </span>
+    ))}
+  </div>
+</div>
 
       {/* ── PLANS ── */}
       <section className="mp-plans">
@@ -208,8 +427,11 @@ export default function MembershipPage() {
 
                 <div className="mp-card__top">
                   <div className={`mp-radio${isSel ? " mp-radio--on" : ""}`} />
-                  <div>
+                  <div style={{width:"100%"}}>
+                    <div style={{display:"flex",width:"100%",gap:"5%"}}>
                     <h3 className="mp-card__name">{plan.name} Membership</h3>
+                    <h5 className="mp-card__name">(3 Months)</h5>
+</div>
                     <p className="mp-card__tagline">{plan.tagline}</p>
                   </div>
                 </div>
@@ -225,10 +447,12 @@ export default function MembershipPage() {
                  <ul className="mp-card__benefits">
                   {plan.benefits.map((b, i) => (
                     <li key={i} className="mp-benefit">
-                      <span className="mp-benefit__icon">{b.icon}</span>
+                      {/* <span className="mp-benefit__icon">{b.icon}</span> */}
                       <div className="mp-benefit__body">
                         <span className="mp-benefit__name">{b.label}</span>
+                        
                         <span className="mp-benefit__price">Member price <strong>{b.member}</strong></span>
+                        
                       </div>
                       <span className="mp-benefit__tick">✓</span>
                     </li>
@@ -237,23 +461,12 @@ export default function MembershipPage() {
 
                 <div className="mp-card__divider" />
 
-                {/* <ul className="mp-card__benefits">
-                  {plan.benefits.map((b, i) => (
-                    <li key={i} className="mp-benefit">
-                      <span className="mp-benefit__icon">{b.icon}</span>
-                      <div className="mp-benefit__body">
-                        <span className="mp-benefit__name">{b.label}</span>
-                        <span className="mp-benefit__price">Member price <strong>{b.member}</strong></span>
-                      </div>
-                      <span className="mp-benefit__tick">✓</span>
-                    </li>
-                  ))}
-                </ul> */}
+               
                 <div className="mp-card__pricing" >
                   <div className="mp-card__price" >
                     <span className="mp-card__cur">₹</span>
                     <span className="mp-card__amt">{plan.price}</span>
-                    <span className="mp-card__per">/yr</span>
+                    {/* <span className="mp-card__per">/yr</span> */}
                   </div>
                   <span className="mp-card__mo">≈ ₹{Math.round(plan.price / 365)}/per day</span>
                 </div>
@@ -274,7 +487,7 @@ export default function MembershipPage() {
             </h2>
             <p className="mp-cta__desc">
               {selectedPlan
-                ? `Pay ₹${selectedPlan.price}/year via PhonePe. Benefits unlock instantly.`
+                ? `Pay ₹${selectedPlan.price}/(3 months) via PhonePe. Benefits unlock instantly.`
                 : "Select a plan above, then pay securely via PhonePe."}
             </p>
           </div>
@@ -304,8 +517,8 @@ export default function MembershipPage() {
 
       <div style={{border:"1px solid black",width:"100%",height:"0px"}}></div>
       </div>
-      <p style={styles.text}>All tops at ₹299/-</p>
-      <p style={styles.text}>All dresses at ₹599/-</p>
+      <p style={styles.text}>All tops at ₹399/-</p>
+      <p style={styles.text}>All dresses at ₹699/-</p>
     </div>
   </div>
 
@@ -352,21 +565,147 @@ export default function MembershipPage() {
     </div>
   </div>
 </section>
-{/* ── TERMS & CONDITIONS ── */}
+
 <section style={tcStyles.section}>
-  <h2 style={tcStyles.heading}>Terms & Conditions</h2>
+  <h2 style={tcStyles.heading}>Girl math behind this</h2>
 
   <ul style={tcStyles.list}>
-    <li>Membership fee is non-refundable and non-transferable.</li>
-    <li>Membership benefits are applicable only on purchases made via the registered account.</li>
-    <li>Membership is valid for 3 months from date of purchase.</li>
-    <li>Membership benefits cannot be combined with any other offers, discounts, or promotions. Only one offer can be applied per order.</li>
-    <li>60-minute delivery is available in select locations and time slots only. Delivery timelines may vary due to external factors beyond control.</li>
-    <li>If Lewkout discontinues the membership, a pro-rata refund will be issued based on the unused duration.</li>
-    <li>Lewkout reserves the right to suspend or terminate membership if any misuse, fraudulent activity, or abnormal usage patterns are detected.</li>
-    <li>Lewkout reserves the right to modify the terms and conditions at any time without prior notice. In case of major changes, Lewkout may refund the last membership amount at its discretion.</li>
-    <li>Accounts with unusually high return rates, repeated delivery failures, or abnormal usage may be restricted after review.</li>
+    <li>That’s just ₹3/day for a whole year of better prices.</li>
+    <li>Recover your entire membership cost in just 1 dresses.</li>
+    <li>You start saving from your very first order itself.</li>
+    <li>No limits. Order as much as you want, save every single time.</li>
+    <li>Save money AND get your outfit in 60 mins.</li>
+  
   </ul>
+</section>
+{/* ── TERMS & CONDITIONS ── */}
+
+<section
+  style={{
+    width: "100%",
+    marginTop: "20px",
+  }}
+>
+  {/* Dropdown Header */}
+  <div
+    onClick={() => setOpenTerms(!openTerms)}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "16px 18px",
+      borderRadius: "16px",
+      background: "rgba(255,255,255,0.06)",
+      backdropFilter: "blur(12px)",
+      border: "1px solid rgba(255,255,255,0.08)",
+      cursor: "pointer",
+      userSelect: "none",
+    }}
+  >
+    <h2
+      style={{
+        margin: 0,
+        fontSize: "16px",
+        fontWeight: "600",
+        color: "black",
+        letterSpacing: "0.3px",
+      }}
+    >
+      Terms & Conditions
+    </h2>
+
+    <span
+      style={{
+        color: "black",
+        fontSize: "18px",
+        transition: "0.3s ease",
+        transform: openTerms ? "rotate(180deg)" : "rotate(0deg)",
+      }}
+    >
+      ▼
+    </span>
+  </div>
+
+  {/* Dropdown Content */}
+  <div
+    style={{
+      maxHeight: openTerms ? "1000px" : "0px",
+      overflow: "hidden",
+      transition: "all 0.4s ease",
+      opacity: openTerms ? 1 : 0,
+    }}
+  >
+    <div
+      style={{
+        marginTop: "12px",
+        padding: "18px",
+        borderRadius: "16px",
+        background: "rgba(255,255,255,0.04)",
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
+      <ul
+        style={{
+          margin: 0,
+          paddingLeft: "18px",
+          color: "rgba(0, 0, 0, 0.85)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "14px",
+          fontSize: "14px",
+          lineHeight: "1.7",
+        }}
+      >
+        <li>Membership fee is non-refundable and non-transferable.</li>
+
+        <li>
+          Membership benefits are applicable only on purchases
+          made via the registered account.
+        </li>
+
+        <li>
+          Membership is valid for 3 months from date of purchase.
+        </li>
+
+        <li>
+          Membership benefits cannot be combined with any other
+          offers, discounts, or promotions. Only one offer can
+          be applied per order.
+        </li>
+
+        <li>
+          60-minute delivery is available in select locations
+          and time slots only. Delivery timelines may vary due
+          to external factors beyond control.
+        </li>
+
+        <li>
+          If Lewkout discontinues the membership, a pro-rata
+          refund will be issued based on the unused duration.
+        </li>
+
+        <li>
+          Lewkout reserves the right to suspend or terminate
+          membership if any misuse, fraudulent activity, or
+          abnormal usage patterns are detected.
+        </li>
+
+        <li>
+          Lewkout reserves the right to modify the terms and
+          conditions at any time without prior notice. In case
+          of major changes, Lewkout may refund the last
+          membership amount at its discretion.
+        </li>
+
+        <li>
+          Accounts with unusually high return rates, repeated
+          delivery failures, or abnormal usage may be restricted
+          after review.
+        </li>
+      </ul>
+    </div>
+  </div>
 </section>
       {/* ── TRUST ── */}
       {/* <footer className="mp-trust">
@@ -390,8 +729,8 @@ export default function MembershipPage() {
 }
 const styles = {
   benefitsSection: {
-    background: "#f9f9f9",
-    padding: "40px 20px",
+    background: "white",
+    padding: "10px 20px",
     // marginTop: "40px",
     // border:"2px solid red",
     borderRadius: "12px",

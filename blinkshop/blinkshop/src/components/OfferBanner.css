@@ -1,0 +1,42 @@
+.offer-banner {
+  background: #2a1f1d;
+  overflow: hidden;
+  width: 100%;
+  padding: 9px 0;
+  /* sits above everything — no margin-top needed; Navbar handles its own offset */
+}
+
+.offer-track {
+  display: inline-flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: offerMarquee 18s linear infinite;
+  will-change: transform;
+}
+
+.offer-item {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  color: #f4ddd8;
+  padding: 0 6px;
+}
+
+.offer-dot {
+  font-size: 6px;
+  color: #e8b8af;
+  vertical-align: middle;
+  padding: 0 10px;
+  opacity: 0.6;
+}
+
+@keyframes offerMarquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Pause on hover (nice UX touch) */
+.offer-banner:hover .offer-track {
+  animation-play-state: paused;
+}

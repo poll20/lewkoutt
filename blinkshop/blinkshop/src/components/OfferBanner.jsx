@@ -27,14 +27,18 @@ export default function OfferBanner() {
           gap: "50px",
           color: "black",
           fontSize: "18px",
-          fontWeight: "600",
+          fontWeight: "400",
           fontFamily:" 'Playfair Display',serif;",
           whiteSpace: "nowrap",
         }}
       >
         
         <span>
-        🕒 Delivery In⚡60 Mins 
+        🕒 Delivery In⚡60 Mins (jaipur)
+        </span>
+
+         <span>
+        🕒4-6 days Delivery (pan-india)
         </span>
         <span>
         25% OFF ON FIRST 3 ORDERS 🛍️
@@ -43,3 +47,33 @@ export default function OfferBanner() {
     </div>
   );
 }
+
+
+// import React from "react";
+// import "./OfferBanner.css";
+
+// const OFFERS = [
+//   "⚡ Delivery in 60 mins",
+//   "25% off on your first 3 orders 🛍️",
+//   "Free shipping above ₹499",
+//   "New arrivals every Friday ✨",
+//   "Easy 7-day returns",
+// ];
+
+// export default function OfferBanner() {
+//   // Duplicate for seamless loop
+//   const track = [...OFFERS, ...OFFERS];
+
+//   return (
+//     <div className="offer-banner">
+//       <div className="offer-track">
+//         {track.map((text, i) => (
+//           <React.Fragment key={i}>
+//             <span className="offer-item">{text}</span>
+//             <span className="offer-dot">◆</span>
+//           </React.Fragment>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }

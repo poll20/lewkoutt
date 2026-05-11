@@ -1471,7 +1471,8 @@ import BundleProduct from "./BundleProduct";
 // ─────────────────────────────────────────────────────────────────────────────
 const COD_SURCHARGE = 50;
 const UPI_DISCOUNT = 20;
-const MEMBER_DELIVERY_CHARGE = 100;
+const MEMBER_DELIVERY_CHARGE = 70;
+
 const MIN_FREE_DELIVERY_AMOUNT = 799;
 const LOW_ORDER_DELIVERY_CHARGE = 50;
 
@@ -1515,7 +1516,7 @@ const getMembershipPrice = (item, memberType) => {
 
   if (memberType === "gold") {
     if (category === "top") return 399;
-    return 650; // ✅ FIXED: was `category != "tops"` which always evaluated true
+    return 699; // ✅ FIXED: was `category != "tops"` which always evaluated true
   }
 
   return original;
@@ -1543,7 +1544,9 @@ const parseDistance = (raw) => {
 
 /** Distance-based delivery charge for non-members (within 16-25 km band) */
 const getDistanceCharge = (km) => {
-  if (km >= 16 && km <= 18) return 49;
+  if (km >= 16 && km <= 18 
+
+  ) return 49;
   if (km > 18 && km <= 21) return 70;
   if (km > 21 && km <= 25) return 80;
   return 0;
