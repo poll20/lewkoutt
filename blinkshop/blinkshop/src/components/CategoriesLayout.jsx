@@ -283,7 +283,7 @@ const CategoriesLayout = () => {
     cara1,
     cara2,
     cara3,
-    cara4,
+    cara6,
     cara5,
   ];
 
