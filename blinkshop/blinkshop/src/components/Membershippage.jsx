@@ -18,7 +18,9 @@ const plans = [
     id: "silver",
     name: "Silver",
     badge: null,
-    price: 149,
+    // price: 149,
+    price: 1,
+
     tagline: "Perfect starter for savvy shoppers",
     benefits: [
       { label: "All Tops", member: "₹399",  },
@@ -28,7 +30,9 @@ const plans = [
     id: "gold",
     name: "Gold",
     badge: "BEST VALUE",
-    price: 299,
+    // price: 299,
+    price: 1,
+
     tagline: "Maximum savings across your wardrobe",
     benefits: [
       { label: "All Tops", member: "₹399",  },

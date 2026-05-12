@@ -1457,7 +1457,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./CheckOut.css";
 import { useBio } from "./BioContext";
 import { IoIosArrowForward } from "react-icons/io";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useFirebaseAuth } from "./FirebaseContext";
 import phonepay from "../components/image/phonepay.png";
 import paytm from "../components/image/paytm.png";
@@ -1653,7 +1653,7 @@ const Checkout = () => {
 
   const { userDetails } = useFirebaseAuth();
   const location = useLocation();
-
+const navigate=useNavigate()
   // ── UI state ────────────────────────────────────────────────────────────────
   const [paymentmode, setPaymentMode] = useState(""); // "cod" | "online" | ""
   const [showSheet, setShowSheet] = useState(false);
@@ -2595,11 +2595,12 @@ const discount = isPercent
         {/* HEADING */}
         <div
           style={{
-            fontSize: "16px",
-            fontWeight: "800",
-            color: "#111",
-            // lineHeight: "1.2",
-            marginBottom: "18px",
+            fontFamily:" 'Cormorant Garamond', serif",
+              fontSize: "18px",
+              fontWeight:"400",
+              color:"black",
+              textShadow:"0 1px 8px rgba(0, 0, 0, 0.3)",
+            marginBottom: "5px",
             textAlign: "center",
           }}
         >
@@ -2616,9 +2617,11 @@ const discount = isPercent
         >
           <span
             style={{
-              fontSize: "17px",
-              color: "#555",
-              fontWeight: "500",
+             fontFamily:" 'Cormorant Garamond', serif",
+               fontSize: "16px",
+               fontWeight:"300",
+               color:"black",
+               textShadow:"0 1px 8px rgba(0, 0, 0, 0.3)",
             }}
           >
             You can save <span style={{
@@ -2657,7 +2660,7 @@ const discount = isPercent
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             gap: "12px",
           }}
         >
@@ -2665,15 +2668,18 @@ const discount = isPercent
           <button
             onClick={() => navigate("/member")}
             style={{
-              width: "100%",
-              height: "56px",
+              width: "50%",
+              // height: "56px",
+              padding:"4px",
               border: "none",
               borderRadius: "18px",
               background:
                 "linear-gradient(135deg,#111827,#374151)",
-              color: "#fff",
-              fontSize: "16px",
-              fontWeight: "800",
+             fontFamily:" 'Cormorant Garamond', serif",
+               fontSize: "14px",
+               fontWeight:"300",
+               color:"white",
+               textShadow:"0 1px 8px rgba(0, 0, 0, 0.3)",
               cursor: "pointer",
               boxShadow:
                 "0 12px 28px rgba(17,24,39,0.22)",
@@ -2695,14 +2701,18 @@ const discount = isPercent
           <button
             onClick={closeMembershipPopup}
             style={{
-              width: "100%",
-              height: "56px",
+              width: "50%",
+              // height: "56px",
+              padding:"4px",
+
               borderRadius: "18px",
               background: "#fff",
               border: "1px solid #e5e5e5",
-              color: "#333",
-              fontSize: "15px",
-              fontWeight: "700",
+             fontFamily:" 'Cormorant Garamond', serif",
+               fontSize: "14px",
+               fontWeight:"300",
+               color:"black",
+               textShadow:"0 1px 8px rgba(0, 0, 0, 0.3)",
               cursor: "pointer",
               transition: "0.25s",
             }}

@@ -1282,20 +1282,40 @@ app.get("/productmodel", async (req, res) => {
     //   }).sort({ _id: -1 }).lean()
     //   res.json(categorydata)
     // }
-    if (operation == "all") {
+//     if (operation == "all") {
+
+//   let categorydata = await productsmodel.find({
+//     category: {
+//       $nin: ["The Cozy Edit", "Warm & Chic"]
+//     }
+//   })
+//   // .sort({ _id: -1 }) // newest category first
+//   .lean();
+
+//   // 🔥 newest productdetails first
+//   const updatedData = categorydata.map((cat) => ({
+//     ...cat,
+//     productdetails: [...cat.productdetails].reverse()
+//   }));
+
+//   res.json(updatedData);
+// }
+
+if (operation == "all") {
 
   let categorydata = await productsmodel.find({
     category: {
       $nin: ["The Cozy Edit", "Warm & Chic"]
     }
-  })
-  // .sort({ _id: -1 }) // newest category first
-  .lean();
+  }).lean();
 
-  // 🔥 newest productdetails first
+  // 🔥 only reverse except "Tops & Tunics"
   const updatedData = categorydata.map((cat) => ({
     ...cat,
-    productdetails: [...cat.productdetails].reverse()
+    productdetails:
+      cat.category?.trim().toLowerCase() === "tops & tunics"
+        ? [...cat.productdetails] // old first
+        : [...cat.productdetails].reverse() // new first
   }));
 
   res.json(updatedData);
