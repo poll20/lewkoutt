@@ -1513,10 +1513,12 @@ console.log("raww,",raw)
  *  Silver → tops = ₹299, everything else = original price
  *  Gold   → tops = ₹299, everything else = ₹599
  */
-const getMembershipPrice = (item, memberType) => {
+const getMembershipPrice = (item,isMember, memberType) => {
   const category = extractCategory(item);
   console.log("catwgory",item,category,memberType)
   const original = item?.discountprice ?? item?.price ?? 0;
+
+  if (!isMember) return original;
 
   if (memberType === "silver") {
     if (category === "top") return 399;
@@ -1536,11 +1538,11 @@ const getMembershipPrice = (item, memberType) => {
 
 
 /** Returns a new cart array with membership prices applied (non-mutating) */
-const applyMembershipPricing = (cartItems, member) => {
+const applyMembershipPricing = (cartItems,isMember, member) => {
   if (!member?.isMember || !member?.memberType) return cartItems;
   return cartItems.map((item) => ({
     ...item,
-    discountprice: getMembershipPrice(item, member.memberType),
+    discountprice: getMembershipPrice(item,isMember, member.memberType),
   }));
 };
 
@@ -1708,12 +1710,16 @@ const [membershipPopupClosed, setMembershipPopupClosed] = useState(false);
     () => userDetails?.member ?? { isMember: false, memberType: null },
     [userDetails]
   );
-  const isMember = member.isMember === true;
-  const memberType = member.memberType ?? null;
+  const isMember = member?.isMember === true;
+  // const memberType = member?.memberType ?? null;
+  const memberType =
+  member?.isMember === true
+    ? member?.memberType
+    : null;
 
   // ── pricedCart: memoised — recomputes only when cart or membership changes ──
   const pricedCart = useMemo(
-    () => applyMembershipPricing(purchaseproduct, member),
+    () => applyMembershipPricing(purchaseproduct, isMember,member),
     [purchaseproduct, member]
   );
 
