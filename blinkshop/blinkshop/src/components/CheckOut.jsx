@@ -1679,6 +1679,16 @@ const [membershipPopupClosed, setMembershipPopupClosed] = useState(false);
   const [purchaseproduct, setPurchaseproduct] = useState(
     () => JSON.parse(localStorage.getItem("checkoutCart")) || buydata || []
   );
+  useEffect(() => {
+  if (buydata?.length > 0) {
+    setPurchaseproduct(buydata);
+
+    localStorage.setItem(
+      "checkoutCart",
+      JSON.stringify(buydata)
+    );
+  }
+}, [buydata]);
 
   const [deliveryAddress, setDeliveryAddress] = useState(
     () =>

@@ -580,7 +580,7 @@ const fromCheckout = location.state?.fromCheckout;
   <h2 style={tcStyles.heading}>Girl math behind this</h2>
 
   <ul style={tcStyles.list}>
-    <li>That’s just ₹3/day for a whole year of better prices.</li>
+    <li>That’s only 2Rs per day for 3 months.</li>
     <li>Recover your entire membership cost in just 1 dresses.</li>
     <li>You start saving from your very first order itself.</li>
     <li>No limits. Order as much as you want, save every single time.</li>
