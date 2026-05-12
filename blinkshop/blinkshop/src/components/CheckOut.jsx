@@ -1770,8 +1770,7 @@ const membershipSavingsData = useMemo(() => {
   purchaseproduct.forEach((item) => {
     const category = extractCategory(item);
 
-    const originalPrice =payableAmount
-      // Number(item?.discountprice ?? item?.price ?? 0);
+    const originalPrice = Number(item?.discountprice ?? item?.price ?? 0);
 
     // TOPS
     if (category === "top") {
