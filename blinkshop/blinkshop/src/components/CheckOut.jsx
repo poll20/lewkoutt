@@ -1781,6 +1781,7 @@ const membershipSavingsData = useMemo(() => {
 
       topSavings += Math.max(0, originalPrice - 399);
     }
+    
 
     // DRESSES
     else {

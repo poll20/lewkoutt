@@ -3,7 +3,7 @@ import { useBio } from "./BioContext";
 
 const timeSlots = [
   { label: "Within 60 minutes", start: 0, end: 1 },
-  { label: "60 minutes or free", start: 0, end: 1 },
+  // { label: "60 minutes or free", start: 0, end: 1 },
 
   { label: "11:00 AM – 1:00 PM", start: 11, end: 13 },
   { label: "1:00 PM – 3:00 PM", start: 13, end: 15 },
