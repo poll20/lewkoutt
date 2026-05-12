@@ -2529,7 +2529,7 @@ if (pendingMember) {
 // });
 app.post("/member", verifySessionCookie, async (req, res) => {
   try {
-    const { planId, planName, amount } = req.body;
+    const { planId, planName, amount,redirectUrl } = req.body;
 
     const firebaseUid = req.user.uid;
 
@@ -2556,7 +2556,7 @@ app.post("/member", verifySessionCookie, async (req, res) => {
       amount,
     });
 
-    const redirectUrl = "https://www.lewkout.com/profile";
+    // const redirectUrl = "https://www.lewkout.com/profile";
 
     const phonepeResponse = await createPhonePePayment({
       merchantOrderId,

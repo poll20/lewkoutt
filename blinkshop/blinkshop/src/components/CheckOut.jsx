@@ -1909,17 +1909,30 @@ const closeMembershipPopup = () => {
   }, [totalDiscountPrice, userDetails]); // ✅ FIXED: was [purchaseproduct, userDetails] — stale
 
   // Clear localStorage on unmount (unless going to address page)
+  const preserveRoutes = ["/address/chek", "/member"];
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (location.pathname !== "/address/chek" && location.pathnamec !== "/member") {
+  //       localStorage.removeItem("checkoutCart");
+  //       localStorage.removeItem("checkoutAddress");
+  //       localStorage.removeItem("checkoutWallet");
+  //       localStorage.removeItem("checkoutCoupon");
+  //       localStorage.removeItem("checkoutDeliveryCharge");
+  //     }
+  //   };
+  // }, [location.pathname]);
   useEffect(() => {
-    return () => {
-      if (location.pathname !== "/address/chek") {
-        localStorage.removeItem("checkoutCart");
-        localStorage.removeItem("checkoutAddress");
-        localStorage.removeItem("checkoutWallet");
-        localStorage.removeItem("checkoutCoupon");
-        localStorage.removeItem("checkoutDeliveryCharge");
-      }
-    };
-  }, [location.pathname]);
+  return () => {
+    if (!preserveRoutes.includes(location.pathname)) {
+      localStorage.removeItem("checkoutCart");
+      localStorage.removeItem("checkoutAddress");
+      localStorage.removeItem("checkoutWallet");
+      localStorage.removeItem("checkoutCoupon");
+      localStorage.removeItem("checkoutDeliveryCharge");
+    }
+  };
+}, [location.pathname]);
 
   // ── Coupon eligibility: coupons are BLOCKED when gold member, silver member + all-tops cart ──
   // In that case the membership discount already applies; stacking a coupon is not allowed.
@@ -2666,7 +2679,11 @@ const discount = isPercent
         >
           {/* START SAVING */}
           <button
-            onClick={() => navigate("/member")}
+            onClick={() => navigate("/member", {
+  state: {
+    fromCheckout: true,
+  },
+})}
             style={{
               width: "50%",
               // height: "56px",

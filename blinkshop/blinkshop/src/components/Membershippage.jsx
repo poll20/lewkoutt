@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import lewkoutlogo from "../components/image/lewklogo.webp";
 import "./Membershippage.css";
 
@@ -50,7 +51,9 @@ export default function MembershipPage() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const isLoggedIn =!!userDetails?._id;
 const [openTerms, setOpenTerms] = useState(false);
-  
+  const location = useLocation();
+
+const fromCheckout = location.state?.fromCheckout;
 
   const showToast = (msg, type = "info") => {
     setToast({ msg, type });
@@ -87,6 +90,9 @@ const [openTerms, setOpenTerms] = useState(false);
         planId: plan.id,
         planName: plan.name,
         amount: plan.price,
+         redirectUrl: fromCheckout
+    ? "https://www.lewkout.com/checkout"
+    : "https://www.lewkout.com/profile",
       }),
     });
 
