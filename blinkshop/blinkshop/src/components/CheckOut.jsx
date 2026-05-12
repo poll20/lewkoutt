@@ -1909,7 +1909,7 @@ const closeMembershipPopup = () => {
   }, [totalDiscountPrice, userDetails]); // ✅ FIXED: was [purchaseproduct, userDetails] — stale
 
   // Clear localStorage on unmount (unless going to address page)
-  const preserveRoutes = ["/address/chek", "/member"];
+  
 
   // useEffect(() => {
   //   return () => {
@@ -1922,16 +1922,16 @@ const closeMembershipPopup = () => {
   //     }
   //   };
   // }, [location.pathname]);
-  useEffect(() => {
-  return () => {
-    if (!preserveRoutes.includes(location.pathname)) {
-      localStorage.removeItem("checkoutCart");
-      localStorage.removeItem("checkoutAddress");
-      localStorage.removeItem("checkoutWallet");
-      localStorage.removeItem("checkoutCoupon");
-      localStorage.removeItem("checkoutDeliveryCharge");
-    }
-  };
+ const preserveRoutes = ["/address/chek", "/member", "/checkout"];
+
+useEffect(() => {
+  if (!preserveRoutes.includes(location.pathname)) {
+    localStorage.removeItem("checkoutCart");
+    localStorage.removeItem("checkoutAddress");
+    localStorage.removeItem("checkoutWallet");
+    localStorage.removeItem("checkoutCoupon");
+    localStorage.removeItem("checkoutDeliveryCharge");
+  }
 }, [location.pathname]);
 
   // ── Coupon eligibility: coupons are BLOCKED when gold member, silver member + all-tops cart ──
