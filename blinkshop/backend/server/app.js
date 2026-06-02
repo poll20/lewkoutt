@@ -1154,7 +1154,26 @@ app.get("/bestselling", async (req, res) => {
   }
 })
 
-
+app.get('/og/:productId', async (req, res) => {
+  const product = await productsmodel.findById(req.params.productId);
+  console.log(product)
+  const imageUrl = cloudinaryUrl(product.colors[0].sizes[0].image[0]);
+  const slug = product.title.toLowerCase().replace(/\s+/g, '-');
+  
+  res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <meta property="og:title" content="${product.title}" />
+  <meta property="og:description" content="${product.material || 'Cotton'} - ₹${product.discountprice}" />
+  <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:url" content="https://www.lewkout.com/${slug}" />
+  <meta property="og:type" content="product" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta http-equiv="refresh" content="0; url=https://www.lewkout.com/product/${product._id}/${product.colors[0].color}" />
+</head>
+<body>Redirecting...</body>
+</html>`);
+});
 
 app.post("/productmodel", verifySessionCookie, isAdmin, async (req, res) => {
   try {

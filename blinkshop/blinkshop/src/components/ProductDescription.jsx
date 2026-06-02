@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 import React, { useState, useEffect, useRef } from "react";
 import { Shield, Clock, RefreshCcw } from "lucide-react";
 import "./ProductDescription.css";
-
+import { FaLink } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useBio } from "./BioContext";
@@ -93,7 +93,18 @@ const productSchema =
       }
     : null;
 
-    
+
+    // Add this helper at the top of the component
+const generateProductUrl = (productId) => {
+  return `https://www.lewkout.com/og/${productId}`;
+};
+
+const handleShareLink = () => {
+  const url = generateProductUrl(product._id);
+  navigator.clipboard.writeText(url).then(() => {
+    prop.showPopup("Link copied! 🔗");
+  });
+};
   
 const fetchProductFromBackend = async (clr) => {
   console.log("🔥 clrchange", clr);
@@ -553,7 +564,9 @@ if(getbundeldata){
 
     <div className="details-sectionnn">
           <div style={{display:"flex"}}>
+            
             <div style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"start"}}>
+              
           <span className="product-description" style={{fontFamily: "Oswald",fontSize:"24px",color:"black",marginTop:"5px",}} >{product?.title?.slice(0,1).toUpperCase()+product?.title?.slice(1)}</span>
           <span style={{fontWeight:"bold",gap:'5px',fontFamily: "'Inter', sans-serif",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{marginLeft:"2px"}}className="original-price"><FaIndianRupeeSign/> {product.price} </span><span  > <FaIndianRupeeSign/>{product.discountprice} </span> <span style={{marginLeft:"5px",color:"white",padding:"2px 5px",borderRadius:"90px",background:"rgb(90, 186, 89,1)",fontSize:"11px",color:"white",fontWeight:"bold"}}>{product.discount}% off</span></span>
           <span
@@ -578,6 +591,15 @@ if(getbundeldata){
 />
 
 </div>
+<FaLink
+  onClick={handleShareLink}
+  style={{
+    position: "absolute", top: "24px", right: "100px",
+    width: "28px", height: "28px", borderRadius: "100%",
+    padding: "5px", backgroundColor: "rgba(255,255,255,0.5)",
+    cursor: "pointer"
+  }}
+/>
         </div>
        
           
@@ -899,3 +921,4 @@ if(getbundeldata){
 };
 
 export default ProductDescription;
+
