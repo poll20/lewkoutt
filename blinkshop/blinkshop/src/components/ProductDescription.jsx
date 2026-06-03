@@ -96,10 +96,12 @@ const productSchema =
 
     // Add this helper at the top of the component
 const generateProductUrl = (productId) => {
-  return `https://www.lewkout.com/og/${productId}`;
+  console.log("pu runs")
+  return `${apiUrl}/og/${productId}`;
 };
 
 const handleShareLink = () => {
+  console.log("link click")
   const url = generateProductUrl(product._id);
   navigator.clipboard.writeText(url).then(() => {
     prop.showPopup("Link copied! 🔗");
