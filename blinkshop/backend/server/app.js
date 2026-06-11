@@ -1155,8 +1155,10 @@ app.get("/bestselling", async (req, res) => {
 })
 
 app.get('/og/:productId', async (req, res) => {
+  console.log("og products")
+
   const product = await productsmodel.findById(req.params.productId);
-  console.log(product)
+  console.log("og products",product)
   const imageUrl = cloudinaryUrl(product.colors[0].sizes[0].image[0]);
   const slug = product.title.toLowerCase().replace(/\s+/g, '-');
   
@@ -2416,6 +2418,19 @@ if (pendingMember) {
       return res.status(200).send("OK");
     }
 
+    console.log("======================================");
+console.log("📦 PENDING ORDER FOUND");
+console.log("merchantOrderId:", merchantOrderId);
+console.log("User ID:", pending?.userDetails?._id);
+console.log("User Name:", pending?.userDetails?.name);
+console.log("User Email:", pending?.userDetails?.email);
+console.log("Wallet Used:", pending?.walletUsed);
+console.log("Distance:", pending?.distance);
+console.log("Timeslot:", pending?.timeslot);
+console.log("Address:", JSON.stringify(pending?.address, null, 2));
+console.log("Order:", JSON.stringify(pending?.order, null, 2));
+console.log("======================================");
+
     // 💰 Amount verification
     // const expectedAmount = Math.round(pending.payableAmount * 100);
     if (amount !== expectedAmount) {
@@ -2454,13 +2469,13 @@ if (pendingMember) {
       };
 
       // 🔻 Stock deduction
-      if (singleProduct.productId) {
-        const product = await productsmodel.findById(singleProduct.productId);
-        if (product && product.qty >= singleProduct.quantity) {
-          product.qty -= singleProduct.quantity;
-          await product.save();
-        }
-      }
+      // if (singleProduct.productId) {
+      //   const product = await productsmodel.findById(singleProduct.productId);
+      //   if (product && product.qty >= singleProduct.quantity) {
+      //     product.qty -= singleProduct.quantity;
+      //     await product.save();
+      //   }
+      // }
 
       const newOrder = new orderr({
         name: userDetails.name,
@@ -2480,17 +2495,43 @@ if (pendingMember) {
         paymentGatewayTxnId: transactionId,
       });
 
-      await newOrder.save();
-      orderEvent.emit("new_order", { type: "new_order", order: newOrder });
+      console.log("📝 CREATING ORDER");
+console.log(
+  JSON.stringify(
+    {
+      merchantOrderId,
+      userId: userDetails._id,
+      product: singleProduct,
+      amount,
+      transactionId,
+    },
+    null,
+    2
+  )
+);
+
+      // await newOrder.save();
+      const savedOrder = await newOrder.save();
+
+console.log("✅ ORDER SAVED");
+console.log("Mongo Order ID:", savedOrder._id);
+console.log("Merchant Order ID:", merchantOrderId);
+      // orderEvent.emit("new_order", { type: "new_order", order: newOrder });
+      orderEvent.emit("new_order", {
+  type: "new_order",
+  order: savedOrder,
+});
     }
 
     // 🎟️ Coupon success
     if (couponcode?.length > 0) {
       await applyCouponSuccess(userDetails._id, couponcode);
     }
-
+console.log("🗑️ DELETING PENDING ORDER:", merchantOrderId);
     // 🧹 Cleanup pending order
-    await pendingOrderModel.deleteOne({ merchantOrderId });
+    // await pendingOrderModel.deleteOne({ merchantOrderId });
+
+    console.log("✅ PENDING ORDER DELETED:", merchantOrderId);
 
     // 💸 Cashback
     await addcashbacktowallet(userDetails._id, walletUsed, "purchase");
@@ -2498,11 +2539,20 @@ if (pendingMember) {
     console.log("✅ ORDER SAVED SUCCESSFULLY:", merchantOrderId);
     return res.status(200).send("OK");
 
-  } catch (err) {
-    console.error("❌ PhonePe Webhook Error:", err);
-    // ⚠️ Always return 200 to PhonePe (avoid retries loop)
-    return res.status(200).send("OK");
-  }
+  }  catch (err) {
+  console.error("❌ PHONEPE WEBHOOK ERROR");
+  console.error("Message:", err?.message);
+  console.error("Stack:", err?.stack);
+
+  try {
+    console.error(
+      "Webhook Payload:",
+      JSON.stringify(req.body, null, 2)
+    );
+  } catch (e) {}
+
+  return res.status(200).send("OK");
+}
 });
 
 
