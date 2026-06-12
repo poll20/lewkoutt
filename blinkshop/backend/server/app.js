@@ -2378,6 +2378,11 @@ app.post("/phonepe/webhook", express.json(), async (req, res) => {
 const pendingMember = await pendingMembershipModel.findOne({ merchantOrderId });
 
 if (pendingMember) {
+
+  if(state!=="COMPLETED"){
+    console.log("membership payment not compeleted",state)
+    return res.status(200).send("OK")
+  }
   if (amount !== pendingMember.amount * 100) {
     console.log("❌ Membership amount mismatch");
     return res.status(200).send("OK");
