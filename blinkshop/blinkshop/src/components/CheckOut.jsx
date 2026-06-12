@@ -1650,6 +1650,7 @@ const Checkout = () => {
     fetchDistance,
     distance,
     coupons,
+    settimeslotlelo,
     karocode,
   } = useBio();
 
@@ -1829,6 +1830,8 @@ const membershipSavingsData = useMemo(() => {
     if (addresssetkro?.length) {
       setDeliveryAddress(addresssetkro);
       localStorage.setItem("checkoutAddress", JSON.stringify(addresssetkro));
+       // ✅ New address selected => reset old slot
+    settimeslotlelo("");
     }
   }, [addresssetkro]);
 
@@ -2504,12 +2507,20 @@ const discount = isPercent
                   <p>
                     Size: {order.size}&nbsp;&nbsp;Qty: {order.qty}
                   </p>
-                  <p className="delivery-info">
+                  {/* <p className="delivery-info">
                     Deliver by{" "}
                     <span className="delivery-date">
-                      {timeslotlelo || "60 minute delivery"}
+                      {timeslotlelo || "4-6 days delivery"}
                     </span>
-                  </p>
+                  </p> */}
+                  <p className="delivery-info">
+  Deliver by{" "}
+  <span className="delivery-date">
+    {isJaipur
+      ? (timeslotlelo || "4-6 days delivery")
+      : "4-6 days delivery"}
+  </span>
+</p>
                 </div>
               </div>
             </div>
