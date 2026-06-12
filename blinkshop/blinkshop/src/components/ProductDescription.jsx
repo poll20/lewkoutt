@@ -95,18 +95,18 @@ const productSchema =
 
 
     // Add this helper at the top of the component
-const generateProductUrl = (productId) => {
-  console.log("pu runs")
-  return `${apiUrl}/og/${productId}`;
-};
+// const generateProductUrl = (productId) => {
+//   console.log("pu runs")
+//   return `https://www.lewkout.com/og/${productId}`;
+// };
 
-const handleShareLink = () => {
-  console.log("link click")
-  const url = generateProductUrl(product._id);
-  navigator.clipboard.writeText(url).then(() => {
-    prop.showPopup("Link copied! 🔗");
-  });
-};
+// const handleShareLink = () => {
+//   console.log("link click")
+//   const url = generateProductUrl(product._id);
+//   navigator.clipboard.writeText(url).then(() => {
+//     prop.showPopup("Link copied! 🔗");
+//   });
+// };
   
 const fetchProductFromBackend = async (clr) => {
   console.log("🔥 clrchange", clr);
@@ -593,7 +593,7 @@ if(getbundeldata){
 />
 
 </div>
-<FaLink
+{/* <FaLink
   onClick={handleShareLink}
   style={{
     position: "absolute", top: "24px", right: "100px",
@@ -601,7 +601,7 @@ if(getbundeldata){
     padding: "5px", backgroundColor: "rgba(255,255,255,0.5)",
     cursor: "pointer"
   }}
-/>
+/> */}
         </div>
        
           
