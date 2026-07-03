@@ -206,37 +206,7 @@ useEffect(() => {
   );
 }, []);
 
-  // useEffect(() => {
-  //   if(user&& userDetails._id){
-  //     const fetchCartItems = async () => {
-  //       try {
-  //         setIsLoading(true)
-  //         let response = await fetch(`${apiUrl}/addtocart/${userDetails._id}`
-  //           , {
-  //           credentials: 'include', // important: allow cookies to be set
-  //         }
-  //       );
-  //         let data = await response.json();
-  //         if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
-  //           console.error("Invalid response format:", data);
-  //           return;
-  //         }
-  //         console.log("data in cart",data)
-  //         setaddtocartdata(data)
-  //         let cartItemIds = data.map(item => item.id); // Collect the ids of the items in the cart
-  //         setaddtocartdataonly(cartItemIds);  // Set the ids in the state to keep the icons red
-  //       } catch (error) {
-  //         console.error("Error fetching cart items:", error);
-  //       }
-  //       finally{
-  //         setIsLoading(false)
-  //       }
-  //     };
-  //     fetchCartItems()
-  //   }
-    
-    
-  //   }, [user,userDetails]);
+  
 
   const fetchCartItems = async () => {
     try {
@@ -328,155 +298,6 @@ useEffect(() => {
   },[isLoggedIn])
   
 
-
-// const handleClick = async (prd, id) => {
-//   console.log("iredandid", prd, id);
-
-//   try {
-//     setIsLoading(true);
-
-//     /* =======================
-//        👉 GUEST USER FLOW
-//     ======================= */
-//     if (!isLoggedIn) {
-//       const guestWishlist =
-//         JSON.parse(localStorage.getItem("guestWishlist")) || [];
-
-//       const alreadyExists = guestWishlist.find(
-//         item => item.productId === id
-//       );
-
-//       // 🔁 TOGGLE
-//       if (alreadyExists) {
-//         const updatedWishlist = guestWishlist.filter(
-//           item => item.productId !== id
-//         );
-// setGuestWishlist(updatedWishlist);
-//         localStorage.setItem(
-//           "guestWishlist",
-//           JSON.stringify(updatedWishlist)
-//         );
-
-//         showPopup("Removed from Wishlist");
-//       } else {
-//         guestWishlist.push({
-//           productId: id,
-//           price: prd.price,
-//           discountprice: prd.discountprice,
-//           discount: prd.discount,
-//           image: prd.image,
-//           shopname: prd.shopname,
-//           color:
-//             Array.isArray(prd?.colors) && prd.colors.length > 0
-//               ? prd.colors[0].color
-//               : prd?.color || "defaultColor",
-//           title: prd.title,
-//           description: prd.description,
-//           size: prd.sizes,
-//         });
-// setGuestWishlist(guestWishlist);  
-// console.log("wdai",guestWishlist)
-//         localStorage.setItem(
-//           "guestWishlist",
-//           JSON.stringify(guestWishlist)
-//         );
-
-//         showPopup("Added to Wishlist");
-//       }
-
-//       return; // 🚨 important
-//     }
-
-//     /* =======================
-//        👉 LOGGED-IN USER FLOW
-//     ======================= */
-
-//     // FB Pixel
-//     if (window.fbq) {
-//       window.fbq("track", "AddToWishlist", {
-//         content_name: prd.title,
-//         content_ids: [prd._id],
-//         content_type: "product",
-//         value: prd.discountprice || prd.price,
-//         currency: "INR",
-//       });
-//     }
-
-//     trackAddToWishlist(prd);
-
-//     // Find matching color item
-//     const matchedColors = productdataonlydetail
-//       .flatMap(product => product.colors || [])
-//       .filter(color => color._id === id);
-
-//     if (matchedColors.length === 0) {
-//       console.error("No matching item found!");
-//       return;
-//     }
-
-//     const matchItem = { ...matchedColors[0] };
-
-//     matchItem.userid = userDetails._id;
-//     matchItem.productId = id;
-//     matchItem.price = prd.price;
-//     matchItem.discountprice = prd.discountprice;
-//     matchItem.discount = prd.discount;
-//     matchItem.image = prd.image;
-//     matchItem.shopname = prd.shopname;
-//     matchItem.color =
-//       Array.isArray(prd?.colors) && prd.colors.length > 0
-//         ? prd.colors[0].color
-//         : prd?.color || "defaultColor";
-//     matchItem.title = prd.title;
-//     matchItem.description = prd.description;
-//     matchItem.size = prd.sizes;
-
-//     const itemInWishlist = wishlistdata.find(
-//       item => item.itemid === id
-//     );
-
-//     /* ➕ ADD */
-//     if (!itemInWishlist) {
-//       const response = await fetch(`${apiUrl}/cart`, {
-//         method: "POST",
-//         credentials: "include",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(matchItem),
-//       });
-
-//       if (response.ok) {
-//         const addedItem = await response.json();
-//         setWishlist(prev => [...prev, id]);
-//         setwishlistdata(prev => [...prev, addedItem]);
-//         showPopup("Added to Wishlist");
-//       }
-//     }
-//     /* ➖ REMOVE */
-//     else {
-//       const response = await fetch(
-//         `${apiUrl}/cart/${itemInWishlist.itemid}`,
-//         {
-//           method: "DELETE",
-//           credentials: "include",
-//         }
-//       );
-
-//       if (response.ok) {
-//         setWishlist(prev => prev.filter(itemId => itemId !== id));
-//         setwishlistdata(prev =>
-//           prev.filter(item => item.itemid !== id)
-//         );
-//         showPopup("Removed from Wishlist");
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error in handleClick:", error);
-//   } finally {
-//     setIsLoading(false);
-//   }
-// };
 
 const handleClick = async (prd, id) => {
   try {
@@ -647,48 +468,7 @@ const handleClick = async (prd, id) => {
 };
 
 
-  // const removewishlistonly=async(id)=>{
-  //   console.log("id",id)
-  //   try{ 
-  //     setIsLoading(true)
-  //     const response = await fetch(`${apiUrl}/cart/${id}`, {
-  //       method: "DELETE",
-  //       credentials: 'include', // important: allow cookies to be set
-  //       // headers: { 
-  //       //   Authorization: `Bearer ${user.accessToken}`,
-  //       // },
-  //     });
-
-  //     const data = await response.json(); // Server se response parse karo
-  //   console.log("Server Response:", data); // Error ya success message dekho
-  //     if (response.ok) {
-  //       setWishlist(prev => prev.filter(itemId => itemId !== id));
-  //       setwishlistdata(prev => prev.filter(item => item.itemid !== id));
-  //      // toast.success("Data removed successfully");
-  //   //    const toast = new window.bootstrap.Toast(toastRef.current);
-  //   // toast.show();
-  //   //    settoastmsg("item removed successfully")
-  //   showPopup("Removed From Wishlist")
-  //     }
-  //     else {
-  //   //     const toast = new window.bootstrap.Toast(toastRef.current);
-  //   // toast.show();
-  //   //     settoastmsg(data.message || "Error removing item");
-  //   showPopup("error removing item")
-  //     }
   
-  //   }
-  //   catch(e){
-  //   //   const toast = new window.bootstrap.Toast(toastRef.current);
-  //   // toast.show();
-  //   //   settoastmsg(data.message || "Error removing item");
-  //   showPopup("error removing item")
-  //   }
-  //   finally{
-  //     setIsLoading(false) 
-  //   } 
-
-  // }
   const removewishlistonly = async (id) => {
   console.log("idoo", id);
 
@@ -751,71 +531,7 @@ const handleClick = async (prd, id) => {
 };
 
   
-// const addtowishlistonly=async(id,prd)=>{
 
-// console.log("iredandid",prd,id)
-//     try {
-//       setIsLoading(true)
-//       // Correcting the way matchItem is created
-//       const matchedColors = productdataonlydetail
-//         .flatMap(product => product.colors)
-//         .filter(color => color._id == id);
-  
-//       if (matchedColors.length === 0) {
-//         console.error("No matching item found!");
-//         return;
-//       }
-  
-//       const matchItem = { ...matchedColors[0] }; // Convert array to object
-//       console.log("matchItem before adding data:", matchItem);
-  
-//       // Adding necessary properties
-//       matchItem.userid = userDetails._id;
-//       matchItem.productId = id;
-//       matchItem.price = prd.price;
-//       matchItem.discountprice = prd.discountprice;
-//       matchItem.discount = prd.discount;
-
-//       matchItem.image = prd.image;
-//       matchItem.shopname = prd.shopname;
-//       matchItem.title = prd.title;
-//       matchItem.description = prd.description;
-//       matchItem.size = prd.sizes;
-  
-//       console.log("Final matchItem:", matchItem); // Debugging
-  
-//       // const itemInCart = wishlistdata.find(cartItem => cartItem.itemid === id);
-//       // console.log("delete", itemInCart);
-  
-      
-//         const response = await fetch(`${apiUrl}/cart`, {
-//           method: "POST",
-//           credentials: 'include', // important: allow cookies to be set
-//           headers: { "Content-Type": "application/json",
-//             // Authorization: `Bearer ${user.accessToken}`,
-//           },
-//           body: JSON.stringify(matchItem),
-//         });
-  
-//         if (response.ok) {
-//           const addedItem = await response.json();
-//           setWishlist(prev => [...prev, id]);
-//           setwishlistdata(prev => [...prev, addedItem]);
-//         //  toast.success("item move to wishlist")
-//     //     const toast = new window.bootstrap.Toast(toastRef.current);
-//     // toast.show();
-//     //     settoastmsg("item moved successfully")
-//     showPopup("Item Moved")
-//          removefromaddtocart(id)
-//         }
-//     }
-// catch(e){
-//   console.log(e)
-// }
-// finally{
-//   setIsLoading(false)
-// }
-// }
 const addtowishlistonly = async (id, prd) => {
   console.log("iredandid", prd, id);
 
@@ -913,106 +629,6 @@ setGuestWishlist(guestWishlist)
     setIsLoading(false);
   }
 };
-
-
-
-  
-
-//   const handleAddToCart = async (prd, quantity, selectedSize) => {  
- 
-   
-    
-//     // 🔥 Facebook Pixel Event
-//     if (window.fbq) {
-//       window.fbq("track", "AddToCart", {
-//         content_name: prd.title ,
-//         content_ids: [prd._id],
-//         content_type: "product",
-//         value: prd.discountprice || prd.price,
-//         currency: "INR",
-//       });
-//     }
-//     // if(!user){
-//     //   setshowloginpage(true)
-//     // }
-
-//     if (!isLoggedIn) {
-//   // 👉 Guest cart
-//   const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
-
-//   guestCart.push({
-//     _id: nanoid(), 
-//      productId: prd._id,
-    
-//       productid: prd._id,
-//           color: prd?.color,
-//           image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
-//           title: prd.title,
-//           description: prd.description,
-//           qty: quantity,
-//           size: selectedSize,
-//           price: prd.price,
-//           discountprice: prd.discountprice,
-//           shopname: prd.shopname,
-//   });
-
-//   setGuestCart(guestCart)
-//   localStorage.setItem("guestCart", JSON.stringify(guestCart));
-//   showPopup("Added to Bag");
-//   return;
-// }
-
-//     else{
-//   try {
-//     setIsLoading(true);
-//  trackAddToCart(prd);
-
-//     const isBundle = Array.isArray(prd) && prd.length > 0;
-
-//     const payload = isBundle
-//       ? {
-//           userid: userDetails?._id,
-//           bundle: prd, // ✅ only send bundle data
-//         }
-//       : {
-//           userid: userDetails?._id,
-//           productId: prd._id,
-//           productid: prd._id,
-//           color: prd?.color,
-//           image: prd.image || prd?.sizes?.[0]?.image?.[0] || "",
-//           title: prd.title,
-//           description: prd.description,
-//           qty: quantity,
-//           size: selectedSize,
-//           price: prd.price,
-//           discountprice: prd.discountprice,
-//           shopname: prd.shopname,
-//         };
-
-//     console.log("🧾 Sending payload to cart:", payload);
-
-//     const response = await fetch(`${apiUrl}/addtocart`, {
-//       method: "POST",
-//       credentials: 'include', // important: allow cookies to be set
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(payload),
-//     });
-
-//     if (response.ok) {
-//       const addedItem = await response.json();
-//       setaddtocartdata((prev) => [...prev, addedItem]);
-//       if (!isBundle) setaddtocartdataonly((prev) => [...prev, prd._id]);
-//       showPopup("Added to Bag");
-//     } else {
-//       showPopup("Oops...");
-//     }
-//   } catch (error) {
-//     console.error("❌ Error in handleAddToCart:", error);
-//   } finally {
-//     setIsLoading(false);
-//   }
-// }
-// };
 const handleAddToCart = async (prd, quantity, selectedSize) => {
   try {
     setIsLoading(true);
@@ -1118,47 +734,7 @@ const handleAddToCart = async (prd, quantity, selectedSize) => {
   }
 };
 
-  // const removefromaddtocart=async(id)=>{
-  //   console.log("crt ki id",id)
-  //   try{
-  //     setIsLoading(true)
-  //     const matchItem = allproductdata.find((e) => e._id === id);
-  //     console.log("match ho gyaa crtid",matchItem)
-  //     const itemInCart = addtocartdatas.find((cartItem) => cartItem.productid === id);
-  //  console.log("deletecrtid",itemInCart)
 
-  //  if(itemInCart)
-  //  {
-  //   const response = await fetch(`${apiUrl}/addtocart/${itemInCart._id}`, {
-  //     method: 'DELETE',
-  //     credentials: 'include', // important: allow cookies to be set
-  //     // headers: { 
-  //     //   Authorization: `Bearer ${user.accessToken}`,
-  //     // },
-  //      });
- 
-  //      if (response.ok) {
-  //             //  setaddtocartdata((prev) => prev.filter((itemId) => itemId.productid !== id));
-  //             setaddtocartdata((prev) => prev.filter((item) => item._id !== itemInCart._id));
-
-              
-  //   showPopup("Removed From Bag")
-  //            }
-  //            else{
-    
-  //   showPopup("Not removed")
-  //            }
-  //  }
-   
-  //   }
-  //   catch(e){
-  //     console.error('Error in handleClick:', error);
-  //   }
-  //   finally{
-  //     setIsLoading(false)
-  //   }
-    
-  // }
   const removefromaddtocart = async (id) => {
   // console.log("crt ki id", id);
 
@@ -1377,38 +953,6 @@ const productfetch = useCallback(async (operationtype) => {
     setIsLoading(false);
   }
 }, []);
-// const productfetch = useCallback(
-//   async (operationtype, pageNo = 1) => {
-//     try {
-//       setIsLoading(true);
-
-//       const res = await fetch(
-//         `${apiUrl}/productmodel?operation=${operationtype}&page=${pageNo}&limit=4`
-//       );
-//       const data = await res.json();
-//       if (!data?.products) return;
-
-//       setproductdataonlydetail((prev) =>
-//         pageNo === 1 ? data.products : [...prev, ...data.products]
-//       );
-
-//       setHasMore(data.pagination?.hasMore);
-//       setPage(pageNo);
-//     } catch (e) {
-//       console.error(e);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   },
-//   []
-// );
-
-
-// ✅ Initial fetch on mount
-// useEffect(() => {
-//   productfetch();
-// }, []);
-
 
 
 // ✅ Re-fetch when manually triggered
@@ -1488,52 +1032,14 @@ let catehicate=(catearr)=>{
 setcatehicate(catearr)
 }
 
-// let handlenewaddress=async(address,user)=>{
-//   console.log("useridf",user._id)
-//   try {
-//     const response = await fetch(`${apiUrl}/user/${user._id}/address`, {
-//       method: "PATCH",  // Using PATCH request to update the address
-//       headers: {
-//         "Content-Type": "application/json",  // Specify that we're sending JSON
-//       },
-//       body: JSON.stringify(address),  // Convert newAddress to JSON
-//     });
-
-//   if (response.ok) {
-//     if (response.ok) {
-//       if (response.message === "OTP sent successfully") {
-//         // alert("OTP sent! Please enter the OTP to verify.");
-//         return;  // ✅ Stop execution and wait for OTP input
-//       } else {
-//         alert("Address added successfully!");
-//       }
-//     } else {
-//       alert("Error:", response.message);
-//     }
-//   } 
-//   } catch (error) {
-//     console.error("Error:", error);
-//     alert("An error occurred while adding the address.");
-//   }
-//   console.log("no data found")
-
-// }
 let handlenewaddress = async (address, user) => {
-  // console.log("helllo addresss",address)
-  // console.log("helllo addresss",otp )
-  // console.log("useridf", user?._id);  // Check if user._id exists before using it
-
-  // if (!user?._id) {
-  //   console.error("Error: User ID is undefined");
-  //   alert("User ID is missing. Please try again.");
-  //   return;
-  // }
+  
   if (!isLoggedIn) {
   const guestAddress =
     JSON.parse(localStorage.getItem("guestAddress")) || [];
 
   const newAddress = {
-      _id: crypto.randomUUID(), // 🔥 VERY IMPORTANT
+      guestId: crypto.randomUUID(), // 🔥 VERY IMPORTANT
       ...address,
     };
 
@@ -1576,71 +1082,6 @@ let handlenewaddress = async (address, user) => {
 
 
 
-// let deleteandeditaddrress=async(addresid,action,user,addr)=>{
-// console.log("sara add mil jaye",addresid,action,user,addr)
-//   if(action=="delete"){
-//  try{
-//   setIsLoading(true)
-//   const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
-//     method: "PATCH",  // Using PATCH request to update the address
-//     credentials: 'include', // important: allow cookies to be set
-//     headers: { "Content-Type": "application/json",
-//       // Authorization: `Bearer ${user.accessToken}`,
-//     },
-//     body: JSON.stringify({addresid,action}),  // Convert newAddress to JSON
-//   });
-//   if(response.ok){
-//     console.log("good")
-//     // setaddress(prev => {
-//     //   console.log("Previous Address State", prev); // Debug check
-//     //   return prev.filter(a => a._id !== addresid);
-//     // });
-//     showPopup("Address Deleted")
-//   }
-//   else{
-//     console.log("issue")
-//   }
-//  } 
-//  catch(e){
-//   console.log(e)
- 
-// }
-// finally{
-//   setIsLoading(false)
-// }
-// }
-
-// else{
-//   console.log("userid",user._id)
-//   console.log("userid",addr)
-//   try {
-//     setIsLoading(true)
-//     const response = await fetch(`${apiUrl}/user/${user._id}/addressdoe`, {
-//       method: "PATCH",  // Using PATCH request to update the address
-//       credentials: 'include', // important: allow cookies to be set
-     
-//       headers: { "Content-Type": "application/json",
-//         // Authorization: `Bearer ${user.accessToken}`,
-//       },
-//       body: JSON.stringify({addresid,action,addr}),  // Convert newAddress to JSON
-//     });
-//     if(response.ok){
-//       console.log("address edit")
-//       showPopup("Address Edited")
-//     }
-//     else{
-//       console.log("not edit")
-//     }
-//   } catch (error) {
-//     console.error("Error:", error);
-//     alert("An error occurred while adding the address.");
-//   }
-//   finally{
-//     setIsLoading(false)
-//   }
-
-// }
-// }
 let deleteandeditaddrress = async (addresid, action, user, addr) => {
   // console.log("sara add mil jaye", addresid, action, user, addr);
 
@@ -1657,7 +1098,7 @@ let deleteandeditaddrress = async (addresid, action, user, addr) => {
       // 🗑️ DELETE
       if (action === "delete") {
         const updatedAddress = guestAddress.filter(
-          a => a._id !== addresid
+          a => a.guestId !== addresid
         );
 
         localStorage.setItem(
@@ -1673,7 +1114,7 @@ let deleteandeditaddrress = async (addresid, action, user, addr) => {
 
       // ✏️ EDIT
       const updatedAddress = guestAddress.map(a =>
-        a._id === addresid ? { ...a, ...addr } : a
+        a.guestId === addresid ? { ...a, ...addr } : a
       );
 
       localStorage.setItem(
@@ -1746,92 +1187,7 @@ let handlechooseaddress=(add)=>{
 
 }
 
-// let orderplaced = async (
-//   order,
-//   address,
-//   walletUsed,
-//   payableAmount,
-//   timeslot,
-//   paymentmode
-// ) => {
-//   trackPurchase(order, addtocartitem, payableAmount);
 
-//   if (user && userDetails) {
-//     try {
-//       setIsLoading(true);
-
-//       let orderpost = await fetch(`${apiUrl}/order`, {
-//         method: "POST",
-//         credentials: "include",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           order,
-//           address,
-//           userDetails,
-//           distance,
-//           walletUsed,
-//           payableAmount,
-//           timeslot,
-//           paymentmode,
-//         }),
-//       });
-
-//       if (!orderpost.ok) return;
-
-//       let data = await orderpost.json();
-//       console.log("order response", data);
-
-//       /* =======================
-//          🔹 COD FLOW
-//       ======================== */
-//       if (paymentmode === "cod") {
-//         showPopup("Your Order Has Been Confirmed");
-//         window.location.href = "/orderconfirm";
-//         return;
-//       }
-
-//       /* =======================
-//          🔹 PHONEPE ONLINE FLOW
-//       ======================== */
-//       // if (paymentmode !== "cod" && data.tokenUrl) {
-//       //    showPopup("Redirecting to PhonePe…");
-//       //   window.PhonePeCheckout.transact({
-//       //     tokenUrl: data.tokenUrl,
-//       //     type: "IFRAME", // ✅ Recommended
-//       //     callback: function (response) {
-//       //       if (response === "USER_CANCEL") {
-//       //         console.log("User cancelled payment");
-//       //         showPopup("Payment cancelled");
-//       //       } else if (response === "CONCLUDED") {
-//       //         console.log("Payment finished");
-//       //         // ⚠️ Final status backend webhook / status API se hi aayega
-//       //         window.location.href = "/orderconfirm";
-//       //       }
-//       //     },
-//       //   });
-//       // }
-//          if (paymentmode !== "cod" && data.tokenUrl) {
-//          showPopup("Redirecting to PhonePe…");
-         
-//     window.location.replace(data.tokenUrl);
-
-//   return;
-//       }
-
-
-//     } catch (e) {
-//       console.log(e);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   }
-  
-// };
-// 🔍 In-app browser detector
-// 🔍 Detect Instagram / Facebook in-app browser
-// 🔍 Detect Instagram / Facebook in-app browser
 const isInAppBrowser = () => {
   const ua = navigator.userAgent || navigator.vendor || window.opera;
   return /Instagram|FBAN|FBAV|FB_IAB|Messenger/i.test(ua);

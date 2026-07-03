@@ -2391,7 +2391,7 @@ const discount = isPercent
           ))}
 
           {/* COD */}
-          <div
+          {/* <div
             style={{
               display: "flex",
               flexDirection: "column",
@@ -2428,7 +2428,7 @@ const discount = isPercent
             <p style={{ fontSize: "10px", fontWeight: "700", marginTop: "4px", color: "#555" }}>
               ₹{COD_SURCHARGE} extra charged for cash on delivery
             </p>
-          </div>
+          </div> */}
         </div>
       )}
 

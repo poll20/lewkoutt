@@ -2186,12 +2186,15 @@ app.post('/order', verifySessionCookie, async (req, res) => {
             await product.save();
           }
         }
-
+  
+        const addressData = { ...(address?.[0] || {}) };
+delete addressData._id;
+delete addressData.guestId;
         const newOrder = new orderr({
           name: userDetails.name,
           userId: userDetails?._id,
           email: userDetails.email,
-          address: address[0] || {},
+          address: [addressData],
           timeslot: timeslot,
           phone: address?.[0]?.phone?.[0] || "",
           products: [singleProduct],
@@ -2255,12 +2258,14 @@ app.post('/order', verifySessionCookie, async (req, res) => {
             await product.save();
           }
         }
-
+       const addressData = { ...(address?.[0] || {}) };
+delete addressData._id;
+delete addressData.guestId;
         const newOrder = new orderr({
           name: userDetails.name,
           userId: userDetails._id,
           email: userDetails.email,
-          address: address[0] || {},
+           address: [addressData],
           timeslot: timeslot,
           phone: address?.[0]?.phone?.[0] || "",
           products: [singleProduct],
@@ -2481,12 +2486,14 @@ console.log("======================================");
       //     await product.save();
       //   }
       // }
-
+      const addressData = { ...(address?.[0] || {}) };
+delete addressData._id;
+delete addressData.guestId;
       const newOrder = new orderr({
         name: userDetails.name,
         userId: userDetails._id,
         email: userDetails.email,
-        address: address?.[0] || {},
+        address: [addressData],
         phone: address?.[0]?.phone?.[0] || "",
         timeslot,
         products: [singleProduct],
