@@ -13,6 +13,7 @@ import SlideUpModal from "./SlideupModel";
 import OtpLogin from "./OtpLogin";
 import heroimg from "../components/image/whatimg.jpeg"
 import { useFirebaseAuth } from "./FirebaseContext";
+import BecomeMemberCard from "./BecomeMemberCard";
 const plans = [
     
   {
@@ -490,7 +491,7 @@ const fromCheckout = location.state?.fromCheckout;
 
       {/* ── CTA ── */}
       <section className="mp-cta">
-        <div className="mp-cta__card">
+        {/* <div className="mp-cta__card">
           <div className="mp-cta__text">
             <h2 className="mp-cta__title">
               {selectedPlan ? `${selectedPlan.name} plan — let's go!` : "Ready to start saving?"}
@@ -510,8 +511,9 @@ const fromCheckout = location.state?.fromCheckout;
               <><span className="mp-cta__p-icon">P</span> Become a Member</>
             )}
           </button>
-        </div>
-        <p className="mp-cta__fine">Secure · PhonePe · Annual · No hidden fees</p>
+        </div> */}
+        <BecomeMemberCard/>
+        {/* <p className="mp-cta__fine">Secure · PhonePe · Annual · No hidden fees</p> */}
       </section>
 {/* ── MEMBER BENEFITS ── */}
 <section style={styles.benefitsSection}>

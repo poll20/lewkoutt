@@ -890,12 +890,129 @@ if(getbundeldata){
 ):('')
     }
 
-  <StickyButton
+  {/* <StickyButton
   onAddToCart={() => handleclick(product, quantity, selectedSize)}
   onBuyNow={() => buydata(product, selectedSize, quantity)}
   targetRef={targetRef}
   qty={product.sizes[0]?.quantity}                
-/>
+/> */}
+
+<style>{`
+  @keyframes sparkleFloatMobile {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes pulseDotMobile {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .order-screenshot-card {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .order-screenshot-card {
+      display: flex;
+    }
+  }
+`}</style>
+
+<div
+  className="order-screenshot-card"
+  style={{
+    background: "linear-gradient(135deg, #E6E6FA 0%, #FFE4E1 50%, #ffffff 100%)",
+    padding: "16px 14px",
+borderRadius: "16px",
+gap: "6px",
+    boxShadow: "0 20px 30px -10px rgba(230,230,250,0.35)",
+    // position: "sticky",
+    bottom: "0",
+    zIndex: 40,
+    overflow: "hidden",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    margin: "10px 0",
+   
+  }}
+>
+  <span style={{ position: "absolute", top: "10px", left: "14px", fontSize: "18px", opacity: 0.4, animation: "sparkleFloatMobile 3s ease-in-out infinite" }}>✨</span>
+  <span style={{ position: "absolute", bottom: "10px", right: "18px", fontSize: "22px", opacity: 0.3, animation: "sparkleFloatMobile 3s ease-in-out infinite 1.5s" }}>✨</span>
+
+ <span
+  style={{
+    fontSize: "20px",
+    marginBottom: "-2px",
+  }}
+>
+  💌
+</span>
+
+  <h3
+  style={{
+    fontFamily: "Oswald, sans-serif",
+    fontSize: "15px",
+    color: "#1e1b18",
+    margin: "0",
+    lineHeight: 1.2,
+  }}
+>
+    Want to order this outfit?
+  </h3>
+
+  <p   style={{
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "11px",
+    color: "#46464c",
+    maxWidth: "270px",
+    lineHeight: 1.35,
+    margin: "2px 0 0",
+  }}>
+    Take a screenshot of this outfit and send it to us on Instagram DM. We'll help you place your order quickly. ✨
+  </p>
+
+  <a
+   href="https://instagram.com/YOUR_USERNAME"
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(e) => {
+    e.preventDefault();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+
+  }}
+    style={{
+      background: "linear-gradient(90deg, #FFE4E1 0%, #E6E6FA 100%)",
+      padding: "12px 26px",
+      borderRadius: "9999px",
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "8px",
+      textDecoration: "none",
+      boxShadow: "0 10px 20px -6px rgba(230,230,250,0.5)",
+      marginTop: "4px",
+    }}
+  >
+    <span style={{ fontSize: "16px" }}>📸</span>
+    <span style={{ fontFamily: "Outfit, sans-serif", fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#6d5a58", fontWeight: 600 }}>
+      Take Screenshot
+    </span>
+  </a>
+
+  {/* <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "4px" }}>
+    <span style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#4ade80", animation: "pulseDotMobile 1.5s ease-in-out infinite" }}></span>
+    <span style={{ fontFamily: "Outfit, sans-serif", fontSize: "9px", letterSpacing: "0.14em", textTransform: "uppercase", color: "#46464c", opacity: 0.6 }}>
+      Usually responds within 10 minutes
+    </span>
+  </div> */}
+</div>
+
+
+
+
 
         </div>
     
@@ -923,4 +1040,3 @@ if(getbundeldata){
 };
 
 export default ProductDescription;
-
