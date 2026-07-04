@@ -214,11 +214,11 @@ export default function Cardforall(props) {
           <span className="pcard-og">₹{price}</span>
         </div>
 
-        {couponPrice !== null && (
+        {/* {couponPrice !== null && (
           <div className="pcard-coupon">
             Get it for ₹{couponPrice}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

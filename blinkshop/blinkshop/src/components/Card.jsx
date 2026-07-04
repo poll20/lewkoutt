@@ -405,7 +405,7 @@ if (store) {
                   <span className="discount" style={{ fontFamily: "Oswald", color: "red" }}>{product?.discount}% off</span>
                 </div>
              {/* <span className="current-price" style={{ fontFamily: "Oswald",color: "rgb(52 195 52)",fontSize:"12.8px" }}>Get it For ₹{product?.discountprice - coupons[0]?.discountValue}</span> */}
-<span
+{/* <span
   className="current-price"
   style={{
     fontFamily: "Oswald",
@@ -420,7 +420,7 @@ if (store) {
         product?.discountprice -
           (product?.discountprice * coupons?.[0]?.discountValue) / 100
       )}
-</span>
+</span> */}
 
 
                 {!wish ? null : (
