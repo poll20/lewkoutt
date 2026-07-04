@@ -118,7 +118,7 @@ export default function Home() {
 
       <Carousel images={carousel} />
       <QuickCategories images={carousel}/>
-      <PromoStrip />
+      {/* <PromoStrip /> */}
       <CategoriesLayout page={page} setPage={setPage} />
       <TrustStrip />
 
