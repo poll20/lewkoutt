@@ -41,9 +41,9 @@ export default function OfferBanner() {
          <span>
         🕒4-6 days Delivery (PAN-INDIA)
         </span>
-        <span>
+        {/* <span>
         25% OFF ON FIRST 3 ORDERS 🛍️
-        </span>
+        </span> */}
       </motion.div>
     </div>
   );
