@@ -716,7 +716,7 @@ if(getbundeldata){
       className={`size-btn ${selectedSize === s.size ? "active" : ""}`}
       style={{
         borderRadius: "30px",
-        width: "50px",
+          minWidth: "50px",
         height: "35px",
         
         opacity: s.quantity === 0 ? 0.6 : 1, // thoda fade
