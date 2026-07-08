@@ -808,7 +808,6 @@ const tcStyles = {
     display:"flex",
     flexDirection:"column",
 gap:"10px",
-    lineHeight: "1.7",
     color: "#444",
     fontSize: "13px",
     lineHeight:"1.2em"

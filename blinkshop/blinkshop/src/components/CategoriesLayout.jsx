@@ -302,7 +302,7 @@ const CategoriesLayout = () => {
           setPage((prev) => prev + 1);
         }
       },
-      { threshold: 1 }
+      { rootMargin: "150px", threshold: 0 }
     );
 
     if (loaderRef.current) {
@@ -402,7 +402,7 @@ const CategoriesLayout = () => {
       {/* INFINITE SCROLL */}
       <div
         ref={loaderRef}
-        style={{ height: "1px" }}
+        style={{ height: "10px" }}
       />
     </>
   );

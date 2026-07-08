@@ -1669,7 +1669,6 @@ const fetchTopSearched = async () => {
         guestWishlist,
         isLoggedIn,
         wishlist,
-        guestWishlist,
         filters,
         setFilters,
         rentdata,
