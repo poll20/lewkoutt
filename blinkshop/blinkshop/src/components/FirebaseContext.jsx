@@ -45,11 +45,10 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
       console.log("✅ Firebase user found");
 
       try {
-        const res = await fetch(`${apiUrl}/user/check-session`, {
-          credentials: "include",
-        });
+        // Use fetchWithAuth so Bearer token is sent — fixes Safari ITP cookie blocking
+        const res = await fetchWithAuth(`${apiUrl}/user/check-session`);
 
-        if (res.status === 401) {
+        if (!res || res.status === 401) {
           console.warn("🔥 Session expired but Firebase alive → logout");
 
           await signOut(auth);
@@ -64,6 +63,9 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
 
       } catch (err) {
         console.error("Session check failed:", err);
+        // Don't log out on network error — let user stay signed in
+        setUser(firebaseUser);
+        await fetchUserDetails(firebaseUser);
       }
 
     } else {
@@ -81,11 +83,10 @@ export const FirebaseAuthProvider = ({ children,showPopup }) => {
 useEffect(() => {
   const checkSession = async () => {
     try {
-      const res = await fetch(`${apiUrl}/user/check-session`, {
-        credentials: "include",
-      });
+      // Use fetchWithAuth so Bearer token is sent — fixes Safari ITP cookie blocking
+      const res = await fetchWithAuth(`${apiUrl}/user/check-session`);
 
-      if (res.status === 401) {
+      if (!res || res.status === 401) {
         console.warn("⚠️ Session expired");
 
         await signOut(auth);
@@ -94,7 +95,8 @@ useEffect(() => {
         setIsRegistered(false);
       }
     } catch (err) {
-      console.error(err);
+      // Network error — don't log out, could be temporary
+      console.warn("Session check network error (ignored):", err.message);
     }
   };
 
