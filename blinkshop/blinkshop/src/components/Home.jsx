@@ -100,24 +100,28 @@ export default function Home() {
   const [carousel, setCarousel] = useState([]);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    const loadCarousel = async () => {
-      try {
-        const data = await fetchCarousel();
-        setCarousel(data);
-      } catch (error) {
-        console.error("Carousel load failed:", error);
-      }
-    };
-    loadCarousel();
-  }, [fetchCarousel]);
+  // useEffect(() => {
+  //   const loadCarousel = async () => {
+  //     try {
+  //       const data = await fetchCarousel();
+  //       setCarousel(data);
+  //     } catch (error) {
+  //       console.error("Carousel load failed:", error);
+  //     }
+  //   };
+  //   loadCarousel();
+  // }, [fetchCarousel]);
 
   return (
     <div className="home">
       <OfferBanner />
 
-      <Carousel images={carousel} />
-      <QuickCategories images={carousel}/>
+      {/* <Carousel images={carousel} /> */}
+      <Carousel />
+
+      {/* <QuickCategories images={carousel}/> */}
+      <QuickCategories/>
+
       {/* <PromoStrip /> */}
       <CategoriesLayout page={page} setPage={setPage} />
       <TrustStrip />

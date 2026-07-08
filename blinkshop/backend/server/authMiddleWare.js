@@ -8,14 +8,14 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-(async () => {
-  try {
-    const token = await admin.app().options.credential.getAccessToken();
-    console.log("✅ Firebase access token fetched successfully");
-  } catch (err) {
-    console.error("❌ Firebase access token test failed:", err);
-  }
-})();
+// (async () => {
+//   try {
+//     const token = await admin.app().options.credential.getAccessToken();
+//     console.log("✅ Firebase access token fetched successfully");
+//   } catch (err) {
+//     console.error("❌ Firebase access token test failed:", err);
+//   }
+// })();
 const COOKIE_NAME = "session";
 
 const verifySessionCookie = async (req, res, next) => {

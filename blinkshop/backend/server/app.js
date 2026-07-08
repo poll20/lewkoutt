@@ -1236,76 +1236,146 @@ const addIdsToSubCollections = async () => {
 
 addIdsToSubCollections();
 
-app.get("/productmodel", async (req, res) => {
+// app.get("/productmodel", async (req, res) => {
 
 
-  let operation = req.query.operation
-  let section = req.query.section
-  let subcategory = req.query.subcategory
-  console.log("ope", operation)
-  console.log("sec", section)
+//   let operation = req.query.operation
+//   let section = req.query.section
+//   let subcategory = req.query.subcategory
+//   console.log("ope", operation)
+//   console.log("sec", section)
 
-  try {
+//   try {
 
-    if (operation === "navbar") {
-      const data = await productsmodel.find(
-        {
-          category: {
-            $nin: ["The Cozy Edit", "Warm & Chic"]
-          }
-        },
-        { category: 1, productdetails: 1, _id: 0 }
-      ).sort({ _id: -1 }).lean();
+//     if (operation === "navbar") {
+//       const data = await productsmodel.find(
+//         {
+//           category: {
+//             $nin: ["The Cozy Edit", "Warm & Chic"]
+//           }
+//         },
+//         { category: 1, productdetails: 1, _id: 0 }
+//       ).sort({ _id: -1 }).lean();
 
-      const navbarData = data.map(cat => {
-        const tags = [
-          ...new Set(
-            (cat.productdetails || [])
-              .map(p => p.tag)
-              .filter(Boolean)
-          )
-        ].filter(tag => tag !== "Co-ord Sets"); // optional cleanup
+//       const navbarData = data.map(cat => {
+//         const tags = [
+//           ...new Set(
+//             (cat.productdetails || [])
+//               .map(p => p.tag)
+//               .filter(Boolean)
+//           )
+//         ].filter(tag => tag !== "Co-ord Sets"); // optional cleanup
 
-        return {
-          category: cat.category,
-          tags
-        };
-      });
+//         return {
+//           category: cat.category,
+//           tags
+//         };
+//       });
 
-      return res.json(navbarData);
-    }
-
-
-    if (operation === "home") {
-      const data = await productsmodel.find({
-        category: {
-          $nin: ["The Cozy Edit", "Warm & Chic"]
-        }
-      }).sort({ _id: -1 }).lean();
-
-      const homeData = data.map(cat => ({
-        _id: cat._id,
-        category: cat.category,
-        image: cat.image, // carousel ke liye
-        productdetails: cat.productdetails.slice(0, 7) // 👈 sirf 7 products
-      }));
-
-      return res.json(homeData);
-    }
+//       return res.json(navbarData);
+//     }
 
 
-    // if (operation == "all") {
-    //   //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
-    //   let categorydata = await productsmodel.find({
-    //     category: {
-    //       $nin: ["The Cozy Edit", "Warm & Chic"]
-    //     }
-    //   }).sort({ _id: -1 }).lean()
-    //   res.json(categorydata)
-    // }
-//     if (operation == "all") {
+//     if (operation === "home") {
+//       const data = await productsmodel.find({
+//         category: {
+//           $nin: ["The Cozy Edit", "Warm & Chic"]
+//         }
+//       }).sort({ _id: -1 }).lean();
+
+//       const homeData = data.map(cat => ({
+//         _id: cat._id,
+//         category: cat.category,
+//         image: cat.image, // carousel ke liye
+//         productdetails: cat.productdetails.slice(0, 7) // 👈 sirf 7 products
+//       }));
+
+//       return res.json(homeData);
+//     }
+
+
+//     // if (operation == "all") {
+//     //   //  let data=await wear.find({}, { category: 1, _id: 0 })// for retrive only category field
+//     //   let categorydata = await productsmodel.find({
+//     //     category: {
+//     //       $nin: ["The Cozy Edit", "Warm & Chic"]
+//     //     }
+//     //   }).sort({ _id: -1 }).lean()
+//     //   res.json(categorydata)
+//     // }
+// //     if (operation == "all") {
+
+// //   let categorydata = await productsmodel.find({
+// //     category: {
+// //       $nin: ["The Cozy Edit", "Warm & Chic"]
+// //     }
+// //   })
+// //   // .sort({ _id: -1 }) // newest category first
+// //   .lean();
+
+// //   // 🔥 newest productdetails first
+// //   const updatedData = categorydata.map((cat) => ({
+// //     ...cat,
+// //     productdetails: [...cat.productdetails].reverse()
+// //   }));
+
+// //   res.json(updatedData);
+// // }
+
+// if (operation == "all") {
 
 //   let categorydata = await productsmodel.find({
+//     category: {
+//       $nin: ["The Cozy Edit", "Warm & Chic"]
+//     }
+//   }).lean();
+
+//   // 🔥 only reverse except "Tops & Tunics"
+//   const updatedData = categorydata.map((cat) => ({
+//     ...cat,
+//     productdetails:
+//       cat.category?.trim().toLowerCase() === "tops & tunics"
+//         ? [...cat.productdetails] // old first
+//         : [...cat.productdetails].reverse() // new first
+//   }));
+
+//   res.json(updatedData);
+// }
+//     // else if (operation === "filtered") {
+//     //   // Operation 2: Fetch documents filtered by 'tag'
+//     //   const cat = section;
+//     //   const subcat = subcategory;
+
+//     //   const categoryData = await productsmodel.find({
+//     //     category: {
+//     //       $nin: ["The Cozy Edit", "Warm & Chic"]
+//     //     }
+//     //   }).sort({ _id: -1 }).lean();
+//     //   console.log("pm", categoryData)
+//     //   const finalData = categoryData.filter((item) => item.category == cat);
+//     //   const finalllData = finalData.map((item) => item.productdetails).flat();
+//     //   const finalsubData = categoryData.map((item) => item.productdetails).flat();
+//     //   const subdata = finalsubData.filter((e) => (e.tag == section))
+//     //   console.log("fd", finalData)
+//     //   console.log("sd", subdata)
+//     //   if (finalllData.length != 0) {
+//     //     res.json(finalllData);
+//     //   }
+//     //   else if (subdata != 0) {
+//     //     res.json(subdata)
+//     //   }
+
+
+//     //   else {
+//     //     res.json({ message: "No data found" });
+//     //   }
+//     // }
+//     else if (operation === "filtered") {
+
+//   const cat = section;
+//   const subcat = subcategory;
+
+//   const categoryData = await productsmodel.find({
 //     category: {
 //       $nin: ["The Cozy Edit", "Warm & Chic"]
 //     }
@@ -1313,120 +1383,199 @@ app.get("/productmodel", async (req, res) => {
 //   // .sort({ _id: -1 }) // newest category first
 //   .lean();
 
+//   console.log("pm", categoryData);
+
+//   const finalData = categoryData.filter(
+//     (item) => item.category == cat
+//   );
+
 //   // 🔥 newest productdetails first
-//   const updatedData = categorydata.map((cat) => ({
-//     ...cat,
-//     productdetails: [...cat.productdetails].reverse()
-//   }));
+//   const finalllData = finalData
+//     .map((item) => [...item.productdetails].reverse())
+//     .flat();
 
-//   res.json(updatedData);
+//   const finalsubData = categoryData
+//     .map((item) => [...item.productdetails].reverse())
+//     .flat();
+
+//   const subdata = finalsubData.filter(
+//     (e) => e.tag == section
+//   );
+
+//   console.log("fd", finalData);
+//   console.log("sd", subdata);
+
+//   if (finalllData.length != 0) {
+//     res.json(finalllData);
+//   }
+
+//   else if (subdata.length != 0) {
+//     res.json(subdata);
+//   }
+
+//   else {
+//     res.json({ message: "No data found" });
+//   }
 // }
+//      else {
+//       res.status(400).json({ message: "Invalid operation type" });
+//     }
+//   }
+//   catch (e) {
+//     console.error(e);
+//     res.status(500).json({ error: "An error occurred while fetching data" });
+//   }
+// })
+// === Optimized /productmodel route ===
+// Same operations as before (navbar, home, all, filtered) — behavior unchanged
+// for existing callers. NEW: pass ?page=&limit= to any "all" or "filtered"
+// call to get real server-side pagination (skip/limit at the DB level,
+// not just "fetch everything and slice in the browser").
+//
+// Response shape when page/limit are provided:
+//   { productdetails: [...], total: <number>, hasMore: <boolean> }
+// Response shape when they are NOT provided: unchanged (raw array / object),
+// so existing frontend code that doesn't send page/limit keeps working exactly
+// as before.
 
-if (operation == "all") {
+app.get("/productmodel", async (req, res) => {
+  const operation = req.query.operation;
+  const section = req.query.section;
+  const page = req.query.page ? parseInt(req.query.page, 10) : null;
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : null;
+  const usePagination = Number.isInteger(page) && Number.isInteger(limit) && page > 0 && limit > 0;
 
-  let categorydata = await productsmodel.find({
-    category: {
-      $nin: ["The Cozy Edit", "Warm & Chic"]
+  try {
+    if (operation === "navbar") {
+      const data = await productsmodel
+        .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } }, { category: 1, productdetails: 1, _id: 0 })
+        .sort({ _id: -1 })
+        .lean();
+
+      const navbarData = data.map((cat) => {
+        const tags = [...new Set((cat.productdetails || []).map((p) => p.tag).filter(Boolean))].filter(
+          (tag) => tag !== "Co-ord Sets"
+        );
+        return { category: cat.category, tags };
+      });
+
+      return res.json(navbarData);
     }
-  }).lean();
 
-  // 🔥 only reverse except "Tops & Tunics"
-  const updatedData = categorydata.map((cat) => ({
-    ...cat,
-    productdetails:
-      cat.category?.trim().toLowerCase() === "tops & tunics"
-        ? [...cat.productdetails] // old first
-        : [...cat.productdetails].reverse() // new first
-  }));
+    if (operation === "home") {
+      const data = await productsmodel
+        .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } })
+        .sort({ _id: -1 })
+        .lean();
 
-  res.json(updatedData);
-}
-    // else if (operation === "filtered") {
-    //   // Operation 2: Fetch documents filtered by 'tag'
-    //   const cat = section;
-    //   const subcat = subcategory;
+      const homeData = data.map((cat) => ({
+        _id: cat._id,
+        category: cat.category,
+        image: cat.image,
+        productdetails: cat.productdetails.slice(0, 7),
+      }));
 
-    //   const categoryData = await productsmodel.find({
-    //     category: {
-    //       $nin: ["The Cozy Edit", "Warm & Chic"]
-    //     }
-    //   }).sort({ _id: -1 }).lean();
-    //   console.log("pm", categoryData)
-    //   const finalData = categoryData.filter((item) => item.category == cat);
-    //   const finalllData = finalData.map((item) => item.productdetails).flat();
-    //   const finalsubData = categoryData.map((item) => item.productdetails).flat();
-    //   const subdata = finalsubData.filter((e) => (e.tag == section))
-    //   console.log("fd", finalData)
-    //   console.log("sd", subdata)
-    //   if (finalllData.length != 0) {
-    //     res.json(finalllData);
-    //   }
-    //   else if (subdata != 0) {
-    //     res.json(subdata)
-    //   }
-
-
-    //   else {
-    //     res.json({ message: "No data found" });
-    //   }
-    // }
-    else if (operation === "filtered") {
-
-  const cat = section;
-  const subcat = subcategory;
-
-  const categoryData = await productsmodel.find({
-    category: {
-      $nin: ["The Cozy Edit", "Warm & Chic"]
+      return res.json(homeData);
     }
-  })
-  // .sort({ _id: -1 }) // newest category first
-  .lean();
 
-  console.log("pm", categoryData);
+    if (operation === "all") {
+      const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
 
-  const finalData = categoryData.filter(
-    (item) => item.category == cat
-  );
+      if (!usePagination) {
+        // --- unchanged legacy behavior ---
+        const categorydata = await productsmodel.find(baseMatch).lean();
+        const updatedData = categorydata.map((cat) => ({
+          ...cat,
+          productdetails:
+            cat.category?.trim().toLowerCase() === "tops & tunics"
+              ? [...cat.productdetails]
+              : [...cat.productdetails].reverse(),
+        }));
+        return res.json(updatedData);
+      }
 
-  // 🔥 newest productdetails first
-  const finalllData = finalData
-    .map((item) => [...item.productdetails].reverse())
-    .flat();
+      // --- true DB-level pagination across all categories' productdetails ---
+      const skip = (page - 1) * limit;
 
-  const finalsubData = categoryData
-    .map((item) => [...item.productdetails].reverse())
-    .flat();
+      const [result] = await productsmodel.aggregate([
+        { $match: baseMatch },
+        { $unwind: "$productdetails" },
+        { $sort: { _id: -1 } },
+        {
+          $facet: {
+            data: [{ $skip: skip }, { $limit: limit }, { $replaceRoot: { newRoot: "$productdetails" } }],
+            totalCount: [{ $count: "count" }],
+          },
+        },
+      ]);
 
-  const subdata = finalsubData.filter(
-    (e) => e.tag == section
-  );
-
-  console.log("fd", finalData);
-  console.log("sd", subdata);
-
-  if (finalllData.length != 0) {
-    res.json(finalllData);
-  }
-
-  else if (subdata.length != 0) {
-    res.json(subdata);
-  }
-
-  else {
-    res.json({ message: "No data found" });
-  }
-}
-     else {
-      res.status(400).json({ message: "Invalid operation type" });
+      const total = result?.totalCount?.[0]?.count || 0;
+      return res.json({
+        productdetails: result?.data || [],
+        total,
+        hasMore: skip + limit < total,
+      });
     }
-  }
-  catch (e) {
+
+    if (operation === "filtered") {
+      const cat = section;
+      const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
+
+      if (!usePagination) {
+        // --- unchanged legacy behavior ---
+        const categoryData = await productsmodel.find(baseMatch).lean();
+
+        const finalData = categoryData.filter((item) => item.category == cat);
+        const finalllData = finalData.map((item) => [...item.productdetails].reverse()).flat();
+
+        const finalsubData = categoryData.map((item) => [...item.productdetails].reverse()).flat();
+        const subdata = finalsubData.filter((e) => e.tag == section);
+
+        if (finalllData.length != 0) return res.json(finalllData);
+        if (subdata.length != 0) return res.json(subdata);
+        return res.json({ message: "No data found" });
+      }
+
+      // --- true DB-level pagination for a specific category/tag ---
+      const skip = (page - 1) * limit;
+
+      // Try matching by category first; if nothing matches, fall back to tag match.
+      const categoryMatch = { ...baseMatch, category: cat };
+      const categoryCountDoc = await productsmodel.countDocuments(categoryMatch);
+
+      const matchStage = categoryCountDoc > 0 ? categoryMatch : baseMatch;
+      const unwindFilterStage =
+        categoryCountDoc > 0 ? [] : [{ $match: { "productdetails.tag": section } }];
+
+      const [result] = await productsmodel.aggregate([
+        { $match: matchStage },
+        { $unwind: "$productdetails" },
+        ...unwindFilterStage,
+        { $sort: { _id: -1 } },
+        {
+          $facet: {
+            data: [{ $skip: skip }, { $limit: limit }, { $replaceRoot: { newRoot: "$productdetails" } }],
+            totalCount: [{ $count: "count" }],
+          },
+        },
+      ]);
+
+      const total = result?.totalCount?.[0]?.count || 0;
+      if (total === 0) return res.json({ message: "No data found" });
+
+      return res.json({
+        productdetails: result?.data || [],
+        total,
+        hasMore: skip + limit < total,
+      });
+    }
+
+    return res.status(400).json({ message: "Invalid operation type" });
+  } catch (e) {
     console.error(e);
     res.status(500).json({ error: "An error occurred while fetching data" });
   }
-})
-
+});
 
 // categories with pagination
 // app.get("/categories", async (req, res) => {
