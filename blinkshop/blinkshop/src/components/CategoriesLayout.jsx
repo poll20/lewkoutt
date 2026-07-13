@@ -278,35 +278,14 @@ const CategoriesLayout = () => {
 
   const loaderRef = useRef(null);
 
-  /* STABLE BANNER IMAGES — keyed by category name so each category
-     always shows the same image, regardless of API return order or
-     which page (pagination chunk) it arrives in.             */
-  const allBannerImages = [cara1, cara2, cara3, cara4, cara5, cara6];
-
-  const categoryBannerMap = {
-    "tops & tunics": cara1,
-    "tops":          cara1,
-    "dresses":       cara2,
-    "co-ord sets":   cara3,
-    "co-ords":       cara3,
-    "bottoms":       cara4,
-    "ethnic":        cara5,
-    "western":       cara6,
-    "jumpsuits":     cara6,
-    "skirts":        cara5,
-    "kurtis":        cara4,
-  };
-
-  /* Fallback: derive a stable index from the category string so
-     unknown categories always get the same image on re-renders.  */
-  const getBannerForCategory = (categoryName) => {
-    const key = (categoryName || "").trim().toLowerCase();
-    if (categoryBannerMap[key]) return categoryBannerMap[key];
-    // Hash the name to a stable index
-    let hash = 0;
-    for (let i = 0; i < key.length; i++) hash += key.charCodeAt(i);
-    return allBannerImages[hash % allBannerImages.length];
-  };
+  /* STATIC BANNER IMAGES */
+  const bannerImages = [
+    cara1,
+    cara2,
+    cara3,
+    cara6,
+    cara5,
+  ];
 
   useEffect(() => {
     fetchCategories(page);
@@ -323,7 +302,7 @@ const CategoriesLayout = () => {
           setPage((prev) => prev + 1);
         }
       },
-      { rootMargin: "150px", threshold: 0 }
+      { threshold: 1 }
     );
 
     if (loaderRef.current) {
@@ -386,7 +365,7 @@ const CategoriesLayout = () => {
             {/* CARDS */}
             <div className="cat-cards-wrapper">
               <div className="cat-cards">
-                {cat.productdetails?.map((p, i) => (
+                {cat.productdetails.map((p, i) => (
                   <div
                     key={i}
                     className="cat-card-item"
@@ -423,7 +402,7 @@ const CategoriesLayout = () => {
       {/* INFINITE SCROLL */}
       <div
         ref={loaderRef}
-        style={{ height: "10px" }}
+        style={{ height: "1px" }}
       />
     </>
   );
