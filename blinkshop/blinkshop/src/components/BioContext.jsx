@@ -962,41 +962,68 @@ useEffect(() => {
 
  
    
-  const fetchCategories = async (page) => {
-    try {
-      console.log("FETCH START", page, new Date().toISOString());
-      const res = await fetch(
-        `${apiUrl}/categories?page=${page}`
+//   const fetchCategories = async (page) => {
+//     try {
+      
+//       const res = await fetch(
+//         `${apiUrl}/categories?page=${page}`
+//       );
+//       const json = await res.json();
+
+//       // setproductdata((prev) => [...prev, ...json.data]);
+//       setproductdata((prev) => {
+//   const existingIds = new Set(prev.map(item => item._id));
+
+//   const newUniqueData = json.data.filter(
+//     item => !existingIds.has(item._id)
+//   );
+
+//   return [...prev, ...newUniqueData];
+// });
+//       setHasMore(json.hasMore);
+//     } catch (err) {
+//       console.error("fetchCategories error:", err);
+//     }
+//   };
+const fetchCategories = async (page) => {
+  try {
+    console.log("🔥 FETCH FUNCTION CALLED", page);
+
+    const url = `${apiUrl}/categories?page=${page}`;
+
+    console.log("🌍 FETCHING URL:", url);
+
+    const res = await fetch(url);
+
+    console.log("📡 RESPONSE RECEIVED:", res.status);
+
+    const json = await res.json();
+
+    console.log("📦 JSON RECEIVED:", json);
+
+    setproductdata((prev) => {
+      const existingIds = new Set(
+        prev.map((item) => item._id)
       );
-       console.log("STATUS:", res.status);
-    console.log("OK:", res.ok);
 
-    const text = await res.text();
-    console.log("RAW RESPONSE:", text);
-      const json = await res.json();
+      const newUniqueData = json.data.filter(
+        (item) => !existingIds.has(item._id)
+      );
 
-      // setproductdata((prev) => [...prev, ...json.data]);
-      setproductdata((prev) => {
-  const existingIds = new Set(prev.map(item => item._id));
-
-  const newUniqueData = json.data.filter(
-    item => !existingIds.has(item._id)
-  );
-
-  return [...prev, ...newUniqueData];
-});
-      setHasMore(json.hasMore);
-    } catch (err) {
-      // console.error("fetchCategories error:", err);
-       console.error("CATEGORY FETCH FAILED:", {
-      message: error.message,
-      name: error.name,
-      stack: error.stack,
-      time: new Date().toISOString(),
-      apiUrl,
+      return [...prev, ...newUniqueData];
     });
-    }
-  };
+
+    setHasMore(json.hasMore);
+  } catch (err) {
+    console.error("🚨 CATEGORY FETCH FAILED:", {
+      message: err.message,
+      name: err.name,
+      stack: err.stack,
+      apiUrl,
+      time: new Date().toISOString(),
+    });
+  }
+};
 
   //  const fetchCarousel = async () => {
   //   const res = await fetch(
