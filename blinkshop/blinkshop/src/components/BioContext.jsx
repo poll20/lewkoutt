@@ -94,10 +94,7 @@ const backendURL = `${apiUrl}:3000`;
   //   console.log("hurraaa",e._id)
   // })
   // Fetch Cart and Wishlist from API on login
-  
-      
-   
-// Empty dependency array to run this effect only on the first render
+  // Empty dependency array to run this effect only on the first render
 // useEffect(() => {
 //   if(user && userDetails._id){
 //   console.log("userdetails in bio",userDetails)
@@ -114,8 +111,8 @@ const backendURL = `${apiUrl}:3000`;
 //         // if(data)
 //         //   {
 //         //    console.log("data kokoin cart",data)
-//         //   }
-//         if (!Array.isArray(data)) {  // ✅ Handle unexpected API response
+//         //   }                       
+//         if (!Array.isArray(data)) {//✅✅✅✅✅Handle unexpected API response
 //           console.error("Invalid response format:", data);
 //           return;
 //         }
@@ -967,9 +964,15 @@ useEffect(() => {
    
   const fetchCategories = async (page) => {
     try {
+      console.log("FETCH START", page, new Date().toISOString());
       const res = await fetch(
         `${apiUrl}/categories?page=${page}`
       );
+       console.log("STATUS:", res.status);
+    console.log("OK:", res.ok);
+
+    const text = await res.text();
+    console.log("RAW RESPONSE:", text);
       const json = await res.json();
 
       // setproductdata((prev) => [...prev, ...json.data]);
@@ -984,7 +987,14 @@ useEffect(() => {
 });
       setHasMore(json.hasMore);
     } catch (err) {
-      console.error("fetchCategories error:", err);
+      // console.error("fetchCategories error:", err);
+       console.error("CATEGORY FETCH FAILED:", {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      time: new Date().toISOString(),
+      apiUrl,
+    });
     }
   };
 
@@ -1745,5 +1755,4 @@ const fetchTopSearched = async () => {
     </>
   );
 };
-
 export const useBio = () => useContext(BioContext);
