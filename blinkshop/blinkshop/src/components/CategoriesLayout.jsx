@@ -339,9 +339,8 @@ const CategoriesLayout = () => {
     <>
       {[...productdata].map((cat, idx) => {
         /* 5 → 4 → 3 → 2 → 1 */
-        // const bannerImage =
-        //   bannerImages[idx % bannerImages.length];
-        const bannerImage = getBannerForCategory(cat.category);
+        const bannerImage =
+          bannerImages[idx % bannerImages.length];
 
         return (
           <section key={idx} className="cat-section">
@@ -371,7 +370,7 @@ const CategoriesLayout = () => {
                   alt={cat.category}
                   className="cat-banner-img"
                   decoding="async"
-                  fetchPriority="low"
+                  fetchpriority="low"
                 />
 
                 <div className="cat-banner-overlay" />
