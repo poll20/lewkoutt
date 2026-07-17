@@ -10,7 +10,7 @@ let app = express()
 
 // ✅ Redis client connect with Upstash
 const cacheMiddleware = require("./cacheMiddleware");
-
+const imagekit = require("../config/imagekit");
 app.use(cookieParser());
 // security middleware
 
@@ -1175,6 +1175,12 @@ app.get('/og/:productId', async (req, res) => {
 </head>
 <body>Redirecting...</body>
 </html>`);
+});
+
+
+app.get("/imagekit/auth", (req, res) => {
+  const result = imagekit.getAuthenticationParameters();
+  res.json(result);
 });
 
 app.post("/productmodel", verifySessionCookie, isAdmin, async (req, res) => {

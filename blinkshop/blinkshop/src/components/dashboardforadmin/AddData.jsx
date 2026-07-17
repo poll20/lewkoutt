@@ -11,7 +11,7 @@ import { ChevronLeft, Plus, FolderPlus, Upload, X, Check, Image as ImageIcon, Ta
 // import { useDashboard } from "./DashboardContext";
 import { useBio } from "../BioContext";
 import { useDashboard } from "./DashboardContext";
-
+import { uploadToImageKit } from "../../utils/imagekit";
 
 
 const AddData = () => {
@@ -118,36 +118,52 @@ useEffect(()=>{
   };
 
   
-  const handleCategoryImageUpload = async (e) => {
+//   const handleCategoryImageUpload = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
+
+//   const formData = new FormData();
+//   formData.append("file", file);
+//   formData.append("upload_preset", "lewkout");
+//   formData.append("cloud_name", "ddbz9m39a");
+
+//   try {
+//     const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+//       method: "POST",
+//       body: formData,
+//     });
+//     const data = await res.json();
+
+//     // ✅ optimize kar diya
+//     // const uploadedUrl = data.secure_url.replace(
+//     //   "/upload/",
+//     //   "/upload/f_auto,q_auto/"
+//     // );
+//     const uploadedUrl=data.secure_url;
+
+//     setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
+//   } catch (err) {
+//     console.error("Category image upload failed:", err);
+//     alert("Failed to upload category image.");
+//   }
+// };
+
+const handleCategoryImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "lewkout");
-  formData.append("cloud_name", "ddbz9m39a");
-
   try {
-    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
+    const uploadedUrl = await uploadToImageKit(file);
 
-    // ✅ optimize kar diya
-    // const uploadedUrl = data.secure_url.replace(
-    //   "/upload/",
-    //   "/upload/f_auto,q_auto/"
-    // );
-    const uploadedUrl=data.secure_url;
-
-    setNewProduct((prev) => ({ ...prev, image: uploadedUrl }));
+    setNewProduct((prev) => ({
+      ...prev,
+      image: uploadedUrl,
+    }));
   } catch (err) {
-    console.error("Category image upload failed:", err);
-    alert("Failed to upload category image.");
+    console.error(err);
+    alert("Upload failed");
   }
 };
-
 
   const addColor = (isNewCategory) => {
     if (newColor.color.trim()) {
@@ -197,7 +213,7 @@ useEffect(()=>{
       return;
     }
 
-    const uploadedUrls = await uploadToCloudinary(files);
+    const uploadedUrls = await uploadToImageKitMultiple(files);
 
     const sizeData = {
       size: newSize.size,
@@ -244,26 +260,36 @@ useEffect(()=>{
   //   }
   //   return urls;
   // };
-  const uploadToCloudinary = async (files) => {
+//   const uploadToCloudinary = async (files) => {
+//   const urls = [];
+//   for (let file of files) {
+//     const formData = new FormData();
+//     formData.append("file", file);
+//     formData.append("upload_preset", "lewkout");
+//     formData.append("cloud_name", "ddbz9m39a");
+
+//     const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
+//       method: "POST",
+//       body: formData,
+//     });
+//     const data = await res.json();
+
+//     // ✅ optimize kar diya
+//     // urls.push(
+//     //   data.secure_url.replace("/upload/", "/upload/f_auto,q_auto/")
+//     // );
+//      urls.push(data.secure_url);
+//   }
+//   return urls;
+// };
+const uploadToImageKitMultiple = async (files) => {
   const urls = [];
-  for (let file of files) {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "lewkout");
-    formData.append("cloud_name", "ddbz9m39a");
 
-    const res = await fetch("https://api.cloudinary.com/v1_1/ddbz9m39a/image/upload", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-
-    // ✅ optimize kar diya
-    // urls.push(
-    //   data.secure_url.replace("/upload/", "/upload/f_auto,q_auto/")
-    // );
-     urls.push(data.secure_url);
+  for (const file of files) {
+    const url = await uploadToImageKit(file);
+    urls.push(url);
   }
+
   return urls;
 };
 
@@ -278,14 +304,14 @@ useEffect(()=>{
       const productImagesInput = document.querySelector('input[type="file"][multiple]');
       const productFiles = productImagesInput ? Array.from(productImagesInput.files) : [];
 
-      const uploadedProductImages = await uploadToCloudinary(productFiles);
+      const uploadedProductImages = await uploadToImageKitMultiple(productFiles);
 
       const colorImages = targetProduct.productdetails.colors.map((c) => c.image).filter(Boolean);
-      const uploadedColorImages = await uploadToCloudinary(colorImages);
+      const uploadedColorImages = await uploadToImageKitMultiple(colorImages);
 
       const sizeImages = targetProduct.productdetails.colors
         .flatMap((color) => color.sizes.flatMap((size) => size.image).filter(Boolean));
-      const uploadedSizeImages = await uploadToCloudinary(sizeImages);
+      const uploadedSizeImages = await uploadToImageKitMultiple(sizeImages);
 
       const updatedProduct = {
         ...targetProduct,
