@@ -141,8 +141,8 @@ export default function Cardforall(props) {
   const slug = slugify(discription);
   const productId = id?._id || id;
   const imgSrc = section !== "bundel"
-    ? cloudinaryImg(id?.image?.[0] || image || "fallback.jpg", 300)
-    : cloudinaryImg(image || "fallback.jpg", 300);
+    ? cloudinaryImg(id?.image?.[0] || image || "fallback.jpg", 500)
+    : cloudinaryImg(image || "fallback.jpg", 500);
   const linkTo = section !== "bundel"
     ? `/productdescription/${slug}/${productId}/${defaultcolor}`
     : `/productdescription/${slug}/${id}/${defaultcolor}`;

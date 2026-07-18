@@ -13,7 +13,7 @@ const IMAGEKIT_ENDPOINT = import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT;
 export const cloudinaryImg = (
   url,
   width = 600,
-  quality = 80
+  quality = 90
 ) => {
   if (!url) return "";
 

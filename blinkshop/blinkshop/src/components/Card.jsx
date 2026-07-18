@@ -652,7 +652,7 @@ const Card = (props) => {
                       style={{ position: "relative", width: "100%", height: "300px", borderRadius: "6px", overflow: "hidden" }}
                     >
                       <img
-                        src={cloudinaryImg(product.image?.[0], 300)}
+                        src={cloudinaryImg(product.image?.[0], 500)}
                         alt={product?.title || "Product"}
                         className="product-image"
                         loading="lazy"
