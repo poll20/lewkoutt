@@ -173,6 +173,7 @@ export default function Cardforall(props) {
             alt={discription || "Product"}
             className="pcard-img"
             loading="lazy"
+            decoding="async"
           />
         </NavLink>
 

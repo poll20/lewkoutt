@@ -927,15 +927,44 @@ finally{
 
 
 
+// const productfetch = useCallback(async (operationtype) => {
+//   try {
+//     setIsLoading(true);
+//     const res = await fetch(
+//       `${apiUrl}/productmodel?operation=${operationtype}`
+//     );
+//     const data = await res.json();
+
+//     if (!data || data.length === 0) return;
+
+//     setproductdata(data);
+
+//     const pdd = data.flatMap((e) => e.productdetails || []);
+//     setproductdataonlydetail(pdd);
+
+//     setIsFetched(true);
+//     setRefetch(false);
+//   } catch (e) {
+//     console.error("❌ Fetch Error:", e);
+//   } finally {
+//     setIsLoading(false);
+//   }
+// }, []);
 const productfetch = useCallback(async (operationtype) => {
   try {
     setIsLoading(true);
     const res = await fetch(
       `${apiUrl}/productmodel?operation=${operationtype}`
     );
+
+    if (!res.ok) {
+      console.error("❌ Fetch failed with status:", res.status);
+      return; // bad response pe state ko touch mat karo
+    }
+
     const data = await res.json();
 
-    if (!data || data.length === 0) return;
+    if (!Array.isArray(data) || data.length === 0) return; // 👈 Array.isArray guard
 
     setproductdata(data);
 
@@ -951,12 +980,11 @@ const productfetch = useCallback(async (operationtype) => {
   }
 }, []);
 
-
 // ✅ Re-fetch when manually triggered
 useEffect(() => { 
   if (refetch) {
     // console.log("🔄 Manually re-fetching data...");
-    productfetch();
+    productfetch("all");
   }
 }, [refetch]);
 

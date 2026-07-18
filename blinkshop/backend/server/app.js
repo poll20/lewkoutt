@@ -10,11 +10,19 @@ let app = express()
 
 // ✅ Redis client connect with Upstash
 const cacheMiddleware = require("./cacheMiddleware");
+const cacheHeaders = require("./middleware/cacheHeaders");
 const imagekit = require("../config/imagekit");
 app.use(cookieParser());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 // security middleware
 
-// const mongoose = require("mongoose");
+// const mongoose = require("mongoose")
+// ;
+const compression = require("compression");
 const crypto = require("crypto"); // CJS
 const axios = require("axios");
 const cron = require("node-cron")
@@ -110,7 +118,14 @@ app.use(cors({
   credentials: true,
 }));
 
+app.use(
+  compression({
+    level: 6,
+    threshold: 1024,
+  })
+);
 
+app.use(cacheHeaders);
 app.use((express.urlencoded({ extented: false })))
 
 app.use(express.json())
@@ -1178,11 +1193,17 @@ app.get('/og/:productId', async (req, res) => {
 });
 
 
+// app.get("/imagekit/auth", (req, res) => {
+//   const result = imagekit.getAuthenticationParameters();
+//   res.json(result);
+// });
 app.get("/imagekit/auth", (req, res) => {
   const result = imagekit.getAuthenticationParameters();
+ res.set("Cache-Control", "no-store");
+  console.log(result);
+
   res.json(result);
 });
-
 app.post("/productmodel", verifySessionCookie, isAdmin, async (req, res) => {
   try {
     const productData = req.body;

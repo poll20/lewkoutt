@@ -5,16 +5,25 @@ const client = require("./redisClient"); // Redis client
  * @param {function} keyGeneratorFn - function to generate cache key from req
  * @param {number} ttl - cache expiration time in seconds
  */
-function cacheMiddleware(keyGeneratorFn, ttl = 10) {
+function cacheMiddleware(keyGeneratorFn, ttl = 300) {
   return async function (req, res, next) {
     try {
       const cacheKey = keyGeneratorFn(req);
       const cachedData = await client.get(cacheKey);
 
+      // if (cachedData) {
+      //   console.log(`👉 Cache hit for ${cacheKey}`);
+      //   return res.json(JSON.parse(cachedData));
+      // }
       if (cachedData) {
-        console.log(`👉 Cache hit for ${cacheKey}`);
-        return res.json(JSON.parse(cachedData));
-      }
+  res.set(
+    "Cache-Control",
+    "public, max-age=60, stale-while-revalidate=300"
+  );
+
+  console.log(`👉 Cache hit for ${cacheKey}`);
+  return res.json(JSON.parse(cachedData));
+}
 
       // ✅ Override res.json to store cache before sending
       const originalJson = res.json.bind(res);
@@ -26,7 +35,7 @@ function cacheMiddleware(keyGeneratorFn, ttl = 10) {
 
       next();
     } catch (err) {
-      console.error("Redis caching error:", err);
+      console.error("Redis caching error:", err.message);
       next(); // Redis fail ho jaye, API continue ho
     }
   };
