@@ -578,6 +578,11 @@ const ResponsiveNavbar = (props) => {
         {/* Right action icons */}
         <div className="lw-actions">
           {/* Search */}
+           {(userDetails || user) && userDetails?.role === 'admin' && (
+              <NavLink to="/admin" className="lw-drawer-link" onClick={closeSideNav}>
+                Admin panel
+              </NavLink>
+            )}
           <NavLink to="/searchme" className="lw-action-btn" aria-label="Search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
               <circle cx="11" cy="11" r="8" />
