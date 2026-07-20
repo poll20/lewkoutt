@@ -15,7 +15,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 
 import "./App.css"
 
-// ✅ Normal Website Components
+//Normal Website Components
 import Home from "./components/Home";
 
 import Card from "./components/Card";
@@ -116,6 +116,9 @@ export default function App() {
   useEffect(() => {
     initGA(); // Initialize GA
   }, []);
+
+// 🔑 FIX: browser ke apne automatic scroll restoration ko band karo,
+  // taaki wo Card ke manual scroll-restore effect se race na kare.
   //  initGA();
   //   usePageTracking();
   const [popupMessage, setPopupMessage] = useState("");
