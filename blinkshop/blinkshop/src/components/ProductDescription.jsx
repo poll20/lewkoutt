@@ -1359,6 +1359,21 @@ navigate("/address/prd")
     }
 }
 
+ const handleInstagramClick = (e) => {
+    e.preventDefault();
+
+    // Scroll to top first
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
+    // Open Instagram after scroll animation
+    setTimeout(() => {
+      window.open("https://instagram.com/lewkout.in", "_blank", "noopener,noreferrer");
+    }, 500);
+  };
+
 let cate=product.cate
 
 // 🔑 FIX: navigation/swipe handlers now use galleryImages.length instead of
@@ -1907,19 +1922,22 @@ gap: "6px",
   </p>
 
   <a
-   href="https://instagram.com/YOUR_USERNAME"
+   href="https://instagram.com/lewkout.in"
   target="_blank"
+
   rel="noopener noreferrer"
-  onClick={(e) => {
-    e.preventDefault();
+  // onClick={(e) => {
+  //   e.preventDefault();
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth",
+  //   });
 
 
-  }}
+  // }}
+          onClick={handleInstagramClick}
+
     style={{
       background: "linear-gradient(90deg, #FFE4E1 0%, #E6E6FA 100%)",
       padding: "12px 26px",
