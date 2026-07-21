@@ -178,7 +178,7 @@ const SubscriptionPopup = ({ onClose }) => {
             <div style={styles.offerBox}>
               {/* <div style={styles.label}>VOUCHER 02</div> */}
               <div style={styles.label}>ALL DRESS</div>
-              <div style={styles.price}>at ₹699</div>
+              <div style={styles.price}>at ₹799</div>
             </div>
           </div>
 

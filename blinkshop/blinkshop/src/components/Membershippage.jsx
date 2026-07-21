@@ -38,7 +38,7 @@ const plans = [
     tagline: "Maximum savings across your wardrobe",
     benefits: [
       { label: "All Tops", member: "₹399",  },
-      { label: "All Dresses", member: "₹699",  },
+      { label: "All Dresses", member: "₹799",  },
     ],
   },
 ];
@@ -376,11 +376,11 @@ const fromCheckout = location.state?.fromCheckout;
   >
     {[
       "Tops at ₹399",
-      "Dresses at ₹699",
+      "Dresses at ₹799",
       "Members-Only Deals",
       "Instant Activation",
       "Tops at ₹399",
-      "Dresses at ₹699",
+      "Dresses at ₹799",
       "Members-Only Deals",
       "Instant Activation",
     ].map((t, i) => (
@@ -530,7 +530,7 @@ const fromCheckout = location.state?.fromCheckout;
       <div style={{border:"1px solid black",width:"100%",height:"0px"}}></div>
       </div>
       <p style={styles.text}>All tops at ₹399/-</p>
-      <p style={styles.text}>All dresses at ₹699/-</p>
+      <p style={styles.text}>All dresses at ₹799/-</p>
     </div>
   </div>
 

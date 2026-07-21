@@ -1527,7 +1527,7 @@ const getMembershipPrice = (item,isMember, memberType) => {
 
   if (memberType === "gold") {
     if (category === "top") return 399;
-    return 699; // ✅ FIXED: was `category != "tops"` which always evaluated true
+    return 799; // ✅ FIXED: was `category != "tops"` which always evaluated true
   }
 
   return original;
@@ -1795,9 +1795,9 @@ const membershipSavingsData = useMemo(() => {
       dressCount += 1;
 
       dressOriginal += originalPrice;
-      dressMember += 699;
+      dressMember += 799;
 
-      dressSavings += Math.max(0, originalPrice - 699);
+      dressSavings += Math.max(0, originalPrice - 799);
     }
   });
 
