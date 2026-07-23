@@ -2720,6 +2720,7 @@ const AddData = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const [newCoupon, setNewCoupon] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // 🔑 FIX: use a ref instead of document.querySelector('input[type="file"][multiple]').
   // querySelector picked the FIRST matching <input multiple> in the DOM, which could
@@ -2954,7 +2955,7 @@ const AddData = () => {
     formData.append("images", file);
   });
 
-  const response = await fetch(`http://localhost:3000/upload`, {
+  const response = await fetch(`${apiUrl}/upload`, {
     method: "POST",
     credentials: "include",
     body: formData,

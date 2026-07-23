@@ -13,6 +13,7 @@ const AvailableProduct = () => {
   const [sortPrice, setSortPrice] = useState("");
   const [sortDiscount, setSortDiscount] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // Responsive breakpoints
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -278,7 +279,7 @@ const uploadToImageKitMultiple = async (files) => {
     formData.append("images", file);
   });
 
-  const response = await fetch(`http://localhost:3000/upload`, {
+  const response = await fetch(`${apiUrl}/upload`, {
     method: "POST",
     credentials: "include",
     body: formData,
