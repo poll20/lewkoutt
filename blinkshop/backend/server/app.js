@@ -41,7 +41,7 @@ const slotevent = new EventEmitter();
 // const verifyFirebaseToken = require("./authMiddleware");
 // const verifyFirebaseToken =require("authMiddleware.js")
 // const isAdmin = require("adminCheck.js");
-const { upload, uploadToCloudinary } = require('./uploadToCloudinary');
+const { upload, uploadToCloudinary } = require('./uploadMiddleware.js');
 
 
 let port = process.env.PORT || 3000
@@ -1204,6 +1204,29 @@ app.get("/imagekit/auth", (req, res) => {
 
   res.json(result);
 });
+
+app.post(
+  "/upload",
+  verifySessionCookie,
+  isAdmin,
+  upload.array("images"),
+  uploadToCloudinary,
+  async (req, res) => {
+    try {
+      res.status(200).json({
+        success: true,
+        urls: req.imageUrls,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        success: false,
+        message: "Upload failed",
+      });
+    }
+  }
+);
+
 app.post("/productmodel", verifySessionCookie, isAdmin, async (req, res) => {
   try {
     const productData = req.body;

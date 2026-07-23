@@ -2820,21 +2820,38 @@ const AddData = () => {
     }));
   };
 
-  const handleCategoryImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // const handleCategoryImageUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
 
-    try {
-      const uploadedUrl = await uploadToImageKit(file);
-      setNewProduct((prev) => ({
-        ...prev,
-        image: uploadedUrl,
-      }));
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed");
-    }
-  };
+  //   try {
+  //     const uploadedUrl = await uploadToImageKit(file);
+  //     setNewProduct((prev) => ({
+  //       ...prev,
+  //       image: uploadedUrl,
+  //     }));
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Upload failed");
+  //   }
+  // };
+  const handleCategoryImageUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const urls = await uploadToImageKitMultiple([file]);
+
+    setNewProduct((prev) => ({
+      ...prev,
+      image: urls[0],
+    }));
+
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed");
+  }
+};
 
   const addColor = (isNewCategory) => {
     if (newColor.color.trim()) {
@@ -2921,14 +2938,36 @@ const AddData = () => {
     setNewSize((prev) => ({ ...prev, image: [...prev.image, ...files] }));
   };
 
+  // const uploadToImageKitMultiple = async (files) => {
+  //   const urls = [];
+  //   for (const file of files) {
+  //     const url = await uploadToImageKit(file);
+  //     urls.push(url);
+  //   }
+  //   return urls;
+  // };
+
   const uploadToImageKitMultiple = async (files) => {
-    const urls = [];
-    for (const file of files) {
-      const url = await uploadToImageKit(file);
-      urls.push(url);
-    }
-    return urls;
-  };
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append("images", file);
+  });
+
+  const response = await fetch(`http://localhost:3000/upload`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Image upload failed");
+  }
+
+  const data = await response.json();
+
+  return data.urls;
+};
 
   // 🔑 FIX: this used to re-upload size.image (already-uploaded URLs) and
   // grabbed the product-images file input via a generic querySelector that

@@ -206,23 +206,39 @@ const handleImageUpload = async (e, index) => {
 //     alert("Failed to upload category image.");
 //   }
 // };
+// const handleCategoryImageUpload = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
+
+//   try {
+//     const uploadedUrl = await uploadToImageKit(file);
+
+//     setNewProduct((prev) => ({
+//       ...prev,
+//       image: uploadedUrl,
+//     }));
+//   } catch (err) {
+//     console.error(err);
+//     alert("Upload failed");
+//   }
+// };
 const handleCategoryImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
   try {
-    const uploadedUrl = await uploadToImageKit(file);
+    const urls = await uploadToImageKitMultiple([file]);
 
     setNewProduct((prev) => ({
       ...prev,
-      image: uploadedUrl,
+      image: urls[0],
     }));
+
   } catch (err) {
     console.error(err);
     alert("Upload failed");
   }
 };
-
 
 //   const uploadToCloudinary = async (files) => {
 //   const urls = [];
@@ -245,15 +261,36 @@ const handleCategoryImageUpload = async (e) => {
 //   }
 //   return urls;
 // };
-const uploadToImageKitMultiple = async (files) => {
-  const urls = [];
+// const uploadToImageKitMultiple = async (files) => {
+//   const urls = [];
 
-  for (const file of files) {
-    const url = await uploadToImageKit(file);
-    urls.push(url);
+//   for (const file of files) {
+//     const url = await uploadToImageKit(file);
+//     urls.push(url);
+//   }
+
+//   return urls;
+// };
+const uploadToImageKitMultiple = async (files) => {
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append("images", file);
+  });
+
+  const response = await fetch(`http://localhost:3000/upload`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Image upload failed");
   }
 
-  return urls;
+  const data = await response.json();
+
+  return data.urls;
 };
   // Styles
   const styles = {
