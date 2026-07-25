@@ -32,7 +32,7 @@ const CDN = "https://cdn.lewkout.com";
 export const cloudinaryImg = (
   url,
   width = 600,
-  quality = 85
+  quality = 80
 ) => {
   if (!url) return "";
 
