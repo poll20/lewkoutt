@@ -26,6 +26,7 @@
 //   return `${IMAGEKIT_ENDPOINT}/tr:w-${width},q-${quality},f-auto${path}`;
 // };
 
+const R2 = "https://pub-61c1bf72aa674febb880a563288fc1ba.r2.dev";
 const CDN = "https://cdn.lewkout.com";
 
 export const cloudinaryImg = (
@@ -35,12 +36,15 @@ export const cloudinaryImg = (
 ) => {
   if (!url) return "";
 
+  // R2 -> Custom domain
+  url = url.replace(R2, CDN);
+
   if (!url.startsWith(CDN)) {
     return url;
   }
 
-  return `/cdn-cgi/image/width=${width},quality=${quality},format=auto${url.replace(
+  return `${CDN}/cdn-cgi/image/width=${width},quality=${quality},format=auto${url.replace(
     CDN,
     ""
   )}`;
-}
+};
