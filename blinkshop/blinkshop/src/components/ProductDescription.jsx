@@ -1912,7 +1912,7 @@ gap: "6px",
 
   <p   style={{
     fontFamily: "'Inter', sans-serif",
-    fontSize: "11px",
+    fontSize: "14px",
     color: "#46464c",
     maxWidth: "270px",
     lineHeight: 1.35,
@@ -1950,9 +1950,9 @@ gap: "6px",
       marginTop: "4px",
     }}
   >
-    <span style={{ fontSize: "16px" }}>📸</span>
-    <span style={{ fontFamily: "Outfit, sans-serif", fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#6d5a58", fontWeight: 600 }}>
-      Take Screenshot
+    {/* <span style={{ fontSize: "16px" }}>📸</span> */}
+    <span style={{ fontFamily: "Outfit, sans-serif", fontSize: "11px", textTransform: "uppercase", color: "#6d5a58", fontWeight: 600 }}>
+      DM Us
     </span>
   </a>
 </div>
