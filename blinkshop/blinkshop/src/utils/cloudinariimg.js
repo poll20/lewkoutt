@@ -8,20 +8,39 @@
 
 // src/utils/imagekitImg.js
 
-const IMAGEKIT_ENDPOINT = import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT;
+// const IMAGEKIT_ENDPOINT = import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT;
+
+// export const cloudinaryImg = (
+//   url,
+//   width = 600,
+//   quality = 90
+// ) => {
+//   if (!url) return "";
+
+//   if (!url.startsWith(IMAGEKIT_ENDPOINT)) {
+//     return url;
+//   }
+
+//   const path = url.replace(IMAGEKIT_ENDPOINT, "");
+
+//   return `${IMAGEKIT_ENDPOINT}/tr:w-${width},q-${quality},f-auto${path}`;
+// };
+
+const CDN = "https://cdn.lewkout.com";
 
 export const cloudinaryImg = (
   url,
   width = 600,
-  quality = 90
+  quality = 85
 ) => {
   if (!url) return "";
 
-  if (!url.startsWith(IMAGEKIT_ENDPOINT)) {
+  if (!url.startsWith(CDN)) {
     return url;
   }
 
-  const path = url.replace(IMAGEKIT_ENDPOINT, "");
-
-  return `${IMAGEKIT_ENDPOINT}/tr:w-${width},q-${quality},f-auto${path}`;
-};
+  return `/cdn-cgi/image/width=${width},quality=${quality},format=auto${url.replace(
+    CDN,
+    ""
+  )}`;
+}
