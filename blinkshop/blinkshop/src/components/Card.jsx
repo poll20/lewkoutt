@@ -57,17 +57,40 @@ const location = useLocation();
   const { prdallsizes, addtocartkeliyeid, sizesshow, setSizesShow, setShowSize } = useSizeSelector();
 
   const visibleProducts = products.slice(0, visibleCount);
+// useEffect(() => {
+//   const data = sessionStorage.getItem("catalogRestore");
+
+//   if (!data) return;
+
+//   const restore = JSON.parse(data);
+
+//   // दूसरी category/search/filter होने पर restore मत करो
+//   if (restore.listKey !== listKey) return;
+
+//   // पहले products render होने दो
+//   if (visibleProducts.length < restore.visibleCount) return;
+
+//   requestAnimationFrame(() => {
+//     window.scrollTo({
+//       top: restore.scrollY,
+//       behavior: "auto",
+//     });
+
+//     sessionStorage.removeItem("catalogRestore");
+//   });
+// }, [visibleProducts.length, listKey]);
+// const location = useLocation();
 useEffect(() => {
+  if (props.disableScrollRestore) return;
+
   const data = sessionStorage.getItem("catalogRestore");
 
   if (!data) return;
 
   const restore = JSON.parse(data);
 
-  // दूसरी category/search/filter होने पर restore मत करो
   if (restore.listKey !== listKey) return;
 
-  // पहले products render होने दो
   if (visibleProducts.length < restore.visibleCount) return;
 
   requestAnimationFrame(() => {
@@ -78,7 +101,7 @@ useEffect(() => {
 
     sessionStorage.removeItem("catalogRestore");
   });
-}, [visibleProducts.length, listKey]);
+}, [visibleProducts.length, listKey, props.disableScrollRestore]);
   return (
     <>
       {/* Filter / Sort header */}

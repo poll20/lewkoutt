@@ -1965,7 +1965,8 @@ gap: "6px",
       <span style={{ fontFamily: "Oswald",color: '#888',fontSize:"0.9rem"}}>{product.title}</span>
       </div>
       <div>
-    <Card  category={cate}/>
+    {/* <Card  category={cate}/> */}
+    <Card category={cate} disableScrollRestore />
     </div>
 
     </div>
