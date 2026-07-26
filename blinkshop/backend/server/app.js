@@ -110,9 +110,10 @@ const cors = require('cors');
 // }));
 app.use(cors({
   origin: [
+    "https://lewkout.netlify.app",
     "https://www.lewkout.com",
     "https://lewkout.com",
-    // "http://localhost:5173"
+    "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
