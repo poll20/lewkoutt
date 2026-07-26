@@ -220,18 +220,37 @@ const faqData = [
         question: "Can I exchange my product instead of returning it?",
         answer: "Currently, we do not offer exchanges. You can return the item and place a new order.",
       },
-      {
-        question: "Is there a return pickup service?",
-        answer: `
-          Yes, our team will arrange a pickup for eligible returns.<br/><br/>
-          However, sometimes pickups may fail due to courier or delivery boy issues. In such cases, we kindly request you to self-ship the product back to our warehouse.<br/><br/>
-          <b>To appreciate your time and effort:</b>
-          <ul>
-            <li><b>For Returns →</b> We'll compensate you with ₹100 towards your shipping cost.</li>
-          </ul>
-          We truly value your patience and cooperation, and this way, we can ensure your request is processed smoothly and without delays. 💙
-        `,
+       {
+        question: "Is a parcel opening video mandatory for return or refund claims?",
+        answer: ` Yes, a parcel opening video is mandatory for any return or refund claim.
+        <ul>
+  <li type='1'>Start recording before opening the parcel.</li>
+<li type='1'>The first cut on the parcel should be clearly visible in the video.</li>
+<li type='1'>Open the parcel completely while recording.</li>
+<li type='1'>Take out the product and show it properly from all angles.</li>
+<li type='1'>If there is any damage, defect, missing item, or wrong product, show it clearly in the same video.</li>
+<li type='1'>The video must be continuous, with no cuts, pauses, or edits.</li>
+<li type='1'>Claims without a valid parcel opening video may not be accepted.</li>
+        </ul>`,
       },
+
+      {
+        question: "Can I return a product if I ordered the wrong size?",
+        answer: `
+        <ul>
+  <li type='1'>Returns for size-related issues are accepted only if we send you the wrong </li>
+<li type='1'>If the size delivered is different from what you ordered, your return request will be accepted.</li>
+<li type='1'>.If we informed you before placing the order that your required size was unavailable, and you still chose to order another size, the product will not be eligible for return due to size issues.</li>
+
+        </ul>`,
+      },
+
+      {
+        question: "Are delivery charges and COD charges refundable?",
+        answer: "No, delivery charges and COD charges are non-refundable.",
+      },
+      
+     
       {
         question: "What if I miss the 60-minute return window?",
         answer: "Unfortunately, returns cannot be processed after 60 minutes.",
@@ -240,10 +259,7 @@ const faqData = [
         question: "Will I get a full refund?",
         answer: "Once we receive and verify the returned item, you will receive a refund as per our refund policy.",
       },
-      {
-        question: "Will I get a refund for the delivery charges if I return my order?",
-        answer: "Delivery charges are non-refundable for orders below ₹799. If you choose to return a product from such an order, only the product cost will be refunded.",
-      },
+      
       {
         question: "How long does it take to process a refund?",
         answer: "Refunds will be processed within 3-5 business days.",
@@ -252,21 +268,8 @@ const faqData = [
         question: "What if I receive a defective or wrong product?",
         answer: "Please raise a return request within 60 minutes, and we will resolve the issue immediately.",
       },
-      {
-        question: "What should I do if I receive the wrong product or size?",
-        answer: "If you receive the wrong product or size, you must report it within 60 minutes of delivery through our support team. We will arrange a free Return.",
-      },
-      {
-        question: "When can my return request be rejected?",
-        answer: `
-          Returns may be rejected if:
-          <ul>
-            <li>The product tag is missing.</li>
-            <li>The product is damaged after delivery.</li>
-            <li>The product shows signs of being worn or used.</li>
-          </ul>
-        `,
-      },
+     
+     
     ],
   },
 ]
