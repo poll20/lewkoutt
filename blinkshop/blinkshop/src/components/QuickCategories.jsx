@@ -7,6 +7,8 @@ import cara3 from "../components/image/cara3.jpeg";
 import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
+import cara7 from "../components/image/desi.png";
+
 
 const CATEGORIES = [
   { emoji: cara5, label: "Tops & Tunics",  path: "/productmodel/Tops%20&%20Tunics"  },
@@ -14,6 +16,8 @@ const CATEGORIES = [
   { emoji:cara3, label: "Co-ord Sets",  path: "/productmodel/Co-ord%20Sets"  },
   { emoji:cara2, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
   { emoji:cara1, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
+  { emoji:cara7, label: "Desi Edit",   path: "/productmodel/Desi%20Edit"   },
+
 ];
 
 export default function QuickCategories({images}) {
