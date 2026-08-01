@@ -263,6 +263,9 @@ import cara3 from "../components/image/cara3.jpeg";
 import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
+import cara77 from "../components/image/desi.PNG";
+
+
 
 
 const CategoriesLayout = () => {
@@ -285,6 +288,8 @@ const CategoriesLayout = () => {
     cara3,
     cara6,
     cara5,
+    cara77,
+
   ];
 
   useEffect(() => {
