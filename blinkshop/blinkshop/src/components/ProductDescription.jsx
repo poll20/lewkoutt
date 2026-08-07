@@ -1374,7 +1374,9 @@ navigate("/address/prd")
     }, 500);
   };
 
-let cate=product.cate
+// let cate=product.cate
+let cate = product.cate;
+const isBagCategory = typeof cate === "string" && /bag/i.test(cate);
 
 // 🔑 FIX: navigation/swipe handlers now use galleryImages.length instead of
 // product.sizes[0].image.length, since sizes may no longer carry images.
@@ -1668,7 +1670,7 @@ if(getbundeldata){
     <p>No colors available</p>
   )}
 </div>
-          {cate=="bag"?(""):(<div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
+          {isBagCategory=="bag"?(""):(<div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
             <div className="sizes" style={{ display: "flex", alignItems: "center", justifyContent: "start", gap: "5px", paddingTop: "5px", borderRadius: "10px" }}>
   <label>Size:</label>
   {product?.sizes?.map((s) => (
@@ -1767,7 +1769,7 @@ if(getbundeldata){
     </div>
 
  <div className="prd-ka-dropdown-container" style={{marginTop:"4px"}}>
-  {cate=="bag"?(""):(<div
+  {isBagCategory=="bag"?(""):(<div
         className="prd-ka-dropdown-item"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -1801,7 +1803,7 @@ if(getbundeldata){
           </div>
         </div>
       )}
-   {cate=="bag"?(""):(<NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
+   {isBagCategory=="bag"?(""):(<NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
         <span>Size Guide</span>
         <span className="prd-ka-dropdown-arrow">›</span>
       </NavLink>)}
