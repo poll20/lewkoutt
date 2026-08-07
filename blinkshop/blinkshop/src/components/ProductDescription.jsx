@@ -1668,8 +1668,7 @@ if(getbundeldata){
     <p>No colors available</p>
   )}
 </div>
-
-          <div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
+          {cate=="bag"?(""):(<div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
             <div className="sizes" style={{ display: "flex", alignItems: "center", justifyContent: "start", gap: "5px", paddingTop: "5px", borderRadius: "10px" }}>
   <label>Size:</label>
   {product?.sizes?.map((s) => (
@@ -1706,7 +1705,8 @@ if(getbundeldata){
   ))}
 </div>
 
-          </div>
+          </div>)}
+          
 
             <div
       style={{
@@ -1767,13 +1767,15 @@ if(getbundeldata){
     </div>
 
  <div className="prd-ka-dropdown-container" style={{marginTop:"4px"}}>
-      <div
+  {cate=="bag"?(""):(<div
         className="prd-ka-dropdown-item"
         onClick={() => setIsOpen(!isOpen)}
       >
+        
         <span>Description</span>
         <span className="prd-ka-dropdown-arrow">›</span>
-      </div>
+      </div>)}
+      
       {isOpen && (
         <div className="prd-ka-dropdown-description">
           <div className="prd-ka-dropdown-row">
@@ -1799,11 +1801,11 @@ if(getbundeldata){
           </div>
         </div>
       )}
-
-      <NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
+   {cate=="bag"?(""):(<NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
         <span>Size Guide</span>
         <span className="prd-ka-dropdown-arrow">›</span>
-      </NavLink>
+      </NavLink>)}
+      
       <div
   className="prd-ka-dropdown-item"
   style={{
