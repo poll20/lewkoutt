@@ -8,6 +8,8 @@ import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
 import cara7 from "../components/image/desi.png";
+import cara8 from "../components/image/bags.png";
+
 
 
 const CATEGORIES = [
@@ -17,6 +19,8 @@ const CATEGORIES = [
   { emoji:cara2, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
   { emoji:cara1, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
   { emoji:cara7, label: "Desi Edit",   path: "/productmodel/Desi%20Edit"   },
+  { emoji:cara8, label: "Handbags",   path: "/productmodel/Handbags"   },
+
 
 ];
 

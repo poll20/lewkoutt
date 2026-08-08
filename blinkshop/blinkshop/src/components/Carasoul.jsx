@@ -225,6 +225,8 @@ import cara3 from "../components/image/cara3.jpeg";
 import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
+import cara8 from "../components/image/bags.png";
+
 
 /* STATIC OVERLAY + IMAGE DATA */
 const OVERLAY_DATA = [
@@ -257,6 +259,12 @@ const OVERLAY_DATA = [
     title: "Luxury\nEdit",
     cta: "Explore now",
     image: cara5,
+  },
+  {
+    tag: "Premium looks",
+    title: "Luxury\nEdit",
+    cta: "Explore now",
+    image: cara8,
   },
 ];
 

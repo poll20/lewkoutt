@@ -1164,7 +1164,8 @@ const fetchProductFromBackend = async (clr) => {
       const defaultVariant =
         mainProduct.colors.find((e) => e.color === clr) ||
         mainProduct.colors.find((e) => e.color === data.defaultColor) ||
-        mainProduct.colors[0];
+        mainProduct.colors[0] ||
+        
 
       console.log("samosa variant", defaultVariant);
 
@@ -1670,7 +1671,7 @@ if(getbundeldata){
     <p>No colors available</p>
   )}
 </div>
-          {isBagCategory=="bag"?(""):(<div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
+          {isBagCategory?(""):(<div   className="size-options" style={{gap:"5px",padding:'2px 0',border:"1px solid white",}}>
             <div className="sizes" style={{ display: "flex", alignItems: "center", justifyContent: "start", gap: "5px", paddingTop: "5px", borderRadius: "10px" }}>
   <label>Size:</label>
   {product?.sizes?.map((s) => (
@@ -1769,7 +1770,7 @@ if(getbundeldata){
     </div>
 
  <div className="prd-ka-dropdown-container" style={{marginTop:"4px"}}>
-  {isBagCategory=="bag"?(""):(<div
+  {isBagCategory?(""):(<div
         className="prd-ka-dropdown-item"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -1803,7 +1804,7 @@ if(getbundeldata){
           </div>
         </div>
       )}
-   {isBagCategory=="bag"?(""):(<NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
+   {isBagCategory?(""):(<NavLink to={`/sizechart/${product.cate}`} className="prd-ka-dropdown-item navlink">
         <span>Size Guide</span>
         <span className="prd-ka-dropdown-arrow">›</span>
       </NavLink>)}

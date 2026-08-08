@@ -264,6 +264,8 @@ import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
 import cara77 from "../components/image/desi.png";
+import cara8 from "../components/image/bags.png";
+
 
 
 
@@ -289,6 +291,8 @@ const CategoriesLayout = () => {
     cara6,
     cara5,
     cara77,
+    cara8
+
 
   ];
 
