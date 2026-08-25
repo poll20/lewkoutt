@@ -188,8 +188,8 @@ export default function Cardforall(props) {
               position: "absolute",
               bottom: "8px",
               left: "8px",
-              backgroundColor: "#EAD7B7",
-              color: "black",
+              backgroundColor: "black",
+              color: "white",
               fontSize: "10px",
               fontWeight: "600",
               letterSpacing: "0.05em",
@@ -199,7 +199,7 @@ export default function Cardforall(props) {
               zIndex: 2,
             }}
           >
-            Sale
+            On Sale
           </div>
         )}
 
