@@ -135,7 +135,7 @@ export default function Cardforall(props) {
 
   if (!wishlistdata) return <p className="pcard-loading">loading...</p>;
 
-  const { id, discription, price, discountprice, discount, defaultcolor, section, image } = props;
+  const { id, discription, price, discountprice, discount, defaultcolor, section, image,onsale } = props;
   const cardCoupons = props.coupons || [];
 
   const slug = slugify(discription);
@@ -180,6 +180,27 @@ export default function Cardforall(props) {
         {/* Discount badge */}
         {discount > 0 && (
           <div className="pcard-badge">{discount}% off</div>
+        )}
+          {/* 👇 On Sale badge — bottom left */}
+        {onsale && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              left: "8px",
+              backgroundColor: "#000000",
+              color: "#ffffff",
+              fontSize: "10px",
+              fontWeight: "600",
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              padding: "3px 8px",
+              borderRadius: "4px",
+              zIndex: 2,
+            }}
+          >
+            Sale
+          </div>
         )}
 
         {/* Heart */}

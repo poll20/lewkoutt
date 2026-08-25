@@ -249,6 +249,28 @@ useEffect(() => {
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       />
 
+                      {/* 👇 On Sale badge — bottom left */}
+  {product?.onsale && (
+    <div
+      style={{
+        position: "absolute",
+        bottom: "8px",
+        left: "8px",
+        backgroundColor: "#000000",
+        color: "#ffffff",
+        fontSize: "10px",
+        fontWeight: "600",
+        letterSpacing: "0.05em",
+        textTransform: "uppercase",
+        padding: "3px 8px",
+        borderRadius: "4px",
+        zIndex: 2,
+      }}
+    >
+      Sale
+    </div>
+  )}
+
                       {product?.colors?.some((color) => color?.sizes?.some((s) => s.quantity === 0)) && (
                         <div
                           style={{

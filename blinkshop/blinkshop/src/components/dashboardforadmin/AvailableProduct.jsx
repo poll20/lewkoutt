@@ -161,6 +161,24 @@ const handleImageUpload = async (e, index) => {
     setEditingIndex(null);
   };
 
+  const handleToggleOnSale = async (product, index) => {
+  const newValue = !product.onsale; // toggle true/false
+
+  // pehle UI turant update kar do (optimistic update)
+  const updatedProducts = [...products];
+  updatedProducts[index] = { ...updatedProducts[index], onsale: newValue };
+  setProducts(updatedProducts);
+
+  try {
+    await editordeleteinexisitingcategory({ onsale: newValue }, product._id);
+  } catch (err) {
+    // agar fail ho jaye to wapas purani value pe revert kar do
+    const revertedProducts = [...products];
+    revertedProducts[index] = { ...revertedProducts[index], onsale: product.onsale };
+    setProducts(revertedProducts);
+  }
+};
+
   const handleDelete = (index) => {
     const updatedProducts = [...products];
     updatedProducts.splice(index, 1);
@@ -541,6 +559,18 @@ const uploadToImageKitMultiple = async (files) => {
       color: '#6b7280',
       fontSize: '16px',
     },
+    onSaleBtn: (isOn) => ({
+  padding: '8px 18px',
+  borderRadius: '999px', // pill shape
+  border: 'none',
+  fontSize: '12px',
+  fontWeight: '600',
+  cursor: 'pointer',
+  color: 'white',
+  backgroundColor: isOn ? '#10b981' : '#9ca3af',
+  transition: 'all 0.2s ease',
+  boxShadow: isOn ? '0 2px 6px rgba(16, 185, 129, 0.35)' : 'none',
+}),
   };
 
   // Mobile Card Component
@@ -622,6 +652,15 @@ const uploadToImageKitMultiple = async (files) => {
             )}
           </p>
         </div>
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <button
+          onClick={() => handleToggleOnSale(product, index)}
+          style={styles.onSaleBtn(product.onsale)}
+        >
+          {product.onsale ? "On Sale" : "Not on Sale"}
+        </button>
       </div>
 
       {/* Images */}
@@ -851,6 +890,7 @@ const uploadToImageKitMultiple = async (files) => {
                 <th style={styles.th}>ID</th>
                 <th style={styles.th}>Category</th>
                 <th style={styles.th}>Title</th>
+                <th style={styles.th}>On Sale</th>
                 <th style={styles.th}>Tag</th>
                 <th style={styles.th}>Description</th>
                 <th style={styles.th}>Images</th>
@@ -893,6 +933,14 @@ const uploadToImageKitMultiple = async (files) => {
                       product.title
                     )}
                   </td>
+                  <td style={styles.td}>
+  <button
+    onClick={() => handleToggleOnSale(product, index)}
+    style={styles.onSaleBtn(product.onsale)}
+  >
+    {product.onsale ? "On Sale" : "Not on Sale"}
+  </button>
+</td>
                   <td style={styles.td}>
                     {editingIndex === index ? (
                       <input

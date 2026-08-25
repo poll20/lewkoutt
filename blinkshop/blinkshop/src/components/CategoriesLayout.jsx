@@ -389,6 +389,7 @@ const CategoriesLayout = () => {
                       discount={p.discount}
                       defaultcolor={p.defaultColor}
                       coupons={coupons}
+                       onsale={p.onsale}
                     />
                   </div>
                 ))}

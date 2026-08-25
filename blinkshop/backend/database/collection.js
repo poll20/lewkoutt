@@ -403,6 +403,10 @@ const CategorySchema = new mongoose.Schema({
         type: Number,
         
       },
+      onsale: {
+  type: Boolean,
+  default: false
+},
       defaultColor:{
         type:String
       },

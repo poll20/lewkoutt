@@ -124,6 +124,8 @@ export const DashboardProvider = ({ children }) => {
         }
       };
 
+
+
       useEffect(() => {
         const checkAlert = () => {
           const alertMessage = localStorage.getItem("lowStockAlert");
