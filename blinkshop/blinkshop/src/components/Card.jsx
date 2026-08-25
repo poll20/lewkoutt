@@ -253,16 +253,17 @@ useEffect(() => {
   {product?.onsale && (
     <div
       style={{
+        
         position: "absolute",
         bottom: "8px",
         left: "8px",
         backgroundColor: "#EAD7B7",
         color: "black",
-        fontSize: "10px",
+        fontSize: "12px",
         fontWeight: "600",
         letterSpacing: "0.05em",
         textTransform: "uppercase",
-        padding: "3px 8px",
+        padding: "3px 12px",
         borderRadius: "4px",
         zIndex: 2,
       }}

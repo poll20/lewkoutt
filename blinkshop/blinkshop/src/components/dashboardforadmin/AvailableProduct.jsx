@@ -314,6 +314,7 @@ const uploadToImageKitMultiple = async (files) => {
   // Styles
   const styles = {
     container: {
+      // border:"2px solid red",
       backgroundColor: '#f8fafc',
       minHeight: '100vh',
       minWidth:"100vw",
@@ -398,7 +399,7 @@ const uploadToImageKitMultiple = async (files) => {
     tableContainer: {
       backgroundColor: 'white',
       borderRadius: '16px',
-      overflow: 'hidden',
+      // overflow: 'hidden',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       border: '1px solid #e2e8f0',
     },
