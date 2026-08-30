@@ -37,6 +37,8 @@ const { randomUUID } = require("crypto");
 const EventEmitter = require('events');
 const orderEvent = new EventEmitter();
 const slotevent = new EventEmitter();
+const salevent = new EventEmitter();
+
 
 // const verifyFirebaseToken = require("./authMiddleware");
 // const verifyFirebaseToken =require("authMiddleware.js")
