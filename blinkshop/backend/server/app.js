@@ -121,10 +121,28 @@ const cors = require('cors');
 //   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 //   credentials: true,
 // }));
+// app.use(cors({
+//   origin: true,
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS"],
+//   credentials: true,
+// }));
+const allowedOrigins = [
+  "https://lewkout.com",
+  "https://www.lewkout.com",
+  "https://lewkout.netlify.app",
+  "https://lewkoutt.sharmaabhay1549.workers.dev"
+];
+
 app.use(cors({
-  origin: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS"],
-  credentials: true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  credentials: true
 }));
 
 app.use(
