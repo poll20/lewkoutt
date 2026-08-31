@@ -110,15 +110,20 @@ const cors = require('cors');
 //   methods: "GET,POST,PUT,PATCH,DELETE",
 //   credentials: true,
 // }));
+// app.use(cors({
+//   origin: [
+//     "https://lewkout.netlify.app",
+//     "https://www.lewkout.com",
+//     "https://lewkout.com",
+//     "https://lewkoutt.sharmaabhay1549.workers.dev"
+//     // "http://localhost:5173"
+//   ],
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+//   credentials: true,
+// }));
 app.use(cors({
-  origin: [
-    "https://lewkout.netlify.app",
-    "https://www.lewkout.com",
-    "https://lewkout.com",
-    "https://lewkoutt.sharmaabhay1549.workers.dev"
-    // "http://localhost:5173"
-  ],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS"],
   credentials: true,
 }));
 
