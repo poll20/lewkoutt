@@ -130,7 +130,8 @@ const allowedOrigins = [
   "https://lewkout.com",
   "https://www.lewkout.com",
   "https://lewkout.netlify.app",
-  "https://lewkoutt.sharmaabhay1549.workers.dev"
+  "https://lewkoutt.sharmaabhay1549.workers.dev",
+  "https://www.lewkout.com/*"
 ];
 
 app.use(cors({
