@@ -204,6 +204,10 @@ const faqData = [
         answer: "Since we offer 60-minute delivery, we also maintain a quick return process to ensure a smooth experience for both customers and partnered stores.",
       },
       {
+        question:"Can I return my product?",
+        answer:"Yes, returns are available. You can initiate a return if the product received is incorrect, damaged, different from what you ordered, or a different size than the size you ordered. Please note that a parcel opening video is mandatory to initiate the return process. The video must clearly show the parcel being opened for the first time."
+      },
+      {
         question: "How can I request a return?",
         answer: "You can request a return through our website within 60 minutes of receiving your order.",
       },
@@ -268,6 +272,7 @@ const faqData = [
         question: "What if I receive a defective or wrong product?",
         answer: "Please raise a return request within 60 minutes, and we will resolve the issue immediately.",
       },
+      
      
      
     ],
