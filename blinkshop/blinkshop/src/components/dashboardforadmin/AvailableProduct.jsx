@@ -155,6 +155,27 @@ const handleImageUpload = async (e, index) => {
   }
 };
 
+const handleVideoUpload = async (e, index) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    const uploadedUrls = await uploadToImageKitMultiple([file]);
+    const updatedProducts = [...products];
+    updatedProducts[index] = { ...updatedProducts[index], video: uploadedUrls[0] };
+    setProducts(updatedProducts);
+  } catch (err) {
+    console.error("Video upload failed:", err);
+    alert("Failed to upload video.");
+  }
+};
+
+const handleRemoveVideo = (index) => {
+  const updatedProducts = [...products];
+  updatedProducts[index] = { ...updatedProducts[index], video: "" };
+  setProducts(updatedProducts);
+};
+
   const handleSave = (id, index) => {
     const updatedProduct = products[index];
     editordeleteinexisitingcategory(updatedProduct, id);
@@ -692,6 +713,30 @@ const uploadToImageKitMultiple = async (files) => {
         </div>
       </div>
 
+      {/* Video */}
+<div style={{ marginBottom: '16px' }}>
+  <p style={{ fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Video</p>
+  {product.video ? (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <video src={product.video} style={{ width: '120px', borderRadius: '8px' }} controls />
+      {editingIndex === index && (
+        <span onClick={() => handleRemoveVideo(index)} style={styles.removeImageBtn}>
+          <FaTimes />
+        </span>
+      )}
+    </div>
+  ) : (
+    editingIndex === index && (
+      <input
+        type="file"
+        accept="video/*"
+        onChange={(e) => handleVideoUpload(e, index)}
+        style={styles.fileInput}
+      />
+    )
+  )}
+</div>
+
       {/* Colors and Sizes */}
       <div style={{ marginBottom: '16px' }}>
         <p style={{ fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Colors & Sizes</p>
@@ -895,6 +940,7 @@ const uploadToImageKitMultiple = async (files) => {
                 <th style={styles.th}>Tag</th>
                 <th style={styles.th}>Description</th>
                 <th style={styles.th}>Images</th>
+                <th style={styles.th}>Video</th>
                 <th style={styles.th}>Price</th>
                 <th style={styles.th}>Discount Price</th>
                 <th style={styles.th}>Colors & Sizes</th>
@@ -992,6 +1038,27 @@ const uploadToImageKitMultiple = async (files) => {
                       )}
                     </div>
                   </td>
+                  <td style={styles.td}>
+  {product.video ? (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <video src={product.video} style={{ width: '60px', borderRadius: '6px' }} controls />
+      {editingIndex === index && (
+        <span onClick={() => handleRemoveVideo(index)} style={styles.removeImageBtn}>
+          <FaTimes />
+        </span>
+      )}
+    </div>
+  ) : (
+    editingIndex === index && (
+      <input
+        type="file"
+        accept="video/*"
+        onChange={(e) => handleVideoUpload(e, index)}
+        style={styles.fileInput}
+      />
+    )
+  )}
+</td>
                   <td style={styles.td}>
                     {editingIndex === index ? (
                       <input

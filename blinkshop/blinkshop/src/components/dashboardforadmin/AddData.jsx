@@ -2721,7 +2721,7 @@ const AddData = () => {
   const [categories, setCategories] = useState([]);
   const [newCoupon, setNewCoupon] = useState("");
   const apiUrl = import.meta.env.VITE_API_URL;
-
+const [uploadingVideo, setUploadingVideo] = useState(false);
   // 🔑 FIX: use a ref instead of document.querySelector('input[type="file"][multiple]').
   // querySelector picked the FIRST matching <input multiple> in the DOM, which could
   // accidentally be a size-image input instead of the product-images input once colors
@@ -2743,6 +2743,7 @@ const AddData = () => {
     productdetails: {
       tag: "",
       title: "",
+       video: "",
       cate: "",
       description: "",
       image: [],
@@ -2770,6 +2771,7 @@ const AddData = () => {
     productdetails: {
       tag: "",
       title: "",
+      video: "",
       cate: "",
       description: "",
       image: [],
@@ -2836,6 +2838,37 @@ const AddData = () => {
   //     alert("Upload failed");
   //   }
   // };
+const handleVideoUpload = async (e, isNewCategory) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // optional: size guard client-side bhi laga le
+  if (file.size > 100 * 1024 * 1024) {
+    alert("Video 100MB se chhoti honi chahiye");
+    return;
+  }
+
+  try {
+    setUploadingVideo(true);
+    const urls = await uploadToImageKitMultiple([file]); // same /upload route → R2
+    const uploadedUrl = urls[0];
+
+    const targetForm = isNewCategory ? setNewProduct : setProduct;
+    targetForm((prev) => ({
+      ...prev,
+      productdetails: {
+        ...prev.productdetails,
+        video: uploadedUrl,
+      },
+    }));
+  } catch (err) {
+    console.error("Video upload failed:", err);
+    alert("Video upload failed");
+  } finally {
+    setUploadingVideo(false);
+  }
+};
+
   const handleCategoryImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -3638,6 +3671,54 @@ const AddData = () => {
                     ))}
                   </div>
                 </div>
+
+
+                <div style={{ marginTop: '24px' }}>
+  <label style={labelStyle}>Product Video (optional)</label>
+
+  <input
+    type="file"
+    accept="video/*"
+    onChange={(e) => handleVideoUpload(e, step === 1)}
+    style={{ display: 'none' }}
+    id="product-video"
+  />
+
+  <label
+    htmlFor="product-video"
+    style={{
+      ...inputStyle,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      cursor: 'pointer',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+      border: '2px dashed #cbd5e1',
+      color: '#64748b',
+      minHeight: '80px',
+    }}
+  >
+    {uploadingVideo ? (
+      "Uploading video..."
+    ) : (
+      <>
+        <ImageIcon size={24} />
+        <span>
+          <strong>Click to upload</strong> product video
+        </span>
+      </>
+    )}
+  </label>
+
+  {(step === 1 ? newProduct.productdetails.video : product.productdetails.video) && (
+    <video
+      src={cdnUrl(step === 1 ? newProduct.productdetails.video : product.productdetails.video)}
+      controls
+      style={{ width: '200px', marginTop: '12px', borderRadius: '8px' }}
+    />
+  )}
+</div>
               </div>
 
               <div style={{

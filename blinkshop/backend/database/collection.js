@@ -381,6 +381,7 @@ const CategorySchema = new mongoose.Schema({
       image:{
        type:[String]
       },
+      video: { type: String },
   
       price: {
         type: Number,

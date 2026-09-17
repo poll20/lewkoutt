@@ -1041,6 +1041,7 @@
 // export default ProductDescription;
 
 import { Helmet } from "react-helmet";
+
 import React, { useState, useEffect, useRef } from "react";
 import { Shield, Clock, RefreshCcw } from "lucide-react";
 import "./ProductDescription.css";
@@ -1054,6 +1055,7 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 import Card from "./Card";
 import { useFirebaseAuth } from "./FirebaseContext";
 import { FaArrowLeft } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa6";
 import StickyButton from "./StickyButton";
 import CouponCard from "./CouponCard";
 import BundleProduct from "./BundleProduct";
@@ -1083,7 +1085,7 @@ const [cartData, setCartData] = useState([]);
    const [isOpen, setIsOpen] = useState(false);
 const[product,setproduct]=useState([])
 const[mainProductt,setmainprodutt]=useState([])
-
+const [isVideoPopupOpen, setIsVideoPopupOpen] = useState(false);
 // Touch/swipe functionality states
 const [touchStartX, setTouchStartX] = useState(0);
 const [touchEndX, setTouchEndX] = useState(0);
@@ -1189,6 +1191,7 @@ const fetchProductFromBackend = async (clr) => {
           // 🔑 FIX: keep the FULL image array here (don't collapse to [0])
           // so the gallery can show every product image, not just one.
           image: mainProduct?.image || [],
+          video: mainProduct?.video || "",
         });
       }
     } else if (data?.productdetails?.length === 0 && data?.colors) {
@@ -1211,6 +1214,7 @@ const fetchProductFromBackend = async (clr) => {
         printtype: variantProduct.printtype,
         // 🔑 FIX: same here — keep the full array
         image: variantProduct?.image || [],
+        video: variantProduct?.video || "", 
       });
     }
   } catch (err) {
@@ -1464,11 +1468,11 @@ if(getbundeldata){
       </script>
     </Helmet>
   )}
-    <div className="container">
+    {/* <div className="container">
 
       <div className="product-page">
 
-        {/* Image Slider Section */}
+        
 
         <div className="image-slider">
 
@@ -1490,7 +1494,7 @@ if(getbundeldata){
 
       </div>
 
-      {/* Popup Modal */}
+      
       {isPopupOpen && (
         <div className="popup"  style={{backgroundColor:"black"}}>
           <div className="image-slider">
@@ -1507,8 +1511,291 @@ if(getbundeldata){
             </div>
           </div>
         </div>
+
+        
       )}
+
+
+      {isVideoPopupOpen && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.9)",
+      zIndex: 1000,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "20px", 
+    }}
+  >
+    <button
+      onClick={() => setIsVideoPopupOpen(false)}
+      style={{
+        position: "absolute",
+        top: "20px",
+        right: "20px",
+        background: "rgba(255,255,255,0.15)",
+        border: "none",
+        borderRadius: "100%",
+        width: "36px",
+        height: "36px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
+        fontSize: "18px",
+        cursor: "pointer",
+        zIndex: 1001,
+      }}
+    >
+      <FaXmark />
+    </button>
+
+    <video
+      src={product.video}
+      controls
+      autoPlay
+      playsInline
+      style={{
+        maxWidth: "100%",
+        maxHeight: "100%",
+        borderRadius: "12px",
+      }}
+    />
+  </div>
+)}
+    </div> */}
+    <div className="container">
+
+  <div className="product-page">
+
+    {/* ================= IMAGE SLIDER ================= */}
+    <div
+      className="image-slider"
+      style={{
+        position: "relative",
+      }}
+    >
+
+      {/* MAIN PRODUCT IMAGE */}
+      <div className="image-slide">
+
+        <img
+          src={cloudinaryImg(
+            galleryImages[currentImageIndex],
+            1000
+          )}
+          alt={product.title || "dress"}
+          onClick={() =>
+            handleImageClick(
+              galleryImages[currentImageIndex],
+              currentImageIndex
+            )
+          }
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{
+            cursor: "pointer",
+            touchAction: "pan-y",
+            width: "100%",
+            display: "block",
+          }}
+          loading="lazy"
+        />
+
+      </div>
+
+
+      {/* ================= VIDEO THUMBNAIL ================= */}
+      
+
     </div>
+
+  </div>
+
+
+  {/* ================================================= */}
+  {/* IMAGE POPUP */}
+  {/* ================================================= */}
+
+  {isPopupOpen && (
+    <div
+      className="popup"
+      style={{
+        position: "fixed",
+        inset: 0,
+
+        backgroundColor: "#000",
+
+        zIndex: 99998,
+
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+
+      <div
+        className="image-slider"
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      >
+
+        <div
+          className="image-slide"
+          style={{
+            minHeight: "100vh",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+
+          <img
+            src={cloudinaryImg(
+              galleryImages[popupCurrentIndex],
+              1000
+            )}
+            alt={`Product ${popupCurrentIndex + 1}`}
+            onTouchStart={handlePopupTouchStart}
+            onTouchMove={handlePopupTouchMove}
+            onTouchEnd={handlePopupTouchEnd}
+            onClick={() => closePopup()}
+            style={{
+              cursor: "pointer",
+              touchAction: "pan-y",
+
+              width: "100%",
+              height: "100%",
+
+              objectFit: "contain",
+            }}
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+  )}
+
+
+  {/* ================================================= */}
+  {/* FULLSCREEN VIDEO POPUP */}
+  {/* ================================================= */}
+
+  {isVideoPopupOpen && (
+    <div
+      style={{
+        // border:"1px solid red",
+        position: "fixed",
+        inset: 0,
+
+        width: "100vw",
+        height: "100vh",
+
+        backgroundColor: "#000",
+
+        zIndex: 99999,
+
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+
+        overflow: "hidden",
+      }}
+    >
+
+      {/* ================= CLOSE BUTTON ================= */}
+
+      <button
+        onClick={() => setIsVideoPopupOpen(false)}
+        aria-label="Close video"
+        style={{
+          position: "absolute",
+
+          top: "20px",
+          right: "20px",
+
+          width: "40px",
+          height: "40px",
+
+          borderRadius: "50%",
+
+          border: "none",
+
+          backgroundColor:
+            "rgba(255,255,255,0.18)",
+
+          color: "#fff",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          fontSize: "18px",
+
+          cursor: "pointer",
+
+          zIndex: 100000,
+        }}
+      >
+        <FaXmark />
+      </button>
+
+
+      {/* ================= FULLSCREEN VIDEO ================= */}
+
+      <video
+        src={product.video}
+
+        autoPlay
+        loop
+        muted
+        playsInline
+
+        controls={false}
+
+        disablePictureInPicture
+
+        controlsList="nodownload nofullscreen noremoteplayback"
+
+        preload="auto"
+
+        onContextMenu={(e) =>
+          e.preventDefault()
+        }
+
+        onClick={(e) =>
+          e.preventDefault()
+        }
+
+        style={{
+          width: "100%",
+          height: "100%",
+
+          objectFit: "contain",
+
+          backgroundColor: "#000",
+
+          userSelect: "none",
+
+          WebkitUserSelect: "none",
+        }}
+      />
+
+    </div>
+  )}
+
+</div>
     <FaArrowLeft  size={50} onClick={()=>{navigate(-1)}} style={{position:"absolute",top:"24px",left:"20px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px", backgroundColor: "rgba(255, 255, 255, 0.5)" }}/>
        <svg xmlns="http://www.w3.org/2000/svg"onClick={()=>{navigate("/cart")}} style={{position:"absolute",top:"24px",right:"20px",width:"28px",height:"28px",borderRadius:"100%",padding:"5px", backgroundColor: "rgba(255, 255, 255, 0.5)" }} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -1526,6 +1813,30 @@ if(getbundeldata){
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'
           }}>
+{product?.video && (
+    <div
+      onClick={() => setIsVideoPopupOpen(true)}
+      style={{
+        width: "70px",
+        height: "90px",
+        borderRadius: '8px',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        border: '2px solid transparent',
+        flexShrink: 0,
+      }}
+    >
+      <video
+        src={product.video}
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+    </div>
+  )}
+
             {galleryImages.map((img, index) => (
               <div
                 key={index}
@@ -1552,6 +1863,7 @@ if(getbundeldata){
                 />
               </div>
             ))}
+            
           </div>
 
 
