@@ -265,6 +265,15 @@ import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
 import cara77 from "../components/image/desi.png";
 import cara8 from "../components/image/bags.png";
+// import cara8 from "../components/image/bags.png";
+import vacation from "../components/image/vacation.webp";
+import pretty from "../components/image/pretty.webp";
+import evening from "../components/image/evening.png";
+
+
+
+
+
 
 
 
@@ -285,10 +294,11 @@ const CategoriesLayout = () => {
 
   /* STATIC BANNER IMAGES */
   const bannerImages = [
-    cara1,
-    cara2,
+    // cara1,
+    pretty,
+    evening,
     cara3,
-    cara6,
+    vacation,
     cara5,
     cara77,
     cara8

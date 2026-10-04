@@ -9,16 +9,19 @@ import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
 import cara7 from "../components/image/desi.png";
 import cara8 from "../components/image/bags.png";
-
+import vacation from "../components/image/vacation.webp";
+import pretty from "../components/image/pretty.webp";
+import evening from "../components/image/evening.png";
 
 
 const CATEGORIES = [
-  { emoji: cara5, label: "Tops & Tunics",  path: "/productmodel/Tops%20&%20Tunics"  },
-  { emoji:cara6, label: "Vacation Vibes",     path: "productmodel/Vacation%20Vibes"     },
+  
+  { emoji:vacation, label: "Vacation Vibes",     path: "productmodel/Vacation%20Vibes"     },
   { emoji:cara3, label: "Co-ord Sets",  path: "/productmodel/Co-ord%20Sets"  },
-  { emoji:cara2, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
-  { emoji:cara1, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
+  { emoji:evening, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
+  { emoji:pretty, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
   { emoji:cara7, label: "Desi Edit",   path: "/productmodel/Desi%20Edit"   },
+  { emoji: cara5, label: "Tops & Tunics",  path: "/productmodel/Tops%20&%20Tunics"  },
   { emoji:cara8, label: "Handbags",   path: "/productmodel/Handbags"   },
 
 
