@@ -226,7 +226,11 @@ import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
 import cara8 from "../components/image/bags.png";
-
+import vacation from "../components/image/vacation.webp";
+import pretty from "../components/image/pretty.webp";
+import evening from "../components/image/evening.png";
+import kurti from "../components/image/kurti.jpeg";
+import jumpsiut from "../components/image/jumpsuit.jpeg";
 
 /* STATIC OVERLAY + IMAGE DATA */
 const OVERLAY_DATA = [
@@ -234,25 +238,25 @@ const OVERLAY_DATA = [
     tag: "New collection",
     title: "Summer\nBloom",
     cta: "Shop now",
-    image: cara1,
+    image: pretty,
   },
   {
     tag: "Trending now",
     title: "Cool &\nCasual",
     cta: "Explore",
-    image: cara2,
+    image: evening,
   },
   {
     tag: "Limited drops",
     title: "Edit\nSeason",
     cta: "View looks",
-    image: cara3,
+    image: vacation,
   },
   {
     tag: "Fresh styles",
     title: "Street\nFashion",
     cta: "Discover",
-    image: cara6,
+    image: jumpsiut,
   },
   {
     tag: "Premium looks",
@@ -264,7 +268,7 @@ const OVERLAY_DATA = [
     tag: "Premium looks",
     title: "Luxury\nEdit",
     cta: "Explore now",
-    image: cara8,
+    image: kurti,
   },
 ];
 

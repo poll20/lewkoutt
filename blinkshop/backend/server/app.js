@@ -1513,7 +1513,7 @@ app.get("/productmodel", async (req, res) => {
 
       const navbarData = data.map((cat) => {
         const tags = [...new Set((cat.productdetails || []).map((p) => p.tag).filter(Boolean))].filter(
-          (tag) => tag !== "Co-ord Sets"
+          (tag) => tag !== "Jumpsuit"
         );
         return { category: cat.category, tags };
       });

@@ -269,8 +269,8 @@ import cara8 from "../components/image/bags.png";
 import vacation from "../components/image/vacation.webp";
 import pretty from "../components/image/pretty.webp";
 import evening from "../components/image/evening.png";
-
-
+import kurti from "../components/image/kurti.jpeg";
+import jumpsiut from "../components/image/jumpsuit.jpeg";
 
 
 
@@ -297,10 +297,10 @@ const CategoriesLayout = () => {
     // cara1,
     pretty,
     evening,
-    cara3,
+    jumpsiut,
     vacation,
     cara5,
-    cara77,
+    kurti,
     cara8
 
 
