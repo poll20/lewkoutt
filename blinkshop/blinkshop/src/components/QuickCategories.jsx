@@ -20,7 +20,7 @@ const CATEGORIES = [
     { emoji:pretty, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
      { emoji:evening, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
   { emoji:vacation, label: "Vacation Vibes",     path: "productmodel/Vacation%20Vibes"     },
-  { emoji:jumpsiut, label: "Jumpsuit",  path: "/productmodel/Co-ord%20Sets"  },
+  { emoji:jumpsiut, label: "Jumpsuit",  path: "/productmodel/Jumpsuit"  },
  
 { emoji: cara5, label: "Tops & Tunics",  path: "/productmodel/Tops%20&%20Tunics"  },
   { emoji:kurti, label: "Desi Edit",   path: "/productmodel/Desi%20Edit"   },
