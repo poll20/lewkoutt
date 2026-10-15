@@ -275,7 +275,30 @@ import jumpsiut from "../components/image/jumpsuit.jpeg";
 
 
 
+/* CATEGORY → BANNER IMAGE MAP (keys lowercase) */
+const categoryBanners = {
+  // jumpsuit: jumpsiut,
+  "Pretty In Pastels": pretty,
+  "The Evening Edit": evening,
+  "Jumpsuit": jumpsiut,
+  "Vacation Vibes": vacation,
+  "Tops & Tunics":cara5,
+  // kurti: kurti,
+  "Desi Edit": kurti,
+  // bag: cara8,
+  "Handbags": cara8,
+  
+  
+  
+};
+const normalizedBanners = Object.fromEntries(
+  Object.entries(categoryBanners).map(([name, img]) => [
+    name.trim().toLowerCase(),
+    img,
+  ])
+);
 
+const fallbackBanner = pretty;
 
 
 
@@ -293,18 +316,18 @@ const CategoriesLayout = () => {
   const loaderRef = useRef(null);
 
   /* STATIC BANNER IMAGES */
-  const bannerImages = [
-    // cara1,
-    pretty,
-    evening,
-    jumpsiut,
-    vacation,
-    cara5,
-    kurti,
-    cara8
+  // const bannerImages = [
+  //   // cara1,
+  //   pretty,
+  //   evening,
+  //   jumpsiut,
+  //   vacation,
+  //   cara5,
+  //   kurti,
+  //   cara8
 
 
-  ];
+  // ];
 
   useEffect(() => {
     fetchCategories(page);
@@ -330,18 +353,24 @@ const CategoriesLayout = () => {
 
     return () => observer.disconnect();
   }, [hasMore]);
-
+console.log("category_name",productdata.map((c) => c.category));
   if (!productdata || !coupons) return null;
 
   return (
     <>
-      {[...productdata].map((cat, idx) => {
-        /* 5 → 4 → 3 → 2 → 1 */
+      {/* {[...productdata].map((cat, idx) => {
+       
         const bannerImage =
           bannerImages[idx % bannerImages.length];
 
         return (
-          <section key={idx} className="cat-section">
+          <section key={idx} className="cat-section"> */}
+          {[...productdata].map((cat) => {
+  const key = cat.category.trim().toLowerCase();
+  const bannerImage = normalizedBanners[key] || fallbackBanner;
+
+  return (
+    <section key={cat._id || cat.category} className="cat-section">
             {/* HEADER */}
             <div className="cat-header">
               <h2 className="cat-title">
