@@ -271,6 +271,9 @@ import pretty from "../components/image/pretty.webp";
 import evening from "../components/image/evening.png";
 import kurti from "../components/image/kurti.jpeg";
 import jumpsiut from "../components/image/jumpsuit.jpeg";
+import festive from "../components/image/fastive.jpeg";
+
+
 
 
 
@@ -287,6 +290,8 @@ const categoryBanners = {
   "Desi Edit": kurti,
   // bag: cara8,
   "Handbags": cara8,
+  "Festive Fits": festive,
+
   
   
   
