@@ -68,7 +68,7 @@ export const BioProvider = ({children,addtocartitem,showPopup,navigate }) => {
     const [guestWishlist, setGuestWishlist] = useState([]);
 const [guestCart, setGuestCart] = useState([]);
 const [guestAddress, setGuestAddress] = useState([]);
-
+const [loadingMore, setLoadingMore] = useState(false);
   const [filters, setFilters] = useState({
     pricerangemin:300,
     pricerangemax:3000,
@@ -1015,7 +1015,8 @@ useEffect(() => {
 //   };
 const fetchCategories = async (page) => {
   try {
-    console.log("🔥 FETCH FUNCTION CALLED", page);
+    // console.log("🔥 FETCH FUNCTION CALLED", page);
+    setLoadingMore(true);
 
     const url = `${apiUrl}/categories?page=${page}`;
 
@@ -1050,6 +1051,9 @@ const fetchCategories = async (page) => {
       apiUrl,
       time: new Date().toISOString(),
     });
+  }
+  finally {
+    setLoadingMore(false); // success ho ya error, loader band
   }
 };
 
@@ -1802,7 +1806,8 @@ const fetchTopSearched = async () => {
         fetchCartItems,
         fetchCarousel,
          fetchCategories,
-          hasMore
+          hasMore,
+          loadingMore
     }}
     >
       {children}

@@ -16,7 +16,7 @@ import CustomerReviewCard from "./Customerreviewcard";
 // import BottomNav from "./BottomNav";
 
 export default function Home() {
-  const { productdata, showloginpage, setshowloginpage, productfetch, fetchCarousel } = useBio();
+  const { productdata, showloginpage, setshowloginpage, productfetch, fetchCarousel, hasMore  } = useBio();
   const [carousel, setCarousel] = useState([]);
   const [page, setPage] = useState(1);
 
@@ -44,7 +44,13 @@ export default function Home() {
 
       {/* <PromoStrip /> */}
       <CategoriesLayout page={page} setPage={setPage} />
-      <TrustStrip />
+      {!hasMore && (
+  <>
+    <TrustStrip />
+    <CustomerReviewCard />
+  </>
+)}
+      {/* <TrustStrip /> */}
 
       {showloginpage && (
         <SlideUpModal show={showloginpage} onClose={() => setshowloginpage(false)}>
@@ -53,7 +59,8 @@ export default function Home() {
       )}
 
       {/* <BottomNav /> */}
-      <CustomerReviewCard/>
+      {/* <CustomerReviewCard/> */}
+      
     </div>
   );
 }

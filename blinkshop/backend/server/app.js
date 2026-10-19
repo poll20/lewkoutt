@@ -1668,58 +1668,112 @@ app.get("/productmodel", async (req, res) => {
 //     res.status(500).json({ error: err.message });
 //   }
 // });
+// app.get("/categories", async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = 2;
+//     const skip = (page - 1) * limit;
+
+//     const data = await productsmodel
+//       .find({
+//         category: {
+//           $nin: ["The Cozy Edit", "Warm & Chic"],
+//         },
+//       })
+//       // .sort({ _id: -1 })
+//       .skip(skip)
+//       .limit(limit)
+//       .lean();
+
+//     // 🔥 newest 6 products only
+//     // const updatedData = data.map((cat) => ({
+//     //   ...cat,
+//     //   productdetails: [...cat.productdetails]
+//     //     .reverse()
+//     //     .slice(0, 6),
+//     // }));
+//     const updatedData = data.map((cat) => {
+//   const category = cat.category?.trim().toLowerCase();
+
+//   return {
+//     ...cat,
+//     productdetails:
+//       category === "tops & tunics"
+//         ? [...cat.productdetails].slice(0, 6)
+//         : [...cat.productdetails].reverse().slice(0, 6),
+//   };
+// });
+
+//     const total = await productsmodel.countDocuments({
+//       category: {
+//         $nin: ["The Cozy Edit", "Warm & Chic"],
+//       },
+//     });
+
+//     res.json({
+//       data: updatedData,
+//       hasMore: skip + data.length < total,
+//     });
+
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 app.get("/categories", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = 2;
-    const skip = (page - 1) * limit;
 
-    const data = await productsmodel
-      .find({
-        category: {
-          $nin: ["The Cozy Edit", "Warm & Chic"],
-        },
-      })
-      // .sort({ _id: -1 })
+    const excluded = ["The Cozy Edit", "Warm & Chic"];
+    const priorityCategory = "Festive Fits";
+
+    // Festive Fits ko chhod kar baaki categories
+    const baseFilter = {
+      category: { $nin: [...excluded, priorityCategory] },
+    };
+
+    // Page 1 pe Festive Fits ek slot lega, isliye baaki ke liye limit 1 kam
+    const firstPageRest = limit - 1;
+    const skip = page === 1 ? 0 : firstPageRest + (page - 2) * limit;
+    const fetchLimit = page === 1 ? firstPageRest : limit;
+
+    let data = await productsmodel
+      .find(baseFilter)
       .skip(skip)
-      .limit(limit)
+      .limit(fetchLimit)
       .lean();
 
-    // 🔥 newest 6 products only
-    // const updatedData = data.map((cat) => ({
-    //   ...cat,
-    //   productdetails: [...cat.productdetails]
-    //     .reverse()
-    //     .slice(0, 6),
-    // }));
+    // Sirf page 1 pe Festive Fits sabse upar add karo
+    if (page === 1) {
+      const festive = await productsmodel
+        .findOne({ category: priorityCategory })
+        .lean();
+      if (festive) data = [festive, ...data];
+    }
+
     const updatedData = data.map((cat) => {
-  const category = cat.category?.trim().toLowerCase();
+      const category = cat.category?.trim().toLowerCase();
 
-  return {
-    ...cat,
-    productdetails:
-      category === "tops & tunics"
-        ? [...cat.productdetails].slice(0, 6)
-        : [...cat.productdetails].reverse().slice(0, 6),
-  };
-});
-
-    const total = await productsmodel.countDocuments({
-      category: {
-        $nin: ["The Cozy Edit", "Warm & Chic"],
-      },
+      return {
+        ...cat,
+        productdetails:
+          category === "tops & tunics"
+            ? [...cat.productdetails].slice(0, 6)
+            : [...cat.productdetails].reverse().slice(0, 6),
+      };
     });
+
+    const total = await productsmodel.countDocuments(baseFilter);
+    const consumed = page === 1 ? firstPageRest : firstPageRest + (page - 1) * limit;
 
     res.json({
       data: updatedData,
-      hasMore: skip + data.length < total,
+      hasMore: consumed < total,
     });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 app.get("/home/carousel", async (req, res) => {
   const data = await productsmodel.find(
     {

@@ -192,7 +192,7 @@ function Layout({ showPopup }) {
 const [openpopup, setOpenpopup] = useState(false);
 const [showIcon, setShowIcon] = useState(false);
   const { setIsLoading, isLoading } = useLoading(); // ✅ add this inside the App component
-  const { userdata } = useBio()
+  const { userdata, hasMore } = useBio()
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isabout = location.pathname.startsWith("/aboutus");
   const address = location.pathname.startsWith("/address/");
@@ -332,6 +332,7 @@ const handleClosePopup = () => {
         !isref &&
         !mood &&
         !address &&
+        ! hasMore&&
         !searchme && (
           <div className="mainnn-contenttttttt">
             <Footer />

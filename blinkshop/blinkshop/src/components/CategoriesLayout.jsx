@@ -314,6 +314,7 @@ const CategoriesLayout = () => {
     hasMore,
     fetchCoupons,
     coupons,
+    loadingMore
   } = useBio();
 
   const [page, setPage] = useState(1);
@@ -358,6 +359,23 @@ const CategoriesLayout = () => {
 
     return () => observer.disconnect();
   }, [hasMore]);
+
+  useEffect(() => {
+  if (!loadingMore) return;
+
+  const scrollbarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+
+  const prevPaddingRight = document.body.style.paddingRight;
+
+  document.body.classList.add("scroll-locked");
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
+
+  return () => {
+    document.body.classList.remove("scroll-locked");
+    document.body.style.paddingRight = prevPaddingRight;
+  };
+}, [loadingMore]);
 console.log("category_name",productdata.map((c) => c.category));
   if (!productdata || !coupons) return null;
 
@@ -458,6 +476,12 @@ console.log("category_name",productdata.map((c) => c.category));
         ref={loaderRef}
         style={{ height: "1px" }}
       />
+      {loadingMore && hasMore && (
+  <div className="loading-more">
+    <span className="spinner" />
+    <p className="cat-see-all">Fetching more products...</p>
+  </div>
+)}
     </>
   );
 };
