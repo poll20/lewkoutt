@@ -1507,7 +1507,9 @@ app.get("/productmodel", async (req, res) => {
   try {
     if (operation === "navbar") {
       const data = await productsmodel
-        .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } }, { category: 1, productdetails: 1, _id: 0 })
+        // .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } }, { category: 1, productdetails: 1, _id: 0 })
+        .find()
+
         .sort({ _id: -1 })
         .lean();
 
@@ -1523,7 +1525,9 @@ app.get("/productmodel", async (req, res) => {
 
     if (operation === "home") {
       const data = await productsmodel
-        .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } })
+        // .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } })
+        .find()
+
         .sort({ _id: -1 })
         .lean();
 
@@ -1538,7 +1542,9 @@ app.get("/productmodel", async (req, res) => {
     }
 
     if (operation === "all") {
-      const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
+      // const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
+      const baseMatch = {};
+
 
       if (!usePagination) {
         // --- unchanged legacy behavior ---
@@ -1578,7 +1584,9 @@ app.get("/productmodel", async (req, res) => {
 
     if (operation === "filtered") {
       const cat = section;
-      const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
+      // const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
+      const baseMatch = {};
+
 
       if (!usePagination) {
         // --- unchanged legacy behavior ---
@@ -1724,13 +1732,16 @@ app.get("/categories", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 2;
 
-    const excluded = ["The Cozy Edit", "Warm & Chic"];
+    // const excluded = ["The Cozy Edit", "Warm & Chic"];
     const priorityCategory = "Festive Fits";
 
     // Festive Fits ko chhod kar baaki categories
+    // const baseFilter = {
+    //   category: { $nin: [...excluded, priorityCategory] },
+    // };
     const baseFilter = {
-      category: { $nin: [...excluded, priorityCategory] },
-    };
+  category: { $ne: priorityCategory },
+};
 
     // Page 1 pe Festive Fits ek slot lega, isliye baaki ke liye limit 1 kam
     const firstPageRest = limit - 1;
@@ -1776,11 +1787,12 @@ app.get("/categories", async (req, res) => {
 });
 app.get("/home/carousel", async (req, res) => {
   const data = await productsmodel.find(
-    {
-      category: {
-        $nin: ["The Cozy Edit", "Warm & Chic"]
-      }
-    },
+    // {
+    //   category: {
+    //     $nin: ["The Cozy Edit", "Warm & Chic"]
+    //   }
+    // },
+    {},
     { image: 1, _id: 0 }
   ).sort({ _id: -1 }).lean();
 
