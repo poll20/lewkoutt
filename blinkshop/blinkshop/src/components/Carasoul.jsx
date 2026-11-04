@@ -21,6 +21,10 @@ import evening from "../components/image/evening.png";
 import kurti from "../components/image/kurti.jpeg";
 import jumpsiut from "../components/image/jumpsuit.jpeg";
 import festive from "../components/image/fastive.jpeg";
+import warm from "../components/image/warm.jpeg";
+import cozy from "../components/image/cozy.jpeg";
+
+
 
 
 /* STATIC OVERLAY + IMAGE DATA */
@@ -54,6 +58,18 @@ const OVERLAY_DATA = [
     title: "Street\nFashion",
     cta: "Discover",
     image: jumpsiut,
+  },
+   {
+    tag: "Fresh styles",
+    title: "Street\nFashion",
+    cta: "Discover",
+    image: warm,
+  },
+   {
+    tag: "Fresh styles",
+    title: "Street\nFashion",
+    cta: "Discover",
+    image: cozy,
   },
   
   {

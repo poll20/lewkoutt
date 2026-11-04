@@ -15,6 +15,8 @@ import evening from "../components/image/evening.png";
 import kurti from "../components/image/kurti.jpeg";
 import jumpsiut from "../components/image/jumpsuit.jpeg";
 import fastive from "../components/image/fastive.jpeg";
+import warm from "../components/image/warm.jpeg";
+import cozy from "../components/image/cozy.jpeg";
 
 
 
@@ -24,6 +26,9 @@ const CATEGORIES = [
   { emoji:vacation, label: "Vacation Vibes",     path: "productmodel/Vacation%20Vibes"     },
   { emoji:jumpsiut, label: "Jumpsuit",  path: "/productmodel/Jumpsuit"  },
   { emoji:fastive, label: "Festive Fits",  path: "/productmodel/Festive%20Fits"  },
+  { emoji:cozy, label: "The Cozy Edit",  path: "/productmodel/The%20Cozy%20Edit"  },
+  { emoji:warm, label: "Warm & Chic",  path: "/productmodel/Warm%20&%20Chic"  },
+
 
  
 { emoji: cara5, label: "Tops & Tunics",  path: "/productmodel/Tops%20&%20Tunics"  },
