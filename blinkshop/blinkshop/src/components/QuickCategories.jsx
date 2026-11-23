@@ -23,7 +23,7 @@ import warm from "../components/image/warm.jpeg";
 const CATEGORIES = [
     { emoji:pretty, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
      { emoji:evening, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
-  { emoji:vacation, label: "Vacation Vibes",     path: "productmodel/Vacation%20Vibes"     },
+  { emoji:vacation, label: "Chic & Casual",     path: "productmodel/Vacation%20Vibes"     },
   { emoji:jumpsiut, label: "Jumpsuit",  path: "/productmodel/Jumpsuit"  },
   { emoji:fastive, label: "Festive Fits",  path: "/productmodel/Festive%20Fits"  },
   // { emoji:cozy, label: "The Cozy Edit",  path: "/productmodel/The%20Cozy%20Edit"  },
