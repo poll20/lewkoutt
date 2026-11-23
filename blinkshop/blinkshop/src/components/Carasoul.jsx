@@ -15,12 +15,12 @@ import cara4 from "../components/image/cara4.jpeg";
 import cara5 from "../components/image/cara5.jpeg";
 import cara6 from "../components/image/cara6.jpeg";
 import cara8 from "../components/image/bags.png";
-import vacation from "../components/image/vacation.webp";
-import pretty from "../components/image/pretty.webp";
-import evening from "../components/image/evening.png";
+import new3 from "../components/image/new3.jpeg";
+import new2 from "../components/image/new2.jpeg";
+import new1 from "../components/image/new1.webp";
 import kurti from "../components/image/kurti.jpeg";
 import jumpsiut from "../components/image/jumpsuit.jpeg";
-import festive from "../components/image/fastive.jpeg";
+import new4 from "../components/image/new4.jpeg";
 import warm from "../components/image/warm.jpeg";
 import cozy from "../components/image/cozy.jpeg";
 
@@ -33,25 +33,25 @@ const OVERLAY_DATA = [
     tag: "Festive styles",
     title: "Festive\nFashion",
     cta: "Discover",
-    image: festive,
+    image: new4,
   },
   {
     tag: "New collection",
     title: "Summer\nBloom",
     cta: "Shop now",
-    image: pretty,
+    image: new2,
   },
   {
     tag: "Trending now",
     title: "Cool &\nCasual",
     cta: "Explore",
-    image: evening,
+    image: new1,
   },
   {
     tag: "Limited drops",
     title: "Edit\nSeason",
     cta: "View looks",
-    image: vacation,
+    image: new3,
   },
   {
     tag: "Fresh styles",

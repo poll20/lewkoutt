@@ -16,16 +16,22 @@ import kurti from "../components/image/kurti.jpeg";
 import jumpsiut from "../components/image/jumpsuit.jpeg";
 import fastive from "../components/image/fastive.jpeg";
 import warm from "../components/image/warm.jpeg";
+
+import new3 from "../components/image/new3.jpeg";
+import new2 from "../components/image/new2.jpeg";
+import new1 from "../components/image/new1.webp";
+
+import new4 from "../components/image/new4.jpeg";
 // import cozy from "../components/image/cozy.jpeg";
 
 
 
 const CATEGORIES = [
-    { emoji:pretty, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
-     { emoji:evening, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
-  { emoji:vacation, label: "Chic & Casual",     path: "productmodel/Vacation%20Vibes"     },
+    { emoji:new2, label: "Pretty In Pastels",   path: "/productmodel/Pretty%20In%20Pastels"   },
+     { emoji:new1, label: "The Evening Edits",   path: "/productmodel/The%20Evening%20Edit"   },
+  { emoji:new3, label: "Chic & Casual",     path: "productmodel/Vacation%20Vibes"     },
   { emoji:jumpsiut, label: "Jumpsuit",  path: "/productmodel/Jumpsuit"  },
-  { emoji:fastive, label: "Festive Fits",  path: "/productmodel/Festive%20Fits"  },
+  { emoji:new4, label: "Festive Fits",  path: "/productmodel/Festive%20Fits"  },
   // { emoji:cozy, label: "The Cozy Edit",  path: "/productmodel/The%20Cozy%20Edit"  },
   { emoji:warm, label: "Warm & Chic",  path: "/productmodel/Warm%20&%20Chic"  },
 

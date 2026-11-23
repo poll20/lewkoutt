@@ -275,7 +275,11 @@ import festive from "../components/image/fastive.jpeg";
 import warm from "../components/image/warm.jpeg";
 import cozy from "../components/image/cozy.jpeg";
 
+import new3 from "../components/image/new3.jpeg";
+import new2 from "../components/image/new2.jpeg";
+import new1 from "../components/image/new1.webp";
 
+import new4 from "../components/image/new4.jpeg";
 
 
 
@@ -283,10 +287,10 @@ import cozy from "../components/image/cozy.jpeg";
 /* CATEGORY → BANNER IMAGE MAP (keys lowercase) */
 const categoryBanners = {
   // jumpsuit: jumpsiut,
-  "Pretty In Pastels": pretty,
-  "The Evening Edit": evening,
+  "Pretty In Pastels": new2,
+  "The Evening Edit": new1,
   "Jumpsuit": jumpsiut,
-  "Chic & Casual": vacation,
+  "Chic & Casual": new3,
   // "The Cozy Edit": cozy,
   "Warm & Chic": warm,
   "Tops & Tunics":cara5,
@@ -294,7 +298,7 @@ const categoryBanners = {
   "Desi Edit": kurti,
   // bag: cara8,
   "Handbags": cara8,
-  "Festive Fits": festive,
+  "Festive Fits": new4,
 
   
   
