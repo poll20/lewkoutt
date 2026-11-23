@@ -1508,7 +1508,9 @@ app.get("/productmodel", async (req, res) => {
     if (operation === "navbar") {
       const data = await productsmodel
         // .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } }, { category: 1, productdetails: 1, _id: 0 })
-        .find()
+        .find({ category: { $nin: ["The Cozy Edit"] } }, { category: 1, productdetails: 1, _id: 0 })
+
+        // .find()
 
         .sort({ _id: -1 })
         .lean();
@@ -1526,7 +1528,9 @@ app.get("/productmodel", async (req, res) => {
     if (operation === "home") {
       const data = await productsmodel
         // .find({ category: { $nin: ["The Cozy Edit", "Warm & Chic"] } })
-        .find()
+        .find({ category: { $nin: ["The Cozy Edit"] } })
+
+        // .find()
 
         .sort({ _id: -1 })
         .lean();
@@ -1543,7 +1547,9 @@ app.get("/productmodel", async (req, res) => {
 
     if (operation === "all") {
       // const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
-      const baseMatch = {};
+      const baseMatch = { category: { $nin: ["The Cozy Edit"] } };
+
+      // const baseMatch = {};
 
 
       if (!usePagination) {
@@ -1585,7 +1591,9 @@ app.get("/productmodel", async (req, res) => {
     if (operation === "filtered") {
       const cat = section;
       // const baseMatch = { category: { $nin: ["The Cozy Edit", "Warm & Chic"] } };
-      const baseMatch = {};
+      const baseMatch = { category: { $nin: ["The Cozy Edit"] } };
+
+      // const baseMatch = {};
 
 
       if (!usePagination) {
@@ -1733,6 +1741,8 @@ app.get("/categories", async (req, res) => {
     const limit = 2;
 
     // const excluded = ["The Cozy Edit", "Warm & Chic"];
+    const excluded = ["The Cozy Edit"];
+
     const priorityCategory = "Festive Fits";
 
     // Festive Fits ko chhod kar baaki categories
@@ -1740,7 +1750,7 @@ app.get("/categories", async (req, res) => {
     //   category: { $nin: [...excluded, priorityCategory] },
     // };
     const baseFilter = {
-  category: { $ne: priorityCategory },
+  category: { $nin: [...excluded, priorityCategory] },
 };
 
     // Page 1 pe Festive Fits ek slot lega, isliye baaki ke liye limit 1 kam
@@ -1792,6 +1802,12 @@ app.get("/home/carousel", async (req, res) => {
     //     $nin: ["The Cozy Edit", "Warm & Chic"]
     //   }
     // },
+    {
+      category: {
+        $nin: ["The Cozy Edit"]
+      }
+    },
+    
     {},
     { image: 1, _id: 0 }
   ).sort({ _id: -1 }).lean();

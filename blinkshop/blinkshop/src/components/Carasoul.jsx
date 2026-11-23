@@ -65,12 +65,12 @@ const OVERLAY_DATA = [
     cta: "Discover",
     image: warm,
   },
-   {
-    tag: "Fresh styles",
-    title: "Street\nFashion",
-    cta: "Discover",
-    image: cozy,
-  },
+  //  {
+  //   tag: "Fresh styles",
+  //   title: "Street\nFashion",
+  //   cta: "Discover",
+  //   image: cozy,
+  // },
   
   {
     tag: "Premium looks",
